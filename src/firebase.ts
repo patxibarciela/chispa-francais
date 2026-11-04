@@ -2,15 +2,15 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore, doc, getDocFromServer } from 'firebase/firestore';
 
-// Configuración de Firebase utilizando variables de entorno de Vite (inyectadas por GitHub Secrets)
+// Configuración de Firebase utilizando variables de entorno de Vite (inyectadas por GitHub Secrets) con fallbacks
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  firestoreDatabaseId: import.meta.env.VITE_FIREBASE_FIRESTORE_DATABASE_ID || '(default)'
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || 'AIzaSyA1JVj4InK4qhIG7BrhofYJ33_K5QnQnNo',
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || 'gen-lang-client-0339417816.firebaseapp.com',
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || 'gen-lang-client-0339417816',
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || 'gen-lang-client-0339417816.firebasestorage.app',
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '71725468520',
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || '1:71725468520:web:9b29da99511d725652a4dd',
+  firestoreDatabaseId: import.meta.env.VITE_FIREBASE_FIRESTORE_DATABASE_ID || 'ai-studio-chispafranais-0ebf0205-6e76-40ea-a4ec-e02e91017c97'
 };
 
 // Initialize Firebase App
