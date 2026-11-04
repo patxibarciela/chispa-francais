@@ -1,0 +1,37 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Reusable security helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Diagnostic connection endpoint for boot testing
+    match /test/connection {
+      allow read: if true;
+    }
+
+    // User profile, progress, XP and unit unlock states
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+
+      // User's Leitner spaced repetition flashcards
+      match /flashcards/{cardId} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+
+    // Catch-all default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

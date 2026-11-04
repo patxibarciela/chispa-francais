@@ -1,0 +1,53 @@
+{
+  "entities": {
+    "UserProgress": {
+      "title": "UserProgress",
+      "description": "User learning profile, grade, xp, streak and completed lessons",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Google User ID" },
+        "email": { "type": "string", "description": "User email address" },
+        "displayName": { "type": "string", "description": "Student display name" },
+        "photoURL": { "type": "string", "description": "Student profile photo URL" },
+        "currentGrade": { "type": "string", "description": "Active grade level, e.g. ak6" },
+        "streak": { "type": "number", "description": "Day streak count" },
+        "lastActivityDate": { "type": "string", "description": "ISO date of last learning activity" },
+        "xp": { "type": "number", "description": "Total experience points" },
+        "completedLessons": { "type": "array", "description": "List of completed preparatory lesson IDs" },
+        "completedSessions": { "type": "array", "description": "List of completed capstone session IDs" },
+        "createdAt": { "type": "string", "description": "Account initialization timestamp" },
+        "updatedAt": { "type": "string", "description": "Last synchronization timestamp" }
+      },
+      "required": ["uid"]
+    },
+    "UserFlashcard": {
+      "title": "UserFlashcard",
+      "description": "Spaced repetition flashcard in the Leitner box system",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique card identifier" },
+        "userId": { "type": "string", "description": "Owner student user ID" },
+        "french": { "type": "string", "description": "French term or expression" },
+        "spanish": { "type": "string", "description": "Spanish translation" },
+        "swedish": { "type": "string", "description": "Swedish translation" },
+        "box": { "type": "number", "description": "Leitner box number (1 to 5)" },
+        "nextReviewDate": { "type": "string", "description": "ISO date for next scheduled review" },
+        "correctCount": { "type": "number", "description": "Count of correct answers" },
+        "incorrectCount": { "type": "number", "description": "Count of incorrect answers" },
+        "lastReviewed": { "type": "string", "description": "ISO date of last review" },
+        "unitId": { "type": "string", "description": "Originating unit ID" }
+      },
+      "required": ["id", "userId", "french"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProgress",
+      "description": "Stores student learning state, XP, and lesson completions"
+    },
+    "/users/{userId}/flashcards/{cardId}": {
+      "schema": "UserFlashcard",
+      "description": "Stores individual spaced repetition Leitner cards for each student"
+    }
+  }
+}

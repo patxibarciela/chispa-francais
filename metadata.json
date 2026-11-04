@@ -1,0 +1,6 @@
+{
+  "name": "Chispa Français",
+  "description": "App interactiva de francés desde cero para estudiantes de årskurs 6 (Moderna språk). Sesiones estructuradas de 30 minutos, ejercicios gamificados, repetición espaciada y tutor adaptativo.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
