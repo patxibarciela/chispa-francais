@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { UserProfile, LanguagePreference } from '../types';
 import { useAuth } from '../context/AuthContext';
+import { AccountModal } from './AccountModal';
 
 interface HeaderProps {
   activeTab: 'roadmap' | 'cards' | 'tutor' | 'achievements';
@@ -160,8 +161,9 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="relative ml-1">
               <button
                 type="button"
-                onClick={() => setShowUserMenu(!showUserMenu)}
-                className="flex items-center gap-2 pl-1.5 pr-2.5 py-1 rounded-2xl bg-white hover:bg-slate-50 border border-slate-200/80 shadow-2xs transition-all cursor-pointer focus:outline-none"
+                onClick={() => setShowUserMenu(true)}
+                className="flex items-center gap-2 pl-1.5 pr-2.5 py-1 rounded-2xl bg-white hover:bg-purple-50/50 border border-slate-200/90 hover:border-purple-300 shadow-2xs transition-all cursor-pointer focus:outline-none"
+                title={isEs ? 'Ver detalles de la cuenta y cerrar sesión' : 'Visa konto och logga ut'}
               >
                 {/* Circular Avatar */}
                 {user?.photoURL ? (
@@ -193,50 +195,16 @@ export const Header: React.FC<HeaderProps> = ({
                   </div>
                 </div>
               </button>
-
-              {/* Dropdown Menu */}
-              {showUserMenu && (
-                <div 
-                  className="absolute right-0 mt-2 w-72 bg-white rounded-2xl shadow-xl border border-slate-200 p-3.5 z-50 text-xs text-slate-700"
-                  onMouseLeave={() => setShowUserMenu(false)}
-                >
-                  <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
-                    <div className="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center text-base font-black">
-                      {profile.name.charAt(0).toUpperCase()}
-                    </div>
-                    <div className="overflow-hidden">
-                      <p className="font-bold text-slate-900 truncate text-sm">{profile.name}</p>
-                      <p className="text-slate-500 text-[11px] truncate">
-                        {user?.email || (isEs ? 'Perfil en este navegador' : 'Lokal profil')}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="py-2.5 space-y-1.5 border-b border-slate-100">
-                    <div className="flex items-center justify-between text-[11px]">
-                      <span className="text-slate-500">{isEs ? 'Almacenamiento:' : 'Lagring:'}</span>
-                      <span className="font-semibold text-emerald-700 flex items-center gap-1">
-                        {isCloud ? <Cloud className="w-3 h-3" /> : <HardDrive className="w-3 h-3" />}
-                        {isCloud ? 'Google Cloud Firestore' : 'LocalStorage'}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between text-[11px]">
-                      <span className="text-slate-500">{isEs ? 'Asignatura:' : 'Ämne:'}</span>
-                      <span className="font-semibold text-purple-700">Moderna språk Franska</span>
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={handleSignOutClick}
-                    className="w-full mt-2 flex items-center justify-center gap-2 px-3 py-2 text-red-600 hover:bg-red-50 rounded-xl font-semibold transition-colors cursor-pointer"
-                  >
-                    <LogOut className="w-3.5 h-3.5" />
-                    <span>{isEs ? 'Cambiar de estudiante / Salir' : 'Byt elev / Logga ut'}</span>
-                  </button>
-                </div>
-              )}
             </div>
+
+            {/* Account Modal matching Chispa Español screenshot */}
+            <AccountModal
+              isOpen={showUserMenu}
+              onClose={() => setShowUserMenu(false)}
+              profile={profile}
+              onUpdateProfile={onUpdateProfile}
+              onLogout={onLogout}
+            />
           </div>
         </div>
       </div>

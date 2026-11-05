@@ -71,48 +71,6 @@ export const CurriculumRoadmap: React.FC<CurriculumRoadmapProps> = ({
         </div>
       )}
 
-      {/* Hero Welcome Banner */}
-      <div className="bg-gradient-to-br from-indigo-900 via-indigo-800 to-slate-900 text-white rounded-2xl p-6 sm:p-8 shadow-sm mb-10 relative overflow-hidden">
-        <div className="relative z-10 max-w-2xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-indigo-200 text-xs font-semibold backdrop-blur-sm mb-4">
-            <GraduationCap className="w-3.5 h-3.5" />
-            <span>Moderna språk · Franska</span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight mb-3">
-            {isSwedish 
-              ? 'Ruta de Aprendizaje · Franska från grunden' 
-              : 'Ruta de Aprendizaje · Francés desde cero'}
-          </h1>
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed mb-6">
-            {isSwedish
-              ? 'Interaktiv kurs anpassad för den svenska grundskolans moderna språk. Följ den låsta steg-för-steg-progressionen: 3 förberedande övningar och avsluta varje enhet med ett 30-minuters pass!'
-              : 'Curso interactivo adaptado al currículo de Moderna språk con progresión continua. Avanza paso a paso: 3 pasos preparatorios y una Gran Sesión Guiada de 30 minutos al final de cada unidad.'}
-          </p>
-          <div className="flex flex-wrap items-center gap-3">
-            <button
-              onClick={() => onSelectLesson(CURRICULUM_UNITS[0].lessons[0], CURRICULUM_UNITS[0])}
-              className="px-5 py-2.5 rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white font-semibold text-sm shadow-md transition-all flex items-center gap-2 group active:scale-95 cursor-pointer"
-            >
-              <span>{isSwedish ? 'Börja från Steg 1' : 'Empezar en el Paso 1'}</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-            </button>
-            <button
-              onClick={() => setActiveGrammarModal(CURRICULUM_UNITS[0])}
-              className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium text-sm backdrop-blur-sm transition-colors flex items-center gap-2 cursor-pointer"
-            >
-              <BookOpen className="w-4 h-4 text-indigo-300" />
-              <span>{isSwedish ? 'Grammatikregel Unité 1' : 'Gramática Unidad 1'}</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Decorative background shapes */}
-        <div className="absolute -right-10 -bottom-10 w-72 h-72 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none" />
-        <div className="absolute right-12 top-6 hidden lg:block opacity-20 text-9xl font-black select-none pointer-events-none">
-          FR
-        </div>
-      </div>
-
       {/* Grade Selector Strip with visual locked states and tooltips */}
       <div className="flex flex-wrap items-center gap-2.5 pb-4 mb-8 border-b border-slate-200">
         <button

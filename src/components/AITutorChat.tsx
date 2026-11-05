@@ -5,13 +5,13 @@ import {
   Mic, 
   Sparkles, 
   RotateCcw, 
-  BookOpen, 
-  MessageCircle,
-  HelpCircle
+  MessageSquare,
+  Sparkle
 } from 'lucide-react';
 import { UserProfile } from '../types';
 import { speakFrench, createSpeechRecognizer, isSpeechRecognitionSupported } from '../utils/audio';
 import { chatWithTutorEngine } from '../utils/tutorEngine';
+import { SectionBanner } from './SectionBanner';
 
 interface AITutorChatProps {
   profile: UserProfile;
@@ -42,14 +42,13 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ profile }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isListening, setIsListening] = useState<boolean>(false);
 
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
+  // Scroll only internally within the messages container when new messages arrive (NEVER scroll the window)
   useEffect(() => {
-    scrollToBottom();
+    if (messages.length > 1 && chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
   }, [messages, isLoading]);
 
   const handleSendMessage = async (textToSend?: string) => {
@@ -84,7 +83,7 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ profile }) => {
 
       setMessages((prev) => [...prev, assistantMsg]);
       speakFrench(aiReply);
-    } catch (e) {
+    } catch {
       const fallbackReply = isSwedish
         ? 'Très bien ! Du gör stora framsteg. Vill du öva på siffror eller mat ?'
         : '¡Muy bien! Estás haciendo un gran esfuerzo. ¿Quieres practicar números, animales o la comida?';
@@ -134,141 +133,161 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ profile }) => {
       ];
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
-      {/* Header */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm mb-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-bold flex items-center justify-center text-lg shadow-sm">
-            👨‍🏫
-          </div>
-          <div>
-            <h1 className="font-bold text-slate-900 text-base flex items-center gap-2">
-              <span>Léo · Tutor de Francés</span>
-              <span className="w-2 h-2 rounded-full bg-emerald-500" title="Activo" />
-            </h1>
-            <p className="text-xs text-slate-500">
-              {isSwedish
-                ? 'Ställ frågor, öva rollspel eller be om förklaringar'
-                : 'Pregunta dudas, practica rol o pide que te haga preguntas'}
-            </p>
-          </div>
-        </div>
+    <div>
+      {/* Unified Section Header matching Chispa style */}
+      <SectionBanner
+        categoryBadge={isSwedish ? 'TUTOR I FRANSKA · LÉO' : 'TUTOR EN VIVO · LÉO'}
+        categoryIcon={MessageSquare}
+        title={isSwedish ? 'Tala franska med Léo' : 'Habla en Francés con Léo'}
+        description={
+          isSwedish
+            ? 'Ställ frågor om grammatik, öva på vardagliga dialoger eller be Léo att utmana dig.'
+            : 'Conversación guiada, resolución de dudas al instante y correcciones amables en francés.'
+        }
+        metrics={[
+          { value: 'A1', label: isSwedish ? 'Nivå' : 'Nivel', colorClass: 'text-purple-600' },
+          { value: '100%', label: isSwedish ? 'Ljud (TTS)' : 'Audio Activo', colorClass: 'text-emerald-600' },
+          { value: 'Åk 6', label: isSwedish ? 'Stadie' : 'Etapa', colorClass: 'text-indigo-600' },
+        ]}
+      />
 
-        <button
-          onClick={() =>
-            setMessages([
-              {
-                id: 'restart',
-                role: 'assistant',
-                content: isSwedish ? 'Bonjour ! Que veux-tu pratiquer ?' : '¡Bonjour ! ¿Qué te apetece practicar?',
-                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-              },
-            ])
-          }
-          className="text-xs text-slate-500 hover:text-slate-800 p-2 rounded-lg hover:bg-slate-100 flex items-center gap-1 transition-colors"
-          title="Reiniciar chat"
-        >
-          <RotateCcw className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">{isSwedish ? 'Börja om' : 'Reiniciar'}</span>
-        </button>
-      </div>
-
-      {/* Chat Messages Log */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-6 mb-4 min-h-[420px] max-h-[520px] overflow-y-auto flex flex-col justify-between">
-        <div className="space-y-4">
-          {messages.map((m) => (
-            <div
-              key={m.id}
-              className={`flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'}`}
-            >
-              <div
-                className={`max-w-[85%] rounded-2xl p-4 text-sm leading-relaxed ${
-                  m.role === 'user'
-                    ? 'bg-indigo-600 text-white rounded-tr-none'
-                    : 'bg-slate-100 text-slate-900 rounded-tl-none border border-slate-200/80'
-                }`}
-              >
-                <div className="flex items-center justify-between gap-3 mb-1">
-                  <span className="text-[11px] font-bold opacity-75">
-                    {m.role === 'user' ? 'Tú' : 'Léo'}
-                  </span>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] opacity-60 tabular-nums">{m.timestamp}</span>
-                    {m.role === 'assistant' && (
-                      <button
-                        onClick={() => speakFrench(m.content)}
-                        className="text-slate-400 hover:text-indigo-600 p-0.5"
-                        title="Escuchar"
-                      >
-                        <Volume2 className="w-3.5 h-3.5" />
-                      </button>
-                    )}
-                  </div>
-                </div>
-                <p className="font-medium whitespace-pre-wrap">{m.content}</p>
+      {/* Main Chat Container - Compact height to avoid window scrolling */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xs p-4 sm:p-5 flex flex-col">
+          {/* Top Bar of Chat */}
+          <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-purple-600 text-white flex items-center justify-center font-bold text-sm shadow-xs">
+                👨‍🏫
+              </div>
+              <div>
+                <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2 leading-none">
+                  <span>Léo</span>
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" title="Online" />
+                </h3>
+                <span className="text-[11px] text-slate-400 leading-tight">
+                  {isSwedish ? 'Fransklärare redo att hjälpa dig' : 'Tutor pedagógico preparado'}
+                </span>
               </div>
             </div>
-          ))}
 
-          {isLoading && (
-            <div className="flex items-center gap-2 text-slate-400 text-xs italic pl-2">
-              <Sparkles className="w-4 h-4 animate-spin text-indigo-500" />
-              <span>{isSwedish ? 'Léo skriver ett svar...' : 'Léo está escribiendo...'}</span>
-            </div>
-          )}
-          <div ref={messagesEndRef} />
-        </div>
+            <button
+              onClick={() =>
+                setMessages([
+                  {
+                    id: 'restart',
+                    role: 'assistant',
+                    content: isSwedish ? 'Bonjour ! Que veux-tu pratiquer ?' : '¡Bonjour ! ¿Qué te apetece practicar?',
+                    timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                  },
+                ])
+              }
+              className="text-xs text-slate-400 hover:text-slate-800 p-1.5 rounded-xl hover:bg-slate-100 flex items-center gap-1.5 transition-colors cursor-pointer"
+              title="Reiniciar chat"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">{isSwedish ? 'Börja om' : 'Reiniciar'}</span>
+            </button>
+          </div>
 
-        {/* Quick Suggestion Chips */}
-        <div className="pt-4 border-t border-slate-100 mt-4">
-          <span className="text-[11px] font-semibold text-slate-400 block mb-2">
-            {isSwedish ? 'Förslag på frågor:' : 'Ideas rápidas para preguntar:'}
-          </span>
-          <div className="flex flex-wrap gap-1.5">
+          {/* Internal Scrollable Chat Messages (Compact height ~260px) */}
+          <div 
+            ref={chatContainerRef}
+            className="h-[260px] sm:h-[280px] overflow-y-auto pr-1 space-y-3 mb-3"
+          >
+            {messages.map((m) => (
+              <div
+                key={m.id}
+                className={`flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'}`}
+              >
+                <div
+                  className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+                    m.role === 'user'
+                      ? 'bg-purple-600 text-white rounded-tr-none shadow-2xs'
+                      : 'bg-purple-50/50 text-slate-900 rounded-tl-none border border-purple-100/70'
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-3 mb-1">
+                    <span className="text-[11px] font-bold opacity-75">
+                      {m.role === 'user' ? (isSwedish ? 'Du' : 'Tú') : 'Léo'}
+                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[10px] opacity-60 tabular-nums">{m.timestamp}</span>
+                      {m.role === 'assistant' && (
+                        <button
+                          type="button"
+                          onClick={() => speakFrench(m.content)}
+                          className="text-purple-600 hover:text-purple-800 p-0.5 cursor-pointer"
+                          title="Escuchar audio"
+                        >
+                          <Volume2 className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                  <p className="font-medium whitespace-pre-wrap leading-snug">{m.content}</p>
+                </div>
+              </div>
+            ))}
+
+            {isLoading && (
+              <div className="flex items-center gap-2 text-purple-600 text-xs italic pl-2">
+                <Sparkles className="w-3.5 h-3.5 animate-spin text-purple-600" />
+                <span>{isSwedish ? 'Léo skriver ett svar...' : 'Léo está respondiendo...'}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Quick Suggestion Chips */}
+          <div className="pt-2.5 pb-3 border-t border-slate-100 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+            <span className="text-[11px] font-bold text-slate-400 shrink-0 mr-1">
+              {isSwedish ? 'Förslag:' : 'Sugerencias:'}
+            </span>
             {quickPrompts.map((qp, idx) => (
               <button
                 key={idx}
                 onClick={() => handleSendMessage(qp)}
-                className="px-3 py-1 text-xs rounded-lg bg-slate-50 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 border border-slate-200/80 transition-all text-left"
+                className="px-2.5 py-1 text-xs rounded-xl bg-slate-50 hover:bg-purple-50 text-slate-700 hover:text-purple-800 border border-slate-200 hover:border-purple-200 transition-all text-left shrink-0 cursor-pointer"
               >
                 {qp}
               </button>
             ))}
           </div>
-        </div>
-      </div>
 
-      {/* Input controls */}
-      <div className="relative">
-        <input
-          type="text"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-          placeholder={isSwedish ? 'Skriv till Léo...' : 'Escribe a Léo en francés o pregunta en español...'}
-          className="w-full pl-4 pr-24 py-3.5 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white shadow-sm text-sm"
-        />
-        <div className="absolute right-2 top-2 flex items-center gap-1">
-          {micSupported && (
-            <button
-              type="button"
-              onClick={handleStartMic}
-              className={`p-2 rounded-xl transition-colors ${
-                isListening ? 'bg-rose-500 text-white animate-pulse' : 'text-slate-400 hover:text-indigo-600'
-              }`}
-              title="Hablar por micrófono"
-            >
-              <Mic className="w-4 h-4" />
-            </button>
-          )}
-          <button
-            type="button"
-            onClick={() => handleSendMessage()}
-            disabled={!inputValue.trim() || isLoading}
-            className="p-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 text-white shadow-xs transition-colors"
-          >
-            <Send className="w-4 h-4" />
-          </button>
+          {/* Input Bar */}
+          <div className="relative">
+            <input
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+              placeholder={isSwedish ? 'Skriv till Léo...' : 'Escribe a Léo en francés o en español...'}
+              className="w-full pl-4 pr-24 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500 bg-slate-50/50 text-sm font-medium text-slate-900"
+            />
+            <div className="absolute right-2 top-2 flex items-center gap-1">
+              {micSupported && (
+                <button
+                  type="button"
+                  onClick={handleStartMic}
+                  className={`p-1.5 rounded-xl transition-colors cursor-pointer ${
+                    isListening ? 'bg-rose-500 text-white animate-pulse' : 'text-slate-400 hover:text-purple-600 hover:bg-slate-100'
+                  }`}
+                  title="Hablar por micrófono"
+                >
+                  <Mic className="w-4 h-4" />
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => handleSendMessage()}
+                disabled={!inputValue.trim() || isLoading}
+                className="p-1.5 rounded-xl bg-purple-600 hover:bg-purple-700 disabled:opacity-40 text-white shadow-xs transition-colors cursor-pointer"
+                title="Enviar mensaje"
+              >
+                <Send className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

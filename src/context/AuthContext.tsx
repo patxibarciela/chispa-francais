@@ -119,6 +119,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return { profile: profileData, cards: cardsData };
     } catch (error) {
       handleFirestoreError(error, OperationType.GET, userDocPath);
+      setSyncStatus('offline');
       return { profile: null, cards: null };
     }
   }, []);
@@ -178,7 +179,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setLastSyncedAt(new Date());
         setSyncStatus('synced');
       } catch (error) {
-        setSyncStatus('error');
+        setSyncStatus('offline');
         handleFirestoreError(error, OperationType.WRITE, userDocPath);
       }
     }, 600);

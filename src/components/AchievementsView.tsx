@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { UserProfile, Flashcard } from '../types';
 import { calculateLevel, getAchievements } from '../utils/storage';
+import { SectionBanner } from './SectionBanner';
 
 interface AchievementsViewProps {
   profile: UserProfile;
@@ -32,7 +33,25 @@ export const AchievementsView: React.FC<AchievementsViewProps> = ({ profile, car
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div>
+      {/* Unified Section Header matching Chispa style */}
+      <SectionBanner
+        categoryBadge={isSwedish ? 'FRAMSTEG & UTMÄRKELSER' : 'PROGRESO & RECOMPENSAS'}
+        categoryIcon={Trophy}
+        title={isSwedish ? 'Mina Utmärkelser & Mål' : 'Mis Logros y Medallas'}
+        description={
+          isSwedish
+            ? 'Följ din progression i årskurs 6, samla erfarenhetspoäng och lås upp officiella medaljer.'
+            : 'Sigue tu progresión paso a paso en Årskurs 6, acumula puntos de experiencia y desbloquea insignias.'
+        }
+        metrics={[
+          { value: `${profile.totalXp} XP`, label: isSwedish ? 'Total XP' : 'XP Total', colorClass: 'text-purple-600' },
+          { value: `${profile.completedLessonIds.length}`, label: isSwedish ? 'Lektioner' : 'Pasos hechos', colorClass: 'text-emerald-600' },
+          { value: `${profile.streakDays}d`, label: isSwedish ? 'Svit' : 'Racha', colorClass: 'text-amber-600' },
+        ]}
+      />
+
+      <div className="max-w-4xl mx-auto px-4 py-4">
       {/* Profile & Level Spotlight */}
       <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm mb-8 flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex items-center gap-5">
@@ -221,6 +240,7 @@ export const AchievementsView: React.FC<AchievementsViewProps> = ({ profile, car
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

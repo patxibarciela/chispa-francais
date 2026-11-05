@@ -14,6 +14,7 @@ import {
 import { Flashcard, UserProfile } from '../types';
 import { speakFrench, soundEffects } from '../utils/audio';
 import { updateCardReview, saveFlashcards } from '../utils/storage';
+import { SectionBanner } from './SectionBanner';
 
 interface SpacedRepetitionDeckProps {
   cards: Flashcard[];
@@ -86,22 +87,25 @@ export const SpacedRepetitionDeck: React.FC<SpacedRepetitionDeckProps> = ({
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      {/* Title & Introduction */}
-      <div className="mb-8 text-center max-w-xl mx-auto">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-semibold mb-3">
-          <Brain className="w-3.5 h-3.5" />
-          <span>{isSwedish ? 'Spaced Repetition · Leitner-lådor' : 'Repetición Espaciada · Sistema Leitner'}</span>
-        </div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-2">
-          {isSwedish ? 'Ordförrådslådan' : 'La Caja de Vocabulario'}
-        </h1>
-        <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-          {isSwedish
-            ? 'Orden flyttas mellan lådorna beroende på hur säkert du kan dem. Låda 3 = behärskade ord!'
-            : 'Las palabras avanzan de caja según las recuerdes. ¡El algoritmo calcula los intervalos óptimos para que nunca las olvides!'}
-        </p>
-      </div>
+    <div>
+      {/* Unified Section Header matching Chispa style */}
+      <SectionBanner
+        categoryBadge={isSwedish ? 'LEITNER-SYSTEMET · REPETITION' : 'SISTEMA LEITNER · INTERVALOS ÓPTIMOS'}
+        categoryIcon={Brain}
+        title={isSwedish ? 'Ordförrådslådan' : 'La Caja de Vocabulario Activo'}
+        description={
+          isSwedish
+            ? 'Orden flyttas mellan lådorna baserat på intervallrepetition. Låda 3 = ord du behärskar helt!'
+            : 'Las palabras avanzan de caja conforme las recuerdas. ¡El algoritmo calcula los intervalos ideales para consolidar tu memoria!'
+        }
+        metrics={[
+          { value: countBox1, label: isSwedish ? 'Låda 1 (Daglig)' : 'Caja 1 (A reforzar)', colorClass: 'text-rose-600' },
+          { value: countBox2, label: isSwedish ? 'Låda 2 (3 dagar)' : 'Caja 2 (En repaso)', colorClass: 'text-amber-600' },
+          { value: countBox3, label: isSwedish ? 'Låda 3 (Mästare)' : 'Caja 3 (Dominadas)', colorClass: 'text-purple-600' },
+        ]}
+      />
+
+      <div className="max-w-4xl mx-auto px-4 py-4">
 
       {/* Leitner Box Counters */}
       <div className="grid grid-cols-3 gap-3 mb-8">
@@ -430,6 +434,7 @@ export const SpacedRepetitionDeck: React.FC<SpacedRepetitionDeckProps> = ({
           </button>
         </div>
       )}
+      </div>
     </div>
   );
 };

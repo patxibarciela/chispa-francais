@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   X, 
   Volume2, 
@@ -42,20 +42,33 @@ export const LessonModal: React.FC<LessonModalProps> = ({
   const currentExercise: Exercise = exercises[currentIndex];
   const progressPercent = Math.round(((currentIndex) / exercises.length) * 100);
 
-  // Play audio when exercise loads if audioFr exists
-  React.useEffect(() => {
-    if (currentExercise.audioFr) {
-      speakFrench(currentExercise.audioFr);
-    }
+  // Reset exercise state upon step change (do NOT auto-play answer in advance)
+  useEffect(() => {
     setSelectedOption(null);
     setScramblePicks([]);
     setIsAnswerChecked(false);
     setShowHint(false);
   }, [currentIndex]);
 
-  const handlePickScrambleWord = (word: string, index: number) => {
+  // Determine whether promptFr should be visible (never show if it gives away the answer)
+  const shouldShowPromptFr = (ex: Exercise): boolean => {
+    if (ex.type === 'scramble') return false;
+    if (ex.type === 'fill-blank' && ex.promptFr?.includes('_')) return true;
+    if (
+      ex.type === 'translate' && 
+      (ex.prompt.toLowerCase().includes('español') || 
+       ex.prompt.toLowerCase().includes('svenska') || 
+       ex.prompt.toLowerCase().includes('significa'))
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  const handlePickScrambleWord = (word: string) => {
     if (isAnswerChecked) return;
     setScramblePicks((prev) => [...prev, word]);
+    speakFrench(word);
   };
 
   const handleRemoveScrambleWord = (index: number) => {
@@ -67,14 +80,15 @@ export const LessonModal: React.FC<LessonModalProps> = ({
     if (isAnswerChecked) return;
 
     let correct = false;
+    let targetAnswer = '';
 
     if (currentExercise.type === 'scramble') {
       const targetArr = Array.isArray(currentExercise.answer) ? currentExercise.answer : [currentExercise.answer];
       const userStr = scramblePicks.join(' ').trim();
-      const targetStr = targetArr.join(' ').trim();
-      correct = userStr === targetStr;
+      targetAnswer = targetArr.join(' ').trim();
+      correct = userStr === targetAnswer;
     } else {
-      const targetAnswer = Array.isArray(currentExercise.answer) ? currentExercise.answer[0] : currentExercise.answer;
+      targetAnswer = Array.isArray(currentExercise.answer) ? currentExercise.answer[0] : currentExercise.answer;
       correct = selectedOption === targetAnswer;
     }
 
@@ -83,6 +97,10 @@ export const LessonModal: React.FC<LessonModalProps> = ({
 
     if (correct) {
       if (profile.soundEnabled) soundEffects.playCorrect();
+      // Reinforce auditory learning by pronouncing the correct French phrase!
+      if (targetAnswer) {
+        speakFrench(targetAnswer);
+      }
     } else {
       if (profile.soundEnabled) soundEffects.playIncorrect();
     }
@@ -95,246 +113,285 @@ export const LessonModal: React.FC<LessonModalProps> = ({
       // Completed lesson!
       setIsFinished(true);
       if (profile.soundEnabled) soundEffects.playVictory();
-      confetti({ particleCount: 100, spread: 60, origin: { y: 0.6 } });
+      confetti({ particleCount: 90, spread: 55, origin: { y: 0.6 } });
       onComplete(lesson.xpReward);
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl border border-slate-200 flex flex-col max-h-[90vh] overflow-y-auto">
-        {/* Top Header */}
-        <div className="flex items-center justify-between gap-4 mb-6">
+    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-150">
+      <div 
+        className="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-slate-200 flex flex-col max-h-[92vh] overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Top Header & Progress */}
+        <div className="flex items-center justify-between gap-3 mb-4 shrink-0">
           <button
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 transition-colors"
+            className="p-1.5 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer"
+            aria-label="Cerrar lección"
           >
             <X className="w-5 h-5" />
           </button>
 
           {/* Progress bar */}
           <div className="flex-1 mx-2">
-            <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+            <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
               <div
-                className="bg-indigo-600 h-2.5 rounded-full transition-all duration-300"
+                className="bg-purple-600 h-2 rounded-full transition-all duration-300"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
           </div>
 
-          <span className="text-xs font-bold text-slate-400">
+          <span className="text-xs font-bold text-slate-400 tabular-nums shrink-0">
             {currentIndex + 1} / {exercises.length}
           </span>
         </div>
 
         {!isFinished ? (
-          <div>
-            {/* Exercise Prompt */}
-            <div className="mb-6">
-              <span className="text-xs font-bold text-indigo-600 uppercase tracking-wider block mb-1">
-                {unit.frenchTitle}
+          <div className="flex flex-col flex-1 justify-between min-h-0">
+            {/* Top Prompt Area */}
+            <div className="shrink-0 mb-3">
+              <span className="text-[11px] font-black uppercase tracking-wider text-purple-700 block mb-0.5">
+                {unit.frenchTitle} · {lesson.title}
               </span>
-              <h2 className="text-lg sm:text-xl font-bold text-slate-900">
+              <h2 className="text-base sm:text-lg font-black text-slate-900 leading-tight">
                 {currentExercise.prompt}
               </h2>
 
-              {currentExercise.promptFr && (
-                <div className="flex items-center gap-2 mt-3 p-3 rounded-xl bg-slate-50 border border-slate-200/60">
-                  <button
-                    type="button"
-                    onClick={() => speakFrench(currentExercise.audioFr || currentExercise.promptFr!)}
-                    className="p-2 rounded-lg bg-indigo-50 text-indigo-600 hover:bg-indigo-100 transition-colors"
-                    title="Escuchar audio"
-                  >
-                    <Volume2 className="w-5 h-5" />
-                  </button>
-                  <span className="font-semibold text-slate-900 text-lg">
+              {/* Only shown when it contains a fill-in blank or French sentence to translate */}
+              {shouldShowPromptFr(currentExercise) && (
+                <div className="mt-2.5 p-2.5 rounded-xl bg-purple-50/60 border border-purple-100 flex items-center justify-between gap-2">
+                  <span className="font-bold text-slate-900 text-base">
                     {currentExercise.promptFr}
                   </span>
+                  <button
+                    type="button"
+                    onClick={() => speakFrench(currentExercise.promptFr!.replace(/_+/g, ''))}
+                    className="p-1 text-purple-600 hover:bg-purple-100 rounded-lg transition-colors cursor-pointer shrink-0"
+                    title="Escuchar frase"
+                  >
+                    <Volume2 className="w-4 h-4" />
+                  </button>
                 </div>
               )}
             </div>
 
-            {/* Scramble Exercise Type */}
-            {currentExercise.type === 'scramble' && (
-              <div className="space-y-6 mb-8">
-                {/* Sentence Construction Zone */}
-                <div className="min-h-[64px] p-3 rounded-2xl border-2 border-dashed border-slate-200 flex flex-wrap gap-2 items-center">
-                  {scramblePicks.length === 0 ? (
-                    <span className="text-xs text-slate-400 italic">
-                      {isSwedish ? 'Tryck på orden nedan i rätt ordning' : 'Pulsa sobre las palabras para ordenar la frase'}
-                    </span>
-                  ) : (
-                    scramblePicks.map((word, idx) => (
-                      <button
-                        key={idx}
-                        type="button"
-                        onClick={() => handleRemoveScrambleWord(idx)}
-                        disabled={isAnswerChecked}
-                        className="px-3.5 py-1.5 rounded-xl bg-indigo-600 text-white font-semibold text-sm shadow-xs hover:bg-indigo-700 transition-all active:scale-95"
-                      >
-                        {word}
-                      </button>
-                    ))
-                  )}
+            {/* Exercise Interaction Body */}
+            <div className="flex-1 min-h-0 py-1">
+              {/* Scramble Exercise Type */}
+              {currentExercise.type === 'scramble' && (
+                <div className="space-y-3">
+                  {/* Construction Drop Zone */}
+                  <div className="min-h-[52px] p-2.5 rounded-2xl border-2 border-dashed border-purple-200 bg-purple-50/20 flex flex-wrap gap-1.5 items-center">
+                    {scramblePicks.length === 0 ? (
+                      <span className="text-xs text-slate-400 italic px-2">
+                        {isSwedish ? 'Tryck på orden nedan i rätt ordning' : 'Pulsa sobre las palabras para ordenar la frase'}
+                      </span>
+                    ) : (
+                      scramblePicks.map((word, idx) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => handleRemoveScrambleWord(idx)}
+                          disabled={isAnswerChecked}
+                          className="px-3 py-1 rounded-xl bg-purple-600 text-white font-semibold text-xs sm:text-sm shadow-xs hover:bg-purple-700 transition-all cursor-pointer active:scale-95"
+                        >
+                          {word}
+                        </button>
+                      ))
+                    )}
+                  </div>
+
+                  {/* Available word tiles */}
+                  <div className="flex flex-wrap gap-1.5">
+                    {currentExercise.options?.map((word, idx) => {
+                      const countInPicks = scramblePicks.filter((w) => w === word).length;
+                      const countInOptions = currentExercise.options?.filter((w) => w === word).length || 1;
+                      const isAllPicked = countInPicks >= countInOptions;
+
+                      return (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => handlePickScrambleWord(word)}
+                          disabled={isAllPicked || isAnswerChecked}
+                          className={`px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer ${
+                            isAllPicked
+                              ? 'bg-slate-100 text-slate-300 border-slate-200 cursor-not-allowed'
+                              : 'bg-white border-slate-300 text-slate-800 hover:border-purple-400 hover:bg-purple-50 shadow-2xs active:scale-95'
+                          }`}
+                        >
+                          {word}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
+              )}
 
-                {/* Available word tiles */}
-                <div className="flex flex-wrap gap-2">
-                  {currentExercise.options?.map((word, idx) => {
-                    const countInPicks = scramblePicks.filter((w) => w === word).length;
-                    const countInOptions = currentExercise.options?.filter((w) => w === word).length || 1;
-                    const isAllPicked = countInPicks >= countInOptions;
-
+              {/* Multiple Choice / Translation Options */}
+              {currentExercise.type !== 'scramble' && currentExercise.options && (
+                <div className="space-y-2">
+                  {currentExercise.options.map((opt, idx) => {
+                    const isSelected = selectedOption === opt;
                     return (
-                      <button
+                      <div
                         key={idx}
-                        type="button"
-                        onClick={() => handlePickScrambleWord(word, idx)}
-                        disabled={isAllPicked || isAnswerChecked}
-                        className={`px-3.5 py-2 rounded-xl text-sm font-semibold border transition-all ${
-                          isAllPicked
-                            ? 'bg-slate-100 text-slate-300 border-slate-200 cursor-not-allowed'
-                            : 'bg-white border-slate-300 text-slate-800 hover:border-indigo-400 hover:bg-indigo-50/40 shadow-xs active:scale-95'
+                        onClick={() => {
+                          if (!isAnswerChecked) {
+                            setSelectedOption(opt);
+                          }
+                          speakFrench(opt);
+                        }}
+                        className={`w-full py-2.5 px-3.5 rounded-2xl border font-semibold text-xs sm:text-sm transition-all flex items-center justify-between cursor-pointer select-none ${
+                          isSelected
+                            ? 'border-purple-600 bg-purple-50/80 text-purple-950 shadow-xs ring-1 ring-purple-500/20'
+                            : 'border-slate-200 bg-white text-slate-800 hover:bg-purple-50/30 hover:border-purple-200'
                         }`}
                       >
-                        {word}
-                      </button>
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <div className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${
+                            isSelected ? 'border-purple-600 bg-purple-600' : 'border-slate-300'
+                          }`}>
+                            {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                          </div>
+                          <span className="truncate">{opt}</span>
+                        </div>
+
+                        {/* Speaker Button: ALWAYS ACTIVE, NEVER DISABLED */}
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            speakFrench(opt);
+                          }}
+                          className="text-slate-400 hover:text-purple-600 p-1.5 hover:bg-purple-100/70 rounded-xl transition-colors cursor-pointer shrink-0 ml-2"
+                          title="Escuchar pronunciación"
+                        >
+                          <Volume2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     );
                   })}
                 </div>
-              </div>
-            )}
+              )}
+            </div>
 
-            {/* Multiple Choice / Translate / Fill blank */}
-            {currentExercise.type !== 'scramble' && currentExercise.options && (
-              <div className="space-y-3 mb-8">
-                {currentExercise.options.map((opt, idx) => {
-                  const isSelected = selectedOption === opt;
-                  return (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => !isAnswerChecked && setSelectedOption(opt)}
-                      disabled={isAnswerChecked}
-                      className={`w-full p-4 rounded-xl border text-left font-semibold text-sm transition-all flex items-center justify-between ${
-                        isSelected
-                          ? 'border-indigo-600 bg-indigo-50/70 text-indigo-950 shadow-xs'
-                          : 'border-slate-200 bg-white text-slate-800 hover:bg-slate-50'
-                      }`}
-                    >
-                      <span>{opt}</span>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          speakFrench(opt);
-                        }}
-                        className="text-slate-400 hover:text-indigo-600 p-1"
-                      >
-                        <Volume2 className="w-4 h-4" />
-                      </button>
-                    </button>
-                  );
-                })}
-              </div>
-            )}
+            {/* Feedback & Bottom Controls */}
+            <div className="shrink-0 pt-2">
+              {/* Answer Feedback Banner */}
+              {isAnswerChecked && (
+                <div
+                  className={`p-3 rounded-2xl mb-3 border flex items-center justify-between gap-2.5 animate-in fade-in duration-150 ${
+                    isCorrect
+                      ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
+                      : 'bg-rose-50 border-rose-200 text-rose-900'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    {isCorrect ? (
+                      <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                    ) : (
+                      <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />
+                    )}
+                    <div className="min-w-0">
+                      <p className="font-bold text-xs sm:text-sm leading-tight">
+                        {isCorrect
+                          ? (isSwedish ? 'Bravo ! Rätt svar.' : '¡Bravo! Respuesta correcta.')
+                          : (isSwedish ? 'Inte riktigt rätt' : 'Casi casi...')}
+                      </p>
+                      <p className="text-[11px] opacity-80 truncate leading-tight mt-0.5">
+                        {isSwedish ? currentExercise.explanationSv : currentExercise.explanationEs}
+                      </p>
+                    </div>
+                  </div>
 
-            {/* Answer Feedback Banner */}
-            {isAnswerChecked && (
-              <div
-                className={`p-4 rounded-2xl mb-6 border flex items-start gap-3 ${
-                  isCorrect
-                    ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
-                    : 'bg-rose-50 border-rose-200 text-rose-900'
-                }`}
-              >
-                {isCorrect ? (
-                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                ) : (
-                  <AlertCircle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
-                )}
-                <div>
-                  <h4 className="font-bold text-sm">
-                    {isCorrect
-                      ? (isSwedish ? 'Lysande! Helt rätt.' : '¡Genial! Respuesta correcta.')
-                      : (isSwedish ? 'Inte riktigt rätt' : 'Casi casi...')}
-                  </h4>
-                  <p className="text-xs mt-1 leading-relaxed">
-                    {isSwedish ? currentExercise.explanationSv : currentExercise.explanationEs}
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* Footer Actions */}
-            <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-              <div>
-                {!isAnswerChecked && (
+                  {/* Speaker to replay correct answer */}
                   <button
                     type="button"
-                    onClick={() => setShowHint(!showHint)}
-                    className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 flex items-center gap-1"
+                    onClick={() => {
+                      const target = Array.isArray(currentExercise.answer) ? currentExercise.answer[0] : currentExercise.answer;
+                      speakFrench(target);
+                    }}
+                    className="p-1.5 text-slate-500 hover:text-purple-700 hover:bg-white/60 rounded-xl transition-colors cursor-pointer shrink-0"
+                    title="Escuchar de nuevo"
                   >
-                    <HelpCircle className="w-4 h-4" />
-                    <span>{isSwedish ? 'Ledtråd' : 'Pista'}</span>
+                    <Volume2 className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+
+              {/* Action Buttons Row */}
+              <div className="flex items-center justify-between pt-2 border-t border-slate-100">
+                <div>
+                  {!isAnswerChecked && (
+                    <button
+                      type="button"
+                      onClick={() => setShowHint(!showHint)}
+                      className="text-xs font-semibold text-purple-700 hover:text-purple-900 flex items-center gap-1 cursor-pointer"
+                    >
+                      <HelpCircle className="w-4 h-4" />
+                      <span>{isSwedish ? 'Ledtråd' : 'Pista'}</span>
+                    </button>
+                  )}
+                  {showHint && (
+                    <p className="text-[11px] text-slate-500 max-w-xs mt-1">
+                      {isSwedish ? currentExercise.hintSv : currentExercise.hintEs}
+                    </p>
+                  )}
+                </div>
+
+                {!isAnswerChecked ? (
+                  <button
+                    type="button"
+                    onClick={handleCheckAnswer}
+                    disabled={
+                      currentExercise.type === 'scramble'
+                        ? scramblePicks.length === 0
+                        : !selectedOption
+                    }
+                    className="px-6 py-2.5 bg-purple-600 hover:bg-purple-700 disabled:opacity-40 text-white font-bold text-xs sm:text-sm rounded-xl shadow-xs transition-all cursor-pointer"
+                  >
+                    {isSwedish ? 'Kontrollera' : 'Comprobar'}
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleNext}
+                    className="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm rounded-xl shadow-xs flex items-center gap-2 transition-all cursor-pointer"
+                  >
+                    <span>{isSwedish ? 'Nästa' : 'Continuar'}</span>
+                    <ArrowRight className="w-4 h-4" />
                   </button>
                 )}
-                {showHint && (
-                  <p className="text-xs text-slate-500 mt-1 max-w-xs">
-                    {isSwedish ? currentExercise.hintSv : currentExercise.hintEs}
-                  </p>
-                )}
               </div>
-
-              {!isAnswerChecked ? (
-                <button
-                  type="button"
-                  onClick={handleCheckAnswer}
-                  disabled={
-                    currentExercise.type === 'scramble'
-                      ? scramblePicks.length === 0
-                      : !selectedOption
-                  }
-                  className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 text-white font-semibold text-sm rounded-xl shadow-sm transition-all"
-                >
-                  {isSwedish ? 'Kontrollera svar' : 'Comprobar'}
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={handleNext}
-                  className="px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm rounded-xl shadow-sm flex items-center gap-2 transition-all"
-                >
-                  <span>{isSwedish ? 'Nästa' : 'Continuar'}</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              )}
             </div>
           </div>
         ) : (
           /* Finished State */
           <div className="text-center py-6">
-            <div className="w-16 h-16 rounded-2xl bg-amber-50 text-amber-500 border border-amber-200/60 flex items-center justify-center mx-auto mb-4">
-              <Trophy className="w-8 h-8" />
+            <div className="w-14 h-14 rounded-2xl bg-amber-50 text-amber-500 border border-amber-200/60 flex items-center justify-center mx-auto mb-3 shadow-2xs">
+              <Trophy className="w-7 h-7" />
             </div>
-            <h2 className="text-2xl font-bold text-slate-900 mb-2">
-              {isSwedish ? 'Lektion slutförd!' : '¡Lección completada!'}
+            <h2 className="text-xl font-black text-slate-900 mb-1">
+              {isSwedish ? 'Lektion slutförd!' : '¡Paso completado con éxito!'}
             </h2>
-            <p className="text-slate-600 text-sm mb-6">
+            <p className="text-slate-600 text-xs sm:text-sm mb-5">
               {isSwedish
-                ? `Du har bemästrat: "${lesson.frenchTitle}". Bra jobbat!`
-                : `Has completado "${lesson.frenchTitle}". ¡Sigue así!`}
+                ? `Du har slutfört: "${lesson.frenchTitle}".`
+                : `Has dominado: "${lesson.frenchTitle}".`}
             </p>
 
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-800 font-bold text-sm mb-8">
-              <Sparkles className="w-4 h-4 text-indigo-600" />
-              <span>+{lesson.xpReward} XP ganados</span>
+            <div className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-purple-50 border border-purple-200 text-purple-900 font-bold text-xs mb-6">
+              <Sparkles className="w-4 h-4 text-purple-600" />
+              <span>+{lesson.xpReward} XP ganados para tu racha</span>
             </div>
 
             <button
               onClick={onClose}
-              className="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm rounded-xl shadow-sm transition-all"
+              className="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold text-sm rounded-2xl shadow-sm transition-all cursor-pointer"
             >
               {isSwedish ? 'Tillbaka till kursöversikten' : 'Volver a la ruta'}
             </button>
