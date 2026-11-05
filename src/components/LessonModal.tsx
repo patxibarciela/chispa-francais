@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { 
   X, 
   Volume2, 
@@ -7,7 +8,8 @@ import {
   ArrowRight, 
   Sparkles, 
   HelpCircle,
-  Trophy
+  Trophy,
+  VolumeX
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { Lesson, Unit, UserProfile, Exercise } from '../types';
@@ -38,9 +40,19 @@ export const LessonModal: React.FC<LessonModalProps> = ({
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
   const [isFinished, setIsFinished] = useState<boolean>(false);
   const [showHint, setShowHint] = useState<boolean>(false);
+  const [playingText, setPlayingText] = useState<string | null>(null);
 
   const currentExercise: Exercise = exercises[currentIndex];
   const progressPercent = Math.round(((currentIndex) / exercises.length) * 100);
+
+  // Close on Escape key press
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
 
   // Reset exercise state upon step change (do NOT auto-play answer in advance)
   useEffect(() => {
@@ -48,7 +60,16 @@ export const LessonModal: React.FC<LessonModalProps> = ({
     setScramblePicks([]);
     setIsAnswerChecked(false);
     setShowHint(false);
+    setPlayingText(null);
   }, [currentIndex]);
+
+  const triggerAudio = (text: string) => {
+    setPlayingText(text);
+    speakFrench(text);
+    setTimeout(() => {
+      setPlayingText((prev) => (prev === text ? null : prev));
+    }, 1400);
+  };
 
   // Determine whether promptFr should be visible (never show if it gives away the answer)
   const shouldShowPromptFr = (ex: Exercise): boolean => {
@@ -65,10 +86,14 @@ export const LessonModal: React.FC<LessonModalProps> = ({
     return false;
   };
 
+  // Check if prompt quotes a French word to let user listen to it
+  const promptQuotedMatch = currentExercise.prompt.match(/«([^»]+)»|"([^"]+)"|'([^']+)'/);
+  const promptQuotedWord = promptQuotedMatch ? (promptQuotedMatch[1] || promptQuotedMatch[2] || promptQuotedMatch[3]) : null;
+
   const handlePickScrambleWord = (word: string) => {
     if (isAnswerChecked) return;
     setScramblePicks((prev) => [...prev, word]);
-    speakFrench(word);
+    triggerAudio(word);
   };
 
   const handleRemoveScrambleWord = (index: number) => {
@@ -97,9 +122,9 @@ export const LessonModal: React.FC<LessonModalProps> = ({
 
     if (correct) {
       if (profile.soundEnabled) soundEffects.playCorrect();
-      // Reinforce auditory learning by pronouncing the correct French phrase!
+      // Reinforce auditory learning by pronouncing the complete French answer!
       if (targetAnswer) {
-        speakFrench(targetAnswer);
+        triggerAudio(targetAnswer);
       }
     } else {
       if (profile.soundEnabled) soundEffects.playIncorrect();
@@ -118,10 +143,19 @@ export const LessonModal: React.FC<LessonModalProps> = ({
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-150">
+  if (typeof document === 'undefined') return null;
+
+  return createPortal(
+    <div 
+      className="fixed inset-0 z-[9999] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto animate-in fade-in duration-150"
+      style={{ top: 0, left: 0, right: 0, bottom: 0 }}
+    >
+      {/* Background click dismiss */}
+      <div className="fixed inset-0" onClick={onClose} aria-hidden="true" />
+
+      {/* Main Lesson Dialog Card */}
       <div 
-        className="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-slate-200 flex flex-col max-h-[92vh] overflow-hidden"
+        className="relative bg-white rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-slate-200 flex flex-col max-h-[92vh] overflow-hidden my-auto z-10 animate-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Header & Progress */}
@@ -156,9 +190,25 @@ export const LessonModal: React.FC<LessonModalProps> = ({
               <span className="text-[11px] font-black uppercase tracking-wider text-purple-700 block mb-0.5">
                 {unit.frenchTitle} · {lesson.title}
               </span>
-              <h2 className="text-base sm:text-lg font-black text-slate-900 leading-tight">
-                {currentExercise.prompt}
-              </h2>
+              <div className="flex items-start justify-between gap-2">
+                <h2 className="text-base sm:text-lg font-black text-slate-900 leading-tight">
+                  {currentExercise.prompt}
+                </h2>
+                {promptQuotedWord && !shouldShowPromptFr(currentExercise) && (
+                  <button
+                    type="button"
+                    onClick={() => triggerAudio(promptQuotedWord)}
+                    className={`p-1.5 rounded-xl border transition-all cursor-pointer shrink-0 ${
+                      playingText === promptQuotedWord
+                        ? 'bg-purple-600 text-white border-purple-600 animate-pulse'
+                        : 'text-purple-600 bg-purple-50 hover:bg-purple-100 border-purple-200'
+                    }`}
+                    title={`Escuchar "${promptQuotedWord}"`}
+                  >
+                    <Volume2 className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
 
               {/* Only shown when it contains a fill-in blank or French sentence to translate */}
               {shouldShowPromptFr(currentExercise) && (
@@ -168,9 +218,13 @@ export const LessonModal: React.FC<LessonModalProps> = ({
                   </span>
                   <button
                     type="button"
-                    onClick={() => speakFrench(currentExercise.promptFr!.replace(/_+/g, ''))}
-                    className="p-1 text-purple-600 hover:bg-purple-100 rounded-lg transition-colors cursor-pointer shrink-0"
-                    title="Escuchar frase"
+                    onClick={() => triggerAudio(currentExercise.promptFr!.replace(/_+/g, ''))}
+                    className={`p-1.5 rounded-lg transition-all cursor-pointer shrink-0 ${
+                      playingText === currentExercise.promptFr!.replace(/_+/g, '')
+                        ? 'bg-purple-600 text-white animate-pulse'
+                        : 'text-purple-600 hover:bg-purple-100'
+                    }`}
+                    title="Escuchar frase en francés"
                   >
                     <Volume2 className="w-4 h-4" />
                   </button>
@@ -179,7 +233,7 @@ export const LessonModal: React.FC<LessonModalProps> = ({
             </div>
 
             {/* Exercise Interaction Body */}
-            <div className="flex-1 min-h-0 py-1">
+            <div className="flex-1 min-h-0 py-1 overflow-y-auto">
               {/* Scramble Exercise Type */}
               {currentExercise.type === 'scramble' && (
                 <div className="space-y-3">
@@ -236,6 +290,8 @@ export const LessonModal: React.FC<LessonModalProps> = ({
                 <div className="space-y-2">
                   {currentExercise.options.map((opt, idx) => {
                     const isSelected = selectedOption === opt;
+                    const isAudioPlayingThis = playingText === opt;
+
                     return (
                       <div
                         key={idx}
@@ -243,7 +299,7 @@ export const LessonModal: React.FC<LessonModalProps> = ({
                           if (!isAnswerChecked) {
                             setSelectedOption(opt);
                           }
-                          speakFrench(opt);
+                          triggerAudio(opt);
                         }}
                         className={`w-full py-2.5 px-3.5 rounded-2xl border font-semibold text-xs sm:text-sm transition-all flex items-center justify-between cursor-pointer select-none ${
                           isSelected
@@ -265,10 +321,14 @@ export const LessonModal: React.FC<LessonModalProps> = ({
                           type="button"
                           onClick={(e) => {
                             e.stopPropagation();
-                            speakFrench(opt);
+                            triggerAudio(opt);
                           }}
-                          className="text-slate-400 hover:text-purple-600 p-1.5 hover:bg-purple-100/70 rounded-xl transition-colors cursor-pointer shrink-0 ml-2"
-                          title="Escuchar pronunciación"
+                          className={`p-1.5 rounded-xl transition-all cursor-pointer shrink-0 ml-2 ${
+                            isAudioPlayingThis
+                              ? 'bg-purple-600 text-white shadow-xs animate-pulse ring-2 ring-purple-300'
+                              : 'text-slate-400 hover:text-purple-600 hover:bg-purple-100/70'
+                          }`}
+                          title="Escuchar pronunciación en francés"
                         >
                           <Volume2 className="w-4 h-4" />
                         </button>
@@ -308,15 +368,21 @@ export const LessonModal: React.FC<LessonModalProps> = ({
                     </div>
                   </div>
 
-                  {/* Speaker to replay correct answer */}
+                  {/* Speaker to replay correct answer (works for both single strings and scramble arrays) */}
                   <button
                     type="button"
                     onClick={() => {
-                      const target = Array.isArray(currentExercise.answer) ? currentExercise.answer[0] : currentExercise.answer;
-                      speakFrench(target);
+                      const target = Array.isArray(currentExercise.answer) 
+                        ? currentExercise.answer.join(' ') 
+                        : currentExercise.answer;
+                      triggerAudio(target);
                     }}
-                    className="p-1.5 text-slate-500 hover:text-purple-700 hover:bg-white/60 rounded-xl transition-colors cursor-pointer shrink-0"
-                    title="Escuchar de nuevo"
+                    className={`p-1.5 rounded-xl transition-all cursor-pointer shrink-0 ${
+                      playingText === (Array.isArray(currentExercise.answer) ? currentExercise.answer.join(' ') : currentExercise.answer)
+                        ? 'bg-purple-600 text-white animate-pulse'
+                        : 'text-slate-500 hover:text-purple-700 hover:bg-white/70'
+                    }`}
+                    title="Escuchar de nuevo la respuesta correcta"
                   >
                     <Volume2 className="w-4 h-4" />
                   </button>
@@ -398,6 +464,7 @@ export const LessonModal: React.FC<LessonModalProps> = ({
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

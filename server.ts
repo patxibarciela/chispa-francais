@@ -41,6 +41,37 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Resilient French Audio TTS Proxy Endpoint (bypasses browser Referer blocks and missing local OS voices)
+app.get('/api/tts/fr', async (req, res) => {
+  try {
+    const rawText = String(req.query.text || '').replace(/<[^>]*>/g, '').trim();
+    if (!rawText) {
+      return res.status(400).send('Text query param is required');
+    }
+    const cleanText = rawText.slice(0, 200);
+    const googleTtsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=fr&client=tw-ob&q=${encodeURIComponent(cleanText)}`;
+    
+    const upstreamRes = await fetch(googleTtsUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'audio/mpeg, audio/*',
+      },
+    });
+
+    if (!upstreamRes.ok) {
+      return res.status(upstreamRes.status).send('Upstream TTS error');
+    }
+
+    res.setHeader('Content-Type', 'audio/mpeg');
+    res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=86400');
+    const buffer = await upstreamRes.arrayBuffer();
+    return res.send(Buffer.from(buffer));
+  } catch (err: any) {
+    console.error('Server TTS proxy error:', err);
+    return res.status(500).send('Internal TTS error');
+  }
+});
+
 // Conversational Tutor endpoint
 app.post('/api/tutor/chat', async (req, res) => {
   const { messages, supportLanguage = 'es', currentUnit = 'Salutations' } = req.body;

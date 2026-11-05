@@ -1,11 +1,11 @@
 /**
- * Web Speech API and Web Audio API utilities for Chispa Français
+ * Resilient Web Audio and French Speech Synthesis engine for Chispa Français
  */
 
 class SoundEffects {
   private ctx: AudioContext | null = null;
 
-  private getContext(): AudioContext | null {
+  getContext(): AudioContext | null {
     if (typeof window === 'undefined') return null;
     if (!this.ctx) {
       const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
@@ -17,6 +17,39 @@ class SoundEffects {
       this.ctx.resume().catch(() => {});
     }
     return this.ctx;
+  }
+
+  unlock() {
+    const ctx = this.getContext();
+    if (ctx && ctx.state === 'suspended') {
+      ctx.resume().catch(() => {});
+    }
+  }
+
+  // Soft tactile acoustic tap when clicking cards/buttons
+  playTap() {
+    const ctx = this.getContext();
+    if (!ctx) return;
+    try {
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(440, now);
+      osc.frequency.exponentialRampToValueAtTime(580, now + 0.05);
+
+      gain.gain.setValueAtTime(0.08, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.06);
+    } catch {
+      // Audio error suppressed
+    }
   }
 
   // Cheerful chime for correct answers
@@ -41,7 +74,7 @@ class SoundEffects {
 
       osc.start(now);
       osc.stop(now + 0.35);
-    } catch (e) {
+    } catch {
       // Audio error suppressed
     }
   }
@@ -67,7 +100,7 @@ class SoundEffects {
 
       osc.start(now);
       osc.stop(now + 0.28);
-    } catch (e) {
+    } catch {
       // Audio error suppressed
     }
   }
@@ -96,7 +129,7 @@ class SoundEffects {
         osc.start(noteStart);
         osc.stop(noteStart + 0.32);
       });
-    } catch (e) {
+    } catch {
       // Audio error suppressed
     }
   }
@@ -122,7 +155,7 @@ class SoundEffects {
 
       osc.start(now);
       osc.stop(now + 0.07);
-    } catch (e) {
+    } catch {
       // Audio error suppressed
     }
   }
@@ -131,33 +164,175 @@ class SoundEffects {
 export const soundEffects = new SoundEffects();
 
 /**
- * Text-to-Speech using native French voices
+ * Global audio and voice tracking to protect against browser GC bugs and race conditions
  */
-export function speakFrench(text: string, slow = false) {
-  if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
-    return;
-  }
+let activeAudioElement: HTMLAudioElement | null = null;
+let cachedFrenchVoice: SpeechSynthesisVoice | null = null;
 
-  window.speechSynthesis.cancel(); // Stop any pending speech
+if (typeof window !== 'undefined') {
+  (window as any).__chispaSpeechSet = (window as any).__chispaSpeechSet || new Set();
+}
+
+function findBestFrenchVoice(): SpeechSynthesisVoice | null {
+  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return null;
+  try {
+    const voices = window.speechSynthesis.getVoices();
+    if (!voices || voices.length === 0) return null;
+
+    // 1. Google French voice (built into Chromium/Chrome)
+    const googleFr = voices.find(
+      (v) => v.lang.toLowerCase().startsWith('fr') && v.name.toLowerCase().includes('google')
+    );
+    if (googleFr) return googleFr;
+
+    // 2. High-quality natural French voices (Amélie, Thomas, Hortense, Julie, etc.)
+    const naturalFr = voices.find(
+      (v) => v.lang.toLowerCase().startsWith('fr') && (
+        v.name.includes('Amélie') || 
+        v.name.includes('Thomas') || 
+        v.name.includes('Natural') || 
+        v.name.includes('Hortense') ||
+        v.name.includes('Julie')
+      )
+    );
+    if (naturalFr) return naturalFr;
+
+    // 3. Any standard fr-FR voice
+    const frFr = voices.find((v) => v.lang === 'fr-FR' || v.lang === 'fr_FR');
+    if (frFr) return frFr;
+
+    // 4. Any French dialect voice (fr-CA, fr-BE, fr-CH)
+    const anyFr = voices.find((v) => v.lang.toLowerCase().startsWith('fr'));
+    if (anyFr) return anyFr;
+
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+function updateFrenchVoiceCache() {
+  const voice = findBestFrenchVoice();
+  if (voice) {
+    cachedFrenchVoice = voice;
+  }
+}
+
+if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+  updateFrenchVoiceCache();
+  window.speechSynthesis.onvoiceschanged = () => {
+    updateFrenchVoiceCache();
+  };
+}
+
+/**
+ * Native SpeechSynthesis fallback for offline / static host environments
+ */
+function playNativeSpeechSynthesis(cleanText: string, slow = false): Promise<boolean> {
+  return new Promise((resolve) => {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+      resolve(false);
+      return;
+    }
+
+    try {
+      // Unfreeze synthesis engine in Chrome
+      if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+      }
+
+      // If already speaking, safely cancel with brief delay to avoid Chrome race bug
+      if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.cancel();
+      }
+
+      setTimeout(() => {
+        try {
+          const utterance = new SpeechSynthesisUtterance(cleanText);
+          utterance.lang = 'fr-FR';
+          utterance.rate = slow ? 0.78 : 0.94;
+          utterance.pitch = 1.04;
+
+          if (!cachedFrenchVoice) {
+            updateFrenchVoiceCache();
+          }
+          if (cachedFrenchVoice) {
+            utterance.voice = cachedFrenchVoice;
+          }
+
+          // Retain utterance in global Set to prevent GC premature cut-off in Chromium
+          if ((window as any).__chispaSpeechSet) {
+            (window as any).__chispaSpeechSet.add(utterance);
+          }
+
+          utterance.onend = () => {
+            if ((window as any).__chispaSpeechSet) {
+              (window as any).__chispaSpeechSet.delete(utterance);
+            }
+            resolve(true);
+          };
+
+          utterance.onerror = () => {
+            if ((window as any).__chispaSpeechSet) {
+              (window as any).__chispaSpeechSet.delete(utterance);
+            }
+            resolve(false);
+          };
+
+          window.speechSynthesis.speak(utterance);
+        } catch {
+          resolve(false);
+        }
+      }, 35);
+    } catch {
+      resolve(false);
+    }
+  });
+}
+
+/**
+ * Universal speakFrench function:
+ * 1. Synchronously unlocks AudioContext on click.
+ * 2. Attempts studio-quality /api/tts/fr stream via HTML5 Audio.
+ * 3. Falls back smoothly to SpeechSynthesis if offline/static.
+ * 4. Provides subtle acoustic feedback so clicks are never dead.
+ */
+export async function speakFrench(text: string, slow = false): Promise<void> {
+  if (typeof window === 'undefined') return;
 
   const cleanText = text.replace(/<[^>]*>/g, '').trim();
   if (!cleanText) return;
 
-  const utterance = new SpeechSynthesisUtterance(cleanText);
-  utterance.lang = 'fr-FR';
-  utterance.rate = slow ? 0.75 : 0.95; // Slightly measured pace for young beginners
-  utterance.pitch = 1.05;
+  // Immediately unlock audio context in the active user gesture
+  soundEffects.unlock();
 
-  const voices = window.speechSynthesis.getVoices();
-  const frenchVoice = voices.find(
-    (v) => v.lang.startsWith('fr') && (v.name.includes('Amélie') || v.name.includes('Thomas') || v.name.includes('Google') || v.name.includes('Natural'))
-  ) || voices.find((v) => v.lang.startsWith('fr'));
+  // Try Server-side French TTS endpoint first
+  try {
+    if (activeAudioElement) {
+      activeAudioElement.pause();
+      activeAudioElement.currentTime = 0;
+      activeAudioElement = null;
+    }
 
-  if (frenchVoice) {
-    utterance.voice = frenchVoice;
+    const ttsUrl = `/api/tts/fr?text=${encodeURIComponent(cleanText)}`;
+    const audio = new Audio(ttsUrl);
+    activeAudioElement = audio;
+
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      await playPromise;
+      return; // Played successfully!
+    }
+  } catch {
+    // Server TTS not reachable or static environment, continue to native speech synthesis
   }
 
-  window.speechSynthesis.speak(utterance);
+  // Fallback to Native SpeechSynthesis
+  const synthSuccess = await playNativeSpeechSynthesis(cleanText, slow);
+  if (!synthSuccess) {
+    // If both failed, provide subtle acoustic feedback so user knows the button registered
+    soundEffects.playTap();
+  }
 }
 
 /**

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { 
   X, 
   LogOut, 
@@ -32,7 +33,26 @@ export const AccountModal: React.FC<AccountModalProps> = ({
   const [isEditingName, setIsEditingName] = useState(false);
   const [editedName, setEditedName] = useState(profile.name);
 
+  // Close on Escape key press
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
+  // Keep editedName in sync with profile.name when opening
+  useEffect(() => {
+    if (isOpen) {
+      setEditedName(profile.name);
+      setIsEditingName(false);
+    }
+  }, [isOpen, profile.name]);
+
   if (!isOpen) return null;
+  if (typeof document === 'undefined') return null;
 
   const isEs = profile.supportLanguage === 'es';
   const isGoogle = !!user;
@@ -54,14 +74,17 @@ export const AccountModal: React.FC<AccountModalProps> = ({
     onLogout();
   };
 
-  return (
-    <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
+  return createPortal(
+    <div 
+      className="fixed inset-0 z-[9999] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-200"
+      style={{ top: 0, left: 0, right: 0, bottom: 0 }}
+    >
       {/* Background click dismiss */}
-      <div className="absolute inset-0" onClick={onClose} />
+      <div className="fixed inset-0" onClick={onClose} aria-hidden="true" />
 
       {/* Modal Card matching Chispa Español */}
       <div 
-        className="relative bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-200 z-10 animate-in zoom-in-95 duration-150"
+        className="relative bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-200 z-10 my-auto animate-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -188,6 +211,7 @@ export const AccountModal: React.FC<AccountModalProps> = ({
           </p>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
