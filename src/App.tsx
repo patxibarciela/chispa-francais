@@ -22,7 +22,8 @@ import {
   loadFlashcards, 
   saveFlashcards,
   getActiveProfileId,
-  setActiveProfileId
+  setActiveProfileId,
+  resetAllProgress
 } from './utils/storage';
 
 function ChispaFrançaisApp() {
@@ -217,6 +218,15 @@ function ChispaFrançaisApp() {
     setHasSelectedSession(false);
   };
 
+  const handleResetProgress = () => {
+    const { profile: cleanProfile, cards: cleanCards } = resetAllProgress();
+    setProfile(cleanProfile);
+    setCards(cleanCards);
+    if (user) {
+      saveCloudData(cleanProfile, cleanCards);
+    }
+  };
+
   // If not logged in via Google and no local profile active, show the Login / Welcome Landing screen
   if (!loading && !user && !hasSelectedSession) {
     return (
@@ -241,8 +251,10 @@ function ChispaFrançaisApp() {
           setActiveTab(tab);
         }}
         profile={profile}
+        cards={cards}
         onUpdateProfile={handleUpdateProfile}
         onLogout={handleLogout}
+        onResetProgress={handleResetProgress}
       />
 
       {/* App Body with Left Sidebar (like Chispa Español) */}

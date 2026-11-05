@@ -1,14 +1,28 @@
 import { UserProfile, Flashcard, Achievement } from '../types';
 import { INITIAL_VOCABULARY } from '../data/vocabulary';
 
-const STORAGE_KEY_PROFILE = 'chispa_francais_profile_v1';
-const STORAGE_KEY_CARDS = 'chispa_francais_cards_v1';
+const STORAGE_KEY_PROFILE = 'chispa_francais_profile_v2';
+const STORAGE_KEY_CARDS = 'chispa_francais_cards_v2';
+const STORAGE_KEY_PROFILES_LIST = 'chispa_francais_profiles_list_v2';
+const STORAGE_KEY_ACTIVE_ID = 'chispa_francais_active_profile_id_v2';
 
-const DEFAULT_PROFILE: UserProfile = {
+// Clean up legacy v1 mock keys from localStorage
+if (typeof window !== 'undefined') {
+  try {
+    localStorage.removeItem('chispa_francais_profile_v1');
+    localStorage.removeItem('chispa_francais_cards_v1');
+    localStorage.removeItem('chispa_francais_profiles_list_v1');
+    localStorage.removeItem('chispa_francais_active_profile_id_v1');
+  } catch {
+    // Ignore storage cleanup errors
+  }
+}
+
+export const DEFAULT_PROFILE: UserProfile = {
   name: 'Élève',
-  streakDays: 1,
+  streakDays: 0,
   lastStudyDate: new Date().toISOString().split('T')[0],
-  totalXp: 45,
+  totalXp: 0,
   completedLessonIds: [],
   completedSessionIds: [],
   currentGrade: 'ak6',
@@ -16,11 +30,8 @@ const DEFAULT_PROFILE: UserProfile = {
   voiceSpeed: 0.9,
   supportLanguage: 'es', // Default Spanish, can toggle to 'sv' (Svenska)
   dailyGoalMinutes: 30,
-  minutesToday: 12,
+  minutesToday: 0,
 };
-
-const STORAGE_KEY_PROFILES_LIST = 'chispa_francais_profiles_list_v1';
-const STORAGE_KEY_ACTIVE_ID = 'chispa_francais_active_profile_id_v1';
 
 export function loadSavedProfiles(): UserProfile[] {
   if (typeof window === 'undefined') return [];
@@ -259,3 +270,32 @@ export function getAchievements(profile: UserProfile, cards: Flashcard[]): Achie
     },
   ];
 }
+
+export function resetAllProgress(): { profile: UserProfile; cards: Flashcard[] } {
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.removeItem(STORAGE_KEY_PROFILE);
+      localStorage.removeItem(STORAGE_KEY_CARDS);
+      localStorage.removeItem(STORAGE_KEY_ACTIVE_ID);
+      localStorage.removeItem(STORAGE_KEY_PROFILES_LIST);
+    } catch {
+      // Storage error suppressed
+    }
+  }
+
+  const cleanCards: Flashcard[] = INITIAL_VOCABULARY.map((c) => ({
+    ...c,
+    box: 1,
+    correctStreak: 0,
+    timesReviewed: 0,
+    nextReviewDate: new Date().toISOString(),
+  }));
+
+  const cleanProfile: UserProfile = { ...DEFAULT_PROFILE };
+
+  saveUserProfile(cleanProfile);
+  saveFlashcards(cleanCards);
+
+  return { profile: cleanProfile, cards: cleanCards };
+}
+

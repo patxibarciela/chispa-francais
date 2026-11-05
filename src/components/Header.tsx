@@ -14,7 +14,7 @@ import {
   Menu,
   X
 } from 'lucide-react';
-import { UserProfile, LanguagePreference } from '../types';
+import { UserProfile, LanguagePreference, Flashcard } from '../types';
 import { useAuth } from '../context/AuthContext';
 import { AccountModal } from './AccountModal';
 
@@ -22,16 +22,20 @@ interface HeaderProps {
   activeTab: 'roadmap' | 'cards' | 'tutor' | 'achievements';
   setActiveTab: (tab: 'roadmap' | 'cards' | 'tutor' | 'achievements') => void;
   profile: UserProfile;
+  cards?: Flashcard[];
   onUpdateProfile: (updated: Partial<UserProfile>) => void;
   onLogout: () => void;
+  onResetProgress?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   activeTab,
   setActiveTab,
   profile,
+  cards,
   onUpdateProfile,
   onLogout,
+  onResetProgress,
 }) => {
   const { user, signOut } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -39,6 +43,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   const isEs = profile.supportLanguage === 'es';
   const isCloud = !!user;
+  const masteredGems = cards ? cards.filter((c) => c.box === 3).length : 0;
 
   const toggleLanguage = () => {
     const nextLang: LanguagePreference = profile.supportLanguage === 'es' ? 'sv' : 'es';
@@ -123,7 +128,7 @@ export const Header: React.FC<HeaderProps> = ({
               title={isEs ? 'Tarjetas dominadas en Caja 3' : 'Behärskade glosor'}
             >
               <Gem className="w-3.5 h-3.5 text-purple-500" />
-              <span className="tabular-nums">20</span>
+              <span className="tabular-nums">{masteredGems}</span>
             </div>
 
             {/* XP Counter */}
@@ -204,6 +209,7 @@ export const Header: React.FC<HeaderProps> = ({
               profile={profile}
               onUpdateProfile={onUpdateProfile}
               onLogout={onLogout}
+              onResetProgress={onResetProgress}
             />
           </div>
         </div>

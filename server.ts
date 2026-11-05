@@ -14,12 +14,12 @@ const PORT = Number(process.env.PORT) || 3000;
 
 app.use(express.json());
 
-// Initialize Google GenAI client if API key is present
-const apiKey = process.env.GEMINI_API_KEY;
-let ai: GoogleGenAI | null = null;
-if (apiKey) {
+// Dynamic Google GenAI client resolver
+function getGeminiClient(): GoogleGenAI | null {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) return null;
   try {
-    ai = new GoogleGenAI({
+    return new GoogleGenAI({
       apiKey,
       httpOptions: {
         headers: {
@@ -29,6 +29,7 @@ if (apiKey) {
     });
   } catch (err) {
     console.error('Failed to initialize GoogleGenAI client:', err);
+    return null;
   }
 }
 
@@ -36,7 +37,7 @@ if (apiKey) {
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
-    aiEnabled: Boolean(ai),
+    aiEnabled: Boolean(process.env.GEMINI_API_KEY),
     timestamp: new Date().toISOString(),
   });
 });
@@ -91,6 +92,7 @@ Directrices pedagógicas:
 6. Si la estudiante pregunta cómo se dice algo o pide explicaciones, explícaselo en francés con la traducción en ${supportLanguage === 'sv' ? 'sueco (svenska)' : 'español'}.
 7. Fomenta siempre que escriba o intente hablar en francés.`;
 
+  const ai = getGeminiClient();
   if (ai) {
     try {
       // Build conversation history for generateContent
@@ -117,17 +119,27 @@ Directrices pedagógicas:
   const lastMsg = (messages[messages.length - 1]?.content || '').toLowerCase();
   let fallbackReply = "¡Bravo ! C'est une très bonne tentative. Comment tu t'appelles ?";
   if (lastMsg.includes('bonjour') || lastMsg.includes('salut')) {
-    fallbackReply = "Bonjour ! Enchanté ! Ça va bien aujourd'hui ? Tu peux me dire : « Ça va bien, merci ! »";
+    fallbackReply = "Bonjour ! Enchanté ! Ça va bien aujourd'hui ? Tu peux me dire : « Ça va super bien, merci ! »";
   } else if (lastMsg.includes('merci')) {
-    fallbackReply = "De rien ! Tu veux apprendre de nouveaux mots sur la famille, les nombres ou les animaux ?";
-  } else if (lastMsg.includes('je m\'appelle') || lastMsg.includes('je mappelle')) {
-    fallbackReply = "Enchanté ! Quel bel prénom ! Quel âge as-tu ? Tu peux dire : « J'ai 13 ans ! »";
+    fallbackReply = "De rien ! Tu veux apprendre de nuevos mots sur la famille, les nombres ou les animaux ?";
+  } else if (lastMsg.includes("je m'appelle") || lastMsg.includes('je mappelle')) {
+    fallbackReply = "Enchanté ! Quel joli prénom ! Quel âge as-tu ? Tu peux me dire : « J'ai 13 ans ! »";
   } else if (lastMsg.includes('ans') || lastMsg.includes('treize') || lastMsg.includes('13')) {
-    fallbackReply = "Super ! 13 ans, c'est l'âge parfait pour commencer le français ! Tu es prête pour un petit jeu ?";
-  } else if (lastMsg.includes('oui')) {
-    fallbackReply = "Fantastique ! Comment dit-on « gato » en français ? Est-ce que c'est : un chien, un chat, ou un oiseau ?";
+    fallbackReply = "Super ! 13 ans, c'est l'âge parfait pour commencer le français en årskurs 6 ! Tu aimes le foot ou les jeux vidéo ?";
+  } else if (lastMsg.includes('oui') || lastMsg.includes('si')) {
+    fallbackReply = "Fantastique ! Comment dit-on « chat » en français ? C'est un animal très mignon qui fait miaou !";
+  } else if (lastMsg.includes('chat')) {
+    fallbackReply = "Exactement ! « Le chat » ! Et comment dit-on « perro » en français ? Tu t'en souviens ?";
+  } else if (lastMsg.includes('chien')) {
+    fallbackReply = "Bravo ! « Le chien » ! Tu as des animaux chez toi ?";
   } else {
-    fallbackReply = "C'est bien essayé ! Répète avec moi : « J'apprends le français à l'école ! » ✨";
+    const variedReplies = [
+      "¡Très bien ! Tu t'exprimes avec de plus en plus d'aisance. Comment dit-on « merci » en français ?",
+      "C'est une super tentative ! Raconte-moi : qu'est-ce que tu préfères manger, la pizza ou les crêpes ?",
+      "Bravo pour tes efforts ! Tu as envie de faire un petit jeu de vocabulaire avec moi ?",
+      "Magnifique ! En français on progresse chaque jour un peu plus. Tu veux qu'on compte ensemble de 1 à 10 ?",
+    ];
+    fallbackReply = variedReplies[Math.floor(Math.random() * variedReplies.length)];
   }
 
   return res.json({ reply: fallbackReply });
@@ -138,6 +150,7 @@ app.post('/api/tutor/session-evaluate', async (req, res) => {
   const { phase, sessionTitle, userInput, history, supportLanguage = 'es' } = req.body;
 
   const promptLanguage = supportLanguage === 'sv' ? 'sueco' : 'español';
+  const ai = getGeminiClient();
 
   if (ai) {
     try {

@@ -9,7 +9,8 @@ import {
   Check, 
   Cloud, 
   HardDrive, 
-  ShieldCheck 
+  ShieldCheck,
+  RotateCcw
 } from 'lucide-react';
 import { UserProfile } from '../types';
 import { useAuth } from '../context/AuthContext';
@@ -20,6 +21,7 @@ interface AccountModalProps {
   profile: UserProfile;
   onUpdateProfile: (updated: Partial<UserProfile>) => void;
   onLogout: () => void;
+  onResetProgress?: () => void;
 }
 
 export const AccountModal: React.FC<AccountModalProps> = ({
@@ -187,8 +189,8 @@ export const AccountModal: React.FC<AccountModalProps> = ({
           )}
         </div>
 
-        {/* Logout Action Button matching Chispa screenshot */}
-        <div className="space-y-3">
+        {/* Action Buttons */}
+        <div className="space-y-2.5">
           <button
             type="button"
             onClick={handleSignOut}
@@ -197,6 +199,22 @@ export const AccountModal: React.FC<AccountModalProps> = ({
             <LogOut className="w-4 h-4 text-purple-700" />
             <span>{isEs ? 'Cerrar sesión y volver a la pantalla de acceso' : 'Logga ut och återgå till startskärmen'}</span>
           </button>
+
+          {onResetProgress && (
+            <button
+              type="button"
+              onClick={() => {
+                if (window.confirm(isEs ? '¿Quieres reiniciar todo el progreso a cero y comenzar desde el Paso 1 de la Unidad 1?' : 'Vill du återställa alla framsteg till noll och börja från Steg 1?')) {
+                  onResetProgress();
+                  onClose();
+                }
+              }}
+              className="w-full py-2.5 px-4 rounded-xl border border-slate-200 bg-white hover:bg-rose-50 hover:border-rose-200 text-slate-500 hover:text-rose-600 font-semibold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>{isEs ? 'Reiniciar progreso a cero (empezar desde el paso 1)' : 'Återställ alla framsteg till noll'}</span>
+            </button>
+          )}
         </div>
 
         {/* Footer info note */}
