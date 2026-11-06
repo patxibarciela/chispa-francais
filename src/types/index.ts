@@ -73,6 +73,8 @@ export interface Flashcard {
   nextReviewDate: string; // ISO date string
   timesReviewed: number;
   correctStreak: number;
+  unitId?: string;
+  grade?: GradeLevel;
 }
 
 export interface DailySessionTemplate {

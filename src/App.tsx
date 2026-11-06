@@ -25,6 +25,7 @@ import {
   setActiveProfileId,
   resetAllProgress
 } from './utils/storage';
+import { CURRICULUM_UNITS } from './data/curriculum';
 
 function ChispaFrançaisApp() {
   const { user, loading, saveCloudData, loadCloudData } = useAuth();
@@ -301,6 +302,7 @@ function ChispaFrançaisApp() {
                   cards={cards}
                   onUpdateCards={handleUpdateCards}
                   profile={profile}
+                  units={CURRICULUM_UNITS}
                 />
               )}
 

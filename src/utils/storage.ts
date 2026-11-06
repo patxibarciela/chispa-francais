@@ -145,7 +145,21 @@ export function loadFlashcards(): Flashcard[] {
     const raw = localStorage.getItem(STORAGE_KEY_CARDS);
     if (!raw) return INITIAL_VOCABULARY;
     const cards = JSON.parse(raw);
-    return Array.isArray(cards) && cards.length > 0 ? cards : INITIAL_VOCABULARY;
+    if (Array.isArray(cards) && cards.length > 0) {
+      const existingIds = new Set(cards.map((c: Flashcard) => c.id));
+      const missing = INITIAL_VOCABULARY.filter((c) => !existingIds.has(c.id));
+      if (missing.length > 0) {
+        const merged = [...cards, ...missing];
+        try {
+          localStorage.setItem(STORAGE_KEY_CARDS, JSON.stringify(merged));
+        } catch {
+          // Ignore storage quota errors
+        }
+        return merged;
+      }
+      return cards;
+    }
+    return INITIAL_VOCABULARY;
   } catch {
     return INITIAL_VOCABULARY;
   }
