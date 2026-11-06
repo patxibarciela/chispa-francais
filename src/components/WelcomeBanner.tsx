@@ -1,6 +1,7 @@
 import React from 'react';
 import { Flame, Target, Trophy, Sparkles } from 'lucide-react';
 import { UserProfile } from '../types';
+import { CURRICULUM_UNITS } from '../data/curriculum';
 
 interface WelcomeBannerProps {
   profile: UserProfile;
@@ -51,10 +52,12 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({ profile }) => {
             </p>
           </div>
 
-          {/* Quick Stats Group from screenshot 2 */}
+          {/* Quick Stats Group */}
           <div className="flex items-center gap-3 self-start md:self-auto shrink-0">
             <div className="bg-white/95 rounded-2xl px-4 py-3 border border-slate-200/80 shadow-2xs text-center min-w-[85px]">
-              <span className="block text-xl font-black text-indigo-600">8</span>
+              <span className="block text-xl font-black text-indigo-600">
+                {CURRICULUM_UNITS.length}
+              </span>
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                 {isEs ? 'Unidades' : 'Enheter'}
               </span>
@@ -70,7 +73,9 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({ profile }) => {
             </div>
 
             <div className="bg-white/95 rounded-2xl px-4 py-3 border border-slate-200/80 shadow-2xs text-center min-w-[85px]">
-              <span className="block text-xl font-black text-purple-600">Åk 6</span>
+              <span className="block text-xl font-black text-purple-600">
+                {profile.currentGrade === 'ak7' ? 'Åk 7' : 'Åk 6'}
+              </span>
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                 {isEs ? 'Etapa' : 'Stadie'}
               </span>

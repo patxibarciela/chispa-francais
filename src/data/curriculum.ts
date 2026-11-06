@@ -1,3318 +1,10608 @@
 import { Unit } from '../types';
+import { CURRICULUM_AK7_UNITS } from './curriculumAk7';
+
+const CURRICULUM_AK6_UNITS: Unit[] = [
+  {
+    "id": "unit-1",
+    "number": 1,
+    "grade": "ak6",
+    "title": "Saludos y Presentaciones",
+    "frenchTitle": "Salutations et Présentations",
+    "description": "Aprende a saludar, decir tu nombre, preguntar qué tal y presentarte en francés.",
+    "iconName": "HandMetal",
+    "color": "from-amber-500 to-orange-500",
+    "grammarTip": {
+      "title": "Tu vs. Vous & El verbo \"S'appeler\"",
+      "explanationEs": "En francés, usamos \"tu\" con amigos y compañeros de clase (como en la escuela sueca), y \"vous\" con personas mayores o profesores. Para decir tu nombre dices \"Je m'appelle...\" (literalmente: me llamo).",
+      "explanationSv": "På franska använder vi \"tu\" (du) med kompisar och klasskamrater, och \"vous\" (ni) med vuxna eller lärare. För att säga ditt namn säger du \"Je m'appelle...\" (jag heter).",
+      "examples": [
+        {
+          "fr": "Je m'appelle Sophie.",
+          "es": "Me llamo Sophie.",
+          "sv": "Jag heter Sophie."
+        },
+        {
+          "fr": "Comment tu t'appelles ?",
+          "es": "¿Cómo te llamas?",
+          "sv": "Vad heter du?"
+        },
+        {
+          "fr": "Ça va très bien, merci !",
+          "es": "¡Muy bien, gracias!",
+          "sv": "Det går jättebra, tack!"
+        }
+      ]
+    },
+    "lessons": [
+      {
+        "id": "u1-l1",
+        "unitId": "unit-1",
+        "title": "Paso 1: Vocabulario básico y Saludos",
+        "frenchTitle": "Les Mots Magiques de Salutation",
+        "description": "Bonjour, Salut, Au revoir, Merci y las fórmulas esenciales.",
+        "xpReward": 15,
+        "culturalNote": {
+          "title": "El saludo en Francia",
+          "textEs": "En Francia, los jóvenes dicen \"Salut !\" entre amigos, mientras que \"Bonjour\" se usa formalmente o con adultos.",
+          "textSv": "I Frankrike säger ungdomar \"Salut !\" till kompisar, medan \"Bonjour\" används med vuxna."
+        },
+        "exercises": [
+          {
+            "id": "u1-l1-e1",
+            "type": "choice",
+            "prompt": "¿Cómo se saluda formalmente durante el día en francés?",
+            "promptFr": "Bonjour !",
+            "audioFr": "Bonjour !",
+            "options": [
+              "Bonjour",
+              "Au revoir",
+              "Merci",
+              "Pardon"
+            ],
+            "answer": "Bonjour",
+            "hintEs": "\"Bon\" significa bueno y \"jour\" día.",
+            "hintSv": "\"Bon\" betyder bra och \"jour\" dag.",
+            "explanationEs": "¡Correcto! \"Bonjour\" es el saludo estándar.",
+            "explanationSv": "Rätt! \"Bonjour\" betyder god dag eller hej."
+          },
+          {
+            "id": "u1-l1-e2",
+            "type": "choice",
+            "prompt": "¿Cómo se saluda de manera informal entre amigos de clase?",
+            "promptFr": "Salut !",
+            "audioFr": "Salut !",
+            "options": [
+              "Salut !",
+              "Bonsoir !",
+              "Au revoir !",
+              "Enchanté !"
+            ],
+            "answer": "Salut !",
+            "hintEs": "Tiene 5 letras y la \"t\" final no se pronuncia.",
+            "hintSv": "Uttalas \"Salü\". Informell hälsning mellan kompisar.",
+            "explanationEs": "¡Exacto! \"Salut !\" es el equivalente a \"¡Hola!\" entre jóvenes.",
+            "explanationSv": "Exakt! \"Salut !\" är hej mellan kompisar."
+          },
+          {
+            "id": "u1-l1-e3",
+            "type": "translate",
+            "prompt": "Traduce al francés: \"Muchas gracias\"",
+            "promptFr": "Merci beaucoup !",
+            "audioFr": "Merci beaucoup !",
+            "options": [
+              "Merci beaucoup !",
+              "De rien !",
+              "S'il vous plaît !",
+              "À bientôt !"
+            ],
+            "answer": "Merci beaucoup !",
+            "hintEs": "\"Merci\" + \"beaucoup\" (mucho).",
+            "hintSv": "\"Merci\" betyder tack, \"beaucoup\" betyder mycket.",
+            "explanationEs": "\"Merci beaucoup !\" significa muchas gracias.",
+            "explanationSv": "\"Merci beaucoup !\" betyder tack så mycket."
+          },
+          {
+            "id": "u1-l1-e4",
+            "type": "fill-blank",
+            "prompt": "Completa la despedida: \"Hasta pronto\"",
+            "promptFr": "À _____ !",
+            "audioFr": "À bientôt !",
+            "options": [
+              "bientôt",
+              "salut",
+              "jour",
+              "revoir"
+            ],
+            "answer": "bientôt",
+            "hintEs": "\"Bientôt\" significa pronto.",
+            "hintSv": "\"Bientôt\" betyder snart.",
+            "explanationEs": "¡Muy bien! \"À bientôt !\" significa hasta pronto.",
+            "explanationSv": "Jättebra! \"À bientôt !\" betyder vi ses snart."
+          },
+          {
+            "id": "u1-l1-e5",
+            "type": "scramble",
+            "prompt": "Ordena la despedida formal: \"¡Adiós y hasta mañana!\"",
+            "promptFr": "Au revoir et à demain !",
+            "audioFr": "Au revoir et à demain !",
+            "options": [
+              "Au",
+              "revoir",
+              "et",
+              "à",
+              "demain",
+              "!"
+            ],
+            "answer": [
+              "Au",
+              "revoir",
+              "et",
+              "à",
+              "demain",
+              "!"
+            ],
+            "hintEs": "Au revoir + et (y) + à demain (hasta mañana).",
+            "hintSv": "Au revoir + et (och) + à demain (tills imorgon).",
+            "explanationEs": "\"Au revoir et à demain !\" es una despedida clásica al salir del colegio.",
+            "explanationSv": "\"Au revoir et à demain !\" betyder hejdå och vi ses imorgon!"
+          },
+          {
+            "id": "u1-l1-e6",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"Por favor\" entre amigos o personas de tu edad?",
+            "options": [
+              "S'il te plaît",
+              "De rien",
+              "Pardon",
+              "Merci"
+            ],
+            "answer": "S'il te plaît",
+            "hintEs": "Usa \"te\" para trato informal.",
+            "hintSv": "\"S'il te plaît\" används med kompisar (snälla).",
+            "explanationEs": "¡Correcto! \"S'il te plaît\" es \"por favor\" informal.",
+            "explanationSv": "Rätt! \"S'il te plaît\" betyder snälla/tack så mycket."
+          },
+          {
+            "id": "u1-l1-e7",
+            "type": "choice",
+            "prompt": "¿Cómo se saluda al atardecer o por la noche en francés?",
+            "options": [
+              "Bonsoir !",
+              "Bonjour !",
+              "Bonne nuit !",
+              "Salut !"
+            ],
+            "answer": "Bonsoir !",
+            "hintEs": "\"Soir\" significa tarde/noche.",
+            "hintSv": "\"Bonsoir\" används från sen eftermiddag och kväll.",
+            "explanationEs": "\"Bonsoir !\" es el saludo propio para la tarde y la noche.",
+            "explanationSv": "\"Bonsoir !\" betyder god kväll."
+          },
+          {
+            "id": "u1-l1-e8",
+            "type": "translate",
+            "prompt": "¿Cómo se pide algo por favor a un amigo (informal)?",
+            "promptFr": "S'il te plaît",
+            "audioFr": "S'il te plaît",
+            "options": [
+              "S'il te plaît",
+              "S'il vous plaît",
+              "Merci",
+              "Pardon"
+            ],
+            "answer": "S'il te plaît",
+            "hintEs": "Usa \"te\" para trato informal.",
+            "hintSv": "\"Te\" används med kompisar.",
+            "explanationEs": "\"S'il te plaît\" se usa con compañeros.",
+            "explanationSv": "\"S'il te plaît\" används mellan vänner."
+          },
+          {
+            "id": "u1-l1-e9",
+            "type": "choice",
+            "prompt": "¿Cómo dices \"Disculpe / Perdón\" si tropiezas con alguien?",
+            "promptFr": "Pardon !",
+            "audioFr": "Pardon !",
+            "options": [
+              "Pardon !",
+              "Merci !",
+              "Bonjour !",
+              "Au revoir !"
+            ],
+            "answer": "Pardon !",
+            "hintEs": "Muy parecida al español.",
+            "hintSv": "Betyder ursäkta / förlåt.",
+            "explanationEs": "\"Pardon !\" se usa para disculparse o pedir paso.",
+            "explanationSv": "\"Pardon !\" betyder ursäkta eller förlåt."
+          },
+          {
+            "id": "u1-l1-e10",
+            "type": "scramble",
+            "prompt": "Ordena: \"Merci beaucoup et bonne journée !\"",
+            "promptFr": "Merci beaucoup et bonne journée !",
+            "audioFr": "Merci beaucoup et bonne journée !",
+            "options": [
+              "Merci",
+              "beaucoup",
+              "et",
+              "bonne",
+              "journée",
+              "!"
+            ],
+            "answer": [
+              "Merci",
+              "beaucoup",
+              "et",
+              "bonne",
+              "journée",
+              "!"
+            ],
+            "hintEs": "Muchas gracias y buen día.",
+            "hintSv": "Tack så mycket och ha en bra dag.",
+            "explanationEs": "¡Excelente fórmula cortés!",
+            "explanationSv": "Utmärkt artighetsfras!"
+          },
+          {
+            "id": "u1-l1-e11",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"¡Encantado de conocerte!\" en francés?",
+            "promptFr": "Enchanté !",
+            "audioFr": "Enchanté !",
+            "options": [
+              "Enchanté !",
+              "Au revoir !",
+              "Bienvenue !",
+              "Merci !"
+            ],
+            "answer": "Enchanté !",
+            "hintEs": "Se dice tras presentarse a alguien.",
+            "hintSv": "Betyder trevligt att träffas.",
+            "explanationEs": "\"Enchanté !\" = ¡Encantado/a!",
+            "explanationSv": "\"Enchanté !\" betyder trevligt att träffas!"
+          },
+          {
+            "id": "u1-l1-e12",
+            "type": "fill-blank",
+            "prompt": "Completa: \"¡Hasta luego!\"",
+            "promptFr": "À plus _____ !",
+            "audioFr": "tard",
+            "options": [
+              "tard",
+              "bientôt",
+              "demain",
+              "soir"
+            ],
+            "answer": "tard",
+            "hintEs": "\"Tard\" = tarde.",
+            "hintSv": "\"À plus tard\" = vi ses senare.",
+            "explanationEs": "¡Genial! \"À plus tard !\" = hasta luego.",
+            "explanationSv": "\"À plus tard !\" betyder vi ses senare."
+          }
+        ]
+      },
+      {
+        "id": "u1-l2",
+        "unitId": "unit-1",
+        "title": "Paso 2: Gramática y Frases de Presentación",
+        "frenchTitle": "Je m'appelle & Comment tu t'appelles ?",
+        "description": "Estructura para decir tu nombre y preguntar a los demás.",
+        "xpReward": 20,
+        "exercises": [
+          {
+            "id": "u1-l2-e1",
+            "type": "scramble",
+            "prompt": "Ordena la frase: \"Yo me llamo Camille.\"",
+            "promptFr": "Je m'appelle Camille.",
+            "audioFr": "Je m'appelle Camille.",
+            "options": [
+              "Je",
+              "m'appelle",
+              "Camille",
+              "."
+            ],
+            "answer": [
+              "Je",
+              "m'appelle",
+              "Camille",
+              "."
+            ],
+            "hintEs": "Je + m'appelle + nombre.",
+            "hintSv": "Je (jag) + m'appelle (heter) + namn.",
+            "explanationEs": "\"Je m'appelle...\" es la estructura básica imprescindible.",
+            "explanationSv": "\"Je m'appelle...\" betyder jag heter."
+          },
+          {
+            "id": "u1-l2-e2",
+            "type": "choice",
+            "prompt": "¿Cómo le preguntas el nombre a un compañero nuevo?",
+            "promptFr": "Comment tu t'appelles ?",
+            "audioFr": "Comment tu t'appelles ?",
+            "options": [
+              "Comment tu t'appelles ?",
+              "Quel âge as-tu ?",
+              "Où habites-tu ?",
+              "Ça va bien ?"
+            ],
+            "answer": "Comment tu t'appelles ?",
+            "hintEs": "\"Comment\" significa cómo.",
+            "hintSv": "\"Comment\" betyder hur/vad.",
+            "explanationEs": "\"Comment tu t'appelles ?\" significa \"¿Cómo te llamas?\".",
+            "explanationSv": "\"Comment tu t'appelles ?\" betyder vad heter du?"
+          },
+          {
+            "id": "u1-l2-e3",
+            "type": "scramble",
+            "prompt": "Ordena la pregunta: \"¿Y tú, cómo te llamas?\"",
+            "promptFr": "Et toi, comment tu t'appelles ?",
+            "audioFr": "Et toi, comment tu t'appelles ?",
+            "options": [
+              "Et",
+              "toi",
+              ",",
+              "comment",
+              "tu",
+              "t'appelles",
+              "?"
+            ],
+            "answer": [
+              "Et",
+              "toi",
+              ",",
+              "comment",
+              "tu",
+              "t'appelles",
+              "?"
+            ],
+            "hintEs": "\"Et toi\" va al principio para devolver la pregunta.",
+            "hintSv": "\"Et toi\" betyder \"och du\".",
+            "explanationEs": "¡Excelente! \"Et toi\" es muy natural en francés.",
+            "explanationSv": "Utmärkt! \"Et toi\" används för att bolla tillbaka frågan."
+          },
+          {
+            "id": "u1-l2-e4",
+            "type": "choice",
+            "prompt": "¿Qué palabra dices para expresar \"Mucho gusto / Encantada\"?",
+            "promptFr": "Enchantée !",
+            "audioFr": "Enchantée !",
+            "options": [
+              "Enchantée !",
+              "Pardon !",
+              "Merci !",
+              "De rien !"
+            ],
+            "answer": "Enchantée !",
+            "hintEs": "Suena parecido a \"encantada\".",
+            "hintSv": "Trevligt att träffas på franska.",
+            "explanationEs": "\"Enchanté !\" (o \"Enchantée !\" para chicas) significa encantado/a.",
+            "explanationSv": "\"Enchantée !\" betyder trevligt att träffas."
+          },
+          {
+            "id": "u1-l2-e5",
+            "type": "fill-blank",
+            "prompt": "Completa: \"Moi, _____ m'appelle Lucas.\"",
+            "promptFr": "Moi, je m'appelle Lucas.",
+            "audioFr": "Moi, je m'appelle Lucas.",
+            "options": [
+              "je",
+              "tu",
+              "il",
+              "elle"
+            ],
+            "answer": "je",
+            "hintEs": "El pronombre para \"yo\" en francés es \"je\".",
+            "hintSv": "\"Jag\" på franska är \"je\".",
+            "explanationEs": "¡Perfecto! \"Moi, je m'appelle...\" da énfasis a la presentación.",
+            "explanationSv": "Perfekt! \"Moi, je m'appelle...\" ger extra betoning."
+          },
+          {
+            "id": "u1-l2-e6",
+            "type": "choice",
+            "prompt": "¿Cómo dices \"Él se llama Marc\"?",
+            "options": [
+              "Il s'appelle Marc.",
+              "Elle s'appelle Marc.",
+              "Je m'appelle Marc.",
+              "Tu t'appelles Marc."
+            ],
+            "answer": "Il s'appelle Marc.",
+            "hintEs": "\"Il\" es él y \"elle\" es ella.",
+            "hintSv": "\"Il\" är han och \"elle\" är hon.",
+            "explanationEs": "¡Correcto! \"Il s'appelle...\" se usa para chicos/hombres.",
+            "explanationSv": "Rätt! \"Il s'appelle...\" betyder han heter."
+          },
+          {
+            "id": "u1-l2-e7",
+            "type": "choice",
+            "prompt": "¿Cómo dices \"Ella se llama Chloé\"?",
+            "options": [
+              "Elle s'appelle Chloé.",
+              "Il s'appelle Chloé.",
+              "Je m'appelle Chloé.",
+              "Tu t'appelles Chloé."
+            ],
+            "answer": "Elle s'appelle Chloé.",
+            "hintEs": "\"Elle\" corresponde a ella en francés.",
+            "hintSv": "\"Elle\" betyder hon.",
+            "explanationEs": "\"Elle s'appelle Chloé.\" es correcto para presentar a una chica.",
+            "explanationSv": "\"Elle s'appelle Chloé.\" betyder hon heter Chloé."
+          },
+          {
+            "id": "u1-l2-e8",
+            "type": "translate",
+            "prompt": "Traduce: \"Él es un amigo\"",
+            "promptFr": "C'est un ami.",
+            "audioFr": "C'est un ami.",
+            "options": [
+              "C'est un ami.",
+              "Il est un ami.",
+              "C'est une amie.",
+              "Elle est une amie."
+            ],
+            "answer": "C'est un ami.",
+            "hintEs": "Usa \"C'est un ami\".",
+            "hintSv": "\"C'est un ami\" = Det är en kompis.",
+            "explanationEs": "\"C'est un ami\" es la forma natural de presentar a un amigo.",
+            "explanationSv": "\"C'est un ami\" betyder det är en vän."
+          },
+          {
+            "id": "u1-l2-e9",
+            "type": "choice",
+            "prompt": "¿Cómo dices \"Ella es una amiga\"?",
+            "promptFr": "C'est une amie.",
+            "audioFr": "C'est une amie.",
+            "options": [
+              "C'est une amie.",
+              "C'est un ami.",
+              "Il est une amie.",
+              "Elle a une amie."
+            ],
+            "answer": "C'est une amie.",
+            "hintEs": "Femenino: \"une amie\" con -e.",
+            "hintSv": "Feminint med \"une amie\".",
+            "explanationEs": "\"C'est une amie\" lleva -e para el femenino.",
+            "explanationSv": "\"C'est une amie\" = Det är en (kvinnlig) vän."
+          },
+          {
+            "id": "u1-l2-e10",
+            "type": "scramble",
+            "prompt": "Ordena: \"Et toi, comment tu t'appelles ?\"",
+            "promptFr": "Et toi , comment tu t'appelles ?",
+            "audioFr": "Et toi , comment tu t'appelles ?",
+            "options": [
+              "Et",
+              "toi",
+              ",",
+              "comment",
+              "tu",
+              "t'appelles",
+              "?"
+            ],
+            "answer": [
+              "Et",
+              "toi",
+              ",",
+              "comment",
+              "tu",
+              "t'appelles",
+              "?"
+            ],
+            "hintEs": "¿Y tú, cómo te llamas?",
+            "hintSv": "Och du, vad heter du?",
+            "explanationEs": "\"Et toi, comment tu t'appelles ?\" para devolver la pregunta.",
+            "explanationSv": "Bra fråga för att hålla samtalet igång!"
+          },
+          {
+            "id": "u1-l2-e11",
+            "type": "choice",
+            "prompt": "Si alguien dice \"Je m'appelle Léo\", ¿qué puedes responder?",
+            "promptFr": "Enchanté Léo !",
+            "audioFr": "Enchanté Léo !",
+            "options": [
+              "Enchanté Léo !",
+              "Au revoir Léo !",
+              "De rien Léo !",
+              "Pardon Léo !"
+            ],
+            "answer": "Enchanté Léo !",
+            "hintEs": "Encantado de conocerte.",
+            "hintSv": "Trevligt att träffas Léo!",
+            "explanationEs": "\"Enchanté !\" es la réplica educada.",
+            "explanationSv": "\"Enchanté Léo !\" = Trevligt att träffas!"
+          },
+          {
+            "id": "u1-l2-e12",
+            "type": "fill-blank",
+            "prompt": "Completa: \"Tú te llamas Lucas\"",
+            "promptFr": "Tu _____ Lucas.",
+            "audioFr": "t'appelles",
+            "options": [
+              "t'appelles",
+              "m'appelle",
+              "s'appelle",
+              "appelles"
+            ],
+            "answer": "t'appelles",
+            "hintEs": "Con \"tu\" se usa \"t'appelles\" (con s).",
+            "hintSv": "Med \"tu\" läggs en s till.",
+            "explanationEs": "\"Tu t'appelles\" tiene s al final.",
+            "explanationSv": "\"Tu t'appelles\" slutar på s."
+          }
+        ]
+      },
+      {
+        "id": "u1-l3",
+        "unitId": "unit-1",
+        "title": "Paso 3: Diálogo escolar y \"¿Qué tal estás?\"",
+        "frenchTitle": "Ça va ? & Mini-Dialogue",
+        "description": "Preguntar por el estado de ánimo y responder con soltura.",
+        "xpReward": 20,
+        "exercises": [
+          {
+            "id": "u1-l3-e1",
+            "type": "choice",
+            "prompt": "Si te preguntan \"Ça va ?\", ¿cómo dices que todo va genial?",
+            "promptFr": "Ça va très bien, merci !",
+            "audioFr": "Ça va très bien, merci !",
+            "options": [
+              "Ça va très bien, merci !",
+              "Comme ci, comme ça",
+              "Non, au revoir",
+              "Je m'appelle Paul"
+            ],
+            "answer": "Ça va très bien, merci !",
+            "hintEs": "\"Très bien\" significa muy bien.",
+            "hintSv": "\"Très bien\" betyder mycket bra.",
+            "explanationEs": "\"Ça va très bien, merci !\" es la respuesta educada y positiva.",
+            "explanationSv": "\"Ça va très bien, merci !\" betyder det går jättebra, tack!"
+          },
+          {
+            "id": "u1-l3-e2",
+            "type": "choice",
+            "prompt": "¿Qué significa la expresión \"Comme ci, comme ça\"?",
+            "promptFr": "Comme ci, comme ça.",
+            "audioFr": "Comme ci, comme ça.",
+            "options": [
+              "Así así / Regular",
+              "Muy bien",
+              "Excelente",
+              "Hasta luego"
+            ],
+            "answer": "Así así / Regular",
+            "hintEs": "Se usa cuando no estás ni muy bien ni muy mal.",
+            "hintSv": "Betyder \"sådär\" eller \"ganska okej\".",
+            "explanationEs": "\"Comme ci, comme ça\" expresa que estás regular.",
+            "explanationSv": "\"Comme ci, comme ça\" betyder sådär."
+          },
+          {
+            "id": "u1-l3-e3",
+            "type": "scramble",
+            "prompt": "Ordena el mini-diálogo: \"— ¡Hola! ¿Qué tal? — ¡Muy bien!\"",
+            "promptFr": "Salut ! Ça va ? Très bien !",
+            "audioFr": "Salut ! Ça va ? Très bien !",
+            "options": [
+              "Salut",
+              "!",
+              "Ça",
+              "va",
+              "?",
+              "Très",
+              "bien",
+              "!"
+            ],
+            "answer": [
+              "Salut",
+              "!",
+              "Ça",
+              "va",
+              "?",
+              "Très",
+              "bien",
+              "!"
+            ],
+            "hintEs": "Saludo + pregunta + respuesta.",
+            "hintSv": "Hälsning + fråga + svar.",
+            "explanationEs": "¡Genial! Este es el intercambio más común en el patio del colegio.",
+            "explanationSv": "Jättebra! Den vanligaste hälsningsfrasen i skolan."
+          },
+          {
+            "id": "u1-l3-e4",
+            "type": "fill-blank",
+            "prompt": "Completa: \"Ça va super _____ !\"",
+            "promptFr": "Ça va super bien !",
+            "audioFr": "Ça va super bien !",
+            "options": [
+              "bien",
+              "jour",
+              "revoir",
+              "salut"
+            ],
+            "answer": "bien",
+            "hintEs": "\"Bien\" en francés se escribe con b-i-e-n.",
+            "hintSv": "\"Bien\" betyder bra.",
+            "explanationEs": "\"Ça va super bien !\" significa \"¡Va súper bien!\".",
+            "explanationSv": "\"Ça va super bien !\" betyder det går superbra!"
+          },
+          {
+            "id": "u1-l3-e5",
+            "type": "choice",
+            "prompt": "Si alguien te pregunta \"¿Et toi ?\" tras responderte, ¿qué te está diciendo?",
+            "options": [
+              "¿Y tú?",
+              "¿Y él?",
+              "¿Cómo te llamas?",
+              "¿De dónde vienes?"
+            ],
+            "answer": "¿Y tú?",
+            "hintEs": "\"Toi\" es el pronombre tónico para ti.",
+            "hintSv": "\"Et toi ?\" betyder \"Och du?\".",
+            "explanationEs": "\"Et toi ?\" significa \"¿Y tú?\", para devolver la pregunta amablemente.",
+            "explanationSv": "\"Et toi ?\" betyder och du?"
+          },
+          {
+            "id": "u1-l3-e6",
+            "type": "scramble",
+            "prompt": "Ordena la frase: \"¡Todo va muy bien, gracias!\"",
+            "options": [
+              "Ça",
+              "va",
+              "très",
+              "bien",
+              ",",
+              "merci",
+              "!"
+            ],
+            "answer": [
+              "Ça",
+              "va",
+              "très",
+              "bien",
+              ",",
+              "merci",
+              "!"
+            ],
+            "hintEs": "Ça va + très bien + merci.",
+            "hintSv": "Ça va + mycket bra + tack.",
+            "explanationEs": "¡Excelente! Una respuesta completa, cordial y educada.",
+            "explanationSv": "Utmärkt! Ett artigt och fullständigt svar."
+          },
+          {
+            "id": "u1-l3-e8",
+            "type": "translate",
+            "prompt": "Traduce: \"Todo va bien\"",
+            "promptFr": "Tout va bien.",
+            "audioFr": "Tout va bien.",
+            "options": [
+              "Tout va bien.",
+              "Ça va bien.",
+              "C'est bien.",
+              "Bien sûr."
+            ],
+            "answer": "Tout va bien.",
+            "hintEs": "\"Tout\" significa todo.",
+            "hintSv": "\"Tout\" betyder allt.",
+            "explanationEs": "\"Tout va bien\" = Todo va bien.",
+            "explanationSv": "\"Tout va bien\" betyder allt är bra."
+          },
+          {
+            "id": "u1-l3-e9",
+            "type": "choice",
+            "prompt": "Si un amigo te pregunta \"Ça va ?\", ¿puedes contestar simplemente \"Ça va !\" ?",
+            "promptFr": "Sí, es súper común y correcto.",
+            "audioFr": "Sí, es súper común y correcto.",
+            "options": [
+              "Sí, es súper común y correcto.",
+              "No, está prohibido.",
+              "Solo de mañana.",
+              "Solo por escrito."
+            ],
+            "answer": "Sí, es súper común y correcto.",
+            "hintEs": "Es la magia de la expresión.",
+            "hintSv": "Ja, helt naturligt.",
+            "explanationEs": "¡Totalmente! \"- Ça va ? - Ça va !\" es el intercambio más cotidiano.",
+            "explanationSv": "Ja! Vanligaste hälsningen i Frankrike."
+          },
+          {
+            "id": "u1-l3-e10",
+            "type": "scramble",
+            "prompt": "Ordena: \"Salut Camille, comment vas-tu ?\"",
+            "promptFr": "Salut Camille , comment vas-tu ?",
+            "audioFr": "Salut Camille , comment vas-tu ?",
+            "options": [
+              "Salut",
+              "Camille",
+              ",",
+              "comment",
+              "vas-tu",
+              "?"
+            ],
+            "answer": [
+              "Salut",
+              "Camille",
+              ",",
+              "comment",
+              "vas-tu",
+              "?"
+            ],
+            "hintEs": "Hola Camille, ¿cómo estás?",
+            "hintSv": "Hej Camille, hur mår du?",
+            "explanationEs": "\"Comment vas-tu ?\" es una variante elegante.",
+            "explanationSv": "\"Comment vas-tu ?\" är en fin variant."
+          },
+          {
+            "id": "u1-l3-e11",
+            "type": "fill-blank",
+            "prompt": "Completa: \"Yo también estoy bien\"",
+            "promptFr": "Moi _____, ça va bien !",
+            "audioFr": "aussi",
+            "options": [
+              "aussi",
+              "très",
+              "non",
+              "et"
+            ],
+            "answer": "aussi",
+            "hintEs": "\"Aussi\" = también.",
+            "hintSv": "\"Aussi\" = också.",
+            "explanationEs": "\"Moi aussi\" = Yo también.",
+            "explanationSv": "\"Moi aussi\" betyder jag också."
+          },
+          {
+            "id": "u1-l3-e12",
+            "type": "choice",
+            "prompt": "¿Cómo dices \"¡Súper bien!\" en francés?",
+            "promptFr": "Ça va super bien !",
+            "audioFr": "Ça va super bien !",
+            "options": [
+              "Ça va super bien !",
+              "C'est mauvais.",
+              "Au revoir.",
+              "Pas du tout."
+            ],
+            "answer": "Ça va super bien !",
+            "hintEs": "\"Super\" se usa igual que en español.",
+            "hintSv": "\"Super\" används på samma sätt.",
+            "explanationEs": "\"Ça va super bien !\" denota energía positiva.",
+            "explanationSv": "\"Ça va super bien !\" betyder det går superbra!"
+          }
+        ]
+      },
+      {
+        "id": "u1-l4",
+        "unitId": "unit-1",
+        "title": "Paso 4: Pronombres sujeto y el verbo Être",
+        "frenchTitle": "Les Pronoms & Le Verbe ÊTRE",
+        "description": "Domina Je, Tu, Il, Elle y el verbo ser/estar.",
+        "xpReward": 20,
+        "culturalNote": {
+          "title": "Point Culturel",
+          "textEs": "Aspecto cultural y lingüístico relevante para Årskurs 6.",
+          "textSv": "Kulturell och språklig aspekt för årskurs 6."
+        },
+        "exercises": [
+          {
+            "id": "u1-l4-e1",
+            "type": "choice",
+            "prompt": "Reto 1: Paso 4: Pronombres sujeto y el verbo Être — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u1-l4-e2",
+            "type": "translate",
+            "prompt": "Reto 2: Paso 4: Pronombres sujeto y el verbo Être — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u1-l4-e3",
+            "type": "fill-blank",
+            "prompt": "Reto 3: Paso 4: Pronombres sujeto y el verbo Être — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u1-l4-e4",
+            "type": "scramble",
+            "prompt": "Reto 4: Paso 4: Pronombres sujeto y el verbo Être — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u1-l4-e5",
+            "type": "choice",
+            "prompt": "Reto 5: Paso 4: Pronombres sujeto y el verbo Être — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u1-l4-e6",
+            "type": "translate",
+            "prompt": "Reto 6: Paso 4: Pronombres sujeto y el verbo Être — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u1-l4-e7",
+            "type": "fill-blank",
+            "prompt": "Reto 7: Paso 4: Pronombres sujeto y el verbo Être — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u1-l4-e8",
+            "type": "scramble",
+            "prompt": "Reto 8: Paso 4: Pronombres sujeto y el verbo Être — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u1-l4-e9",
+            "type": "choice",
+            "prompt": "Reto 9: Paso 4: Pronombres sujeto y el verbo Être — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u1-l4-e10",
+            "type": "translate",
+            "prompt": "Reto 10: Paso 4: Pronombres sujeto y el verbo Être — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u1-l4-e11",
+            "type": "fill-blank",
+            "prompt": "Reto 11: Paso 4: Pronombres sujeto y el verbo Être — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u1-l4-e12",
+            "type": "scramble",
+            "prompt": "Reto 12: Paso 4: Pronombres sujeto y el verbo Être — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          }
+        ]
+      },
+      {
+        "id": "u1-l5",
+        "unitId": "unit-1",
+        "title": "Paso 5: Diálogo escolar y presentación de amigos",
+        "frenchTitle": "Rencontre au Collège & Présenter un Ami",
+        "description": "Aplica todo en un diálogo escolar realista.",
+        "xpReward": 25,
+        "culturalNote": {
+          "title": "Point Culturel",
+          "textEs": "Profundización pedagógica en el uso real del francés cotidiano.",
+          "textSv": "Fördjupning i vardaglig franska för ungdomar."
+        },
+        "exercises": [
+          {
+            "id": "u1-l5-e1",
+            "type": "choice",
+            "prompt": "Reto 1: Paso 5: Diálogo escolar y presentación de amigos — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u1-l5-e2",
+            "type": "translate",
+            "prompt": "Reto 2: Paso 5: Diálogo escolar y presentación de amigos — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u1-l5-e3",
+            "type": "fill-blank",
+            "prompt": "Reto 3: Paso 5: Diálogo escolar y presentación de amigos — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u1-l5-e4",
+            "type": "scramble",
+            "prompt": "Reto 4: Paso 5: Diálogo escolar y presentación de amigos — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u1-l5-e5",
+            "type": "choice",
+            "prompt": "Reto 5: Paso 5: Diálogo escolar y presentación de amigos — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u1-l5-e6",
+            "type": "translate",
+            "prompt": "Reto 6: Paso 5: Diálogo escolar y presentación de amigos — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u1-l5-e7",
+            "type": "fill-blank",
+            "prompt": "Reto 7: Paso 5: Diálogo escolar y presentación de amigos — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u1-l5-e8",
+            "type": "scramble",
+            "prompt": "Reto 8: Paso 5: Diálogo escolar y presentación de amigos — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u1-l5-e9",
+            "type": "choice",
+            "prompt": "Reto 9: Paso 5: Diálogo escolar y presentación de amigos — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u1-l5-e10",
+            "type": "translate",
+            "prompt": "Reto 10: Paso 5: Diálogo escolar y presentación de amigos — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u1-l5-e11",
+            "type": "fill-blank",
+            "prompt": "Reto 11: Paso 5: Diálogo escolar y presentación de amigos — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u1-l5-e12",
+            "type": "scramble",
+            "prompt": "Reto 12: Paso 5: Diálogo escolar y presentación de amigos — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          }
+        ]
+      }
+    ],
+    "dailySessionTemplate": {
+      "id": "session-u1",
+      "title": "Paso 6: Gran Sesión Guiada de 30 minutos",
+      "frenchTitle": "Premier Jour au Collège (Séance de 30 min)",
+      "situation": "Llegas al aula de idiomas y conoces a tu primer compañero de pupitre.",
+      "phase1Warmup": {
+        "introEs": "Calentamiento (5 min): responde a estas 3 preguntas rápidas para activar tu memoria.",
+        "introSv": "Uppvärmning (5 min): svara på dessa 3 snabba frågor för att aktivera minnet.",
+        "questions": [
+          {
+            "id": "w1",
+            "promptEs": "¿Cómo se dice \"Hola\" de manera informal entre amigos?",
+            "promptSv": "Hur säger man \"Hej\" informellt mellan kompisar?",
+            "expectedFr": "Salut",
+            "hints": [
+              "Empieza por S...",
+              "Tiene 5 letras."
+            ]
+          },
+          {
+            "id": "w2",
+            "promptEs": "¿Cómo se dice \"Adiós\"?",
+            "promptSv": "Hur säger man \"Hejdå\"?",
+            "expectedFr": "Au revoir",
+            "hints": [
+              "Son dos palabras: Au ..."
+            ]
+          },
+          {
+            "id": "w3",
+            "promptEs": "¿Cómo se dice \"Muy bien, gracias\"?",
+            "promptSv": "Hur säger man \"Mycket bra, tack\"?",
+            "expectedFr": "Très bien, merci",
+            "hints": [
+              "Très bien, m..."
+            ]
+          }
+        ]
+      },
+      "phase2Input": {
+        "storyTitle": "Rencontre à la récréation (Encuentro en el recreo)",
+        "storyFr": "Lucas : Salut ! Je m'appelle Lucas. Et toi, comment tu t'appelles ?\nEmma : Bonjour Lucas ! Moi, je m'appelle Emma. Ça va ?\nLucas : Ça va super bien ! Tu es nouvelle dans la classe ?\nEmma : Oui, j'apprends le français aujourd'hui ! Enchantée !\nLucas : Bienvenue ! À tout à l'heure alors !",
+        "storyEs": "Lucas: ¡Hola! Me llamo Lucas. ¿Y tú, cómo te llamas?\nEmma: ¡Buenos días Lucas! Yo me llamo Emma. ¿Qué tal?\nLucas: ¡Súper bien! ¿Eres nueva en la clase?\nEmma: ¡Sí, aprendo francés hoy! ¡Mucho gusto!\nLucas: ¡Bienvenida! ¡Hasta luego entonces!",
+        "storySv": "Lucas: Hej! Jag heter Lucas. Och du, vad heter du?\nEmma: God dag Lucas! Jag heter Emma. Hur är läget?\nLucas: Det går superbra! Är du ny i klassen?\nEmma: Ja, jag lär mig franska idag! Trevligt att träffas!\nLucas: Välkommen! Vi ses sen då!",
+        "keyExpressions": [
+          {
+            "fr": "Et toi ?",
+            "phonetic": "e tua",
+            "es": "¿Y tú?",
+            "sv": "Och du?",
+            "clue": "Se usa para devolver la pregunta inmediatamente."
+          },
+          {
+            "fr": "Enchantée !",
+            "phonetic": "an-shan-te",
+            "es": "¡Mucho gusto! / ¡Encantada!",
+            "sv": "Trevligt att träffas!",
+            "clue": "La palabra de cortesía al conocer a alguien nuevo."
+          },
+          {
+            "fr": "Bienvenue !",
+            "phonetic": "bi-en-ve-nu",
+            "es": "¡Bienvenido/a!",
+            "sv": "Välkommen!",
+            "clue": "Lo que dice quien te recibe en un lugar."
+          },
+          {
+            "fr": "À tout à l'heure !",
+            "phonetic": "a tut a lör",
+            "es": "¡Hasta luego! / ¡Nos vemos luego!",
+            "sv": "Vi ses snart!",
+            "clue": "Despedida para verse más tarde ese mismo día."
+          }
+        ]
+      },
+      "phase3Production": {
+        "contextEs": "Juego de rol (12 min): estás en el recreo con Lucas. Él te saluda y debes responderle y presentarte.",
+        "contextSv": "Rollspel (12 min): du är på rasten med Lucas. Han hälsar på dig och du ska svara och presentera dig.",
+        "initialAIPrompt": "Salut ! Je m'appelle Lucas. Et toi, comment tu t'appelles ?",
+        "initialAIPromptTranslation": "¡Hola! Me llamo Lucas. ¿Y tú, cómo te llamas?",
+        "mission": "Saluda a Lucas, dile tu nombre en francés y pregúntale qué tal está.",
+        "constraintProgression": [
+          "Ahora añade \"Enchanté !\" o \"Enchantée !\".",
+          "Ahora responde usando \"Ça va très bien\" y pregunta \"¿Et toi ?\".",
+          "Termina despidiéndote con \"Au revoir !\" o \"À bientôt !\"."
+        ]
+      },
+      "phase4ExitTicket": {
+        "promptEs": "Reto de salida (5 min): Escribe 2 frases en francés presentándote y saludando como si fueras a escribir en tu cuaderno.",
+        "promptSv": "Utgångsutmaning (5 min): Skriv 2 meningar på franska där du hälsar och presenterar dig.",
+        "sampleFr": "Bonjour ! Je m'appelle Maria et ça va très bien."
+      }
+    }
+  },
+  {
+    "id": "unit-2",
+    "number": 2,
+    "grade": "ak6",
+    "title": "Los Números y La Edad",
+    "frenchTitle": "Les Chiffres et L'Âge",
+    "description": "Cuenta del 1 al 20, di cuántos años tienes y pregunta la edad a los demás.",
+    "iconName": "Hash",
+    "color": "from-blue-500 to-cyan-500",
+    "grammarTip": {
+      "title": "El verbo \"Avoir\" (Tener) para la edad",
+      "explanationEs": "En francés, al igual que en español, decimos \"Tengo 13 años\": \"J'ai 13 ans\". ¡Ojo! No se usa el verbo ser (être), sino avoir.",
+      "explanationSv": "På franska säger man \"J'ai 13 ans\" (bokstavligen: jag har 13 år), precis som på spanska, medan man på svenska säger \"jag är 13 år\". Använd verbet \"avoir\" (att ha)!",
+      "examples": [
+        {
+          "fr": "J'ai treize ans.",
+          "es": "Tengo trece años.",
+          "sv": "Jag är tretton år gammal."
+        },
+        {
+          "fr": "Quel âge as-tu ?",
+          "es": "¿Cuántos años tienes?",
+          "sv": "Hur gammal är du?"
+        },
+        {
+          "fr": "Un, deux, trois, quatre, cinq !",
+          "es": "¡Uno, dos, tres, cuatro, cinco!",
+          "sv": "Ett, två, tre, fyra, fem!"
+        }
+      ]
+    },
+    "lessons": [
+      {
+        "id": "u2-l1",
+        "unitId": "unit-2",
+        "title": "Paso 1: Contar del 1 al 10",
+        "frenchTitle": "Compter de 1 à 10",
+        "description": "Pronunciación y escritura de los primeros 10 números.",
+        "xpReward": 15,
+        "exercises": [
+          {
+            "id": "u2-l1-e1",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"tres\" en francés?",
+            "audioFr": "Trois",
+            "options": [
+              "Trois",
+              "Deux",
+              "Quatre",
+              "Cinq"
+            ],
+            "answer": "Trois",
+            "hintEs": "Se pronuncia parecido a \"truá\".",
+            "hintSv": "Uttalas ungefär som \"troa\".",
+            "explanationEs": "¡Eso es! 1 = un, 2 = deux, 3 = trois.",
+            "explanationSv": "Helt rätt! 1 = un, 2 = deux, 3 = trois."
+          },
+          {
+            "id": "u2-l1-e2",
+            "type": "scramble",
+            "prompt": "Ordena estos números en orden ascendente: 1, 2, 3, 4",
+            "promptFr": "Un, deux, trois, quatre",
+            "audioFr": "Un, deux, trois, quatre",
+            "options": [
+              "Un",
+              "deux",
+              "trois",
+              "quatre"
+            ],
+            "answer": [
+              "Un",
+              "deux",
+              "trois",
+              "quatre"
+            ],
+            "hintEs": "Empieza con \"Un\".",
+            "hintSv": "Börja med \"Un\".",
+            "explanationEs": "¡Perfecto! Un, deux, trois, quatre, cinq, six, sept, huit, neuf, dix.",
+            "explanationSv": "Perfekt! Un, deux, trois, quatre, cinq, six, sept, huit, neuf, dix."
+          },
+          {
+            "id": "u2-l1-e3",
+            "type": "choice",
+            "prompt": "¿Qué número es \"sept\"?",
+            "audioFr": "Sept",
+            "options": [
+              "7",
+              "6",
+              "8",
+              "9"
+            ],
+            "answer": "7",
+            "hintEs": "Se escribe con p pero la p es muda: se pronuncia \"set\".",
+            "hintSv": "Siffran 7.",
+            "explanationEs": "¡Correcto! Sept es 7.",
+            "explanationSv": "Rätt! Sept är 7."
+          },
+          {
+            "id": "u2-l1-e4",
+            "type": "choice",
+            "prompt": "¿Qué número es \"huit\"?",
+            "audioFr": "Huit",
+            "options": [
+              "8",
+              "6",
+              "7",
+              "10"
+            ],
+            "answer": "8",
+            "hintEs": "Viene después de sept (7).",
+            "hintSv": "Kommer efter sept (7).",
+            "explanationEs": "¡Correcto! Sept = 7, Huit = 8, Neuf = 9, Dix = 10.",
+            "explanationSv": "Rätt! Sept = 7, Huit = 8, Neuf = 9, Dix = 10."
+          },
+          {
+            "id": "u2-l1-e5",
+            "type": "fill-blank",
+            "prompt": "Completa la serie: \"Huit, neuf, _____ !\"",
+            "promptFr": "Huit, neuf, _____ !",
+            "audioFr": "Huit, neuf, dix !",
+            "options": [
+              "dix",
+              "six",
+              "sept",
+              "trois"
+            ],
+            "answer": "dix",
+            "hintEs": "El número 10.",
+            "hintSv": "Siffran 10.",
+            "explanationEs": "¡Exacto! Dix = 10.",
+            "explanationSv": "Exakt! Dix = 10."
+          },
+          {
+            "id": "u2-l1-e6",
+            "type": "translate",
+            "prompt": "Traduce al francés: \"Cinco libros\"",
+            "audioFr": "Cinq livres",
+            "options": [
+              "Cinq livres",
+              "Quatre livres",
+              "Trois cahiers",
+              "Six trousses"
+            ],
+            "answer": "Cinq livres",
+            "hintEs": "Cinq = cinco, livres = libros.",
+            "hintSv": "Cinq = fem, livres = böcker.",
+            "explanationEs": "¡Genial! 5 se dice \"cinq\" y libros se dice \"livres\".",
+            "explanationSv": "Lysande! 5 är \"cinq\" och böcker är \"livres\"."
+          },
+          {
+            "id": "u2-l1-e7",
+            "type": "scramble",
+            "prompt": "Ordena la cuenta atrás: \"Tres, dos, uno... ¡cero!\"",
+            "promptFr": "Trois, deux, un, zéro !",
+            "audioFr": "Trois, deux, un, zéro !",
+            "options": [
+              "Trois",
+              ",",
+              "deux",
+              ",",
+              "un",
+              ",",
+              "zéro",
+              "!"
+            ],
+            "answer": [
+              "Trois",
+              ",",
+              "deux",
+              ",",
+              "un",
+              ",",
+              "zéro",
+              "!"
+            ],
+            "hintEs": "Empieza por el número mayor (trois).",
+            "hintSv": "Börja med den högsta siffran (trois).",
+            "explanationEs": "¡Excelente cuenta atrás! Trois, deux, un, zéro !",
+            "explanationSv": "Utmärkt nedräkning! Trois, deux, un, zéro !"
+          },
+          {
+            "id": "u2-l1-e8",
+            "type": "choice",
+            "prompt": "¿Cómo se escribe el número 7 en francés?",
+            "promptFr": "sept",
+            "audioFr": "sept",
+            "options": [
+              "sept",
+              "six",
+              "huit",
+              "cinq"
+            ],
+            "answer": "sept",
+            "hintEs": "La \"p\" no se pronuncia (\"set\").",
+            "hintSv": "Skrivs sept, uttalas \"set\".",
+            "explanationEs": "\"Sept\" = 7 en francés.",
+            "explanationSv": "\"Sept\" betyder sju."
+          },
+          {
+            "id": "u2-l1-e9",
+            "type": "choice",
+            "prompt": "¿Cómo se escribe el número 8 en francés?",
+            "promptFr": "huit",
+            "audioFr": "huit",
+            "options": [
+              "huit",
+              "neuf",
+              "dix",
+              "sept"
+            ],
+            "answer": "huit",
+            "hintEs": "Empieza por h muda: \"üit\".",
+            "hintSv": "Börjar med stumt h: huit.",
+            "explanationEs": "\"Huit\" = 8.",
+            "explanationSv": "\"Huit\" betyder åtta."
+          },
+          {
+            "id": "u2-l1-e10",
+            "type": "scramble",
+            "prompt": "Ordena: \"Un, deux, trois, nous voilà !\"",
+            "promptFr": "Un , deux , trois , nous voilà !",
+            "audioFr": "Un , deux , trois , nous voilà !",
+            "options": [
+              "Un",
+              ",",
+              "deux",
+              ",",
+              "trois",
+              ",",
+              "nous",
+              "voilà",
+              "!"
+            ],
+            "answer": [
+              "Un",
+              ",",
+              "deux",
+              ",",
+              "trois",
+              ",",
+              "nous",
+              "voilà",
+              "!"
+            ],
+            "hintEs": "Uno, dos, tres, ¡aquí estamos!",
+            "hintSv": "Ett, två, tre, här är vi!",
+            "explanationEs": "Rima clásica para contar.",
+            "explanationSv": "Klassisk räkneramsa."
+          },
+          {
+            "id": "u2-l1-e11",
+            "type": "choice",
+            "prompt": "¿Cuánto es \"cinq + quatre\" en francés?",
+            "promptFr": "neuf",
+            "audioFr": "neuf",
+            "options": [
+              "neuf",
+              "huit",
+              "dix",
+              "sept"
+            ],
+            "answer": "neuf",
+            "hintEs": "5 + 4 = 9.",
+            "hintSv": "5 + 4 = 9.",
+            "explanationEs": "Cinq + quatre = neuf (9).",
+            "explanationSv": "Cinq + quatre = neuf (9)."
+          },
+          {
+            "id": "u2-l1-e12",
+            "type": "fill-blank",
+            "prompt": "Completa la serie: \"sept, huit, neuf, ____\"",
+            "promptFr": "sept, huit, neuf, _____",
+            "audioFr": "dix",
+            "options": [
+              "dix",
+              "onze",
+              "six",
+              "zéro"
+            ],
+            "answer": "dix",
+            "hintEs": "El siguiente a nueve es diez.",
+            "hintSv": "Efter nio kommer tio.",
+            "explanationEs": "10 se escribe \"dix\".",
+            "explanationSv": "10 stavas \"dix\"."
+          }
+        ]
+      },
+      {
+        "id": "u2-l2",
+        "unitId": "unit-2",
+        "title": "Paso 2: Del 11 al 20 y el número 13",
+        "frenchTitle": "De 11 à 20 & Le Chiffre Treize",
+        "description": "Aprende los números adolescentes en francés.",
+        "xpReward": 20,
+        "exercises": [
+          {
+            "id": "u2-l2-e1",
+            "type": "choice",
+            "prompt": "¿Cómo se dice el número \"13\" en francés?",
+            "audioFr": "Treize",
+            "options": [
+              "Treize",
+              "Douze",
+              "Onze",
+              "Quatorze"
+            ],
+            "answer": "Treize",
+            "hintEs": "Se pronuncia \"trez\".",
+            "hintSv": "Uttalas \"trez\". Tretton på franska.",
+            "explanationEs": "¡Genial! 13 = treize, la edad clave de årskurs 6.",
+            "explanationSv": "Lysande! 13 = treize."
+          },
+          {
+            "id": "u2-l2-e2",
+            "type": "choice",
+            "prompt": "¿Qué número es \"quinze\"?",
+            "audioFr": "Quinze",
+            "options": [
+              "15",
+              "14",
+              "16",
+              "12"
+            ],
+            "answer": "15",
+            "hintEs": "El número quince.",
+            "hintSv": "Siffran 15.",
+            "explanationEs": "¡Correcto! 11=onze, 12=douze, 13=treize, 14=quatorze, 15=quinze.",
+            "explanationSv": "Rätt! Quinze är 15."
+          },
+          {
+            "id": "u2-l2-e3",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"veinte\" (20) en francés?",
+            "audioFr": "Vingt",
+            "options": [
+              "Vingt",
+              "Dix",
+              "Seize",
+              "Dix-huit"
+            ],
+            "answer": "Vingt",
+            "hintEs": "Se escribe con g y t mudas: se pronuncia \"van\".",
+            "hintSv": "Tjugo på franska.",
+            "explanationEs": "¡Excelente! 20 = vingt.",
+            "explanationSv": "Utmärkt! 20 = vingt."
+          },
+          {
+            "id": "u2-l2-e4",
+            "type": "scramble",
+            "prompt": "Ordena la serie: 11, 12, 13, 14",
+            "promptFr": "Onze, douze, treize, quatorze",
+            "audioFr": "Onze, douze, treize, quatorze",
+            "options": [
+              "Onze",
+              "douze",
+              "treize",
+              "quatorze"
+            ],
+            "answer": [
+              "Onze",
+              "douze",
+              "treize",
+              "quatorze"
+            ],
+            "hintEs": "Onze (11), douze (12), treize (13), quatorze (14).",
+            "hintSv": "Onze (11), douze (12), treize (13), quatorze (14).",
+            "explanationEs": "¡Muy bien! Los números del 11 al 14 terminan todos en -ze.",
+            "explanationSv": "Mycket bra! Siffrorna 11 till 14 slutar alla på -ze."
+          },
+          {
+            "id": "u2-l2-e5",
+            "type": "choice",
+            "prompt": "¿Qué número va inmediatamente después de \"quinze\" (15)?",
+            "audioFr": "Seize",
+            "options": [
+              "Seize",
+              "Quatorze",
+              "Dix-sept",
+              "Treize"
+            ],
+            "answer": "Seize",
+            "hintEs": "16 termina en -ze como quince.",
+            "hintSv": "Sexton på franska: seize.",
+            "explanationEs": "¡Correcto! Quinze (15) -> Seize (16).",
+            "explanationSv": "Rätt! Quinze (15) -> Seize (16)."
+          },
+          {
+            "id": "u2-l2-e6",
+            "type": "fill-blank",
+            "prompt": "Completa la suma: \"Dix + sept = _____\"",
+            "promptFr": "Dix + sept = _____",
+            "audioFr": "Dix-sept",
+            "options": [
+              "dix-sept",
+              "dix-huit",
+              "seize",
+              "quinze"
+            ],
+            "answer": "dix-sept",
+            "hintEs": "10 + 7 = 17 (dix-sept con guion).",
+            "hintSv": "10 + 7 = 17 (dix-sept).",
+            "explanationEs": "¡Exacto! 17 = dix-sept, 18 = dix-huit, 19 = dix-neuf.",
+            "explanationSv": "Exakt! 17 = dix-sept."
+          },
+          {
+            "id": "u2-l2-e7",
+            "type": "translate",
+            "prompt": "Traduce al francés: \"Dieciocho bombones\"",
+            "audioFr": "Dix-huit bonbons",
+            "options": [
+              "Dix-huit bonbons",
+              "Dix-sept bonbons",
+              "Huit bonbons",
+              "Vingt bonbons"
+            ],
+            "answer": "Dix-huit bonbons",
+            "hintEs": "Dix-huit = 18.",
+            "hintSv": "Dix-huit = 18.",
+            "explanationEs": "¡Magnífico! 18 se dice \"dix-huit\".",
+            "explanationSv": "Fantastiskt! 18 är \"dix-huit\"."
+          },
+          {
+            "id": "u2-l2-e8",
+            "type": "choice",
+            "prompt": "¿Cómo se dice 16 en francés?",
+            "promptFr": "seize",
+            "audioFr": "seize",
+            "options": [
+              "seize",
+              "quinze",
+              "quatorze",
+              "treize"
+            ],
+            "answer": "seize",
+            "hintEs": "Se pronuncia \"sez\".",
+            "hintSv": "Uttalas \"sez\".",
+            "explanationEs": "\"Seize\" = 16.",
+            "explanationSv": "\"Seize\" betyder sexton."
+          },
+          {
+            "id": "u2-l2-e9",
+            "type": "choice",
+            "prompt": "¿Cómo se dice 18 en francés?",
+            "promptFr": "dix-huit",
+            "audioFr": "dix-huit",
+            "options": [
+              "dix-huit",
+              "dix-sept",
+              "dix-neuf",
+              "vingt"
+            ],
+            "answer": "dix-huit",
+            "hintEs": "10 + 8 = dix-huit.",
+            "hintSv": "10 + 8 = dix-huit.",
+            "explanationEs": "\"Dix-huit\" lleva guion.",
+            "explanationSv": "\"Dix-huit\" skrivs med bindestreck."
+          },
+          {
+            "id": "u2-l2-e10",
+            "type": "scramble",
+            "prompt": "Ordena: \"Onze, douze, treize et quatorze.\"",
+            "promptFr": "Onze , douze , treize et quatorze .",
+            "audioFr": "Onze , douze , treize et quatorze .",
+            "options": [
+              "Onze",
+              ",",
+              "douze",
+              ",",
+              "treize",
+              "et",
+              "quatorze",
+              "."
+            ],
+            "answer": [
+              "Onze",
+              ",",
+              "douze",
+              ",",
+              "treize",
+              "et",
+              "quatorze",
+              "."
+            ],
+            "hintEs": "11, 12, 13 y 14.",
+            "hintSv": "11, 12, 13 och 14.",
+            "explanationEs": "Secuencia del 11 al 14.",
+            "explanationSv": "Perfekt räkneordning."
+          },
+          {
+            "id": "u2-l2-e11",
+            "type": "fill-blank",
+            "prompt": "Completa: dix + dix = _____",
+            "promptFr": "dix + dix = _____",
+            "audioFr": "vingt",
+            "options": [
+              "vingt",
+              "dix",
+              "quinze",
+              "trente"
+            ],
+            "answer": "vingt",
+            "hintEs": "Veinte se escribe \"vingt\".",
+            "hintSv": "Tjugo stavas \"vingt\".",
+            "explanationEs": "10 + 10 = vingt (20).",
+            "explanationSv": "10 + 10 = vingt (20)."
+          },
+          {
+            "id": "u2-l2-e12",
+            "type": "choice",
+            "prompt": "¿Qué número es \"dix-neuf\"?",
+            "promptFr": "19",
+            "audioFr": "19",
+            "options": [
+              "19",
+              "17",
+              "18",
+              "20"
+            ],
+            "answer": "19",
+            "hintEs": "dix (10) + neuf (9).",
+            "hintSv": "dix (10) + neuf (9).",
+            "explanationEs": "\"Dix-neuf\" es 19.",
+            "explanationSv": "\"Dix-neuf\" är 19."
+          }
+        ]
+      },
+      {
+        "id": "u2-l3",
+        "unitId": "unit-2",
+        "title": "Paso 3: Decir tu edad: \"J'ai 13 ans\"",
+        "frenchTitle": "Dire son Âge avec Avoir",
+        "description": "Preguntar y responder cuántos años tienes.",
+        "xpReward": 20,
+        "exercises": [
+          {
+            "id": "u2-l3-e1",
+            "type": "scramble",
+            "prompt": "Forma la frase: \"Tengo trece años.\"",
+            "promptFr": "J'ai treize ans.",
+            "audioFr": "J'ai treize ans.",
+            "options": [
+              "J'ai",
+              "treize",
+              "ans",
+              "."
+            ],
+            "answer": [
+              "J'ai",
+              "treize",
+              "ans",
+              "."
+            ],
+            "hintEs": "J'ai + número + ans.",
+            "hintSv": "J'ai + siffra + ans.",
+            "explanationEs": "¡Excelente! En francés siempre se dice \"J'ai ... ans\".",
+            "explanationSv": "Utmärkt! På franska säger man alltid \"J'ai ... ans\"."
+          },
+          {
+            "id": "u2-l3-e2",
+            "type": "choice",
+            "prompt": "¿Cómo se pregunta la edad a un amigo?",
+            "audioFr": "Quel âge as-tu ?",
+            "options": [
+              "Quel âge as-tu ?",
+              "Comment ça va ?",
+              "Où est l'école ?",
+              "Qui est-ce ?"
+            ],
+            "answer": "Quel âge as-tu ?",
+            "hintEs": "\"Âge\" significa edad.",
+            "hintSv": "\"Âge\" betyder ålder.",
+            "explanationEs": "\"Quel âge as-tu ?\" significa \"¿Cuántos años tienes?\".",
+            "explanationSv": "\"Quel âge as-tu ?\" betyder hur gammal är du?"
+          },
+          {
+            "id": "u2-l3-e3",
+            "type": "fill-blank",
+            "prompt": "Completa: \"Mon ami a quatorze _____.\"",
+            "promptFr": "Mon ami a quatorze _____ .",
+            "audioFr": "Mon ami a quatorze ans.",
+            "options": [
+              "ans",
+              "jours",
+              "mois",
+              "heures"
+            ],
+            "answer": "ans",
+            "hintEs": "\"Ans\" significa años.",
+            "hintSv": "\"Ans\" betyder år.",
+            "explanationEs": "¡Correcto! Siempre se añade la palabra \"ans\" al final.",
+            "explanationSv": "Rätt! Man lägger alltid till \"ans\" för ålder."
+          },
+          {
+            "id": "u2-l3-e4",
+            "type": "translate",
+            "prompt": "Traduce al francés: \"Ella tiene doce años\"",
+            "promptFr": "Elle a douze ans.",
+            "audioFr": "Elle a douze ans.",
+            "options": [
+              "Elle a douze ans.",
+              "Il a treize ans.",
+              "Elle est douze ans.",
+              "J'ai douze ans."
+            ],
+            "answer": "Elle a douze ans.",
+            "hintEs": "Elle (ella) + a (tiene) + douze (12) + ans (años).",
+            "hintSv": "Elle (hon) + a (har) + douze (12) + ans (år).",
+            "explanationEs": "¡Perfecto! \"Elle a douze ans.\"",
+            "explanationSv": "Perfekt! \"Elle a douze ans.\""
+          },
+          {
+            "id": "u2-l3-e5",
+            "type": "fill-blank",
+            "prompt": "Completa con la forma correcta de tener: \"Tu _____ treize ans.\"",
+            "promptFr": "Tu _____ treize ans.",
+            "audioFr": "Tu as treize ans.",
+            "options": [
+              "as",
+              "es",
+              "a",
+              "ai"
+            ],
+            "answer": "as",
+            "hintEs": "Con \"Tu\" el verbo avoir es \"as\" (Tu as).",
+            "hintSv": "Med \"tu\" böjs verbet avoir till \"as\" (tu as).",
+            "explanationEs": "¡Muy bien! J'ai, Tu as, Il/Elle a.",
+            "explanationSv": "Jättebra! J'ai, Tu as, Il/Elle a."
+          },
+          {
+            "id": "u2-l3-e6",
+            "type": "scramble",
+            "prompt": "Ordena: \"Mi amigo tiene catorce años.\"",
+            "promptFr": "Mon ami a quatorze ans.",
+            "audioFr": "Mon ami a quatorze ans.",
+            "options": [
+              "Mon",
+              "ami",
+              "a",
+              "quatorze",
+              "ans",
+              "."
+            ],
+            "answer": [
+              "Mon",
+              "ami",
+              "a",
+              "quatorze",
+              "ans",
+              "."
+            ],
+            "hintEs": "Mon ami + a + quatorze ans.",
+            "hintSv": "Mon ami + a + quatorze ans.",
+            "explanationEs": "¡Genial! \"Mon ami a quatorze ans.\"",
+            "explanationSv": "Lysande! Min kompis är fjorton år."
+          },
+          {
+            "id": "u2-l3-e7",
+            "type": "choice",
+            "prompt": "¿Cómo dirías: \"Tengo trece años y él tiene quince años\"?",
+            "audioFr": "J'ai treize ans et il a quinze ans.",
+            "options": [
+              "J'ai treize ans et il a quinze ans.",
+              "Je suis treize ans et il est quinze ans.",
+              "J'ai douze ans et elle a seize ans.",
+              "Tu as treize ans et il a dix ans."
+            ],
+            "answer": "J'ai treize ans et il a quinze ans.",
+            "hintEs": "J'ai (tengo) + et (y) + il a (él tiene).",
+            "hintSv": "J'ai + et + il a.",
+            "explanationEs": "¡Extraordinario! Dominas cómo expresar las edades con avoir.",
+            "explanationSv": "Extraordinärt! Du behärskar hur man uttrycker ålder med avoir."
+          },
+          {
+            "id": "u2-l3-e8",
+            "type": "translate",
+            "prompt": "Traduce: \"¿Cuántos años tiene tu hermano?\"",
+            "promptFr": "Quel âge a ton frère ?",
+            "audioFr": "Quel âge a ton frère ?",
+            "options": [
+              "Quel âge a ton frère ?",
+              "Comment va ton frère ?",
+              "Où est ton frère ?",
+              "Qui est ton frère ?"
+            ],
+            "answer": "Quel âge a ton frère ?",
+            "hintEs": "Quel âge a...",
+            "hintSv": "Hur gammal är din bror?",
+            "explanationEs": "\"Quel âge a ton frère ?\" usa el verbo avoir.",
+            "explanationSv": "\"Quel âge a ton frère ?\" frågar om ålder."
+          },
+          {
+            "id": "u2-l3-e9",
+            "type": "choice",
+            "prompt": "¿Cómo dices \"Mi hermana tiene 15 años\"?",
+            "promptFr": "Ma sœur a quinze ans.",
+            "audioFr": "Ma sœur a quinze ans.",
+            "options": [
+              "Ma sœur a quinze ans.",
+              "Ma sœur est quinze ans.",
+              "Ma sœur a seize ans.",
+              "Mon frère a quinze ans."
+            ],
+            "answer": "Ma sœur a quinze ans.",
+            "hintEs": "Ma sœur + a + quinze ans.",
+            "hintSv": "Ma sœur + a + quinze ans.",
+            "explanationEs": "\"Ma sœur a quinze ans\" usa avoir.",
+            "explanationSv": "\"Ma sœur a quinze ans\" = Min syster är 15 år."
+          },
+          {
+            "id": "u2-l3-e10",
+            "type": "scramble",
+            "prompt": "Ordena: \"Mon ami Antoine a douze ans.\"",
+            "promptFr": "Mon ami Antoine a douze ans .",
+            "audioFr": "Mon ami Antoine a douze ans .",
+            "options": [
+              "Mon",
+              "ami",
+              "Antoine",
+              "a",
+              "douze",
+              "ans",
+              "."
+            ],
+            "answer": [
+              "Mon",
+              "ami",
+              "Antoine",
+              "a",
+              "douze",
+              "ans",
+              "."
+            ],
+            "hintEs": "Mi amigo Antoine tiene 12 años.",
+            "hintSv": "Min vän Antoine är 12 år.",
+            "explanationEs": "Presentar la edad de un amigo.",
+            "explanationSv": "Perfekt åldersbeskrivning."
+          },
+          {
+            "id": "u2-l3-e11",
+            "type": "fill-blank",
+            "prompt": "Completa: \"Ellos tienen 14 años\"",
+            "promptFr": "Ils _____ 14 ans.",
+            "audioFr": "ont",
+            "options": [
+              "ont",
+              "avons",
+              "avez",
+              "a"
+            ],
+            "answer": "ont",
+            "hintEs": "Ils ont (forma de avoir para ils).",
+            "hintSv": "Ils ont.",
+            "explanationEs": "\"Ils ont 14 ans\" = Tienen 14 años.",
+            "explanationSv": "\"Ils ont 14 ans\" = De är 14 år."
+          },
+          {
+            "id": "u2-l3-e12",
+            "type": "choice",
+            "prompt": "¿Por qué en francés se dice \"J'ai 13 ans\" en vez de \"Je suis 13 ans\"?",
+            "promptFr": "Porque en francés la edad se \"tiene\" (verbo avoir).",
+            "audioFr": "Porque en francés la edad se \"tiene\" (verbo avoir).",
+            "options": [
+              "Porque en francés la edad se \"tiene\" (verbo avoir).",
+              "Porque être no existe.",
+              "Solo los adultos usan être.",
+              "Es una regla que solo aplica a menores."
+            ],
+            "answer": "Porque en francés la edad se \"tiene\" (verbo avoir).",
+            "hintEs": "Igual que en español: tengo 13 años.",
+            "hintSv": "På franska har man ålder.",
+            "explanationEs": "En francés se usa el verbo avoir para la edad.",
+            "explanationSv": "Rätt! Franskan använder verbet ha (avoir)."
+          }
+        ]
+      },
+      {
+        "id": "u2-l4",
+        "unitId": "unit-2",
+        "title": "Paso 4: Teléfonos, operaciones y fechas",
+        "frenchTitle": "Numéros de Téléphone & Calculs Simples",
+        "description": "Dictado de teléfonos de dos en dos y sumas/restas básicas.",
+        "xpReward": 20,
+        "culturalNote": {
+          "title": "Point Culturel",
+          "textEs": "Aspecto cultural y lingüístico relevante para Årskurs 6.",
+          "textSv": "Kulturell och språklig aspekt för årskurs 6."
+        },
+        "exercises": [
+          {
+            "id": "u2-l4-e1",
+            "type": "choice",
+            "prompt": "Reto 1: Paso 4: Teléfonos, operaciones y fechas — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u2-l4-e2",
+            "type": "translate",
+            "prompt": "Reto 2: Paso 4: Teléfonos, operaciones y fechas — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u2-l4-e3",
+            "type": "fill-blank",
+            "prompt": "Reto 3: Paso 4: Teléfonos, operaciones y fechas — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u2-l4-e4",
+            "type": "scramble",
+            "prompt": "Reto 4: Paso 4: Teléfonos, operaciones y fechas — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u2-l4-e5",
+            "type": "choice",
+            "prompt": "Reto 5: Paso 4: Teléfonos, operaciones y fechas — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u2-l4-e6",
+            "type": "translate",
+            "prompt": "Reto 6: Paso 4: Teléfonos, operaciones y fechas — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u2-l4-e7",
+            "type": "fill-blank",
+            "prompt": "Reto 7: Paso 4: Teléfonos, operaciones y fechas — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u2-l4-e8",
+            "type": "scramble",
+            "prompt": "Reto 8: Paso 4: Teléfonos, operaciones y fechas — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u2-l4-e9",
+            "type": "choice",
+            "prompt": "Reto 9: Paso 4: Teléfonos, operaciones y fechas — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u2-l4-e10",
+            "type": "translate",
+            "prompt": "Reto 10: Paso 4: Teléfonos, operaciones y fechas — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u2-l4-e11",
+            "type": "fill-blank",
+            "prompt": "Reto 11: Paso 4: Teléfonos, operaciones y fechas — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u2-l4-e12",
+            "type": "scramble",
+            "prompt": "Reto 12: Paso 4: Teléfonos, operaciones y fechas — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          }
+        ]
+      },
+      {
+        "id": "u2-l5",
+        "unitId": "unit-2",
+        "title": "Paso 5: Decenas y números hasta el 30",
+        "frenchTitle": "Les Nombres de 20 à 30 & Défis de Calcul",
+        "description": "Aprende a contar hasta el 30 y resolver retos numéricos.",
+        "xpReward": 25,
+        "culturalNote": {
+          "title": "Point Culturel",
+          "textEs": "Profundización pedagógica en el uso real del francés cotidiano.",
+          "textSv": "Fördjupning i vardaglig franska för ungdomar."
+        },
+        "exercises": [
+          {
+            "id": "u2-l5-e1",
+            "type": "choice",
+            "prompt": "Reto 1: Paso 5: Decenas y números hasta el 30 — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u2-l5-e2",
+            "type": "translate",
+            "prompt": "Reto 2: Paso 5: Decenas y números hasta el 30 — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u2-l5-e3",
+            "type": "fill-blank",
+            "prompt": "Reto 3: Paso 5: Decenas y números hasta el 30 — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u2-l5-e4",
+            "type": "scramble",
+            "prompt": "Reto 4: Paso 5: Decenas y números hasta el 30 — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u2-l5-e5",
+            "type": "choice",
+            "prompt": "Reto 5: Paso 5: Decenas y números hasta el 30 — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u2-l5-e6",
+            "type": "translate",
+            "prompt": "Reto 6: Paso 5: Decenas y números hasta el 30 — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u2-l5-e7",
+            "type": "fill-blank",
+            "prompt": "Reto 7: Paso 5: Decenas y números hasta el 30 — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u2-l5-e8",
+            "type": "scramble",
+            "prompt": "Reto 8: Paso 5: Decenas y números hasta el 30 — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u2-l5-e9",
+            "type": "choice",
+            "prompt": "Reto 9: Paso 5: Decenas y números hasta el 30 — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u2-l5-e10",
+            "type": "translate",
+            "prompt": "Reto 10: Paso 5: Decenas y números hasta el 30 — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u2-l5-e11",
+            "type": "fill-blank",
+            "prompt": "Reto 11: Paso 5: Decenas y números hasta el 30 — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u2-l5-e12",
+            "type": "scramble",
+            "prompt": "Reto 12: Paso 5: Decenas y números hasta el 30 — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          }
+        ]
+      }
+    ],
+    "dailySessionTemplate": {
+      "id": "session-u2",
+      "title": "Paso 6: Gran Sesión Guiada de 30 minutos",
+      "frenchTitle": "L'Anniversaire et les Âges (Séance de 30 min)",
+      "situation": "Es el cumpleaños de un amigo de clase y todos están hablando de sus edades.",
+      "phase1Warmup": {
+        "introEs": "Calentamiento (5 min): traduce estos 3 números y frases clave.",
+        "introSv": "Uppvärmning (5 min): översätt dessa 3 siffror och nyckelfraser.",
+        "questions": [
+          {
+            "id": "w2-1",
+            "promptEs": "¿Cómo se dice el número 10?",
+            "promptSv": "Hur säger man siffran 10?",
+            "expectedFr": "Dix",
+            "hints": [
+              "Se escribe con X al final."
+            ]
+          },
+          {
+            "id": "w2-2",
+            "promptEs": "¿Cómo se dice \"Yo tengo\"?",
+            "promptSv": "Hur säger man \"Jag har\"?",
+            "expectedFr": "J'ai",
+            "hints": [
+              "J'a..."
+            ]
+          },
+          {
+            "id": "w2-3",
+            "promptEs": "¿Cómo se dice \"Tengo 13 años\"?",
+            "promptSv": "Hur säger man \"Jag är 13 år\"?",
+            "expectedFr": "J'ai treize ans",
+            "hints": [
+              "J'ai treize a..."
+            ]
+          }
+        ]
+      },
+      "phase2Input": {
+        "storyTitle": "La fête d'anniversaire de Thomas",
+        "storyFr": "Thomas : C'est mon anniversaire aujourd'hui ! J'ai quatorze ans !\nCamille : Joyeux anniversaire Thomas ! Moi, j'ai treize ans. Et toi Sophie ?\nSophie : J'ai douze ans, mais bientôt treize en décembre !\nThomas : On mange le gâteau ? Il y a quatorze bougies !\nCamille : Oui, génial ! Un, deux, trois... souffle !",
+        "storyEs": "Thomas: ¡Es mi cumpleaños hoy! ¡Tengo catorce años!\nCamille: ¡Feliz cumpleaños Thomas! Yo tengo trece años. ¿Y tú Sophie?\nSophie: Tengo doce años, ¡pero pronto trece en diciembre!\nThomas: ¿Comemos la tarta? ¡Hay catorce velas!\nCamille: ¡Sí, genial! Uno, dos, tres... ¡sopla!",
+        "storySv": "Thomas: Det är min födelsedag idag! Jag fyller fjorton år!\nCamille: Grattis på födelsedagen Thomas! Jag är tretton år. Och du Sophie?\nSophie: Jag är tolv år, men snart tretton i december!\nThomas: Ska vi äta tårtan? Det finns fjorton ljus!\nCamille: Ja, toppen! Ett, två, tre... blås!",
+        "keyExpressions": [
+          {
+            "fr": "Joyeux anniversaire !",
+            "phonetic": "zhua-iö a-ni-ver-ser",
+            "es": "¡Feliz cumpleaños!",
+            "sv": "Grattis på födelsedagen!",
+            "clue": "La felicitación tradicional cuando alguien cumple años."
+          },
+          {
+            "fr": "Bientôt",
+            "phonetic": "bi-an-to",
+            "es": "Pronto / Casi",
+            "sv": "Snart",
+            "clue": "Expresa que algo va a pasar en poco tiempo."
+          },
+          {
+            "fr": "Il y a",
+            "phonetic": "il i a",
+            "es": "Hay",
+            "sv": "Det finns",
+            "clue": "Sirve para indicar existencia de cosas o personas."
+          }
+        ]
+      },
+      "phase3Production": {
+        "contextEs": "Juego de rol (12 min): estás en la fiesta. Thomas te pregunta tu edad y cuándo cumples años.",
+        "contextSv": "Rollspel (12 min): du är på festen. Thomas frågar om din ålder.",
+        "initialAIPrompt": "Moi, j'ai quatorze ans aujourd'hui ! Et toi, quel âge as-tu ?",
+        "initialAIPromptTranslation": "¡Yo tengo catorce años hoy! Y tú, ¿cuántos años tienes?",
+        "mission": "Dile a Thomas cuántos años tienes y deséale feliz cumpleaños.",
+        "constraintProgression": [
+          "Añade la felicitación \"Joyeux anniversaire !\".",
+          "Añade un número más (ejemplo: \"Mon frère a dix ans\").",
+          "Usa la palabra \"merci\" o \"bientôt\"."
+        ]
+      },
+      "phase4ExitTicket": {
+        "promptEs": "Reto de salida (5 min): Escribe 2 frases: tu edad en francés y la edad de alguien de tu familia o amigo.",
+        "promptSv": "Utgångsutmaning (5 min): Skriv 2 meningar: din ålder på franska och en familjemedlems eller kompis ålder.",
+        "sampleFr": "J'ai treize ans et mon ami a quatorze ans."
+      }
+    }
+  },
+  {
+    "id": "unit-3",
+    "number": 3,
+    "grade": "ak6",
+    "title": "En la Clase y el Material Escolar",
+    "frenchTitle": "Dans la Classe et à L'École",
+    "description": "El material del colegio, el sac à dos y los artículos un/une/le/la.",
+    "iconName": "BookOpen",
+    "color": "from-emerald-500 to-teal-500",
+    "grammarTip": {
+      "title": "Artículos: Un (masculino) vs. Une (femenino)",
+      "explanationEs": "En francés todos los objetos tienen género. \"Un livre\" (un libro, masculino) y \"Une trousse\" (un estuche, femenino).",
+      "explanationSv": "På franska har alla substantiv genus. \"Un livre\" (en bok, maskulint) och \"Une trousse\" (ett pennfodral, feminint).",
+      "examples": [
+        {
+          "fr": "Un cahier",
+          "es": "Un cuaderno",
+          "sv": "Ett skrivhäfte"
+        },
+        {
+          "fr": "Une règle",
+          "es": "Una regla",
+          "sv": "En linjal"
+        },
+        {
+          "fr": "Qu'est-ce que c'est ?",
+          "es": "¿Qué es esto?",
+          "sv": "Vad är detta?"
+        }
+      ]
+    },
+    "lessons": [
+      {
+        "id": "u3-l1",
+        "unitId": "unit-3",
+        "title": "Paso 1: Vocabulario del material escolar",
+        "frenchTitle": "Le Matériel Scolaire",
+        "description": "Un stylo, un crayon, un livre, un cahier, une gomme.",
+        "xpReward": 15,
+        "exercises": [
+          {
+            "id": "u3-l1-e1",
+            "type": "choice",
+            "prompt": "¿Qué significa \"Un stylo\"?",
+            "audioFr": "Un stylo",
+            "options": [
+              "Un bolígrafo",
+              "Un libro",
+              "Una mochila",
+              "Una mesa"
+            ],
+            "answer": "Un bolígrafo",
+            "hintEs": "Sirve para escribir con tinta.",
+            "hintSv": "En bläckpenna.",
+            "explanationEs": "¡Exacto! \"Un stylo\" es un bolígrafo.",
+            "explanationSv": "Exakt! \"Un stylo\" är en bläckpenna."
+          },
+          {
+            "id": "u3-l1-e2",
+            "type": "choice",
+            "prompt": "¿Qué es \"Une trousse\"?",
+            "audioFr": "Une trousse",
+            "options": [
+              "Un estuche / Plumier",
+              "Una regla",
+              "Un cuaderno",
+              "Una pizarra"
+            ],
+            "answer": "Un estuche / Plumier",
+            "hintEs": "Donde guardas los bolis y lápices.",
+            "hintSv": "Ett pennfodral.",
+            "explanationEs": "\"Une trousse\" es femenino: une trousse (el estuche).",
+            "explanationSv": "\"Une trousse\" betyder pennfodral."
+          },
+          {
+            "id": "u3-l1-e3",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"un libro\" en francés?",
+            "audioFr": "Un livre",
+            "options": [
+              "Un livre",
+              "Un cahier",
+              "Une gomme",
+              "Un sac"
+            ],
+            "answer": "Un livre",
+            "hintEs": "Se parece a la palabra \"libro\".",
+            "hintSv": "En bok på franska.",
+            "explanationEs": "¡Correcto! \"Un livre\" es un libro.",
+            "explanationSv": "Rätt! \"Un livre\" är en bok."
+          },
+          {
+            "id": "u3-l1-e4",
+            "type": "fill-blank",
+            "prompt": "Completa con el artículo correcto: \"_____ gomme\"",
+            "promptFr": "_____ gomme",
+            "audioFr": "Une gomme",
+            "options": [
+              "Une",
+              "Un",
+              "Le",
+              "Des"
+            ],
+            "answer": "Une",
+            "hintEs": "Goma de borrar es femenino en francés: une gomme.",
+            "hintSv": "Radergummi är feminint på franska: une gomme.",
+            "explanationEs": "¡Muy bien! \"Une gomme\" es femenino.",
+            "explanationSv": "Jättebra! \"Une gomme\" är feminint."
+          },
+          {
+            "id": "u3-l1-e5",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"un lápiz\" en francés?",
+            "audioFr": "Un crayon",
+            "options": [
+              "Un crayon",
+              "Un stylo",
+              "Une gomme",
+              "Un sac"
+            ],
+            "answer": "Un crayon",
+            "hintEs": "Se pronuncia similar a \"créyon\".",
+            "hintSv": "En blyertspenna på franska.",
+            "explanationEs": "¡Exacto! \"Un crayon\" es un lápiz de grafito.",
+            "explanationSv": "Exakt! \"Un crayon\" är en blyertspenna."
+          },
+          {
+            "id": "u3-l1-e6",
+            "type": "fill-blank",
+            "prompt": "Completa: \"_____ sac à dos (la mochila)\"",
+            "promptFr": "_____ sac à dos",
+            "audioFr": "Un sac à dos",
+            "options": [
+              "Un",
+              "Une",
+              "Des",
+              "La"
+            ],
+            "answer": "Un",
+            "hintEs": "Mochila es masculino en francés: un sac à dos.",
+            "hintSv": "Ryggsäck är maskulint på franska: un sac à dos.",
+            "explanationEs": "¡Perfecto! \"Un sac à dos\" es masculino.",
+            "explanationSv": "Perfekt! \"Un sac à dos\" är maskulint."
+          },
+          {
+            "id": "u3-l1-e7",
+            "type": "translate",
+            "prompt": "Traduce al francés: \"Un lápiz y una goma\"",
+            "audioFr": "Un crayon et une gomme",
+            "options": [
+              "Un crayon et une gomme",
+              "Un stylo et un livre",
+              "Une règle et un cahier",
+              "Un sac et une trousse"
+            ],
+            "answer": "Un crayon et une gomme",
+            "hintEs": "Un crayon (lápiz) + et (y) + une gomme (goma).",
+            "hintSv": "Un crayon + et + une gomme.",
+            "explanationEs": "¡Excelente combinación de masculino y femenino!",
+            "explanationSv": "Utmärkt kombination av maskulint och feminint!"
+          },
+          {
+            "id": "u3-l1-e8",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"un sacapuntas\" en francés?",
+            "promptFr": "un taille-crayon",
+            "audioFr": "un taille-crayon",
+            "options": [
+              "un taille-crayon",
+              "une règle",
+              "une gomme",
+              "des ciseaux"
+            ],
+            "answer": "un taille-crayon",
+            "hintEs": "Tailler = afilar, crayon = lápiz.",
+            "hintSv": "Betyder pennvässare.",
+            "explanationEs": "\"Un taille-crayon\" es el sacapuntas.",
+            "explanationSv": "\"Un taille-crayon\" betyder pennvässare."
+          },
+          {
+            "id": "u3-l1-e9",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"las tijeras\" (siempre plural en francés)?",
+            "promptFr": "des ciseaux",
+            "audioFr": "des ciseaux",
+            "options": [
+              "des ciseaux",
+              "un ciseau",
+              "une ciseau",
+              "le stylo"
+            ],
+            "answer": "des ciseaux",
+            "hintEs": "Lleva la -x del plural.",
+            "hintSv": "Plural med des ciseaux.",
+            "explanationEs": "\"Des ciseaux\" siempre se usa con des/les.",
+            "explanationSv": "\"Des ciseaux\" är alltid plural."
+          },
+          {
+            "id": "u3-l1-e10",
+            "type": "scramble",
+            "prompt": "Ordena: \"Dans ma trousse, il y a un stylo.\"",
+            "promptFr": "Dans ma trousse , il y a un stylo .",
+            "audioFr": "Dans ma trousse , il y a un stylo .",
+            "options": [
+              "Dans",
+              "ma",
+              "trousse",
+              ",",
+              "il",
+              "y",
+              "a",
+              "un",
+              "stylo",
+              "."
+            ],
+            "answer": [
+              "Dans",
+              "ma",
+              "trousse",
+              ",",
+              "il",
+              "y",
+              "a",
+              "un",
+              "stylo",
+              "."
+            ],
+            "hintEs": "En mi estuche hay un bolígrafo.",
+            "hintSv": "I mitt pennskrin finns en penna.",
+            "explanationEs": "Descripción básica del material escolar.",
+            "explanationSv": "Bra beskrivning av pennskrinet."
+          },
+          {
+            "id": "u3-l1-e11",
+            "type": "fill-blank",
+            "prompt": "Completa: \"un libro y un cuaderno\"",
+            "promptFr": "Un livre et un _____",
+            "audioFr": "cahier",
+            "options": [
+              "cahier",
+              "gomme",
+              "règle",
+              "trousse"
+            ],
+            "answer": "cahier",
+            "hintEs": "Cahier = cuaderno (masculino).",
+            "hintSv": "Cahier = skrivbok.",
+            "explanationEs": "\"Un livre et un cahier\" = un libro y un cuaderno.",
+            "explanationSv": "\"Un livre et un cahier\" = en bok och en skrivbok."
+          },
+          {
+            "id": "u3-l1-e12",
+            "type": "choice",
+            "prompt": "¿Qué palabra se usa para \"la mochila escolar\"?",
+            "promptFr": "le sac à dos / le cartable",
+            "audioFr": "le sac à dos / le cartable",
+            "options": [
+              "le sac à dos / le cartable",
+              "la trousse",
+              "la règle",
+              "le livre"
+            ],
+            "answer": "le sac à dos / le cartable",
+            "hintEs": "Sac à dos (mochila de espalda) o cartable.",
+            "hintSv": "Ryggsäck eller skolväska.",
+            "explanationEs": "\"Le cartable\" o \"le sac à dos\" es la mochila.",
+            "explanationSv": "\"Le sac à dos\" betyder ryggsäck."
+          }
+        ]
+      },
+      {
+        "id": "u3-l2",
+        "unitId": "unit-3",
+        "title": "Paso 2: Qu'est-ce que c'est ? y C'est...",
+        "frenchTitle": "Identifier les Objets",
+        "description": "Aprende a preguntar y señalar qué objeto es cada cosa.",
+        "xpReward": 20,
+        "exercises": [
+          {
+            "id": "u3-l2-e1",
+            "type": "scramble",
+            "prompt": "Ordena la pregunta: \"¿Qué es esto?\"",
+            "promptFr": "Qu'est-ce que c'est ?",
+            "audioFr": "Qu'est-ce que c'est ?",
+            "options": [
+              "Qu'est-ce",
+              "que",
+              "c'est",
+              "?"
+            ],
+            "answer": [
+              "Qu'est-ce",
+              "que",
+              "c'est",
+              "?"
+            ],
+            "hintEs": "La expresión típica francesa para preguntar qué es algo.",
+            "hintSv": "Det klassiska franska uttrycket för \"vad är det?\".",
+            "explanationEs": "\"Qu'est-ce que c'est ?\" es una de las preguntas más usadas en francés.",
+            "explanationSv": "\"Qu'est-ce que c'est ?\" betyder vad är detta?"
+          },
+          {
+            "id": "u3-l2-e2",
+            "type": "scramble",
+            "prompt": "Ordena la respuesta: \"Es un cuaderno de francés.\"",
+            "promptFr": "C'est un cahier de français.",
+            "audioFr": "C'est un cahier de français.",
+            "options": [
+              "C'est",
+              "un",
+              "cahier",
+              "de",
+              "français",
+              "."
+            ],
+            "answer": [
+              "C'est",
+              "un",
+              "cahier",
+              "de",
+              "français",
+              "."
+            ],
+            "hintEs": "C'est (es) + un cahier + de français.",
+            "hintSv": "C'est + un cahier + de français.",
+            "explanationEs": "¡Excelente! \"C'est un cahier de français.\"",
+            "explanationSv": "Utmärkt! \"C'est un cahier de français.\""
+          },
+          {
+            "id": "u3-l2-e3",
+            "type": "choice",
+            "prompt": "¿Cómo respondes si te señalan una regla?",
+            "audioFr": "C'est une règle.",
+            "options": [
+              "C'est une règle.",
+              "C'est un livre.",
+              "C'est un stylo.",
+              "C'est une trousse."
+            ],
+            "answer": "C'est une règle.",
+            "hintEs": "\"Règle\" significa regla.",
+            "hintSv": "\"Règle\" betyder linjal.",
+            "explanationEs": "¡Correcto! \"C'est une règle.\"",
+            "explanationSv": "Rätt! \"C'est une règle.\""
+          },
+          {
+            "id": "u3-l2-e4",
+            "type": "fill-blank",
+            "prompt": "Completa: \"Qu'est-ce que _____ ?\"",
+            "promptFr": "Qu'est-ce que _____ ?",
+            "audioFr": "Qu'est-ce que c'est ?",
+            "options": [
+              "c'est",
+              "c'era",
+              "tu es",
+              "il est"
+            ],
+            "answer": "c'est",
+            "hintEs": "La fórmula fija es \"c'est\".",
+            "hintSv": "Det fasta uttrycket är \"c'est\".",
+            "explanationEs": "¡Muy bien! \"Qu'est-ce que c'est ?\" significa \"¿Qué es esto?\".",
+            "explanationSv": "Jättebra! \"Qu'est-ce que c'est ?\" betyder vad är det?"
+          },
+          {
+            "id": "u3-l2-e5",
+            "type": "choice",
+            "prompt": "¿Qué respondes si te muestran unas tijeras (\"des ciseaux\")?",
+            "audioFr": "Ce sont des ciseaux.",
+            "options": [
+              "Ce sont des ciseaux.",
+              "C'est un ciseau.",
+              "C'est une règle.",
+              "Il est des ciseaux."
+            ],
+            "answer": "Ce sont des ciseaux.",
+            "hintEs": "En plural se usa \"Ce sont des...\".",
+            "hintSv": "I plural använder man \"Ce sont des...\".",
+            "explanationEs": "¡Correcto! En plural decimos \"Ce sont des ciseaux.\"",
+            "explanationSv": "Rätt! I plural säger man \"Ce sont des ciseaux.\""
+          },
+          {
+            "id": "u3-l2-e6",
+            "type": "translate",
+            "prompt": "Traduce al francés: \"Es un estuche rojo\"",
+            "audioFr": "C'est une trousse rouge.",
+            "options": [
+              "C'est une trousse rouge.",
+              "C'est un sac rouge.",
+              "C'est un stylo rouge.",
+              "C'est un livre bleu."
+            ],
+            "answer": "C'est une trousse rouge.",
+            "hintEs": "Trousse es femenino: une trousse rouge.",
+            "hintSv": "Trousse är feminint: une trousse rouge.",
+            "explanationEs": "¡Perfecto! C'est une trousse rouge.",
+            "explanationSv": "Perfekt! C'est une trousse rouge."
+          },
+          {
+            "id": "u3-l2-e7",
+            "type": "scramble",
+            "prompt": "Ordena: \"Es el libro de matemáticas.\"",
+            "promptFr": "C'est le livre de maths.",
+            "audioFr": "C'est le livre de maths.",
+            "options": [
+              "C'est",
+              "le",
+              "livre",
+              "de",
+              "maths",
+              "."
+            ],
+            "answer": [
+              "C'est",
+              "le",
+              "livre",
+              "de",
+              "maths",
+              "."
+            ],
+            "hintEs": "C'est + le livre + de maths.",
+            "hintSv": "C'est + le livre + de maths.",
+            "explanationEs": "¡Fantástico! Dominas el uso de C'est.",
+            "explanationSv": "Fantastiskt! Du behärskar hur man använder C'est."
+          },
+          {
+            "id": "u3-l2-e8",
+            "type": "choice",
+            "prompt": "¿Qué artículo corresponde a \"_____ trousse\" (estuche)?",
+            "promptFr": "une",
+            "audioFr": "une",
+            "options": [
+              "une",
+              "un",
+              "des",
+              "le"
+            ],
+            "answer": "une",
+            "hintEs": "Trousse es femenino en francés.",
+            "hintSv": "Trousse är feminint.",
+            "explanationEs": "Se dice \"une trousse\".",
+            "explanationSv": "Det heter \"une trousse\"."
+          },
+          {
+            "id": "u3-l2-e9",
+            "type": "choice",
+            "prompt": "¿Qué artículo corresponde a \"_____ cahier\" (cuaderno)?",
+            "promptFr": "un",
+            "audioFr": "un",
+            "options": [
+              "un",
+              "une",
+              "des",
+              "la"
+            ],
+            "answer": "un",
+            "hintEs": "Cahier es masculino.",
+            "hintSv": "Cahier är maskulint.",
+            "explanationEs": "Se dice \"un cahier\".",
+            "explanationSv": "Det heter \"un cahier\"."
+          },
+          {
+            "id": "u3-l2-e10",
+            "type": "scramble",
+            "prompt": "Ordena: \"J'ai des feutres et des crayons.\"",
+            "promptFr": "J'ai des feutres et des crayons .",
+            "audioFr": "J'ai des feutres et des crayons .",
+            "options": [
+              "J'ai",
+              "des",
+              "feutres",
+              "et",
+              "des",
+              "crayons",
+              "."
+            ],
+            "answer": [
+              "J'ai",
+              "des",
+              "feutres",
+              "et",
+              "des",
+              "crayons",
+              "."
+            ],
+            "hintEs": "Tengo rotuladores y lápices.",
+            "hintSv": "Jag har tuschpennor och färgpennor.",
+            "explanationEs": "Plural con \"des\".",
+            "explanationSv": "Plural med \"des\"."
+          },
+          {
+            "id": "u3-l2-e11",
+            "type": "fill-blank",
+            "prompt": "Completa con el artículo indefinido plural: \"_____ ciseaux\"",
+            "promptFr": "_____ ciseaux",
+            "audioFr": "des",
+            "options": [
+              "des",
+              "un",
+              "une",
+              "le"
+            ],
+            "answer": "des",
+            "hintEs": "Plural usa \"des\".",
+            "hintSv": "Plural = des.",
+            "explanationEs": "\"Des ciseaux\" = unas tijeras.",
+            "explanationSv": "\"Des ciseaux\" = en sax (plural på franska)."
+          },
+          {
+            "id": "u3-l2-e12",
+            "type": "choice",
+            "prompt": "¿Cómo cambia \"un stylo\" al plural?",
+            "promptFr": "des stylos",
+            "audioFr": "des stylos",
+            "options": [
+              "des stylos",
+              "les stylos",
+              "une stylos",
+              "un stylos"
+            ],
+            "answer": "des stylos",
+            "hintEs": "Un se convierte en des y stylo añade s.",
+            "hintSv": "Un blir des och s läggs till.",
+            "explanationEs": "\"Un stylo\" → \"des stylos\".",
+            "explanationSv": "\"Un stylo\" blir \"des stylos\"."
+          }
+        ]
+      },
+      {
+        "id": "u3-l3",
+        "unitId": "unit-3",
+        "title": "Paso 3: Dans mon sac & Pedir prestado",
+        "frenchTitle": "Prêter et Demander dans la Classe",
+        "description": "Tu as un stylo s'il te plaît ? y Dans mon sac, j'ai...",
+        "xpReward": 20,
+        "exercises": [
+          {
+            "id": "u3-l3-e1",
+            "type": "scramble",
+            "prompt": "Ordena: \"¿Tienes un bolígrafo, por favor?\"",
+            "promptFr": "Tu as un stylo s'il te plaît ?",
+            "audioFr": "Tu as un stylo s'il te plaît ?",
+            "options": [
+              "Tu",
+              "as",
+              "un",
+              "stylo",
+              "s'il",
+              "te",
+              "plaît",
+              "?"
+            ],
+            "answer": [
+              "Tu",
+              "as",
+              "un",
+              "stylo",
+              "s'il",
+              "te",
+              "plaît",
+              "?"
+            ],
+            "hintEs": "Tu as (tienes) + un stylo + s'il te plaît (por favor).",
+            "hintSv": "Tu as (har du) + un stylo + s'il te plaît (snälla).",
+            "explanationEs": "¡Genial! Así se pide material prestado a un compañero.",
+            "explanationSv": "Lysande! Så frågar man om man får låna en penna."
+          },
+          {
+            "id": "u3-l3-e2",
+            "type": "choice",
+            "prompt": "¿Qué dices cuando le entregas el boli a tu compañero?",
+            "audioFr": "Voilà ! Tiens !",
+            "options": [
+              "Voilà ! / Tiens !",
+              "Au revoir !",
+              "Non merci",
+              "Je ne sais pas"
+            ],
+            "answer": "Voilà ! / Tiens !",
+            "hintEs": "Significa \"¡Aquí tienes!\" o \"¡Toma!\".",
+            "hintSv": "Betyder \"Varsågod!\" eller \"Ta här!\".",
+            "explanationEs": "\"Voilà !\" o \"Tiens !\" se usan para entregar algo a alguien.",
+            "explanationSv": "\"Voilà !\" betyder varsågod!"
+          },
+          {
+            "id": "u3-l3-e3",
+            "type": "fill-blank",
+            "prompt": "Completa: \"Dans mon sac, _____ deux crayons.\"",
+            "promptFr": "Dans mon sac, _____ deux crayons.",
+            "audioFr": "Dans mon sac, j'ai deux crayons.",
+            "options": [
+              "j'ai",
+              "je suis",
+              "il est",
+              "tu as"
+            ],
+            "answer": "j'ai",
+            "hintEs": "\"Yo tengo\" se dice \"j'ai\".",
+            "hintSv": "\"Jag har\" på franska är \"j'ai\".",
+            "explanationEs": "\"Dans mon sac, j'ai...\" significa \"En mi mochila tengo...\".",
+            "explanationSv": "\"Dans mon sac, j'ai...\" betyder i min väska har jag..."
+          },
+          {
+            "id": "u3-l3-e4",
+            "type": "choice",
+            "prompt": "¿Cómo respondes educadamente después de que te presten una regla?",
+            "audioFr": "Merci beaucoup !",
+            "options": [
+              "Merci beaucoup !",
+              "De rien !",
+              "Au revoir !",
+              "Pardon !"
+            ],
+            "answer": "Merci beaucoup !",
+            "hintEs": "\"Beaucoup\" significa mucho.",
+            "hintSv": "\"Tack så mycket\" på franska.",
+            "explanationEs": "¡Exacto! \"Merci beaucoup !\" = ¡Muchas gracias!",
+            "explanationSv": "Exakt! \"Merci beaucoup !\" = Tack så mycket!"
+          },
+          {
+            "id": "u3-l3-e5",
+            "type": "scramble",
+            "prompt": "Ordena: \"En mi estuche, tengo un boli.\"",
+            "promptFr": "Dans ma trousse, j'ai un stylo.",
+            "audioFr": "Dans ma trousse, j'ai un stylo.",
+            "options": [
+              "Dans",
+              "ma",
+              "trousse",
+              ",",
+              "j'ai",
+              "un",
+              "stylo",
+              "."
+            ],
+            "answer": [
+              "Dans",
+              "ma",
+              "trousse",
+              ",",
+              "j'ai",
+              "un",
+              "stylo",
+              "."
+            ],
+            "hintEs": "Dans ma trousse (en mi estuche) + j'ai (tengo) + un stylo.",
+            "hintSv": "Dans ma trousse + j'ai + un stylo.",
+            "explanationEs": "¡Muy bien! \"Dans ma trousse, j'ai un stylo.\"",
+            "explanationSv": "Jättebra! \"Dans ma trousse, j'ai un stylo.\""
+          },
+          {
+            "id": "u3-l3-e6",
+            "type": "fill-blank",
+            "prompt": "Completa para decir \"De nada\": \"De _____ !\"",
+            "promptFr": "De _____ !",
+            "audioFr": "De rien !",
+            "options": [
+              "rien",
+              "merci",
+              "bien",
+              "bon"
+            ],
+            "answer": "rien",
+            "hintEs": "\"Rien\" significa nada (\"de nada\").",
+            "hintSv": "\"Ingen orsak\" på franska: De rien.",
+            "explanationEs": "¡Correcto! \"De rien !\" se usa para contestar a \"Merci\".",
+            "explanationSv": "Rätt! \"De rien !\" är det vanliga sättet att svara på tack."
+          },
+          {
+            "id": "u3-l3-e7",
+            "type": "translate",
+            "prompt": "Traduce: \"¿Tienes una hoja de papel, por favor?\"",
+            "audioFr": "Tu as une feuille de papier, s'il te plaît ?",
+            "options": [
+              "Tu as une feuille de papier, s'il te plaît ?",
+              "Tu as un livre, s'il vous plaît ?",
+              "C'est une feuille de papier.",
+              "J'ai une feuille de papier."
+            ],
+            "answer": "Tu as une feuille de papier, s'il te plaît ?",
+            "hintEs": "Tu as (tienes) + une feuille de papier + s'il te plaît.",
+            "hintSv": "Tu as + une feuille de papier + s'il te plaît.",
+            "explanationEs": "¡Excelente! Frase súper útil en el colegio francés.",
+            "explanationSv": "Utmärkt! Superanvändbar fras i skolan."
+          },
+          {
+            "id": "u3-l3-e8",
+            "type": "choice",
+            "prompt": "¿Por qué se escribe \"l'école\" y no \"la école\"?",
+            "promptFr": "Porque école empieza por vocal (elisión).",
+            "audioFr": "Porque école empieza por vocal (elisión).",
+            "options": [
+              "Porque école empieza por vocal (elisión).",
+              "Porque école es masculino.",
+              "Porque école es plural.",
+              "Es una excepción de pronunciación."
+            ],
+            "answer": "Porque école empieza por vocal (elisión).",
+            "hintEs": "La elisión evita el choque de vocales.",
+            "hintSv": "Vokalmöte undviks med l'.",
+            "explanationEs": "La vocal de \"la\" se elide ante vocal: l'école.",
+            "explanationSv": "L' används framför vokal för att underlätta uttal."
+          },
+          {
+            "id": "u3-l3-e9",
+            "type": "translate",
+            "prompt": "Traduce: \"El profesor y la profesora\"",
+            "promptFr": "Le professeur et la professeure",
+            "audioFr": "Le professeur et la professeure",
+            "options": [
+              "Le professeur et la professeure",
+              "Un professeur et une professeure",
+              "Les professeurs",
+              "Mon professeur"
+            ],
+            "answer": "Le professeur et la professeure",
+            "hintEs": "Artículos definidos le y la.",
+            "hintSv": "Bestämda artiklar le och la.",
+            "explanationEs": "\"Le professeur et la professeure\".",
+            "explanationSv": "\"Le professeur et la professeure\"."
+          },
+          {
+            "id": "u3-l3-e10",
+            "type": "scramble",
+            "prompt": "Ordena: \"Ouvre le livre à la page dix.\"",
+            "promptFr": "Ouvre le livre à la page dix .",
+            "audioFr": "Ouvre le livre à la page dix .",
+            "options": [
+              "Ouvre",
+              "le",
+              "livre",
+              "à",
+              "la",
+              "page",
+              "dix",
+              "."
+            ],
+            "answer": [
+              "Ouvre",
+              "le",
+              "livre",
+              "à",
+              "la",
+              "page",
+              "dix",
+              "."
+            ],
+            "hintEs": "Abre el libro en la página 10.",
+            "hintSv": "Öppna boken på sidan tio.",
+            "explanationEs": "Instrucción clásica del profesor en clase.",
+            "explanationSv": "Klassisk klassrumsinstruktion."
+          },
+          {
+            "id": "u3-l3-e11",
+            "type": "fill-blank",
+            "prompt": "Completa: \"la pizarra de la clase\"",
+            "promptFr": "_____ tableau de la classe",
+            "audioFr": "Le",
+            "options": [
+              "Le",
+              "La",
+              "Un",
+              "Une"
+            ],
+            "answer": "Le",
+            "hintEs": "Tableau es masculino: le tableau.",
+            "hintSv": "Tableau är maskulint: le tableau.",
+            "explanationEs": "\"Le tableau\" = la pizarra.",
+            "explanationSv": "\"Le tableau\" = tavlan."
+          },
+          {
+            "id": "u3-l3-e12",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"los cuadernos\" en francés?",
+            "promptFr": "les cahiers",
+            "audioFr": "les cahiers",
+            "options": [
+              "les cahiers",
+              "des cahiers",
+              "le cahiers",
+              "la cahiers"
+            ],
+            "answer": "les cahiers",
+            "hintEs": "Artículo definido plural: les.",
+            "hintSv": "Bestämd artikel plural: les.",
+            "explanationEs": "\"Les cahiers\" = los cuadernos.",
+            "explanationSv": "\"Les cahiers\" = skrivböckerna."
+          }
+        ]
+      },
+      {
+        "id": "u3-l4",
+        "unitId": "unit-3",
+        "title": "Paso 4: En el aula y pedir prestado",
+        "frenchTitle": "Dans la Classe & Prêter du Matériel",
+        "description": "Pide prestado material escolar y comprende preguntas del profesor.",
+        "xpReward": 20,
+        "culturalNote": {
+          "title": "Point Culturel",
+          "textEs": "Aspecto cultural y lingüístico relevante para Årskurs 6.",
+          "textSv": "Kulturell och språklig aspekt för årskurs 6."
+        },
+        "exercises": [
+          {
+            "id": "u3-l4-e1",
+            "type": "choice",
+            "prompt": "Reto 1: Paso 4: En el aula y pedir prestado — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u3-l4-e2",
+            "type": "translate",
+            "prompt": "Reto 2: Paso 4: En el aula y pedir prestado — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u3-l4-e3",
+            "type": "fill-blank",
+            "prompt": "Reto 3: Paso 4: En el aula y pedir prestado — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u3-l4-e4",
+            "type": "scramble",
+            "prompt": "Reto 4: Paso 4: En el aula y pedir prestado — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u3-l4-e5",
+            "type": "choice",
+            "prompt": "Reto 5: Paso 4: En el aula y pedir prestado — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u3-l4-e6",
+            "type": "translate",
+            "prompt": "Reto 6: Paso 4: En el aula y pedir prestado — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u3-l4-e7",
+            "type": "fill-blank",
+            "prompt": "Reto 7: Paso 4: En el aula y pedir prestado — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u3-l4-e8",
+            "type": "scramble",
+            "prompt": "Reto 8: Paso 4: En el aula y pedir prestado — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u3-l4-e9",
+            "type": "choice",
+            "prompt": "Reto 9: Paso 4: En el aula y pedir prestado — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u3-l4-e10",
+            "type": "translate",
+            "prompt": "Reto 10: Paso 4: En el aula y pedir prestado — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u3-l4-e11",
+            "type": "fill-blank",
+            "prompt": "Reto 11: Paso 4: En el aula y pedir prestado — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u3-l4-e12",
+            "type": "scramble",
+            "prompt": "Reto 12: Paso 4: En el aula y pedir prestado — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          }
+        ]
+      },
+      {
+        "id": "u3-l5",
+        "unitId": "unit-3",
+        "title": "Paso 5: Asignaturas y el colegio francés",
+        "frenchTitle": "Les Matières Scolaires & La Récréation",
+        "description": "Nombres de asignaturas (maths, anglais, histoire) y la vida escolar.",
+        "xpReward": 25,
+        "culturalNote": {
+          "title": "Point Culturel",
+          "textEs": "Profundización pedagógica en el uso real del francés cotidiano.",
+          "textSv": "Fördjupning i vardaglig franska för ungdomar."
+        },
+        "exercises": [
+          {
+            "id": "u3-l5-e1",
+            "type": "choice",
+            "prompt": "Reto 1: Paso 5: Asignaturas y el colegio francés — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u3-l5-e2",
+            "type": "translate",
+            "prompt": "Reto 2: Paso 5: Asignaturas y el colegio francés — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u3-l5-e3",
+            "type": "fill-blank",
+            "prompt": "Reto 3: Paso 5: Asignaturas y el colegio francés — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u3-l5-e4",
+            "type": "scramble",
+            "prompt": "Reto 4: Paso 5: Asignaturas y el colegio francés — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u3-l5-e5",
+            "type": "choice",
+            "prompt": "Reto 5: Paso 5: Asignaturas y el colegio francés — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u3-l5-e6",
+            "type": "translate",
+            "prompt": "Reto 6: Paso 5: Asignaturas y el colegio francés — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u3-l5-e7",
+            "type": "fill-blank",
+            "prompt": "Reto 7: Paso 5: Asignaturas y el colegio francés — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u3-l5-e8",
+            "type": "scramble",
+            "prompt": "Reto 8: Paso 5: Asignaturas y el colegio francés — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u3-l5-e9",
+            "type": "choice",
+            "prompt": "Reto 9: Paso 5: Asignaturas y el colegio francés — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u3-l5-e10",
+            "type": "translate",
+            "prompt": "Reto 10: Paso 5: Asignaturas y el colegio francés — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u3-l5-e11",
+            "type": "fill-blank",
+            "prompt": "Reto 11: Paso 5: Asignaturas y el colegio francés — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u3-l5-e12",
+            "type": "scramble",
+            "prompt": "Reto 12: Paso 5: Asignaturas y el colegio francés — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          }
+        ]
+      }
+    ],
+    "dailySessionTemplate": {
+      "id": "session-u3",
+      "title": "Paso 6: Gran Sesión Guiada de 30 minutos",
+      "frenchTitle": "Préparer le Sac de Cours (Séance de 30 min)",
+      "situation": "Tu compañera te pide prestado material antes de que empiece la clase de francés.",
+      "phase1Warmup": {
+        "introEs": "Calentamiento (5 min): recuerda el material escolar y los artículos.",
+        "introSv": "Uppvärmning (5 min): repetera skolmaterial och artiklar.",
+        "questions": [
+          {
+            "id": "w3-1",
+            "promptEs": "¿Cómo se dice \"un libro\"?",
+            "promptSv": "Hur säger man \"en bok\"?",
+            "expectedFr": "Un livre",
+            "hints": [
+              "Un l..."
+            ]
+          },
+          {
+            "id": "w3-2",
+            "promptEs": "¿Cómo se dice \"un estuche\"?",
+            "promptSv": "Hur säger man \"ett pennfodral\"?",
+            "expectedFr": "Une trousse",
+            "hints": [
+              "Une t..."
+            ]
+          },
+          {
+            "id": "w3-3",
+            "promptEs": "¿Cómo se dice \"Por favor\"?",
+            "promptSv": "Hur säger man \"Snälla / Tack\"?",
+            "expectedFr": "S'il te plaît",
+            "hints": [
+              "S'il te p..."
+            ]
+          }
+        ]
+      },
+      "phase2Input": {
+        "storyTitle": "Dans la salle de classe",
+        "storyFr": "Juliette : Oh non ! J'ai oublié ma trousse à la maison !\nMarc : Ne t'inquiète pas ! Dans mon sac, j'ai deux stylos et un crayon.\nJuliette : Tu as une règle et une gomme aussi ?\nMarc : Oui, voilà ! Tiens, c'est pour toi.\nJuliette : Merci beaucoup Marc, tu es super sympa !",
+        "storyEs": "Juliette: ¡Oh no! ¡He olvidado mi estuche en casa!\nMarc: ¡No te preocupes! En mi mochila tengo dos bolis y un lápiz.\nJuliette: ¿Tienes una regla y una goma también?\nMarc: ¡Sí, aquí tienes! Toma, es para ti.\nJuliette: ¡Muchas gracias Marc, eres súper simpático!",
+        "storySv": "Juliette: Åh nej! Jag har glömt mitt pennfodral hemma!\nMarc: Oroa dig inte! I min väska har jag två pennor och en blyertspenna.\nJuliette: Har du en linjal och ett radergummi också?\nMarc: Ja, varsågod! Ta här, det är till dig.\nJuliette: Tack så mycket Marc, du är jättesnäll!",
+        "keyExpressions": [
+          {
+            "fr": "Ne t'inquiète pas !",
+            "phonetic": "n tan-kiet pa",
+            "es": "¡No te preocupes!",
+            "sv": "Oroa dig inte!",
+            "clue": "Para tranquilizar a un amigo."
+          },
+          {
+            "fr": "Voilà ! / Tiens !",
+            "phonetic": "vua-la / ti-an",
+            "es": "¡Aquí tienes! / ¡Toma!",
+            "sv": "Varsågod! / Ta här!",
+            "clue": "Lo que dices al entregar un objeto a alguien."
+          },
+          {
+            "fr": "Tu es super sympa !",
+            "phonetic": "tu e su-per sam-pa",
+            "es": "¡Eres súper simpático/a!",
+            "sv": "Du är jättesnäll!",
+            "clue": "Un cumplido muy común entre jóvenes."
+          }
+        ]
+      },
+      "phase3Production": {
+        "contextEs": "Juego de rol (12 min): tu compañera Juliette necesita un bolígrafo y un cuaderno.",
+        "contextSv": "Rollspel (12 min): din klasskamrat Juliette behöver en penna och ett skrivhäfte.",
+        "initialAIPrompt": "Pardon ! Tu as un stylo s'il te plaît ?",
+        "initialAIPromptTranslation": "¡Perdón! ¿Tienes un bolígrafo por favor?",
+        "mission": "Respóndele amablemente que sí tienes y ofréceselo.",
+        "constraintProgression": [
+          "Usa \"Oui, voilà !\" o \"Tiens !\".",
+          "Añade qué color tiene el boli (ejemplo: \"un stylo bleu\").",
+          "Pregúntale si también necesita un cuaderno (\"un cahier\")."
+        ]
+      },
+      "phase4ExitTicket": {
+        "promptEs": "Reto de salida (5 min): Escribe 2 frases sobre qué tienes en tu mochila en francés usando \"Dans mon sac, j'ai...\".",
+        "promptSv": "Utgångsutmaning (5 min): Skriv 2 meningar om vad du har i din skolväska på franska med \"Dans mon sac, j'ai...\".",
+        "sampleFr": "Dans mon sac, j'ai un livre et une trousse."
+      }
+    }
+  },
+  {
+    "id": "unit-4",
+    "number": 4,
+    "grade": "ak6",
+    "title": "La Familia y Las Mascotas",
+    "frenchTitle": "La Famille et Les Animaux",
+    "description": "Describe a tu familia y habla de tus animales favoritos.",
+    "iconName": "Users",
+    "color": "from-purple-500 to-indigo-500",
+    "grammarTip": {
+      "title": "Posesivos: Mon, Ma, Mes",
+      "explanationEs": "\"Mon\" se usa para masculino (mon père, mon frère), \"Ma\" para femenino (ma mère, ma sœur) y \"Mes\" para plural (mes parents, mes amis).",
+      "explanationSv": "\"Mon\" används för maskulint (mon père, mon frère), \"Ma\" för feminint (ma mère, ma sœur) och \"Mes\" för plural (mes parents).",
+      "examples": [
+        {
+          "fr": "Mon frère s'appelle Léo.",
+          "es": "Mi hermano se llama Léo.",
+          "sv": "Min bror heter Léo."
+        },
+        {
+          "fr": "Ma sœur a dix ans.",
+          "es": "Mi hermana tiene diez años.",
+          "sv": "Min syster är tio år."
+        },
+        {
+          "fr": "J'ai un chien noir.",
+          "es": "Tengo un perro negro.",
+          "sv": "Jag har en svart hund."
+        }
+      ]
+    },
+    "lessons": [
+      {
+        "id": "u4-l1",
+        "unitId": "unit-4",
+        "title": "Paso 1: Los miembros de la familia",
+        "frenchTitle": "Les Membres de la Famille",
+        "description": "Padre, madre, hermano, hermana, abuelo y abuela.",
+        "xpReward": 15,
+        "exercises": [
+          {
+            "id": "u4-l1-e1",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"hermana\" en francés?",
+            "audioFr": "Une sœur",
+            "options": [
+              "Une sœur",
+              "Un frère",
+              "Une mère",
+              "Un père"
+            ],
+            "answer": "Une sœur",
+            "hintEs": "Se pronuncia similar a \"sör\".",
+            "hintSv": "Uttalas ungefär som \"sör\".",
+            "explanationEs": "¡Correcto! Une sœur = una hermana, un frère = un hermano.",
+            "explanationSv": "Rätt! Une sœur = en syster, un frère = en bror."
+          },
+          {
+            "id": "u4-l1-e2",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"mi padre\" en francés?",
+            "audioFr": "Mon père",
+            "options": [
+              "Mon père",
+              "Ma mère",
+              "Mon frère",
+              "Mon oncle"
+            ],
+            "answer": "Mon père",
+            "hintEs": "Père = padre.",
+            "hintSv": "Père = pappa.",
+            "explanationEs": "\"Mon père\" significa mi padre.",
+            "explanationSv": "\"Mon père\" betyder min pappa."
+          },
+          {
+            "id": "u4-l1-e3",
+            "type": "fill-blank",
+            "prompt": "Completa con el posesivo femenino: \"_____ mère s'appelle Marie.\"",
+            "promptFr": "_____ mère s'appelle Marie.",
+            "audioFr": "Ma mère s'appelle Marie.",
+            "options": [
+              "Ma",
+              "Mon",
+              "Mes",
+              "Le"
+            ],
+            "answer": "Ma",
+            "hintEs": "Para femenino singular se usa \"Ma\".",
+            "hintSv": "För feminint singular använder man \"Ma\".",
+            "explanationEs": "¡Exacto! \"Ma mère\" (mi madre).",
+            "explanationSv": "Exakt! \"Ma mère\" betyder min mamma."
+          },
+          {
+            "id": "u4-l1-e4",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"mi abuelo\" en francés?",
+            "audioFr": "Mon grand-père",
+            "options": [
+              "Mon grand-père",
+              "Ma grand-mère",
+              "Mon oncle",
+              "Mon cousin"
+            ],
+            "answer": "Mon grand-père",
+            "hintEs": "Grand-père = abuelo.",
+            "hintSv": "Farfar / morfar: grand-père.",
+            "explanationEs": "¡Correcto! Mon grand-père = mi abuelo, ma grand-mère = mi abuela.",
+            "explanationSv": "Rätt! Mon grand-père = morfar/farfar."
+          },
+          {
+            "id": "u4-l1-e5",
+            "type": "fill-blank",
+            "prompt": "Completa con el posesivo plural: \"_____ parents sont gentils.\"",
+            "promptFr": "_____ parents sont gentils.",
+            "audioFr": "Mes parents sont gentils.",
+            "options": [
+              "Mes",
+              "Mon",
+              "Ma",
+              "Leur"
+            ],
+            "answer": "Mes",
+            "hintEs": "Para el plural se usa \"Mes\" (mis padres).",
+            "hintSv": "I plural använder man \"Mes\" (mina föräldrar).",
+            "explanationEs": "¡Excelente! \"Mes parents\" = mis padres.",
+            "explanationSv": "Utmärkt! \"Mes parents\" = mina föräldrar."
+          },
+          {
+            "id": "u4-l1-e6",
+            "type": "translate",
+            "prompt": "Traduce al francés: \"Mi hermano y mi hermana\"",
+            "audioFr": "Mon frère et ma sœur",
+            "options": [
+              "Mon frère et ma sœur",
+              "Ma mère et mon père",
+              "Mes frères et sœurs",
+              "Mon père et ma sœur"
+            ],
+            "answer": "Mon frère et ma sœur",
+            "hintEs": "Mon frère (masculino) + et + ma sœur (femenino).",
+            "hintSv": "Mon bror (maskulint) och min syster (feminint).",
+            "explanationEs": "¡Muy bien! Mon frère (masculino) y ma sœur (femenino).",
+            "explanationSv": "Jättebra! Mon frère (maskulint) och ma sœur (feminint)."
+          },
+          {
+            "id": "u4-l1-e7",
+            "type": "scramble",
+            "prompt": "Ordena: \"Mi familia es muy simpática.\"",
+            "promptFr": "Ma famille est très sympa.",
+            "audioFr": "Ma famille est très sympa.",
+            "options": [
+              "Ma",
+              "famille",
+              "est",
+              "très",
+              "sympa",
+              "."
+            ],
+            "answer": [
+              "Ma",
+              "famille",
+              "est",
+              "très",
+              "sympa",
+              "."
+            ],
+            "hintEs": "Ma famille + est (verbo ser) + très sympa.",
+            "hintSv": "Ma famille + est + très sympa.",
+            "explanationEs": "¡Genial! \"Ma famille est très sympa.\"",
+            "explanationSv": "Lysande! Min familj är jättetrevlig."
+          },
+          {
+            "id": "u4-l1-e8",
+            "type": "choice",
+            "prompt": "¿Qué palabra francesa encaja aquí? (Unité 4)",
+            "promptFr": "bien",
+            "audioFr": "bien",
+            "options": [
+              "oui",
+              "non",
+              "merci",
+              "bien"
+            ],
+            "answer": "bien",
+            "hintEs": "Palabra positiva.",
+            "hintSv": "Positivt ord.",
+            "explanationEs": "¡Muy bien!",
+            "explanationSv": "Jättebra!"
+          },
+          {
+            "id": "u4-l1-e9",
+            "type": "translate",
+            "prompt": "Traduce la frase clave del vocabulario de la unidad 4",
+            "promptFr": "C'est super !",
+            "audioFr": "C'est super !",
+            "options": [
+              "C'est super !",
+              "Au revoir !",
+              "Bonjour !",
+              "Pardon !"
+            ],
+            "answer": "C'est super !",
+            "hintEs": "Expresión positiva.",
+            "hintSv": "Positivt uttryck.",
+            "explanationEs": "\"C'est super !\" = ¡Es genial!",
+            "explanationSv": "\"C'est super !\" = Det är toppen!"
+          },
+          {
+            "id": "u4-l1-e10",
+            "type": "scramble",
+            "prompt": "Ordena: \"J'aime beaucoup cette leçon.\"",
+            "promptFr": "J'aime beaucoup cette leçon .",
+            "audioFr": "J'aime beaucoup cette leçon .",
+            "options": [
+              "J'aime",
+              "beaucoup",
+              "cette",
+              "leçon",
+              "."
+            ],
+            "answer": [
+              "J'aime",
+              "beaucoup",
+              "cette",
+              "leçon",
+              "."
+            ],
+            "hintEs": "Me gusta mucho esta lección.",
+            "hintSv": "Jag gillar den här lektionen mycket.",
+            "explanationEs": "¡Excelente estructuración!",
+            "explanationSv": "Mycket bra meningsbyggnad!"
+          },
+          {
+            "id": "u4-l1-e11",
+            "type": "fill-blank",
+            "prompt": "Completa: \"C'est _____ intéressant !\"",
+            "promptFr": "C'est _____ intéressant !",
+            "audioFr": "très",
+            "options": [
+              "très",
+              "non",
+              "de",
+              "un"
+            ],
+            "answer": "très",
+            "hintEs": "Très = muy.",
+            "hintSv": "Très = mycket.",
+            "explanationEs": "\"C'est très intéressant !\" = Es muy interesante.",
+            "explanationSv": "\"C'est très intéressant !\" = Det är mycket intressant."
+          },
+          {
+            "id": "u4-l1-e12",
+            "type": "choice",
+            "prompt": "¿Cómo se pronuncia correctamente la terminación en francés?",
+            "promptFr": "Con entonación natural hacia la última sílaba.",
+            "audioFr": "Con entonación natural hacia la última sílaba.",
+            "options": [
+              "Con entonación natural hacia la última sílaba.",
+              "Acentuando la primera sílaba.",
+              "Gritando la palabra.",
+              "Silenciando todas las vocales."
+            ],
+            "answer": "Con entonación natural hacia la última sílaba.",
+            "hintEs": "La fonética francesa acentúa al final de grupo.",
+            "hintSv": "Franskan betonar sista stavelsen.",
+            "explanationEs": "El francés acentúa suavemente la última sílaba sonada.",
+            "explanationSv": "Fransk accentuering ligger på sista stavelsen."
+          }
+        ]
+      },
+      {
+        "id": "u4-l2",
+        "unitId": "unit-4",
+        "title": "Paso 2: Las mascotas y los animales",
+        "frenchTitle": "Les Animaux de Compagnie",
+        "description": "Un chien, un chat, un poisson, un oiseau, un lapin.",
+        "xpReward": 20,
+        "exercises": [
+          {
+            "id": "u4-l2-e1",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"un perro\" en francés?",
+            "audioFr": "Un chien",
+            "options": [
+              "Un chien",
+              "Un chat",
+              "Un cheval",
+              "Un oiseau"
+            ],
+            "answer": "Un chien",
+            "hintEs": "Se pronuncia \"ö shi-an\".",
+            "hintSv": "En hund på franska.",
+            "explanationEs": "¡Correcto! \"Un chien\" = un perro.",
+            "explanationSv": "Rätt! \"Un chien\" = en hund."
+          },
+          {
+            "id": "u4-l2-e2",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"un gato\"?",
+            "audioFr": "Un chat",
+            "options": [
+              "Un chat",
+              "Un chien",
+              "Un poisson",
+              "Un lapin"
+            ],
+            "answer": "Un chat",
+            "hintEs": "Se escribe c-h-a-t y la t es muda.",
+            "hintSv": "En katt på franska.",
+            "explanationEs": "\"Un chat\" = un gato.",
+            "explanationSv": "\"Un chat\" = en katt."
+          },
+          {
+            "id": "u4-l2-e3",
+            "type": "scramble",
+            "prompt": "Ordena la frase: \"Tengo un perro y un gato.\"",
+            "promptFr": "J'ai un chien et un chat.",
+            "audioFr": "J'ai un chien et un chat.",
+            "options": [
+              "J'ai",
+              "un",
+              "chien",
+              "et",
+              "un",
+              "chat",
+              "."
+            ],
+            "answer": [
+              "J'ai",
+              "un",
+              "chien",
+              "et",
+              "un",
+              "chat",
+              "."
+            ],
+            "hintEs": "J'ai + un chien + et (y) + un chat.",
+            "hintSv": "J'ai + un chien + et (och) + un chat.",
+            "explanationEs": "¡Perfecto! \"J'ai un chien et un chat.\"",
+            "explanationSv": "Perfekt! \"J'ai un chien et un chat.\""
+          },
+          {
+            "id": "u4-l2-e4",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"un conejo\" en francés?",
+            "audioFr": "Un lapin",
+            "options": [
+              "Un lapin",
+              "Un cheval",
+              "Un oiseau",
+              "Un poisson"
+            ],
+            "answer": "Un lapin",
+            "hintEs": "Se pronuncia \"ö la-pan\".",
+            "hintSv": "En kanin på franska: un lapin.",
+            "explanationEs": "¡Correcto! \"Un lapin\" = un conejo.",
+            "explanationSv": "Rätt! \"Un lapin\" = en kanin."
+          },
+          {
+            "id": "u4-l2-e5",
+            "type": "fill-blank",
+            "prompt": "Completa: \"Dans l'aquarium, il y a un _____ rouge (pez).\"",
+            "promptFr": "Dans l'aquarium, il y a un _____ rouge.",
+            "audioFr": "Un poisson rouge",
+            "options": [
+              "poisson",
+              "chien",
+              "chat",
+              "cheval"
+            ],
+            "answer": "poisson",
+            "hintEs": "\"Poisson\" significa pez o pescado.",
+            "hintSv": "Fisk på franska: poisson.",
+            "explanationEs": "¡Muy bien! \"Un poisson rouge\" es un pez dorado / de colores.",
+            "explanationSv": "Jättebra! \"Un poisson rouge\" = en guldfisk."
+          },
+          {
+            "id": "u4-l2-e6",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"un pájaro\" en francés?",
+            "audioFr": "Un oiseau",
+            "options": [
+              "Un oiseau",
+              "Un poisson",
+              "Un lapin",
+              "Un canard"
+            ],
+            "answer": "Un oiseau",
+            "hintEs": "Se pronuncia \"ö ua-zo\".",
+            "hintSv": "En fågel på franska: un oiseau.",
+            "explanationEs": "¡Exacto! \"Un oiseau\" es un pájaro.",
+            "explanationSv": "Exakt! \"Un oiseau\" = en fågel."
+          },
+          {
+            "id": "u4-l2-e7",
+            "type": "translate",
+            "prompt": "Traduce al francés: \"No tengo animales\"",
+            "audioFr": "Je n'ai pas d'animaux.",
+            "options": [
+              "Je n'ai pas d'animaux.",
+              "J'ai deux animaux.",
+              "Je n'aime pas les chiens.",
+              "C'est un animal."
+            ],
+            "answer": "Je n'ai pas d'animaux.",
+            "hintEs": "Je n'ai pas de... (no tengo).",
+            "hintSv": "Jag har inga djur: Je n'ai pas d'animaux.",
+            "explanationEs": "¡Genial! Negación con el verbo avoir: \"Je n'ai pas d'animaux.\"",
+            "explanationSv": "Lysande! \"Je n'ai pas d'animaux.\""
+          },
+          {
+            "id": "u4-l2-e8",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"también\" en francés?",
+            "promptFr": "aussi",
+            "audioFr": "aussi",
+            "options": [
+              "aussi",
+              "mais",
+              "donc",
+              "alors"
+            ],
+            "answer": "aussi",
+            "hintEs": "\"Aussi\" = también.",
+            "hintSv": "\"Aussi\" = också.",
+            "explanationEs": "\"Aussi\" = también.",
+            "explanationSv": "\"Aussi\" betyder också."
+          },
+          {
+            "id": "u4-l2-e9",
+            "type": "translate",
+            "prompt": "Traduce: \"Es muy fácil\"",
+            "promptFr": "C'est très facile.",
+            "audioFr": "C'est très facile.",
+            "options": [
+              "C'est très facile.",
+              "C'est difficile.",
+              "C'est bon.",
+              "C'est beau."
+            ],
+            "answer": "C'est très facile.",
+            "hintEs": "Facile = fácil.",
+            "hintSv": "Facile = lätt.",
+            "explanationEs": "\"C'est très facile\" = Es muy fácil.",
+            "explanationSv": "\"C'est très facile\" = Det är jättelätt."
+          },
+          {
+            "id": "u4-l2-e10",
+            "type": "scramble",
+            "prompt": "Ordena: \"Nous apprenons le français ensemble.\"",
+            "promptFr": "Nous apprenons le français ensemble .",
+            "audioFr": "Nous apprenons le français ensemble .",
+            "options": [
+              "Nous",
+              "apprenons",
+              "le",
+              "français",
+              "ensemble",
+              "."
+            ],
+            "answer": [
+              "Nous",
+              "apprenons",
+              "le",
+              "français",
+              "ensemble",
+              "."
+            ],
+            "hintEs": "Aprendemos francés juntos.",
+            "hintSv": "Vi lär oss franska tillsammans.",
+            "explanationEs": "¡Preciosa frase cooperativa!",
+            "explanationSv": "Underbar gemensam mening!"
+          },
+          {
+            "id": "u4-l2-e11",
+            "type": "fill-blank",
+            "prompt": "Completa: \"_____ est très sympa !\"",
+            "promptFr": "_____ est très sympa !",
+            "audioFr": "Elle",
+            "options": [
+              "Elle",
+              "Nous",
+              "Vous",
+              "Ils"
+            ],
+            "answer": "Elle",
+            "hintEs": "Tercera persona singular.",
+            "hintSv": "Tredje person singular.",
+            "explanationEs": "\"Elle est très sympa !\" = Ella es muy simpática.",
+            "explanationSv": "\"Elle est très sympa !\" = Hon är jättetrevlig."
+          },
+          {
+            "id": "u4-l2-e12",
+            "type": "choice",
+            "prompt": "¿Qué palabra une dos ideas con \"pero\"?",
+            "promptFr": "mais",
+            "audioFr": "mais",
+            "options": [
+              "mais",
+              "et",
+              "ou",
+              "avec"
+            ],
+            "answer": "mais",
+            "hintEs": "Mais = pero.",
+            "hintSv": "Mais = men.",
+            "explanationEs": "\"Mais\" significa pero.",
+            "explanationSv": "\"Mais\" betyder men."
+          }
+        ]
+      },
+      {
+        "id": "u4-l3",
+        "unitId": "unit-4",
+        "title": "Paso 3: Describir a las personas y mascotas",
+        "frenchTitle": "Il est drôle / Elle est gentille",
+        "description": "Decir cómo es alguien: drôle, sympa, petit, grand.",
+        "xpReward": 20,
+        "exercises": [
+          {
+            "id": "u4-l3-e1",
+            "type": "choice",
+            "prompt": "¿Qué significa \"Il est très drôle\"?",
+            "promptFr": "Il est très drôle.",
+            "audioFr": "Il est très drôle.",
+            "options": [
+              "Es muy divertido / gracioso",
+              "Es muy serio",
+              "Es muy alto",
+              "Está enfadado"
+            ],
+            "answer": "Es muy divertido / gracioso",
+            "hintEs": "\"Drôle\" significa gracioso o divertido.",
+            "hintSv": "\"Drôle\" betyder rolig.",
+            "explanationEs": "\"Il est très drôle\" significa que es muy gracioso.",
+            "explanationSv": "\"Il est très drôle\" betyder han är jätterolig."
+          },
+          {
+            "id": "u4-l3-e2",
+            "type": "scramble",
+            "prompt": "Ordena: \"Mi hermano tiene diez años.\"",
+            "promptFr": "Mon frère a dix ans.",
+            "audioFr": "Mon frère a dix ans.",
+            "options": [
+              "Mon",
+              "frère",
+              "a",
+              "dix",
+              "ans",
+              "."
+            ],
+            "answer": [
+              "Mon",
+              "frère",
+              "a",
+              "dix",
+              "ans",
+              "."
+            ],
+            "hintEs": "Mon frère + verbo a (tiene) + diez años.",
+            "hintSv": "Mon frère + a + dix ans.",
+            "explanationEs": "¡Muy bien! \"Mon frère a dix ans.\"",
+            "explanationSv": "Jättebra! \"Mon frère a dix ans.\""
+          },
+          {
+            "id": "u4-l3-e3",
+            "type": "fill-blank",
+            "prompt": "Completa: \"Mon chat _____ Cookie.\"",
+            "promptFr": "Mon chat _____ Cookie.",
+            "audioFr": "Mon chat s'appelle Cookie.",
+            "options": [
+              "s'appelle",
+              "est",
+              "a",
+              "va"
+            ],
+            "answer": "s'appelle",
+            "hintEs": "\"Se llama\" se dice \"s'appelle\".",
+            "hintSv": "\"Heter\" är \"s'appelle\".",
+            "explanationEs": "¡Exacto! \"Mon chat s'appelle Cookie.\"",
+            "explanationSv": "Exakt! \"Mon chat s'appelle Cookie.\""
+          },
+          {
+            "id": "u4-l3-e4",
+            "type": "choice",
+            "prompt": "¿Qué significa \"Elle est très gentille\" ?",
+            "audioFr": "Elle est très gentille.",
+            "options": [
+              "Ella es muy amable / cariñosa",
+              "Ella es muy alta",
+              "Ella está enfadada",
+              "Ella tiene frío"
+            ],
+            "answer": "Ella es muy amable / cariñosa",
+            "hintEs": "\"Gentille\" es el femenino de \"gentil\" (amable/bueno).",
+            "hintSv": "Gentille = snäll/trevlig.",
+            "explanationEs": "¡Correcto! \"Gentille\" significa amable o cariñosa.",
+            "explanationSv": "Rätt! \"Gentille\" betyder snäll."
+          },
+          {
+            "id": "u4-l3-e5",
+            "type": "translate",
+            "prompt": "Traduce al francés: \"Mi perro es pequeño y negro.\"",
+            "audioFr": "Mon chien est petit et noir.",
+            "options": [
+              "Mon chien est petit et noir.",
+              "Mon chat est grand et blanc.",
+              "Mon chien a deux ans.",
+              "C'est un petit lapin."
+            ],
+            "answer": "Mon chien est petit et noir.",
+            "hintEs": "Petit = pequeño, noir = negro.",
+            "hintSv": "Petit = liten, noir = svart.",
+            "explanationEs": "¡Perfecto! \"Mon chien est petit et noir.\"",
+            "explanationSv": "Perfekt! \"Mon chien est petit et noir.\""
+          },
+          {
+            "id": "u4-l3-e6",
+            "type": "fill-blank",
+            "prompt": "Completa el femenino: \"Mon frère est grand, mais ma sœur est _____.\"",
+            "promptFr": "Mon frère est grand, mais ma sœur est _____ .",
+            "audioFr": "Ma sœur est grande.",
+            "options": [
+              "grande",
+              "grand",
+              "petit",
+              "gentil"
+            ],
+            "answer": "grande",
+            "hintEs": "Los adjetivos femeninos suelen añadir una -e final: grand -> grande.",
+            "hintSv": "Feminina adjektiver slutar oftast på -e: grand -> grande.",
+            "explanationEs": "¡Excelente! Grand (masculino) -> Grande (femenino).",
+            "explanationSv": "Utmärkt! Grand -> Grande."
+          },
+          {
+            "id": "u4-l3-e7",
+            "type": "scramble",
+            "prompt": "Ordena: \"Mi abuela es genial.\"",
+            "promptFr": "Ma grand-mère est géniale.",
+            "audioFr": "Ma grand-mère est géniale.",
+            "options": [
+              "Ma",
+              "grand-mère",
+              "est",
+              "géniale",
+              "."
+            ],
+            "answer": [
+              "Ma",
+              "grand-mère",
+              "est",
+              "géniale",
+              "."
+            ],
+            "hintEs": "Ma grand-mère + est + géniale.",
+            "hintSv": "Ma grand-mère + est + géniale.",
+            "explanationEs": "¡Brillante! Dominas las descripciones de la familia.",
+            "explanationSv": "Strålande! Du behärskar familjebeskrivningar."
+          },
+          {
+            "id": "u4-l3-e8",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"con mis amigos\" en francés?",
+            "promptFr": "avec mes amis",
+            "audioFr": "avec mes amis",
+            "options": [
+              "avec mes amis",
+              "sans mes amis",
+              "pour mes amis",
+              "dans mes amis"
+            ],
+            "answer": "avec mes amis",
+            "hintEs": "Avec = con.",
+            "hintSv": "Avec = med.",
+            "explanationEs": "\"Avec mes amis\" = con mis amigos.",
+            "explanationSv": "\"Avec mes amis\" = med mina vänner."
+          },
+          {
+            "id": "u4-l3-e9",
+            "type": "translate",
+            "prompt": "Traduce: \"Tengo una pregunta\"",
+            "promptFr": "J'ai une question.",
+            "audioFr": "J'ai une question.",
+            "options": [
+              "J'ai une question.",
+              "Je suis une question.",
+              "C'est une question.",
+              "Il y a une question."
+            ],
+            "answer": "J'ai une question.",
+            "hintEs": "Verbo avoir: J'ai.",
+            "hintSv": "Verbet avoir: J'ai.",
+            "explanationEs": "\"J'ai une question\" = Tengo una pregunta.",
+            "explanationSv": "\"J'ai une question\" = Jag har en fråga."
+          },
+          {
+            "id": "u4-l3-e10",
+            "type": "scramble",
+            "prompt": "Ordena: \"C'est une excellente idée !\"",
+            "promptFr": "C'est une excellente idée !",
+            "audioFr": "C'est une excellente idée !",
+            "options": [
+              "C'est",
+              "une",
+              "excellente",
+              "idée",
+              "!"
+            ],
+            "answer": [
+              "C'est",
+              "une",
+              "excellente",
+              "idée",
+              "!"
+            ],
+            "hintEs": "¡Es una idea excelente!",
+            "hintSv": "Det är en utmärkt idé!",
+            "explanationEs": "Expresión de aprobación entusiasta.",
+            "explanationSv": "Entusiastiskt godkännande."
+          },
+          {
+            "id": "u4-l3-e11",
+            "type": "fill-blank",
+            "prompt": "Completa: \"Je suis d'_____ avec toi !\"",
+            "promptFr": "Je suis d'_____ avec toi !",
+            "audioFr": "accord",
+            "options": [
+              "accord",
+              "ami",
+              "ordre",
+              "avis"
+            ],
+            "answer": "accord",
+            "hintEs": "\"Être d'accord\" = estar de acuerdo.",
+            "hintSv": "\"Être d'accord\" = hålla med.",
+            "explanationEs": "\"Je suis d'accord\" = Estoy de acuerdo.",
+            "explanationSv": "\"Je suis d'accord\" = Jag håller med."
+          },
+          {
+            "id": "u4-l3-e12",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"¡Buen fin de semana!\" en francés?",
+            "promptFr": "Bon week-end !",
+            "audioFr": "Bon week-end !",
+            "options": [
+              "Bon week-end !",
+              "Bonne nuit !",
+              "Bonne journée !",
+              "Bonjour !"
+            ],
+            "answer": "Bon week-end !",
+            "hintEs": "Se usa week-end en francés.",
+            "hintSv": "Man säger week-end på franska.",
+            "explanationEs": "\"Bon week-end !\" es el deseo para los viernes.",
+            "explanationSv": "\"Bon week-end !\" betyder trevlig helg!"
+          }
+        ]
+      },
+      {
+        "id": "u4-l4",
+        "unitId": "unit-4",
+        "title": "Paso 4: Describir a las mascotas con adjetivos",
+        "frenchTitle": "Décrire ses Animaux de Compagnie",
+        "description": "Usa adjetivos como mignon, petit, noir, blanc para tus mascotas.",
+        "xpReward": 20,
+        "culturalNote": {
+          "title": "Point Culturel",
+          "textEs": "Aspecto cultural y lingüístico relevante para Årskurs 6.",
+          "textSv": "Kulturell och språklig aspekt för årskurs 6."
+        },
+        "exercises": [
+          {
+            "id": "u4-l4-e1",
+            "type": "choice",
+            "prompt": "Reto 1: Paso 4: Describir a las mascotas con adjetivos — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u4-l4-e2",
+            "type": "translate",
+            "prompt": "Reto 2: Paso 4: Describir a las mascotas con adjetivos — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u4-l4-e3",
+            "type": "fill-blank",
+            "prompt": "Reto 3: Paso 4: Describir a las mascotas con adjetivos — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u4-l4-e4",
+            "type": "scramble",
+            "prompt": "Reto 4: Paso 4: Describir a las mascotas con adjetivos — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u4-l4-e5",
+            "type": "choice",
+            "prompt": "Reto 5: Paso 4: Describir a las mascotas con adjetivos — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u4-l4-e6",
+            "type": "translate",
+            "prompt": "Reto 6: Paso 4: Describir a las mascotas con adjetivos — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u4-l4-e7",
+            "type": "fill-blank",
+            "prompt": "Reto 7: Paso 4: Describir a las mascotas con adjetivos — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u4-l4-e8",
+            "type": "scramble",
+            "prompt": "Reto 8: Paso 4: Describir a las mascotas con adjetivos — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u4-l4-e9",
+            "type": "choice",
+            "prompt": "Reto 9: Paso 4: Describir a las mascotas con adjetivos — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u4-l4-e10",
+            "type": "translate",
+            "prompt": "Reto 10: Paso 4: Describir a las mascotas con adjetivos — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u4-l4-e11",
+            "type": "fill-blank",
+            "prompt": "Reto 11: Paso 4: Describir a las mascotas con adjetivos — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u4-l4-e12",
+            "type": "scramble",
+            "prompt": "Reto 12: Paso 4: Describir a las mascotas con adjetivos — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          }
+        ]
+      },
+      {
+        "id": "u4-l5",
+        "unitId": "unit-4",
+        "title": "Paso 5: Presentar a la familia y hermanos",
+        "frenchTitle": "Parler de sa Famille & Frères et Sœurs",
+        "description": "Habla de cuántos hermanos tienes o si eres hijo único.",
+        "xpReward": 25,
+        "culturalNote": {
+          "title": "Point Culturel",
+          "textEs": "Profundización pedagógica en el uso real del francés cotidiano.",
+          "textSv": "Fördjupning i vardaglig franska för ungdomar."
+        },
+        "exercises": [
+          {
+            "id": "u4-l5-e1",
+            "type": "choice",
+            "prompt": "Reto 1: Paso 5: Presentar a la familia y hermanos — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u4-l5-e2",
+            "type": "translate",
+            "prompt": "Reto 2: Paso 5: Presentar a la familia y hermanos — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u4-l5-e3",
+            "type": "fill-blank",
+            "prompt": "Reto 3: Paso 5: Presentar a la familia y hermanos — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u4-l5-e4",
+            "type": "scramble",
+            "prompt": "Reto 4: Paso 5: Presentar a la familia y hermanos — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u4-l5-e5",
+            "type": "choice",
+            "prompt": "Reto 5: Paso 5: Presentar a la familia y hermanos — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u4-l5-e6",
+            "type": "translate",
+            "prompt": "Reto 6: Paso 5: Presentar a la familia y hermanos — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u4-l5-e7",
+            "type": "fill-blank",
+            "prompt": "Reto 7: Paso 5: Presentar a la familia y hermanos — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u4-l5-e8",
+            "type": "scramble",
+            "prompt": "Reto 8: Paso 5: Presentar a la familia y hermanos — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u4-l5-e9",
+            "type": "choice",
+            "prompt": "Reto 9: Paso 5: Presentar a la familia y hermanos — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u4-l5-e10",
+            "type": "translate",
+            "prompt": "Reto 10: Paso 5: Presentar a la familia y hermanos — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u4-l5-e11",
+            "type": "fill-blank",
+            "prompt": "Reto 11: Paso 5: Presentar a la familia y hermanos — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u4-l5-e12",
+            "type": "scramble",
+            "prompt": "Reto 12: Paso 5: Presentar a la familia y hermanos — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          }
+        ]
+      }
+    ],
+    "dailySessionTemplate": {
+      "id": "session-u4",
+      "title": "Paso 6: Gran Sesión Guiada de 30 minutos",
+      "frenchTitle": "Présenter ma Famille (Séance de 30 min)",
+      "situation": "En la clase de francés muestras una foto de tu familia y tu mascota.",
+      "phase1Warmup": {
+        "introEs": "Calentamiento (5 min): repasa los miembros de la familia.",
+        "introSv": "Uppvärmning (5 min): repetera familjemedlemmar.",
+        "questions": [
+          {
+            "id": "w4-1",
+            "promptEs": "¿Cómo se dice \"mi madre\"?",
+            "promptSv": "Hur säger man \"min mamma\"?",
+            "expectedFr": "Ma mère",
+            "hints": [
+              "Ma m..."
+            ]
+          },
+          {
+            "id": "w4-2",
+            "promptEs": "¿Cómo se dice \"un perro\"?",
+            "promptSv": "Hur säger man \"en hund\"?",
+            "expectedFr": "Un chien",
+            "hints": [
+              "Un ch..."
+            ]
+          },
+          {
+            "id": "w4-3",
+            "promptEs": "¿Cómo se dice \"un gato\"?",
+            "promptSv": "Hur säger man \"en katt\"?",
+            "expectedFr": "Un chat",
+            "hints": [
+              "Un ch..."
+            ]
+          }
+        ]
+      },
+      "phase2Input": {
+        "storyTitle": "La photo de famille de Théo",
+        "storyFr": "Théo : Regarde, voici ma famille ! C'est mon père et ma mère.\nChloé : Et le garçon avec le ballon, c'est ton frère ?\nThéo : Oui, il s'appelle Maxime. Il a huit ans, il est très drôle !\nChloé : Et vous avez un animal de compagnie ?\nThéo : Oui, nous avons un petit chien blanc qui s'appelle Cookie !",
+        "storyEs": "Théo: ¡Mira, aquí está mi familia! Es mi padre y mi madre.\nChloé: Y el chico con el balón, ¿es tu hermano?\nThéo: Sí, se llama Maxime. ¡Tiene ocho años, es muy divertido!\nChloé: ¿Y tenéis alguna mascota?\nThéo: ¡Sí, tenemos un perrito blanco que se llama Cookie!",
+        "storySv": "Théo: Titta, här är min familj! Det är min pappa och min mamma.\nChloé: Och killen med bollen, är det din bror?\nThéo: Ja, han heter Maxime. Han är åtta år, han är jätterolig!\nChloé: Och har ni något husdjur?\nThéo: Ja, vi har en liten vit hund som heter Cookie!",
+        "keyExpressions": [
+          {
+            "fr": "Voici...",
+            "phonetic": "vua-si",
+            "es": "Aquí está / Aquí tienes",
+            "sv": "Här är...",
+            "clue": "Para señalar o presentar a alguien en una foto."
+          },
+          {
+            "fr": "Il est très drôle !",
+            "phonetic": "il e tre drol",
+            "es": "¡Es muy gracioso/divertido!",
+            "sv": "Han är jätterolig!",
+            "clue": "Para describir la personalidad simpática de alguien."
+          },
+          {
+            "fr": "Un animal de compagnie",
+            "phonetic": "ö-na-ni-mal dö kom-pa-ñi",
+            "es": "Una mascota",
+            "sv": "Ett husdjur",
+            "clue": "Animal doméstico."
+          }
+        ]
+      },
+      "phase3Production": {
+        "contextEs": "Juego de rol (12 min): tu amigo francés te pregunta si tienes hermanos o mascotas.",
+        "contextSv": "Rollspel (12 min): din franska vän frågar om du har syskon eller husdjur.",
+        "initialAIPrompt": "Tu as des frères et sœurs ? Et tu as un animal ?",
+        "initialAIPromptTranslation": "¿Tienes hermanos y hermanas? ¿Y tienes mascota?",
+        "mission": "Responde describiendo quiénes están en tu casa en francés.",
+        "constraintProgression": [
+          "Usa \"J'ai...\" o \"Je n'ai pas de...\".",
+          "Menciona el nombre o la edad de alguien usando \"Il/Elle s'appelle...\".",
+          "Describe a tu mascota o di qué animal te gusta (\"J'adore les chats\")."
+        ]
+      },
+      "phase4ExitTicket": {
+        "promptEs": "Reto de salida (5 min): Escribe 2 frases sobre tu familia o tu mascota preferida en francés.",
+        "promptSv": "Utgångsutmaning (5 min): Skriv 2 meningar om din familj eller ditt favoritdjur på franska.",
+        "sampleFr": "J'ai un frère qui s'appelle David et un chat mignon."
+      }
+    }
+  },
+  {
+    "id": "unit-5",
+    "number": 5,
+    "grade": "ak6",
+    "title": "Los Colores y La Ropa",
+    "frenchTitle": "Les Couleurs et Les Vêtements",
+    "description": "Aprende los colores y describe qué ropa llevas puesta.",
+    "iconName": "Palette",
+    "color": "from-pink-500 to-rose-500",
+    "grammarTip": {
+      "title": "Los adjetivos de color van detrás",
+      "explanationEs": "En francés, los colores se colocan DESPUÉS del sustantivo: \"Un t-shirt bleu\" (una camiseta azul), \"Une robe rouge\".",
+      "explanationSv": "På franska placeras färgerna oftast EFTER substantivet: \"Un t-shirt bleu\" (en blå t-shirt), \"Une robe rouge\" (en röd klänning).",
+      "examples": [
+        {
+          "fr": "Je porte un pantalon noir.",
+          "es": "Llevo unos pantalones negros.",
+          "sv": "Jag har svarta byxor på mig."
+        },
+        {
+          "fr": "C'est de quelle couleur ?",
+          "es": "¿De qué color es?",
+          "sv": "Vilken färg är det?"
+        },
+        {
+          "fr": "Blanc, noir, bleu, rouge, jaune, vert.",
+          "es": "Blanco, negro, azul, rojo, amarillo, verde.",
+          "sv": "Vit, svart, blå, röd, gul, grön."
+        }
+      ]
+    },
+    "lessons": [
+      {
+        "id": "u5-l1",
+        "unitId": "unit-5",
+        "title": "Paso 1: Todos los Colores",
+        "frenchTitle": "Les Couleurs Principales",
+        "description": "Bleu, blanc, rouge, vert, jaune, noir, rose, gris.",
+        "xpReward": 15,
+        "exercises": [
+          {
+            "id": "u5-l1-e1",
+            "type": "choice",
+            "prompt": "¿Qué color es \"vert\" en francés?",
+            "audioFr": "Vert",
+            "options": [
+              "Verde",
+              "Rojo",
+              "Azul",
+              "Amarillo"
+            ],
+            "answer": "Verde",
+            "hintEs": "El color de la hierba o los árboles.",
+            "hintSv": "Grön på svenska.",
+            "explanationEs": "¡Correcto! Vert = verde, rouge = rojo, bleu = azul, jaune = amarillo.",
+            "explanationSv": "Rätt! Vert = grön, rouge = röd, bleu = blå, jaune = gul."
+          },
+          {
+            "id": "u5-l1-e2",
+            "type": "choice",
+            "prompt": "¿Cuáles son los 3 colores de la bandera de Francia?",
+            "audioFr": "Bleu, blanc, rouge",
+            "options": [
+              "Azul, blanco y rojo",
+              "Verde, blanco y rojo",
+              "Amarillo y azul",
+              "Negro, rojo y amarillo"
+            ],
+            "answer": "Azul, blanco y rojo",
+            "hintEs": "Bleu = azul, blanc = blanco, rouge = rojo.",
+            "hintSv": "Blå, vit och röd.",
+            "explanationEs": "¡Muy bien! Bleu, blanc, rouge.",
+            "explanationSv": "Mycket bra! Blå, vit och röd."
+          },
+          {
+            "id": "u5-l1-e3",
+            "type": "fill-blank",
+            "prompt": "Completa: \"Le soleil est _____ (amarillo).\"",
+            "promptFr": "Le soleil est _____ .",
+            "audioFr": "Le soleil est jaune.",
+            "options": [
+              "jaune",
+              "bleu",
+              "noir",
+              "rouge"
+            ],
+            "answer": "jaune",
+            "hintEs": "\"Jaune\" significa amarillo.",
+            "hintSv": "\"Jaune\" betyder gul.",
+            "explanationEs": "¡Exacto! Jaune = amarillo.",
+            "explanationSv": "Exakt! Jaune = gul."
+          },
+          {
+            "id": "u5-l1-e4",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"negro\" en francés?",
+            "audioFr": "Noir",
+            "options": [
+              "Noir",
+              "Blanc",
+              "Rose",
+              "Gris"
+            ],
+            "answer": "Noir",
+            "hintEs": "Se pronuncia \"nuar\".",
+            "hintSv": "Svart på franska: noir.",
+            "explanationEs": "¡Correcto! Noir = negro.",
+            "explanationSv": "Rätt! Noir = svart."
+          },
+          {
+            "id": "u5-l1-e5",
+            "type": "fill-blank",
+            "prompt": "Completa con el femenino: \"Une feuille _____ (blanca).\"",
+            "promptFr": "Une feuille _____ .",
+            "audioFr": "Une feuille blanche.",
+            "options": [
+              "blanche",
+              "blanc",
+              "blancs",
+              "blanches"
+            ],
+            "answer": "blanche",
+            "hintEs": "El femenino de blanc es irregular: blanche.",
+            "hintSv": "Feminint av blanc är blanche.",
+            "explanationEs": "¡Excelente! Blanc (masculino) -> Blanche (femenino).",
+            "explanationSv": "Utmärkt! Blanc -> Blanche."
+          },
+          {
+            "id": "u5-l1-e6",
+            "type": "choice",
+            "prompt": "¿Qué color es \"rose\"?",
+            "audioFr": "Rose",
+            "options": [
+              "Rosa",
+              "Rojo",
+              "Gris",
+              "Marrón"
+            ],
+            "answer": "Rosa",
+            "hintEs": "El color de la flor rosa.",
+            "hintSv": "Rosa på franska: rose.",
+            "explanationEs": "¡Exacto! Rose = rosa.",
+            "explanationSv": "Exakt! Rose = rosa."
+          },
+          {
+            "id": "u5-l1-e7",
+            "type": "translate",
+            "prompt": "Traduce al francés: \"El cielo es azul\"",
+            "audioFr": "Le ciel est bleu.",
+            "options": [
+              "Le ciel est bleu.",
+              "La mer est verte.",
+              "Le soleil est jaune.",
+              "La nuit est noire."
+            ],
+            "answer": "Le ciel est bleu.",
+            "hintEs": "Le ciel (el cielo) + est bleu.",
+            "hintSv": "Le ciel (himlen) + est bleu.",
+            "explanationEs": "¡Perfecto! \"Le ciel est bleu.\"",
+            "explanationSv": "Perfekt! \"Le ciel est bleu.\""
+          },
+          {
+            "id": "u5-l1-e8",
+            "type": "choice",
+            "prompt": "¿Qué palabra francesa encaja aquí? (Unité 5)",
+            "promptFr": "bien",
+            "audioFr": "bien",
+            "options": [
+              "oui",
+              "non",
+              "merci",
+              "bien"
+            ],
+            "answer": "bien",
+            "hintEs": "Palabra positiva.",
+            "hintSv": "Positivt ord.",
+            "explanationEs": "¡Muy bien!",
+            "explanationSv": "Jättebra!"
+          },
+          {
+            "id": "u5-l1-e9",
+            "type": "translate",
+            "prompt": "Traduce la frase clave del vocabulario de la unidad 5",
+            "promptFr": "C'est super !",
+            "audioFr": "C'est super !",
+            "options": [
+              "C'est super !",
+              "Au revoir !",
+              "Bonjour !",
+              "Pardon !"
+            ],
+            "answer": "C'est super !",
+            "hintEs": "Expresión positiva.",
+            "hintSv": "Positivt uttryck.",
+            "explanationEs": "\"C'est super !\" = ¡Es genial!",
+            "explanationSv": "\"C'est super !\" = Det är toppen!"
+          },
+          {
+            "id": "u5-l1-e10",
+            "type": "scramble",
+            "prompt": "Ordena: \"J'aime beaucoup cette leçon.\"",
+            "promptFr": "J'aime beaucoup cette leçon .",
+            "audioFr": "J'aime beaucoup cette leçon .",
+            "options": [
+              "J'aime",
+              "beaucoup",
+              "cette",
+              "leçon",
+              "."
+            ],
+            "answer": [
+              "J'aime",
+              "beaucoup",
+              "cette",
+              "leçon",
+              "."
+            ],
+            "hintEs": "Me gusta mucho esta lección.",
+            "hintSv": "Jag gillar den här lektionen mycket.",
+            "explanationEs": "¡Excelente estructuración!",
+            "explanationSv": "Mycket bra meningsbyggnad!"
+          },
+          {
+            "id": "u5-l1-e11",
+            "type": "fill-blank",
+            "prompt": "Completa: \"C'est _____ intéressant !\"",
+            "promptFr": "C'est _____ intéressant !",
+            "audioFr": "très",
+            "options": [
+              "très",
+              "non",
+              "de",
+              "un"
+            ],
+            "answer": "très",
+            "hintEs": "Très = muy.",
+            "hintSv": "Très = mycket.",
+            "explanationEs": "\"C'est très intéressant !\" = Es muy interesante.",
+            "explanationSv": "\"C'est très intéressant !\" = Det är mycket intressant."
+          },
+          {
+            "id": "u5-l1-e12",
+            "type": "choice",
+            "prompt": "¿Cómo se pronuncia correctamente la terminación en francés?",
+            "promptFr": "Con entonación natural hacia la última sílaba.",
+            "audioFr": "Con entonación natural hacia la última sílaba.",
+            "options": [
+              "Con entonación natural hacia la última sílaba.",
+              "Acentuando la primera sílaba.",
+              "Gritando la palabra.",
+              "Silenciando todas las vocales."
+            ],
+            "answer": "Con entonación natural hacia la última sílaba.",
+            "hintEs": "La fonética francesa acentúa al final de grupo.",
+            "hintSv": "Franskan betonar sista stavelsen.",
+            "explanationEs": "El francés acentúa suavemente la última sílaba sonada.",
+            "explanationSv": "Fransk accentuering ligger på sista stavelsen."
+          }
+        ]
+      },
+      {
+        "id": "u5-l2",
+        "unitId": "unit-5",
+        "title": "Paso 2: Las Prendas de Ropa",
+        "frenchTitle": "Les Vêtements de Tous les Jours",
+        "description": "Un t-shirt, un pull, un pantalon, une veste, des baskets.",
+        "xpReward": 20,
+        "exercises": [
+          {
+            "id": "u5-l2-e1",
+            "type": "choice",
+            "prompt": "¿Qué significa \"Des baskets\"?",
+            "audioFr": "Des baskets",
+            "options": [
+              "Zapatillas deportivas",
+              "Un pantalón",
+              "Una bufanda",
+              "Una gorra"
+            ],
+            "answer": "Zapatillas deportivas",
+            "hintEs": "Calzado cómodo deportivo.",
+            "hintSv": "Sneakers / gympaskor.",
+            "explanationEs": "¡Correcto! \"Des baskets\" son zapatillas de deporte.",
+            "explanationSv": "Rätt! \"Des baskets\" är gympaskor."
+          },
+          {
+            "id": "u5-l2-e2",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"un jersey / suéter\" en francés?",
+            "audioFr": "Un pull",
+            "options": [
+              "Un pull",
+              "Un pantalon",
+              "Une robe",
+              "Un manteau"
+            ],
+            "answer": "Un pull",
+            "hintEs": "Viene de pull-over.",
+            "hintSv": "En tröja.",
+            "explanationEs": "\"Un pull\" es un jersey.",
+            "explanationSv": "\"Un pull\" är en tröja."
+          },
+          {
+            "id": "u5-l2-e3",
+            "type": "scramble",
+            "prompt": "Ordena: \"Un pantalón negro y un t-shirt blanco.\"",
+            "promptFr": "Un pantalon noir et un t-shirt blanc.",
+            "audioFr": "Un pantalon noir et un t-shirt blanc.",
+            "options": [
+              "Un",
+              "pantalon",
+              "noir",
+              "et",
+              "un",
+              "t-shirt",
+              "blanc",
+              "."
+            ],
+            "answer": [
+              "Un",
+              "pantalon",
+              "noir",
+              "et",
+              "un",
+              "t-shirt",
+              "blanc",
+              "."
+            ],
+            "hintEs": "Recuerda que el color va detrás de la prenda.",
+            "hintSv": "Färgen kommer efter klädesplagget.",
+            "explanationEs": "¡Perfecto! Un pantalon noir et un t-shirt blanc.",
+            "explanationSv": "Perfekt! Färgen sätts efter substantivet."
+          },
+          {
+            "id": "u5-l2-e4",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"una gorra\" en francés?",
+            "audioFr": "Une casquette",
+            "options": [
+              "Une casquette",
+              "Un chapeau",
+              "Une écharpe",
+              "Un manteau"
+            ],
+            "answer": "Une casquette",
+            "hintEs": "Se parece al español \"casquete / casquette\".",
+            "hintSv": "En keps på franska: une casquette.",
+            "explanationEs": "¡Correcto! \"Une casquette\" = una gorra.",
+            "explanationSv": "Rätt! \"Une casquette\" = en keps."
+          },
+          {
+            "id": "u5-l2-e5",
+            "type": "fill-blank",
+            "prompt": "Completa: \"En hiver, je porte un _____ chaud (abrigo).\"",
+            "promptFr": "En hiver, je porte un _____ chaud.",
+            "audioFr": "Un manteau chaud",
+            "options": [
+              "manteau",
+              "t-shirt",
+              "short",
+              "chapeau"
+            ],
+            "answer": "manteau",
+            "hintEs": "\"Manteau\" significa abrigo.",
+            "hintSv": "En kappa / vinterjacka: manteau.",
+            "explanationEs": "¡Muy bien! \"Un manteau\" es un abrigo de invierno.",
+            "explanationSv": "Jättebra! \"Un manteau\" = en kappa / rock."
+          },
+          {
+            "id": "u5-l2-e6",
+            "type": "translate",
+            "prompt": "Traduce al francés: \"Una camiseta blanca y unos vaqueros\"",
+            "audioFr": "Un t-shirt blanc et un jean",
+            "options": [
+              "Un t-shirt blanc et un jean",
+              "Un pull vert et une robe",
+              "Une veste noire et des baskets",
+              "Un chapeau rouge et une chemise"
+            ],
+            "answer": "Un t-shirt blanc et un jean",
+            "hintEs": "T-shirt blanc + et + un jean.",
+            "hintSv": "Un t-shirt blanc + et + un jean.",
+            "explanationEs": "¡Perfecto! Conjunto informal básico.",
+            "explanationSv": "Perfekt! En vit t-shirt och ett par jeans."
+          },
+          {
+            "id": "u5-l2-e7",
+            "type": "scramble",
+            "prompt": "Ordena: \"Un vestido rojo muy bonito.\"",
+            "promptFr": "Une très jolie robe rouge.",
+            "audioFr": "Une très jolie robe rouge.",
+            "options": [
+              "Une",
+              "très",
+              "jolie",
+              "robe",
+              "rouge",
+              "."
+            ],
+            "answer": [
+              "Une",
+              "très",
+              "jolie",
+              "robe",
+              "rouge",
+              "."
+            ],
+            "hintEs": "Une très jolie (muy bonita) + robe + rouge.",
+            "hintSv": "Une très jolie + robe + rouge.",
+            "explanationEs": "¡Genial! \"Une très jolie robe rouge.\"",
+            "explanationSv": "Lysande! En jättefin röd klänning."
+          },
+          {
+            "id": "u5-l2-e8",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"también\" en francés?",
+            "promptFr": "aussi",
+            "audioFr": "aussi",
+            "options": [
+              "aussi",
+              "mais",
+              "donc",
+              "alors"
+            ],
+            "answer": "aussi",
+            "hintEs": "\"Aussi\" = también.",
+            "hintSv": "\"Aussi\" = också.",
+            "explanationEs": "\"Aussi\" = también.",
+            "explanationSv": "\"Aussi\" betyder också."
+          },
+          {
+            "id": "u5-l2-e9",
+            "type": "translate",
+            "prompt": "Traduce: \"Es muy fácil\"",
+            "promptFr": "C'est très facile.",
+            "audioFr": "C'est très facile.",
+            "options": [
+              "C'est très facile.",
+              "C'est difficile.",
+              "C'est bon.",
+              "C'est beau."
+            ],
+            "answer": "C'est très facile.",
+            "hintEs": "Facile = fácil.",
+            "hintSv": "Facile = lätt.",
+            "explanationEs": "\"C'est très facile\" = Es muy fácil.",
+            "explanationSv": "\"C'est très facile\" = Det är jättelätt."
+          },
+          {
+            "id": "u5-l2-e10",
+            "type": "scramble",
+            "prompt": "Ordena: \"Nous apprenons le français ensemble.\"",
+            "promptFr": "Nous apprenons le français ensemble .",
+            "audioFr": "Nous apprenons le français ensemble .",
+            "options": [
+              "Nous",
+              "apprenons",
+              "le",
+              "français",
+              "ensemble",
+              "."
+            ],
+            "answer": [
+              "Nous",
+              "apprenons",
+              "le",
+              "français",
+              "ensemble",
+              "."
+            ],
+            "hintEs": "Aprendemos francés juntos.",
+            "hintSv": "Vi lär oss franska tillsammans.",
+            "explanationEs": "¡Preciosa frase cooperativa!",
+            "explanationSv": "Underbar gemensam mening!"
+          },
+          {
+            "id": "u5-l2-e11",
+            "type": "fill-blank",
+            "prompt": "Completa: \"_____ est très sympa !\"",
+            "promptFr": "_____ est très sympa !",
+            "audioFr": "Elle",
+            "options": [
+              "Elle",
+              "Nous",
+              "Vous",
+              "Ils"
+            ],
+            "answer": "Elle",
+            "hintEs": "Tercera persona singular.",
+            "hintSv": "Tredje person singular.",
+            "explanationEs": "\"Elle est très sympa !\" = Ella es muy simpática.",
+            "explanationSv": "\"Elle est très sympa !\" = Hon är jättetrevlig."
+          },
+          {
+            "id": "u5-l2-e12",
+            "type": "choice",
+            "prompt": "¿Qué palabra une dos ideas con \"pero\"?",
+            "promptFr": "mais",
+            "audioFr": "mais",
+            "options": [
+              "mais",
+              "et",
+              "ou",
+              "avec"
+            ],
+            "answer": "mais",
+            "hintEs": "Mais = pero.",
+            "hintSv": "Mais = men.",
+            "explanationEs": "\"Mais\" significa pero.",
+            "explanationSv": "\"Mais\" betyder men."
+          }
+        ]
+      },
+      {
+        "id": "u5-l3",
+        "unitId": "unit-5",
+        "title": "Paso 3: Je porte... (Llevar puesto)",
+        "frenchTitle": "Décrire sa Tenue",
+        "description": "Expresar qué ropa llevas hoy y cómo es.",
+        "xpReward": 20,
+        "exercises": [
+          {
+            "id": "u5-l3-e1",
+            "type": "scramble",
+            "prompt": "Ordena la frase: \"Hoy llevo una chaqueta azul.\"",
+            "promptFr": "Aujourd'hui, je porte une veste bleue.",
+            "audioFr": "Aujourd'hui, je porte une veste bleue.",
+            "options": [
+              "Aujourd'hui",
+              ",",
+              "je",
+              "porte",
+              "une",
+              "veste",
+              "bleue",
+              "."
+            ],
+            "answer": [
+              "Aujourd'hui",
+              ",",
+              "je",
+              "porte",
+              "une",
+              "veste",
+              "bleue",
+              "."
+            ],
+            "hintEs": "Aujourd'hui (hoy) + je porte (llevo) + une veste bleue.",
+            "hintSv": "Aujourd'hui + je porte + une veste bleue.",
+            "explanationEs": "¡Excelente! \"Je porte...\" es el verbo para llevar ropa.",
+            "explanationSv": "Utmärkt! \"Je porte...\" betyder jag har på mig."
+          },
+          {
+            "id": "u5-l3-e2",
+            "type": "choice",
+            "prompt": "¿Cómo preguntas a alguien qué lleva puesto?",
+            "audioFr": "Qu'est-ce que tu portes ?",
+            "options": [
+              "Qu'est-ce que tu portes ?",
+              "Comment tu t'appelles ?",
+              "Où vas-tu ?",
+              "Quel âge as-tu ?"
+            ],
+            "answer": "Qu'est-ce que tu portes ?",
+            "hintEs": "El verbo \"porter\" significa llevar ropa.",
+            "hintSv": "Fråga vad någon har på sig.",
+            "explanationEs": "\"Qu'est-ce que tu portes ?\" significa \"¿Qué llevas puesto?\".",
+            "explanationSv": "\"Qu'est-ce que tu portes ?\" betyder vad har du på dig?"
+          },
+          {
+            "id": "u5-l3-e3",
+            "type": "fill-blank",
+            "prompt": "Completa: \"Aujourd'hui, je _____ des baskets blanches.\"",
+            "promptFr": "Aujourd'hui, je _____ des baskets blanches.",
+            "audioFr": "Je porte des baskets blanches.",
+            "options": [
+              "porte",
+              "suis",
+              "ai",
+              "fais"
+            ],
+            "answer": "porte",
+            "hintEs": "Con \"je\" el verbo porter termina en -e: je porte.",
+            "hintSv": "Med \"je\" slutar verbet porter på -e: je porte.",
+            "explanationEs": "¡Correcto! \"Je porte...\" = Yo llevo puesto.",
+            "explanationSv": "Rätt! \"Je porte...\" = Jag har på mig."
+          },
+          {
+            "id": "u5-l3-e4",
+            "type": "translate",
+            "prompt": "Traduce al francés: \"Llevo unos pantalones cortos\"",
+            "audioFr": "Je porte un short.",
+            "options": [
+              "Je porte un short.",
+              "Je porte un pantalon.",
+              "Tu portes une veste.",
+              "Il porte un pull."
+            ],
+            "answer": "Je porte un short.",
+            "hintEs": "Pantalón corto en francés es \"un short\".",
+            "hintSv": "Shorts på franska är maskulint: un short.",
+            "explanationEs": "¡Muy bien! \"Je porte un short.\"",
+            "explanationSv": "Jättebra! \"Je porte un short.\""
+          },
+          {
+            "id": "u5-l3-e5",
+            "type": "choice",
+            "prompt": "¿Cómo dices: \"¡Me gusta mucho tu camiseta!\"?",
+            "audioFr": "J'aime beaucoup ton t-shirt !",
+            "options": [
+              "J'aime beaucoup ton t-shirt !",
+              "Je déteste ta chemise.",
+              "Où est ton pantalon ?",
+              "C'est combien ce pull ?"
+            ],
+            "answer": "J'aime beaucoup ton t-shirt !",
+            "hintEs": "\"Beaucoup\" significa mucho.",
+            "hintSv": "Jag gillar verkligen din t-shirt.",
+            "explanationEs": "¡Excelente cumplido entre compañeros de clase!",
+            "explanationSv": "Utmärkt komplimang bland klasskompisar!"
+          },
+          {
+            "id": "u5-l3-e6",
+            "type": "scramble",
+            "prompt": "Ordena: \"¿Qué ropa llevas para hacer deporte?\"",
+            "promptFr": "Qu'est-ce que tu portes pour le sport ?",
+            "audioFr": "Qu'est-ce que tu portes pour le sport ?",
+            "options": [
+              "Qu'est-ce",
+              "que",
+              "tu",
+              "portes",
+              "pour",
+              "le",
+              "sport",
+              "?"
+            ],
+            "answer": [
+              "Qu'est-ce",
+              "que",
+              "tu",
+              "portes",
+              "pour",
+              "le",
+              "sport",
+              "?"
+            ],
+            "hintEs": "Qu'est-ce que tu portes + pour le sport ?",
+            "hintSv": "Qu'est-ce que tu portes + pour le sport ?",
+            "explanationEs": "¡Perfecto! Una pregunta genial para entablar conversación.",
+            "explanationSv": "Perfekt! En jättebra fråga för att starta ett samtal."
+          },
+          {
+            "id": "u5-l3-e7",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"Llevo una sudadera verde\"?",
+            "audioFr": "Je porte un sweat vert.",
+            "options": [
+              "Je porte un sweat vert.",
+              "Je porte un t-shirt rouge.",
+              "Tu portes une robe bleue.",
+              "Elle porte une veste noire."
+            ],
+            "answer": "Je porte un sweat vert.",
+            "hintEs": "Sweat = sudadera (se pronuncia suet), vert = verde.",
+            "hintSv": "En grön sweatshirt: un sweat vert.",
+            "explanationEs": "¡Impresionante! Ya sabes describir cualquier vestimenta en francés.",
+            "explanationSv": "Imponerande! Du kan nu beskriva alla kläder på franska."
+          },
+          {
+            "id": "u5-l3-e8",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"con mis amigos\" en francés?",
+            "promptFr": "avec mes amis",
+            "audioFr": "avec mes amis",
+            "options": [
+              "avec mes amis",
+              "sans mes amis",
+              "pour mes amis",
+              "dans mes amis"
+            ],
+            "answer": "avec mes amis",
+            "hintEs": "Avec = con.",
+            "hintSv": "Avec = med.",
+            "explanationEs": "\"Avec mes amis\" = con mis amigos.",
+            "explanationSv": "\"Avec mes amis\" = med mina vänner."
+          },
+          {
+            "id": "u5-l3-e9",
+            "type": "translate",
+            "prompt": "Traduce: \"Tengo una pregunta\"",
+            "promptFr": "J'ai une question.",
+            "audioFr": "J'ai une question.",
+            "options": [
+              "J'ai une question.",
+              "Je suis une question.",
+              "C'est une question.",
+              "Il y a une question."
+            ],
+            "answer": "J'ai une question.",
+            "hintEs": "Verbo avoir: J'ai.",
+            "hintSv": "Verbet avoir: J'ai.",
+            "explanationEs": "\"J'ai une question\" = Tengo una pregunta.",
+            "explanationSv": "\"J'ai une question\" = Jag har en fråga."
+          },
+          {
+            "id": "u5-l3-e10",
+            "type": "scramble",
+            "prompt": "Ordena: \"C'est une excellente idée !\"",
+            "promptFr": "C'est une excellente idée !",
+            "audioFr": "C'est une excellente idée !",
+            "options": [
+              "C'est",
+              "une",
+              "excellente",
+              "idée",
+              "!"
+            ],
+            "answer": [
+              "C'est",
+              "une",
+              "excellente",
+              "idée",
+              "!"
+            ],
+            "hintEs": "¡Es una idea excelente!",
+            "hintSv": "Det är en utmärkt idé!",
+            "explanationEs": "Expresión de aprobación entusiasta.",
+            "explanationSv": "Entusiastiskt godkännande."
+          },
+          {
+            "id": "u5-l3-e11",
+            "type": "fill-blank",
+            "prompt": "Completa: \"Je suis d'_____ avec toi !\"",
+            "promptFr": "Je suis d'_____ avec toi !",
+            "audioFr": "accord",
+            "options": [
+              "accord",
+              "ami",
+              "ordre",
+              "avis"
+            ],
+            "answer": "accord",
+            "hintEs": "\"Être d'accord\" = estar de acuerdo.",
+            "hintSv": "\"Être d'accord\" = hålla med.",
+            "explanationEs": "\"Je suis d'accord\" = Estoy de acuerdo.",
+            "explanationSv": "\"Je suis d'accord\" = Jag håller med."
+          },
+          {
+            "id": "u5-l3-e12",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"¡Buen fin de semana!\" en francés?",
+            "promptFr": "Bon week-end !",
+            "audioFr": "Bon week-end !",
+            "options": [
+              "Bon week-end !",
+              "Bonne nuit !",
+              "Bonne journée !",
+              "Bonjour !"
+            ],
+            "answer": "Bon week-end !",
+            "hintEs": "Se usa week-end en francés.",
+            "hintSv": "Man säger week-end på franska.",
+            "explanationEs": "\"Bon week-end !\" es el deseo para los viernes.",
+            "explanationSv": "\"Bon week-end !\" betyder trevlig helg!"
+          }
+        ]
+      },
+      {
+        "id": "u5-l4",
+        "unitId": "unit-5",
+        "title": "Paso 4: Adjetivos de tamaño y cualidad",
+        "frenchTitle": "Les Adjectifs de Taille & Qualité",
+        "description": "Grand, petit, joli, nouveau y su posición y concordancia.",
+        "xpReward": 20,
+        "culturalNote": {
+          "title": "Point Culturel",
+          "textEs": "Aspecto cultural y lingüístico relevante para Årskurs 6.",
+          "textSv": "Kulturell och språklig aspekt för årskurs 6."
+        },
+        "exercises": [
+          {
+            "id": "u5-l4-e1",
+            "type": "choice",
+            "prompt": "Reto 1: Paso 4: Adjetivos de tamaño y cualidad — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u5-l4-e2",
+            "type": "translate",
+            "prompt": "Reto 2: Paso 4: Adjetivos de tamaño y cualidad — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u5-l4-e3",
+            "type": "fill-blank",
+            "prompt": "Reto 3: Paso 4: Adjetivos de tamaño y cualidad — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u5-l4-e4",
+            "type": "scramble",
+            "prompt": "Reto 4: Paso 4: Adjetivos de tamaño y cualidad — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u5-l4-e5",
+            "type": "choice",
+            "prompt": "Reto 5: Paso 4: Adjetivos de tamaño y cualidad — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u5-l4-e6",
+            "type": "translate",
+            "prompt": "Reto 6: Paso 4: Adjetivos de tamaño y cualidad — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u5-l4-e7",
+            "type": "fill-blank",
+            "prompt": "Reto 7: Paso 4: Adjetivos de tamaño y cualidad — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u5-l4-e8",
+            "type": "scramble",
+            "prompt": "Reto 8: Paso 4: Adjetivos de tamaño y cualidad — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u5-l4-e9",
+            "type": "choice",
+            "prompt": "Reto 9: Paso 4: Adjetivos de tamaño y cualidad — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u5-l4-e10",
+            "type": "translate",
+            "prompt": "Reto 10: Paso 4: Adjetivos de tamaño y cualidad — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u5-l4-e11",
+            "type": "fill-blank",
+            "prompt": "Reto 11: Paso 4: Adjetivos de tamaño y cualidad — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u5-l4-e12",
+            "type": "scramble",
+            "prompt": "Reto 12: Paso 4: Adjetivos de tamaño y cualidad — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          }
+        ]
+      },
+      {
+        "id": "u5-l5",
+        "unitId": "unit-5",
+        "title": "Paso 5: Estilo, temporadas y el tiempo",
+        "frenchTitle": "Les Vêtements de Saison & La Météo",
+        "description": "Qué ropa llevar en invierno y en verano según el clima.",
+        "xpReward": 25,
+        "culturalNote": {
+          "title": "Point Culturel",
+          "textEs": "Profundización pedagógica en el uso real del francés cotidiano.",
+          "textSv": "Fördjupning i vardaglig franska för ungdomar."
+        },
+        "exercises": [
+          {
+            "id": "u5-l5-e1",
+            "type": "choice",
+            "prompt": "Reto 1: Paso 5: Estilo, temporadas y el tiempo — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u5-l5-e2",
+            "type": "translate",
+            "prompt": "Reto 2: Paso 5: Estilo, temporadas y el tiempo — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u5-l5-e3",
+            "type": "fill-blank",
+            "prompt": "Reto 3: Paso 5: Estilo, temporadas y el tiempo — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u5-l5-e4",
+            "type": "scramble",
+            "prompt": "Reto 4: Paso 5: Estilo, temporadas y el tiempo — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u5-l5-e5",
+            "type": "choice",
+            "prompt": "Reto 5: Paso 5: Estilo, temporadas y el tiempo — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u5-l5-e6",
+            "type": "translate",
+            "prompt": "Reto 6: Paso 5: Estilo, temporadas y el tiempo — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u5-l5-e7",
+            "type": "fill-blank",
+            "prompt": "Reto 7: Paso 5: Estilo, temporadas y el tiempo — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u5-l5-e8",
+            "type": "scramble",
+            "prompt": "Reto 8: Paso 5: Estilo, temporadas y el tiempo — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u5-l5-e9",
+            "type": "choice",
+            "prompt": "Reto 9: Paso 5: Estilo, temporadas y el tiempo — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u5-l5-e10",
+            "type": "translate",
+            "prompt": "Reto 10: Paso 5: Estilo, temporadas y el tiempo — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u5-l5-e11",
+            "type": "fill-blank",
+            "prompt": "Reto 11: Paso 5: Estilo, temporadas y el tiempo — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u5-l5-e12",
+            "type": "scramble",
+            "prompt": "Reto 12: Paso 5: Estilo, temporadas y el tiempo — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          }
+        ]
+      }
+    ],
+    "dailySessionTemplate": {
+      "id": "session-u5",
+      "title": "Paso 6: Gran Sesión Guiada de 30 minutos",
+      "frenchTitle": "La Tenue du Jour (Séance de 30 min)",
+      "situation": "Describes tu estilo y tu ropa favorita a tus amigos.",
+      "phase1Warmup": {
+        "introEs": "Calentamiento (5 min): repasa los colores principales.",
+        "introSv": "Uppvärmning (5 min): repetera grundfärgerna.",
+        "questions": [
+          {
+            "id": "w5-1",
+            "promptEs": "¿Cómo se dice \"azul\"?",
+            "promptSv": "Hur säger man \"blå\"?",
+            "expectedFr": "Bleu",
+            "hints": [
+              "Bl..."
+            ]
+          },
+          {
+            "id": "w5-2",
+            "promptEs": "¿Cómo se dice \"rojo\"?",
+            "promptSv": "Hur säger man \"röd\"?",
+            "expectedFr": "Rouge",
+            "hints": [
+              "Ro..."
+            ]
+          },
+          {
+            "id": "w5-3",
+            "promptEs": "¿Cómo se dice \"Yo llevo puesto\"?",
+            "promptSv": "Hur säger man \"Jag har på mig\"?",
+            "expectedFr": "Je porte",
+            "hints": [
+              "Je p..."
+            ]
+          }
+        ]
+      },
+      "phase2Input": {
+        "storyTitle": "La mode au collège",
+        "storyFr": "Manon : J'adore ton pull, Alex ! Il est super beau en vert !\nAlex : Merci ! C'est mon pull préféré. Et toi, tu portes une jolie veste noire.\nManon : Oui, avec mes baskets blanches. C'est confortable pour faire du sport !\nAlex : Tout à fait ! Tu as du style aujourd'hui !",
+        "storyEs": "Manon: ¡Me encanta tu jersey, Alex! ¡Queda genial en verde!\nAlex: ¡Gracias! Es mi jersey preferido. Y tú llevas una chaqueta negra muy bonita.\nManon: Sí, con mis zapatillas blancas. ¡Es cómodo para hacer deporte!\nAlex: ¡Totalmente! ¡Hoy tienes mucho estilo!",
+        "storySv": "Manon: Jag älskar din tröja, Alex! Den är jättefin i grönt!\nAlex: Tack! Det är min favorittröja. Och du har en fin svart jacka på dig.\nManon: Ja, med mina vita sneakers. Det är bekvämt för idrotten!\nAlex: Absolut! Du har stil idag!",
+        "keyExpressions": [
+          {
+            "fr": "C'est mon préféré !",
+            "phonetic": "se mon pre-fe-re",
+            "es": "¡Es mi preferido/favorito!",
+            "sv": "Det är min favorit!",
+            "clue": "Para expresar tu cosa predilecta."
+          },
+          {
+            "fr": "Des baskets",
+            "phonetic": "de bas-ket",
+            "es": "Zapatillas deportivas",
+            "sv": "Gympaskor / sneakers",
+            "clue": "Calzado informal para jóvenes."
+          },
+          {
+            "fr": "C'est confortable !",
+            "phonetic": "se kon-for-tabl",
+            "es": "¡Es cómodo!",
+            "sv": "Det är bekvämt!",
+            "clue": "Sensación agradable al vestir."
+          }
+        ]
+      },
+      "phase3Production": {
+        "contextEs": "Juego de rol (12 min): Alex te pregunta qué ropa llevas puesta hoy.",
+        "contextSv": "Rollspel (12 min): Alex frågar vilka kläder du har på dig idag.",
+        "initialAIPrompt": "Salut ! Qu'est-ce que tu portes aujourd'hui ?",
+        "initialAIPromptTranslation": "¡Hola! ¿Qué ropa llevas puesta hoy?",
+        "mission": "Dile qué prendas y de qué color llevas hoy en francés.",
+        "constraintProgression": [
+          "Usa \"Je porte...\" con al menos una prenda y un color.",
+          "Añade un conector como \"et\" (y) o \"avec\" (con).",
+          "Di si te gusta usando \"J'aime\" o \"J'adore\"."
+        ]
+      },
+      "phase4ExitTicket": {
+        "promptEs": "Reto de salida (5 min): Escribe 2 frases describiendo tu ropa preferida en francés.",
+        "promptSv": "Utgångsutmaning (5 min): Skriv 2 meningar som beskriver dina favoritkläder på franska.",
+        "sampleFr": "Je porte un t-shirt bleu et des baskets blanches. J'adore !"
+      }
+    }
+  },
+  {
+    "id": "unit-6",
+    "number": 6,
+    "grade": "ak6",
+    "title": "Alimentos y En el Café",
+    "frenchTitle": "Au Café et Les Aliments",
+    "description": "Pide comida y bebida en una cafetería francesa educadamente.",
+    "iconName": "Coffee",
+    "color": "from-amber-600 to-yellow-500",
+    "grammarTip": {
+      "title": "Pedir con educación: \"Je voudrais...\"",
+      "explanationEs": "En francés nunca decimos \"quiero\" de forma brusca. Decimos \"Je voudrais...\" (quisiera / me gustaría) seguido de \"s'il vous plaît\" (por favor).",
+      "explanationSv": "På franska säger man artigt \"Je voudrais...\" (jag skulle vilja ha...) följt av \"s'il vous plaît\" (tack / snälla).",
+      "examples": [
+        {
+          "fr": "Je voudrais un croissant, s'il vous plaît.",
+          "es": "Quisiera un cruasán, por favor.",
+          "sv": "Jag skulle vilja ha en croissant, tack."
+        },
+        {
+          "fr": "C'est combien ?",
+          "es": "¿Cuánto cuesta?",
+          "sv": "Vad kostar det?"
+        },
+        {
+          "fr": "Un jus d'orange et une crêpe au chocolat.",
+          "es": "Un zumo de naranja y un crepe de chocolate.",
+          "sv": "En apelsinjuice och en chokladpannkaka."
+        }
+      ]
+    },
+    "lessons": [
+      {
+        "id": "u6-l1",
+        "unitId": "unit-6",
+        "title": "Paso 1: Comida típica y Bebidas",
+        "frenchTitle": "Les Aliments du Petit-Déjeuner",
+        "description": "Un croissant, une crêpe, un pain au chocolat, du jus, de l'eau.",
+        "xpReward": 15,
+        "exercises": [
+          {
+            "id": "u6-l1-e1",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"agua\" en francés?",
+            "audioFr": "De l'eau",
+            "options": [
+              "De l'eau",
+              "Du jus",
+              "Du lait",
+              "Du thé"
+            ],
+            "answer": "De l'eau",
+            "hintEs": "Se pronuncia \"dö lo\".",
+            "hintSv": "Vatten på franska.",
+            "explanationEs": "¡Correcto! \"De l'eau\" significa agua.",
+            "explanationSv": "Rätt! \"De l'eau\" = vatten."
+          },
+          {
+            "id": "u6-l1-e2",
+            "type": "choice",
+            "prompt": "¿Qué es \"Un pain au chocolat\"?",
+            "audioFr": "Un pain au chocolat",
+            "options": [
+              "Una napolitana de chocolate",
+              "Un bocadillo de jamón",
+              "Un zumo",
+              "Una galleta"
+            ],
+            "answer": "Una napolitana de chocolate",
+            "hintEs": "Bollería francesa hojaldrada con chocolate.",
+            "hintSv": "Chokladbröd / bakverk med choklad.",
+            "explanationEs": "\"Un pain au chocolat\" es la merienda favorita de los jóvenes en Francia.",
+            "explanationSv": "\"Un pain au chocolat\" är ett klassiskt fransk bakverk."
+          },
+          {
+            "id": "u6-l1-e3",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"un zumo de naranja\"?",
+            "audioFr": "Un jus d'orange",
+            "options": [
+              "Un jus d'orange",
+              "Un jus de pomme",
+              "Un café",
+              "Un chocolat chaud"
+            ],
+            "answer": "Un jus d'orange",
+            "hintEs": "Orange = naranja.",
+            "hintSv": "Apelsinjuice.",
+            "explanationEs": "¡Exacto! \"Un jus d'orange\".",
+            "explanationSv": "Exakt! \"Un jus d'orange\" = apelsinjuice."
+          },
+          {
+            "id": "u6-l1-e4",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"un crepe de chocolate\"?",
+            "audioFr": "Une crêpe au chocolat",
+            "options": [
+              "Une crêpe au chocolat",
+              "Un croissant chaud",
+              "Une baguette au fromage",
+              "Un gâteau aux fraises"
+            ],
+            "answer": "Une crêpe au chocolat",
+            "hintEs": "Típico postre bretón muy popular.",
+            "hintSv": "En chokladpannkaka.",
+            "explanationEs": "¡Mmm! \"Une crêpe au chocolat\" es una delicia francesa.",
+            "explanationSv": "Mums! \"Une crêpe au chocolat\" är en fransk favorit."
+          },
+          {
+            "id": "u6-l1-e5",
+            "type": "fill-blank",
+            "prompt": "Completa: \"Le matin, je bois du _____ chaud (leche).\"",
+            "promptFr": "Le matin, je bois du _____ chaud.",
+            "audioFr": "Du lait chaud",
+            "options": [
+              "lait",
+              "jus",
+              "thé",
+              "café"
+            ],
+            "answer": "lait",
+            "hintEs": "\"Lait\" significa leche (se pronuncia \"le\").",
+            "hintSv": "Mjölk på franska: lait.",
+            "explanationEs": "¡Correcto! \"Du lait\" = leche.",
+            "explanationSv": "Rätt! \"Du lait\" = mjölk."
+          },
+          {
+            "id": "u6-l1-e6",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"un pastel / tarta\" en francés?",
+            "audioFr": "Un gâteau",
+            "options": [
+              "Un gâteau",
+              "Une pomme",
+              "Un pain",
+              "Une glace"
+            ],
+            "answer": "Un gâteau",
+            "hintEs": "Se escribe con acento circunflejo: gâteau.",
+            "hintSv": "En kaka / tårta på franska.",
+            "explanationEs": "¡Exacto! \"Un gâteau\" = una tarta o pastel.",
+            "explanationSv": "Exakt! \"Un gâteau\" = en kaka/tårta."
+          },
+          {
+            "id": "u6-l1-e7",
+            "type": "translate",
+            "prompt": "Traduce al francés: \"Una botella de agua\"",
+            "audioFr": "Une bouteille d'eau",
+            "options": [
+              "Une bouteille d'eau",
+              "Un verre de jus",
+              "Une tasse de thé",
+              "Une canette de soda"
+            ],
+            "answer": "Une bouteille d'eau",
+            "hintEs": "Une bouteille (botella) + d'eau (de agua).",
+            "hintSv": "En flaska vatten: une bouteille d'eau.",
+            "explanationEs": "¡Genial! \"Une bouteille d'eau\".",
+            "explanationSv": "Lysande! \"Une bouteille d'eau\"."
+          },
+          {
+            "id": "u6-l1-e8",
+            "type": "choice",
+            "prompt": "¿Qué palabra francesa encaja aquí? (Unité 6)",
+            "promptFr": "bien",
+            "audioFr": "bien",
+            "options": [
+              "oui",
+              "non",
+              "merci",
+              "bien"
+            ],
+            "answer": "bien",
+            "hintEs": "Palabra positiva.",
+            "hintSv": "Positivt ord.",
+            "explanationEs": "¡Muy bien!",
+            "explanationSv": "Jättebra!"
+          },
+          {
+            "id": "u6-l1-e9",
+            "type": "translate",
+            "prompt": "Traduce la frase clave del vocabulario de la unidad 6",
+            "promptFr": "C'est super !",
+            "audioFr": "C'est super !",
+            "options": [
+              "C'est super !",
+              "Au revoir !",
+              "Bonjour !",
+              "Pardon !"
+            ],
+            "answer": "C'est super !",
+            "hintEs": "Expresión positiva.",
+            "hintSv": "Positivt uttryck.",
+            "explanationEs": "\"C'est super !\" = ¡Es genial!",
+            "explanationSv": "\"C'est super !\" = Det är toppen!"
+          },
+          {
+            "id": "u6-l1-e10",
+            "type": "scramble",
+            "prompt": "Ordena: \"J'aime beaucoup cette leçon.\"",
+            "promptFr": "J'aime beaucoup cette leçon .",
+            "audioFr": "J'aime beaucoup cette leçon .",
+            "options": [
+              "J'aime",
+              "beaucoup",
+              "cette",
+              "leçon",
+              "."
+            ],
+            "answer": [
+              "J'aime",
+              "beaucoup",
+              "cette",
+              "leçon",
+              "."
+            ],
+            "hintEs": "Me gusta mucho esta lección.",
+            "hintSv": "Jag gillar den här lektionen mycket.",
+            "explanationEs": "¡Excelente estructuración!",
+            "explanationSv": "Mycket bra meningsbyggnad!"
+          },
+          {
+            "id": "u6-l1-e11",
+            "type": "fill-blank",
+            "prompt": "Completa: \"C'est _____ intéressant !\"",
+            "promptFr": "C'est _____ intéressant !",
+            "audioFr": "très",
+            "options": [
+              "très",
+              "non",
+              "de",
+              "un"
+            ],
+            "answer": "très",
+            "hintEs": "Très = muy.",
+            "hintSv": "Très = mycket.",
+            "explanationEs": "\"C'est très intéressant !\" = Es muy interesante.",
+            "explanationSv": "\"C'est très intéressant !\" = Det är mycket intressant."
+          },
+          {
+            "id": "u6-l1-e12",
+            "type": "choice",
+            "prompt": "¿Cómo se pronuncia correctamente la terminación en francés?",
+            "promptFr": "Con entonación natural hacia la última sílaba.",
+            "audioFr": "Con entonación natural hacia la última sílaba.",
+            "options": [
+              "Con entonación natural hacia la última sílaba.",
+              "Acentuando la primera sílaba.",
+              "Gritando la palabra.",
+              "Silenciando todas las vocales."
+            ],
+            "answer": "Con entonación natural hacia la última sílaba.",
+            "hintEs": "La fonética francesa acentúa al final de grupo.",
+            "hintSv": "Franskan betonar sista stavelsen.",
+            "explanationEs": "El francés acentúa suavemente la última sílaba sonada.",
+            "explanationSv": "Fransk accentuering ligger på sista stavelsen."
+          }
+        ]
+      },
+      {
+        "id": "u6-l2",
+        "unitId": "unit-6",
+        "title": "Paso 2: La fórmula educada \"Je voudrais...\"",
+        "frenchTitle": "Commander Poliment",
+        "description": "Je voudrais... s'il vous plaît.",
+        "xpReward": 20,
+        "exercises": [
+          {
+            "id": "u6-l2-e1",
+            "type": "scramble",
+            "prompt": "Ordena la petición: \"Quisiera un cruasán, por favor.\"",
+            "promptFr": "Je voudrais un croissant, s'il vous plaît.",
+            "audioFr": "Je voudrais un croissant, s'il vous plaît.",
+            "options": [
+              "Je",
+              "voudrais",
+              "un",
+              "croissant",
+              ",",
+              "s'il",
+              "vous",
+              "plaît",
+              "."
+            ],
+            "answer": [
+              "Je",
+              "voudrais",
+              "un",
+              "croissant",
+              ",",
+              "s'il",
+              "vous",
+              "plaît",
+              "."
+            ],
+            "hintEs": "Je voudrais (quisiera) + un croissant + s'il vous plaît (por favor).",
+            "hintSv": "Je voudrais + un croissant + s'il vous plaît.",
+            "explanationEs": "¡Perfecto! Esta es la frase dorada al entrar en cualquier cafetería.",
+            "explanationSv": "Perfekt! Den gyllene frasen på varje franskt kafé."
+          },
+          {
+            "id": "u6-l2-e2",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"Por favor\" formal a un camarero?",
+            "audioFr": "S'il vous plaît",
+            "options": [
+              "S'il vous plaît",
+              "S'il te plaît",
+              "Merci",
+              "De rien"
+            ],
+            "answer": "S'il vous plaît",
+            "hintEs": "Con adultos y camareros se usa \"vous\": s'il vous plaît.",
+            "hintSv": "Med vuxna och servitörer använder man \"vous\".",
+            "explanationEs": "\"S'il vous plaît\" es la fórmula de cortesía formal.",
+            "explanationSv": "\"S'il vous plaît\" är det artiga sättet att säga tack/snälla."
+          },
+          {
+            "id": "u6-l2-e3",
+            "type": "fill-blank",
+            "prompt": "Completa la petición educada: \"Je _____ une crêpe au sucre, s'il vous plaît.\"",
+            "promptFr": "Je _____ une crêpe au sucre, s'il vous plaît.",
+            "audioFr": "Je voudrais une crêpe au sucre, s'il vous plaît.",
+            "options": [
+              "voudrais",
+              "veux",
+              "suis",
+              "prends"
+            ],
+            "answer": "voudrais",
+            "hintEs": "El condicional de cortesía es \"Je voudrais\".",
+            "hintSv": "Artighetsfrasen är \"Je voudrais\".",
+            "explanationEs": "¡Perfecto! \"Je voudrais...\" expresa deseo con mucha educación.",
+            "explanationSv": "Perfekt! \"Je voudrais...\" är det artiga sättet."
+          },
+          {
+            "id": "u6-l2-e4",
+            "type": "translate",
+            "prompt": "Traduce: \"Quisiera un zumo de manzana, por favor.\"",
+            "audioFr": "Je voudrais un jus de pomme, s'il vous plaît.",
+            "options": [
+              "Je voudrais un jus de pomme, s'il vous plaît.",
+              "Je voudrais de l'eau, s'il vous plaît.",
+              "Donne-moi un jus d'orange.",
+              "C'est un jus de pomme."
+            ],
+            "answer": "Je voudrais un jus de pomme, s'il vous plaît.",
+            "hintEs": "Je voudrais + un jus de pomme + s'il vous plaît.",
+            "hintSv": "Je voudrais + un jus de pomme + s'il vous plaît.",
+            "explanationEs": "¡Genial! \"Jus de pomme\" = zumo de manzana.",
+            "explanationSv": "Lysande! \"Jus de pomme\" = äppeljuice."
+          },
+          {
+            "id": "u6-l2-e5",
+            "type": "scramble",
+            "prompt": "Ordena: \"Para mí, un chocolate caliente, por favor.\"",
+            "promptFr": "Pour moi, un chocolat chaud, s'il vous plaît.",
+            "audioFr": "Pour moi, un chocolat chaud, s'il vous plaît.",
+            "options": [
+              "Pour",
+              "moi",
+              ",",
+              "un",
+              "chocolat",
+              "chaud",
+              ",",
+              "s'il",
+              "vous",
+              "plaît",
+              "."
+            ],
+            "answer": [
+              "Pour",
+              "moi",
+              ",",
+              "un",
+              "chocolat",
+              "chaud",
+              ",",
+              "s'il",
+              "vous",
+              "plaît",
+              "."
+            ],
+            "hintEs": "Pour moi (para mí) + un chocolat chaud + s'il vous plaît.",
+            "hintSv": "För mig en varm choklad, tack.",
+            "explanationEs": "¡Excelente! \"Pour moi...\" es otra forma estupenda de pedir en grupo.",
+            "explanationSv": "Utmärkt! \"Pour moi...\" är perfekt när man beställer."
+          },
+          {
+            "id": "u6-l2-e6",
+            "type": "choice",
+            "prompt": "¿Qué te pregunta el camarero cuando se acerca a tomar nota?",
+            "audioFr": "Qu'est-ce que vous désirez ?",
+            "options": [
+              "Qu'est-ce que vous désirez ?",
+              "Quel âge as-tu ?",
+              "Comment tu t'appelles ?",
+              "Où habites-tu ?"
+            ],
+            "answer": "Qu'est-ce que vous désirez ?",
+            "hintEs": "Significa literalmente \"¿Qué desea usted?\".",
+            "hintSv": "Vad önskar ni?",
+            "explanationEs": "¡Exacto! \"Qu'est-ce que vous désirez ?\" es la fórmula profesional de hostelería.",
+            "explanationSv": "Exakt! \"Qu'est-ce que vous désirez ?\" frågar servitören."
+          },
+          {
+            "id": "u6-l2-e7",
+            "type": "choice",
+            "prompt": "¿Cómo dices si quieres pedir la comida \"para llevar\"?",
+            "audioFr": "À emporter",
+            "options": [
+              "À emporter",
+              "Sur place",
+              "À la maison",
+              "Au revoir"
+            ],
+            "answer": "À emporter",
+            "hintEs": "\"Emporter\" significa llevar contigo.",
+            "hintSv": "Take away / att ta med: à emporter.",
+            "explanationEs": "¡Muy bien! \"À emporter\" (para llevar) vs. \"Sur place\" (para tomar aquí).",
+            "explanationSv": "Jättebra! \"À emporter\" (take away) vs. \"Sur place\" (äta här)."
+          },
+          {
+            "id": "u6-l2-e8",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"también\" en francés?",
+            "promptFr": "aussi",
+            "audioFr": "aussi",
+            "options": [
+              "aussi",
+              "mais",
+              "donc",
+              "alors"
+            ],
+            "answer": "aussi",
+            "hintEs": "\"Aussi\" = también.",
+            "hintSv": "\"Aussi\" = också.",
+            "explanationEs": "\"Aussi\" = también.",
+            "explanationSv": "\"Aussi\" betyder också."
+          },
+          {
+            "id": "u6-l2-e9",
+            "type": "translate",
+            "prompt": "Traduce: \"Es muy fácil\"",
+            "promptFr": "C'est très facile.",
+            "audioFr": "C'est très facile.",
+            "options": [
+              "C'est très facile.",
+              "C'est difficile.",
+              "C'est bon.",
+              "C'est beau."
+            ],
+            "answer": "C'est très facile.",
+            "hintEs": "Facile = fácil.",
+            "hintSv": "Facile = lätt.",
+            "explanationEs": "\"C'est très facile\" = Es muy fácil.",
+            "explanationSv": "\"C'est très facile\" = Det är jättelätt."
+          },
+          {
+            "id": "u6-l2-e10",
+            "type": "scramble",
+            "prompt": "Ordena: \"Nous apprenons le français ensemble.\"",
+            "promptFr": "Nous apprenons le français ensemble .",
+            "audioFr": "Nous apprenons le français ensemble .",
+            "options": [
+              "Nous",
+              "apprenons",
+              "le",
+              "français",
+              "ensemble",
+              "."
+            ],
+            "answer": [
+              "Nous",
+              "apprenons",
+              "le",
+              "français",
+              "ensemble",
+              "."
+            ],
+            "hintEs": "Aprendemos francés juntos.",
+            "hintSv": "Vi lär oss franska tillsammans.",
+            "explanationEs": "¡Preciosa frase cooperativa!",
+            "explanationSv": "Underbar gemensam mening!"
+          },
+          {
+            "id": "u6-l2-e11",
+            "type": "fill-blank",
+            "prompt": "Completa: \"_____ est très sympa !\"",
+            "promptFr": "_____ est très sympa !",
+            "audioFr": "Elle",
+            "options": [
+              "Elle",
+              "Nous",
+              "Vous",
+              "Ils"
+            ],
+            "answer": "Elle",
+            "hintEs": "Tercera persona singular.",
+            "hintSv": "Tredje person singular.",
+            "explanationEs": "\"Elle est très sympa !\" = Ella es muy simpática.",
+            "explanationSv": "\"Elle est très sympa !\" = Hon är jättetrevlig."
+          },
+          {
+            "id": "u6-l2-e12",
+            "type": "choice",
+            "prompt": "¿Qué palabra une dos ideas con \"pero\"?",
+            "promptFr": "mais",
+            "audioFr": "mais",
+            "options": [
+              "mais",
+              "et",
+              "ou",
+              "avec"
+            ],
+            "answer": "mais",
+            "hintEs": "Mais = pero.",
+            "hintSv": "Mais = men.",
+            "explanationEs": "\"Mais\" significa pero.",
+            "explanationSv": "\"Mais\" betyder men."
+          }
+        ]
+      },
+      {
+        "id": "u6-l3",
+        "unitId": "unit-6",
+        "title": "Paso 3: Preguntar el precio y pagar",
+        "frenchTitle": "C'est combien ? & L'Addition",
+        "description": "Preguntar cuánto cuesta y entender la cuenta en euros.",
+        "xpReward": 20,
+        "exercises": [
+          {
+            "id": "u6-l3-e1",
+            "type": "choice",
+            "prompt": "¿Cómo preguntas \"¿Cuánto cuesta?\" en una tienda o café?",
+            "audioFr": "C'est combien ?",
+            "options": [
+              "C'est combien ?",
+              "Quelle heure est-il ?",
+              "Comment ça va ?",
+              "Où est la gare ?"
+            ],
+            "answer": "C'est combien ?",
+            "hintEs": "\"Combien\" significa cuánto.",
+            "hintSv": "\"Combien\" betyder hur mycket.",
+            "explanationEs": "¡Muy bien! \"C'est combien ?\" significa \"¿Cuánto cuesta?\".",
+            "explanationSv": "Jättebra! \"C'est combien ?\" betyder vad kostar det?"
+          },
+          {
+            "id": "u6-l3-e2",
+            "type": "scramble",
+            "prompt": "Ordena la respuesta del camarero: \"Son cinco euros.\"",
+            "promptFr": "Ça fait cinq euros.",
+            "audioFr": "Ça fait cinq euros.",
+            "options": [
+              "Ça",
+              "fait",
+              "cinq",
+              "euros",
+              "."
+            ],
+            "answer": [
+              "Ça",
+              "fait",
+              "cinq",
+              "euros",
+              "."
+            ],
+            "hintEs": "Ça fait (hace/suma) + cinco euros.",
+            "hintSv": "Ça fait + cinq euros.",
+            "explanationEs": "\"Ça fait cinq euros\" significa que suma 5 euros en total.",
+            "explanationSv": "\"Ça fait cinq euros\" betyder det blir fem euro."
+          },
+          {
+            "id": "u6-l3-e3",
+            "type": "choice",
+            "prompt": "¿Cómo se pide la cuenta en un restaurante o café francés?",
+            "audioFr": "L'addition, s'il vous plaît !",
+            "options": [
+              "L'addition, s'il vous plaît !",
+              "Le menu, s'il vous plaît !",
+              "La carte, merci !",
+              "L'argent, voilà !"
+            ],
+            "answer": "L'addition, s'il vous plaît !",
+            "hintEs": "\"L'addition\" es la cuenta en hostelería.",
+            "hintSv": "Notan tack: l'addition, s'il vous plaît.",
+            "explanationEs": "¡Exacto! \"L'addition, s'il vous plaît !\" es la frase universal para pedir la cuenta.",
+            "explanationSv": "Exakt! Notan på franska är \"l'addition\"."
+          },
+          {
+            "id": "u6-l3-e4",
+            "type": "fill-blank",
+            "prompt": "Completa: \"Ça _____ six euros (Suma seis euros).\"",
+            "promptFr": "Ça _____ six euros.",
+            "audioFr": "Ça fait six euros.",
+            "options": [
+              "fait",
+              "est",
+              "a",
+              "va"
+            ],
+            "answer": "fait",
+            "hintEs": "El verbo faire se conjuga \"fait\" (Ça fait...).",
+            "hintSv": "Det blir: Ça fait...",
+            "explanationEs": "¡Muy bien! \"Ça fait\" se usa siempre para el total monetario.",
+            "explanationSv": "Jättebra! \"Ça fait\" används alltid för summan."
+          },
+          {
+            "id": "u6-l3-e5",
+            "type": "translate",
+            "prompt": "Traduce al francés: \"¿Cuánto cuesta el cruasán?\"",
+            "audioFr": "C'est combien le croissant ?",
+            "options": [
+              "C'est combien le croissant ?",
+              "Où est le croissant ?",
+              "Tu as un croissant ?",
+              "Je voudrais un croissant."
+            ],
+            "answer": "C'est combien le croissant ?",
+            "hintEs": "C'est combien + le croissant ?",
+            "hintSv": "Vad kostar croissanten?",
+            "explanationEs": "¡Perfecto! Pregunta directa y muy común.",
+            "explanationSv": "Perfekt! Direkt och mycket vanlig fråga."
+          },
+          {
+            "id": "u6-l3-e6",
+            "type": "scramble",
+            "prompt": "Ordena: \"Son tres euros cincuenta.\"",
+            "promptFr": "Ça fait trois euros cinquante.",
+            "audioFr": "Ça fait trois euros cinquante.",
+            "options": [
+              "Ça",
+              "fait",
+              "trois",
+              "euros",
+              "cinquante",
+              "."
+            ],
+            "answer": [
+              "Ça",
+              "fait",
+              "trois",
+              "euros",
+              "cinquante",
+              "."
+            ],
+            "hintEs": "Ça fait + trois euros + cinquante.",
+            "hintSv": "Ça fait trois euros cinquante.",
+            "explanationEs": "¡Genial! Los céntimos se dicen simplemente tras los euros.",
+            "explanationSv": "Lysande! Centen sägs enkelt efter euro."
+          },
+          {
+            "id": "u6-l3-e7",
+            "type": "choice",
+            "prompt": "¿Qué dice el camarero deseándote que disfrutes de tu comida o bebida?",
+            "audioFr": "Bon appétit !",
+            "options": [
+              "Bon appétit !",
+              "Bonne nuit !",
+              "Bon voyage !",
+              "Bienvenue !"
+            ],
+            "answer": "Bon appétit !",
+            "hintEs": "¡Que aproveche!",
+            "hintSv": "Smaklig måltid!",
+            "explanationEs": "¡Magnífico! \"Bon appétit !\" es la cortesía clásica francesa antes de degustar.",
+            "explanationSv": "Fantastiskt! \"Bon appétit !\" betyder smaklig måltid."
+          },
+          {
+            "id": "u6-l3-e8",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"con mis amigos\" en francés?",
+            "promptFr": "avec mes amis",
+            "audioFr": "avec mes amis",
+            "options": [
+              "avec mes amis",
+              "sans mes amis",
+              "pour mes amis",
+              "dans mes amis"
+            ],
+            "answer": "avec mes amis",
+            "hintEs": "Avec = con.",
+            "hintSv": "Avec = med.",
+            "explanationEs": "\"Avec mes amis\" = con mis amigos.",
+            "explanationSv": "\"Avec mes amis\" = med mina vänner."
+          },
+          {
+            "id": "u6-l3-e9",
+            "type": "translate",
+            "prompt": "Traduce: \"Tengo una pregunta\"",
+            "promptFr": "J'ai une question.",
+            "audioFr": "J'ai une question.",
+            "options": [
+              "J'ai une question.",
+              "Je suis une question.",
+              "C'est une question.",
+              "Il y a une question."
+            ],
+            "answer": "J'ai une question.",
+            "hintEs": "Verbo avoir: J'ai.",
+            "hintSv": "Verbet avoir: J'ai.",
+            "explanationEs": "\"J'ai une question\" = Tengo una pregunta.",
+            "explanationSv": "\"J'ai une question\" = Jag har en fråga."
+          },
+          {
+            "id": "u6-l3-e10",
+            "type": "scramble",
+            "prompt": "Ordena: \"C'est une excellente idée !\"",
+            "promptFr": "C'est une excellente idée !",
+            "audioFr": "C'est une excellente idée !",
+            "options": [
+              "C'est",
+              "une",
+              "excellente",
+              "idée",
+              "!"
+            ],
+            "answer": [
+              "C'est",
+              "une",
+              "excellente",
+              "idée",
+              "!"
+            ],
+            "hintEs": "¡Es una idea excelente!",
+            "hintSv": "Det är en utmärkt idé!",
+            "explanationEs": "Expresión de aprobación entusiasta.",
+            "explanationSv": "Entusiastiskt godkännande."
+          },
+          {
+            "id": "u6-l3-e11",
+            "type": "fill-blank",
+            "prompt": "Completa: \"Je suis d'_____ avec toi !\"",
+            "promptFr": "Je suis d'_____ avec toi !",
+            "audioFr": "accord",
+            "options": [
+              "accord",
+              "ami",
+              "ordre",
+              "avis"
+            ],
+            "answer": "accord",
+            "hintEs": "\"Être d'accord\" = estar de acuerdo.",
+            "hintSv": "\"Être d'accord\" = hålla med.",
+            "explanationEs": "\"Je suis d'accord\" = Estoy de acuerdo.",
+            "explanationSv": "\"Je suis d'accord\" = Jag håller med."
+          },
+          {
+            "id": "u6-l3-e12",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"¡Buen fin de semana!\" en francés?",
+            "promptFr": "Bon week-end !",
+            "audioFr": "Bon week-end !",
+            "options": [
+              "Bon week-end !",
+              "Bonne nuit !",
+              "Bonne journée !",
+              "Bonjour !"
+            ],
+            "answer": "Bon week-end !",
+            "hintEs": "Se usa week-end en francés.",
+            "hintSv": "Man säger week-end på franska.",
+            "explanationEs": "\"Bon week-end !\" es el deseo para los viernes.",
+            "explanationSv": "\"Bon week-end !\" betyder trevlig helg!"
+          }
+        ]
+      },
+      {
+        "id": "u6-l4",
+        "unitId": "unit-6",
+        "title": "Paso 4: Preguntar precios y pagar",
+        "frenchTitle": "Demander le Prix & Payer au Café",
+        "description": "C'est combien ?, L'addition s'il vous plaît y los euros.",
+        "xpReward": 20,
+        "culturalNote": {
+          "title": "Point Culturel",
+          "textEs": "Aspecto cultural y lingüístico relevante para Årskurs 6.",
+          "textSv": "Kulturell och språklig aspekt för årskurs 6."
+        },
+        "exercises": [
+          {
+            "id": "u6-l4-e1",
+            "type": "choice",
+            "prompt": "Reto 1: Paso 4: Preguntar precios y pagar — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u6-l4-e2",
+            "type": "translate",
+            "prompt": "Reto 2: Paso 4: Preguntar precios y pagar — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u6-l4-e3",
+            "type": "fill-blank",
+            "prompt": "Reto 3: Paso 4: Preguntar precios y pagar — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u6-l4-e4",
+            "type": "scramble",
+            "prompt": "Reto 4: Paso 4: Preguntar precios y pagar — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u6-l4-e5",
+            "type": "choice",
+            "prompt": "Reto 5: Paso 4: Preguntar precios y pagar — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u6-l4-e6",
+            "type": "translate",
+            "prompt": "Reto 6: Paso 4: Preguntar precios y pagar — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u6-l4-e7",
+            "type": "fill-blank",
+            "prompt": "Reto 7: Paso 4: Preguntar precios y pagar — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u6-l4-e8",
+            "type": "scramble",
+            "prompt": "Reto 8: Paso 4: Preguntar precios y pagar — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u6-l4-e9",
+            "type": "choice",
+            "prompt": "Reto 9: Paso 4: Preguntar precios y pagar — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u6-l4-e10",
+            "type": "translate",
+            "prompt": "Reto 10: Paso 4: Preguntar precios y pagar — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u6-l4-e11",
+            "type": "fill-blank",
+            "prompt": "Reto 11: Paso 4: Preguntar precios y pagar — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u6-l4-e12",
+            "type": "scramble",
+            "prompt": "Reto 12: Paso 4: Preguntar precios y pagar — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          }
+        ]
+      },
+      {
+        "id": "u6-l5",
+        "unitId": "unit-6",
+        "title": "Paso 5: Expresar hambre, sed y gustos culinarios",
+        "frenchTitle": "Avoir Faim, Avoir Soif & Les Préférences",
+        "description": "J'ai faim, J'ai soif, J'adore les crêpes, Je n'aime pas le café.",
+        "xpReward": 25,
+        "culturalNote": {
+          "title": "Point Culturel",
+          "textEs": "Profundización pedagógica en el uso real del francés cotidiano.",
+          "textSv": "Fördjupning i vardaglig franska för ungdomar."
+        },
+        "exercises": [
+          {
+            "id": "u6-l5-e1",
+            "type": "choice",
+            "prompt": "Reto 1: Paso 5: Expresar hambre, sed y gustos culinarios — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u6-l5-e2",
+            "type": "translate",
+            "prompt": "Reto 2: Paso 5: Expresar hambre, sed y gustos culinarios — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u6-l5-e3",
+            "type": "fill-blank",
+            "prompt": "Reto 3: Paso 5: Expresar hambre, sed y gustos culinarios — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u6-l5-e4",
+            "type": "scramble",
+            "prompt": "Reto 4: Paso 5: Expresar hambre, sed y gustos culinarios — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u6-l5-e5",
+            "type": "choice",
+            "prompt": "Reto 5: Paso 5: Expresar hambre, sed y gustos culinarios — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u6-l5-e6",
+            "type": "translate",
+            "prompt": "Reto 6: Paso 5: Expresar hambre, sed y gustos culinarios — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u6-l5-e7",
+            "type": "fill-blank",
+            "prompt": "Reto 7: Paso 5: Expresar hambre, sed y gustos culinarios — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u6-l5-e8",
+            "type": "scramble",
+            "prompt": "Reto 8: Paso 5: Expresar hambre, sed y gustos culinarios — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u6-l5-e9",
+            "type": "choice",
+            "prompt": "Reto 9: Paso 5: Expresar hambre, sed y gustos culinarios — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u6-l5-e10",
+            "type": "translate",
+            "prompt": "Reto 10: Paso 5: Expresar hambre, sed y gustos culinarios — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u6-l5-e11",
+            "type": "fill-blank",
+            "prompt": "Reto 11: Paso 5: Expresar hambre, sed y gustos culinarios — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u6-l5-e12",
+            "type": "scramble",
+            "prompt": "Reto 12: Paso 5: Expresar hambre, sed y gustos culinarios — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          }
+        ]
+      }
+    ],
+    "dailySessionTemplate": {
+      "id": "session-u6",
+      "title": "Paso 6: Gran Sesión Guiada de 30 minutos",
+      "frenchTitle": "À la Boulangerie (Séance de 30 min)",
+      "situation": "Entras en una típica panadería de París por la mañana para desayunar.",
+      "phase1Warmup": {
+        "introEs": "Calentamiento (5 min): repasa las comidas y bebidas típicas.",
+        "introSv": "Uppvärmning (5 min): repetera typisk mat och dryck.",
+        "questions": [
+          {
+            "id": "w6-1",
+            "promptEs": "¿Cómo se dice \"un cruasán\"?",
+            "promptSv": "Hur säger man \"en croissant\"?",
+            "expectedFr": "Un croissant",
+            "hints": [
+              "Un cr..."
+            ]
+          },
+          {
+            "id": "w6-2",
+            "promptEs": "¿Cómo se dice \"agua\"?",
+            "promptSv": "Hur säger man \"vatten\"?",
+            "expectedFr": "De l'eau",
+            "hints": [
+              "De l'e..."
+            ]
+          },
+          {
+            "id": "w6-3",
+            "promptEs": "¿Cómo se dice \"¿Cuánto cuesta?\"?",
+            "promptSv": "Hur säger man \"Vad kostar det?\"?",
+            "expectedFr": "C'est combien ?",
+            "hints": [
+              "C'est c..."
+            ]
+          }
+        ]
+      },
+      "phase2Input": {
+        "storyTitle": "Le petit-déjeuner au café",
+        "storyFr": "Serveur : Bonjour jeune fille ! Qu'est-ce que vous désirez ?\nLéa : Bonjour monsieur ! Je voudrais un croissant chaud et un jus de pomme, s'il vous plaît.\nServeur : Très bien. Avec ceci ? Une crêpe au chocolat ?\nLéa : Oh oui, une crêpe s'il vous plaît ! C'est combien en tout ?\nServeur : Ça fait cinq euros. Bon appétit !\nLéa : Merci beaucoup, au revoir !",
+        "storyEs": "Camarero: ¡Buenos días jovencita! ¿Qué desea?\nLéa: ¡Buenos días señor! Quisiera un cruasán caliente y un zumo de manzana, por favor.\nCamarero: Muy bien. ¿Algo más con esto? ¿Un crepe de chocolate?\nLéa: ¡Oh sí, un crepe por favor! ¿Cuánto es en total?\nCamarero: Son cinco euros. ¡Buen provecho!\nLéa: ¡Muchas gracias, adiós!",
+        "storySv": "Servitör: God dag unga dam! Vad önskas?\nLéa: God dag herrn! Jag skulle vilja ha en varm croissant och en äppeljuice, tack.\nServitör: Jättebra. Något mer till det? En chokladpannkaka?\nLéa: Åh ja, en pannkaka tack! Vad kostar det totalt?\nServitör: Det blir fem euro. Smaklig måltid!\nLéa: Tack så mycket, hejdå!",
+        "keyExpressions": [
+          {
+            "fr": "Qu'est-ce que vous désirez ?",
+            "phonetic": "kes-kö vu de-zi-re",
+            "es": "¿Qué desea usted?",
+            "sv": "Vad önskar ni?",
+            "clue": "La pregunta clásica que hace el camarero o dependiente."
+          },
+          {
+            "fr": "Avec ceci ?",
+            "phonetic": "a-vek sö-si",
+            "es": "¿Algo más con esto?",
+            "sv": "Något mer till det?",
+            "clue": "Pregunta para saber si quieres añadir algo más al pedido."
+          },
+          {
+            "fr": "Bon appétit !",
+            "phonetic": "bon a-pe-ti",
+            "es": "¡Buen provecho! / ¡Que aproveche!",
+            "sv": "Smaklig måltid!",
+            "clue": "Deseo antes de comer."
+          }
+        ]
+      },
+      "phase3Production": {
+        "contextEs": "Juego de rol (12 min): estás en el mostrador del café y el camarero te atiende.",
+        "contextSv": "Rollspel (12 min): du är vid kassan på kaféet och servitören tar din beställning.",
+        "initialAIPrompt": "Bonjour ! Qu'est-ce que vous désirez ?",
+        "initialAIPromptTranslation": "¡Buenos días! ¿Qué desea usted?",
+        "mission": "Pide educadamente un croissant o una crêpe y una bebida.",
+        "constraintProgression": [
+          "Usa \"Je voudrais...\" y \"s'il vous plaît\".",
+          "Añade un conector \"et\" para pedir dos cosas.",
+          "Pregunta el precio usando \"C'est combien ?\"."
+        ]
+      },
+      "phase4ExitTicket": {
+        "promptEs": "Reto de salida (5 min): Escribe 2 frases pidiendo tu desayuno ideal en francés.",
+        "promptSv": "Utgångsutmaning (5 min): Skriv 2 meningar där du beställer din drömfrukost på franska.",
+        "sampleFr": "Je voudrais une crêpe au sucre et un chocolat chaud, s'il vous plaît."
+      }
+    }
+  },
+  {
+    "id": "unit-7",
+    "number": 7,
+    "grade": "ak6",
+    "title": "Pasiones, Deportes y Gustos",
+    "frenchTitle": "Passions, Sports et Goûts",
+    "description": "Expresa qué te encanta hacer y qué cosas no te gustan nada.",
+    "iconName": "Flame",
+    "color": "from-red-500 to-orange-500",
+    "grammarTip": {
+      "title": "Verbos de gusto: Aimer, Adorer, Détester",
+      "explanationEs": "Para expresar gustos decimos: \"J'adore...\" (me encanta), \"J'aime...\" (me gusta) y \"Je n'aime pas...\" (no me gusta). ¡Fíjate en el \"ne... pas\" para negar!",
+      "explanationSv": "För att uttrycka tycke: \"J'adore...\" (jag älskar), \"J'aime...\" (jag gillar) och \"Je n'aime pas...\" (jag gillar inte). Lägg märke till \"ne... pas\" för negation!",
+      "examples": [
+        {
+          "fr": "J'adore le football !",
+          "es": "¡Me encanta el fútbol!",
+          "sv": "Jag älskar fotboll!"
+        },
+        {
+          "fr": "J'aime la musique.",
+          "es": "Me gusta la música.",
+          "sv": "Jag gillar musik."
+        },
+        {
+          "fr": "Je n'aime pas les devoirs.",
+          "es": "No me gustan los deberes.",
+          "sv": "Jag gillar inte läxor."
+        }
+      ]
+    },
+    "lessons": [
+      {
+        "id": "u7-l1",
+        "unitId": "unit-7",
+        "title": "Paso 1: Vocabulario de deportes y aficiones",
+        "frenchTitle": "Les Sports et les Hobbies",
+        "description": "Le football, le basket, la danse, la musique, les jeux vidéo.",
+        "xpReward": 15,
+        "exercises": [
+          {
+            "id": "u7-l1-e1",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"los videojuegos\"?",
+            "audioFr": "Les jeux vidéo",
+            "options": [
+              "Les jeux vidéo",
+              "La musique",
+              "Le dessin",
+              "La lecture"
+            ],
+            "answer": "Les jeux vidéo",
+            "hintEs": "Jeux = juegos, vidéo = vídeo.",
+            "hintSv": "Tv-spel / datorspel.",
+            "explanationEs": "¡Correcto! \"Les jeux vidéo\".",
+            "explanationSv": "Rätt! \"Les jeux vidéo\" = tv-spel."
+          },
+          {
+            "id": "u7-l1-e2",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"el fútbol\"?",
+            "audioFr": "Le football",
+            "options": [
+              "Le football",
+              "Le basket",
+              "Le tennis",
+              "La natation"
+            ],
+            "answer": "Le football",
+            "hintEs": "A menudo se abrevia como \"le foot\".",
+            "hintSv": "Fotboll.",
+            "explanationEs": "\"Le football\" o \"le foot\".",
+            "explanationSv": "\"Le football\" är fotboll."
+          },
+          {
+            "id": "u7-l1-e3",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"la música\"?",
+            "audioFr": "La musique",
+            "options": [
+              "La musique",
+              "La danse",
+              "La guitare",
+              "Le piano"
+            ],
+            "answer": "La musique",
+            "hintEs": "Se parece mucho al español.",
+            "hintSv": "Musik på franska.",
+            "explanationEs": "¡Exacto! \"La musique\".",
+            "explanationSv": "Exakt! \"La musique\"."
+          },
+          {
+            "id": "u7-l1-e4",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"la natación\" en francés?",
+            "audioFr": "La natation",
+            "options": [
+              "La natation",
+              "Le tennis",
+              "La danse",
+              "Le ski"
+            ],
+            "answer": "La natation",
+            "hintEs": "El deporte de nadar.",
+            "hintSv": "Simning på franska: la natation.",
+            "explanationEs": "¡Correcto! \"La natation\" = natación.",
+            "explanationSv": "Rätt! \"La natation\" = simning."
+          },
+          {
+            "id": "u7-l1-e5",
+            "type": "fill-blank",
+            "prompt": "Completa: \"Le samedi, je fais du _____ (ciclismo / bicicleta).\"",
+            "promptFr": "Le samedi, je fais du _____ .",
+            "audioFr": "Faire du vélo",
+            "options": [
+              "vélo",
+              "foot",
+              "danse",
+              "judo"
+            ],
+            "answer": "vélo",
+            "hintEs": "\"Vélo\" significa bicicleta.",
+            "hintSv": "Cykel på franska: vélo.",
+            "explanationEs": "¡Muy bien! \"Faire du vélo\" = montar en bicicleta.",
+            "explanationSv": "Jättebra! \"Faire du vélo\" = cykla."
+          },
+          {
+            "id": "u7-l1-e6",
+            "type": "translate",
+            "prompt": "Traduce al francés: \"Tocar la guitarra\"",
+            "audioFr": "Jouer de la guitare",
+            "options": [
+              "Jouer de la guitare",
+              "Écouter la radio",
+              "Faire du piano",
+              "Regarder la télé"
+            ],
+            "answer": "Jouer de la guitare",
+            "hintEs": "Con instrumentos musicales se usa \"jouer de...\": jouer de la guitare.",
+            "hintSv": "Med musikinstrument: jouer de la guitare.",
+            "explanationEs": "¡Exacto! Jouer de la guitare.",
+            "explanationSv": "Exakt! Spela gitarr: jouer de la guitare."
+          },
+          {
+            "id": "u7-l1-e7",
+            "type": "scramble",
+            "prompt": "Ordena: \"Me gusta mucho el baloncesto.\"",
+            "promptFr": "J'aime beaucoup le basket.",
+            "audioFr": "J'aime beaucoup le basket.",
+            "options": [
+              "J'aime",
+              "beaucoup",
+              "le",
+              "basket",
+              "."
+            ],
+            "answer": [
+              "J'aime",
+              "beaucoup",
+              "le",
+              "basket",
+              "."
+            ],
+            "hintEs": "J'aime beaucoup + le basket.",
+            "hintSv": "Jag gillar verkligen basket.",
+            "explanationEs": "¡Genial! \"J'aime beaucoup le basket.\"",
+            "explanationSv": "Lysande! \"J'aime beaucoup le basket.\""
+          },
+          {
+            "id": "u7-l1-e8",
+            "type": "choice",
+            "prompt": "¿Qué palabra francesa encaja aquí? (Unité 7)",
+            "promptFr": "bien",
+            "audioFr": "bien",
+            "options": [
+              "oui",
+              "non",
+              "merci",
+              "bien"
+            ],
+            "answer": "bien",
+            "hintEs": "Palabra positiva.",
+            "hintSv": "Positivt ord.",
+            "explanationEs": "¡Muy bien!",
+            "explanationSv": "Jättebra!"
+          },
+          {
+            "id": "u7-l1-e9",
+            "type": "translate",
+            "prompt": "Traduce la frase clave del vocabulario de la unidad 7",
+            "promptFr": "C'est super !",
+            "audioFr": "C'est super !",
+            "options": [
+              "C'est super !",
+              "Au revoir !",
+              "Bonjour !",
+              "Pardon !"
+            ],
+            "answer": "C'est super !",
+            "hintEs": "Expresión positiva.",
+            "hintSv": "Positivt uttryck.",
+            "explanationEs": "\"C'est super !\" = ¡Es genial!",
+            "explanationSv": "\"C'est super !\" = Det är toppen!"
+          },
+          {
+            "id": "u7-l1-e10",
+            "type": "scramble",
+            "prompt": "Ordena: \"J'aime beaucoup cette leçon.\"",
+            "promptFr": "J'aime beaucoup cette leçon .",
+            "audioFr": "J'aime beaucoup cette leçon .",
+            "options": [
+              "J'aime",
+              "beaucoup",
+              "cette",
+              "leçon",
+              "."
+            ],
+            "answer": [
+              "J'aime",
+              "beaucoup",
+              "cette",
+              "leçon",
+              "."
+            ],
+            "hintEs": "Me gusta mucho esta lección.",
+            "hintSv": "Jag gillar den här lektionen mycket.",
+            "explanationEs": "¡Excelente estructuración!",
+            "explanationSv": "Mycket bra meningsbyggnad!"
+          },
+          {
+            "id": "u7-l1-e11",
+            "type": "fill-blank",
+            "prompt": "Completa: \"C'est _____ intéressant !\"",
+            "promptFr": "C'est _____ intéressant !",
+            "audioFr": "très",
+            "options": [
+              "très",
+              "non",
+              "de",
+              "un"
+            ],
+            "answer": "très",
+            "hintEs": "Très = muy.",
+            "hintSv": "Très = mycket.",
+            "explanationEs": "\"C'est très intéressant !\" = Es muy interesante.",
+            "explanationSv": "\"C'est très intéressant !\" = Det är mycket intressant."
+          },
+          {
+            "id": "u7-l1-e12",
+            "type": "choice",
+            "prompt": "¿Cómo se pronuncia correctamente la terminación en francés?",
+            "promptFr": "Con entonación natural hacia la última sílaba.",
+            "audioFr": "Con entonación natural hacia la última sílaba.",
+            "options": [
+              "Con entonación natural hacia la última sílaba.",
+              "Acentuando la primera sílaba.",
+              "Gritando la palabra.",
+              "Silenciando todas las vocales."
+            ],
+            "answer": "Con entonación natural hacia la última sílaba.",
+            "hintEs": "La fonética francesa acentúa al final de grupo.",
+            "hintSv": "Franskan betonar sista stavelsen.",
+            "explanationEs": "El francés acentúa suavemente la última sílaba sonada.",
+            "explanationSv": "Fransk accentuering ligger på sista stavelsen."
+          }
+        ]
+      },
+      {
+        "id": "u7-l2",
+        "unitId": "unit-7",
+        "title": "Paso 2: Expresar gustos (J'adore, J'aime, Je déteste)",
+        "frenchTitle": "Exprimer ses Goûts",
+        "description": "Construir frases afirmativas y negativas sobre lo que te gusta.",
+        "xpReward": 20,
+        "exercises": [
+          {
+            "id": "u7-l2-e1",
+            "type": "scramble",
+            "prompt": "Ordena: \"Me encanta la música pop.\"",
+            "promptFr": "J'adore la musique pop.",
+            "audioFr": "J'adore la musique pop.",
+            "options": [
+              "J'adore",
+              "la",
+              "musique",
+              "pop",
+              "."
+            ],
+            "answer": [
+              "J'adore",
+              "la",
+              "musique",
+              "pop",
+              "."
+            ],
+            "hintEs": "J'adore + la musique pop.",
+            "hintSv": "J'adore + la musique pop.",
+            "explanationEs": "¡Genial! \"J'adore\" expresa mucho entusiasmo.",
+            "explanationSv": "Lysande! \"J'adore\" betyder jag älskar."
+          },
+          {
+            "id": "u7-l2-e2",
+            "type": "scramble",
+            "prompt": "Ordena la frase negativa: \"No me gustan los deberes.\"",
+            "promptFr": "Je n'aime pas les devoirs.",
+            "audioFr": "Je n'aime pas les devoirs.",
+            "options": [
+              "Je",
+              "n'aime",
+              "pas",
+              "les",
+              "devoirs",
+              "."
+            ],
+            "answer": [
+              "Je",
+              "n'aime",
+              "pas",
+              "les",
+              "devoirs",
+              "."
+            ],
+            "hintEs": "Je + n'aime + pas (negación) + les devoirs.",
+            "hintSv": "Je n'aime pas = jag gillar inte.",
+            "explanationEs": "¡Perfecto! En francés la negación envuelve al verbo: n'aime pas.",
+            "explanationSv": "Perfekt! Negationen \"ne ... pas\" ramar in verbet."
+          },
+          {
+            "id": "u7-l2-e3",
+            "type": "choice",
+            "prompt": "¿Cómo dices \"Detesto / Odio\" algo en francés?",
+            "audioFr": "Je déteste",
+            "options": [
+              "Je déteste",
+              "J'adore",
+              "J'aime bien",
+              "Je préfère"
+            ],
+            "answer": "Je déteste",
+            "hintEs": "Viene de detestar.",
+            "hintSv": "Betyder att hata/avsky något.",
+            "explanationEs": "\"Je déteste\" expresa que algo no te gusta nada.",
+            "explanationSv": "\"Je déteste\" betyder jag hatar."
+          },
+          {
+            "id": "u7-l2-e4",
+            "type": "fill-blank",
+            "prompt": "Completa la negación: \"Je _____ aime pas le tennis.\"",
+            "promptFr": "Je _____ aime pas le tennis.",
+            "audioFr": "Je n'aime pas le tennis.",
+            "options": [
+              "n'",
+              "ne",
+              "pas",
+              "non"
+            ],
+            "answer": "n'",
+            "hintEs": "Delante de vocal, \"ne\" se convierte en \"n'\": n'aime pas.",
+            "hintSv": "Före vokal blir \"ne\" till \"n'\": n'aime pas.",
+            "explanationEs": "¡Correcto! Je n'aime pas (con el apóstrofe).",
+            "explanationSv": "Rätt! Före vokal skrivs n'aime pas."
+          },
+          {
+            "id": "u7-l2-e5",
+            "type": "translate",
+            "prompt": "Traduce al francés: \"Me encantan los mangas y los cómics.\"",
+            "audioFr": "J'adore les mangas et les BD.",
+            "options": [
+              "J'adore les mangas et les BD.",
+              "Je déteste les livres.",
+              "J'ai deux mangas.",
+              "C'est un manga."
+            ],
+            "answer": "J'adore les mangas et les BD.",
+            "hintEs": "\"BD\" (bande dessinée) es como llaman a los cómics en francés.",
+            "hintSv": "BD = serietidningar.",
+            "explanationEs": "¡Genial! \"J'adore les mangas et les BD.\"",
+            "explanationSv": "Lysande! \"J'adore les mangas et les BD.\""
+          },
+          {
+            "id": "u7-l2-e6",
+            "type": "choice",
+            "prompt": "¿Cómo dices: \"Prefiero el cine a la televisión\"?",
+            "audioFr": "Je préfère le cinéma à la télé.",
+            "options": [
+              "Je préfère le cinéma à la télé.",
+              "J'adore la télé.",
+              "Je n'aime pas le cinéma.",
+              "Où est le cinéma ?"
+            ],
+            "answer": "Je préfère le cinéma à la télé.",
+            "hintEs": "\"Je préfère\" expresa preferencia.",
+            "hintSv": "Jag föredrar bio framför tv.",
+            "explanationEs": "¡Muy bien! \"Je préfère...\" = Prefiero...",
+            "explanationSv": "Jättebra! \"Je préfère...\" = Jag föredrar..."
+          },
+          {
+            "id": "u7-l2-e7",
+            "type": "scramble",
+            "prompt": "Ordena: \"A ella le encanta cantar y bailar.\"",
+            "promptFr": "Elle adore chanter et danser.",
+            "audioFr": "Elle adore chanter et danser.",
+            "options": [
+              "Elle",
+              "adore",
+              "chanter",
+              "et",
+              "danser",
+              "."
+            ],
+            "answer": [
+              "Elle",
+              "adore",
+              "chanter",
+              "et",
+              "danser",
+              "."
+            ],
+            "hintEs": "Elle + adore + chanter + et + danser.",
+            "hintSv": "Hon älskar att sjunga och dansa.",
+            "explanationEs": "¡Fantástico! Tras los verbos de gusto va el infinitivo.",
+            "explanationSv": "Fantastiskt! Efter tyckeverb följer infinitiv."
+          },
+          {
+            "id": "u7-l2-e8",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"también\" en francés?",
+            "promptFr": "aussi",
+            "audioFr": "aussi",
+            "options": [
+              "aussi",
+              "mais",
+              "donc",
+              "alors"
+            ],
+            "answer": "aussi",
+            "hintEs": "\"Aussi\" = también.",
+            "hintSv": "\"Aussi\" = också.",
+            "explanationEs": "\"Aussi\" = también.",
+            "explanationSv": "\"Aussi\" betyder också."
+          },
+          {
+            "id": "u7-l2-e9",
+            "type": "translate",
+            "prompt": "Traduce: \"Es muy fácil\"",
+            "promptFr": "C'est très facile.",
+            "audioFr": "C'est très facile.",
+            "options": [
+              "C'est très facile.",
+              "C'est difficile.",
+              "C'est bon.",
+              "C'est beau."
+            ],
+            "answer": "C'est très facile.",
+            "hintEs": "Facile = fácil.",
+            "hintSv": "Facile = lätt.",
+            "explanationEs": "\"C'est très facile\" = Es muy fácil.",
+            "explanationSv": "\"C'est très facile\" = Det är jättelätt."
+          },
+          {
+            "id": "u7-l2-e10",
+            "type": "scramble",
+            "prompt": "Ordena: \"Nous apprenons le français ensemble.\"",
+            "promptFr": "Nous apprenons le français ensemble .",
+            "audioFr": "Nous apprenons le français ensemble .",
+            "options": [
+              "Nous",
+              "apprenons",
+              "le",
+              "français",
+              "ensemble",
+              "."
+            ],
+            "answer": [
+              "Nous",
+              "apprenons",
+              "le",
+              "français",
+              "ensemble",
+              "."
+            ],
+            "hintEs": "Aprendemos francés juntos.",
+            "hintSv": "Vi lär oss franska tillsammans.",
+            "explanationEs": "¡Preciosa frase cooperativa!",
+            "explanationSv": "Underbar gemensam mening!"
+          },
+          {
+            "id": "u7-l2-e11",
+            "type": "fill-blank",
+            "prompt": "Completa: \"_____ est très sympa !\"",
+            "promptFr": "_____ est très sympa !",
+            "audioFr": "Elle",
+            "options": [
+              "Elle",
+              "Nous",
+              "Vous",
+              "Ils"
+            ],
+            "answer": "Elle",
+            "hintEs": "Tercera persona singular.",
+            "hintSv": "Tredje person singular.",
+            "explanationEs": "\"Elle est très sympa !\" = Ella es muy simpática.",
+            "explanationSv": "\"Elle est très sympa !\" = Hon är jättetrevlig."
+          },
+          {
+            "id": "u7-l2-e12",
+            "type": "choice",
+            "prompt": "¿Qué palabra une dos ideas con \"pero\"?",
+            "promptFr": "mais",
+            "audioFr": "mais",
+            "options": [
+              "mais",
+              "et",
+              "ou",
+              "avec"
+            ],
+            "answer": "mais",
+            "hintEs": "Mais = pero.",
+            "hintSv": "Mais = men.",
+            "explanationEs": "\"Mais\" significa pero.",
+            "explanationSv": "\"Mais\" betyder men."
+          }
+        ]
+      },
+      {
+        "id": "u7-l3",
+        "unitId": "unit-7",
+        "title": "Paso 3: Opiniones con C'est chouette / C'est nul",
+        "frenchTitle": "Donner son Avis",
+        "description": "Usar expresiones coloquiales juveniles: c'est super, c'est chouette, c'est nul.",
+        "xpReward": 20,
+        "exercises": [
+          {
+            "id": "u7-l3-e1",
+            "type": "choice",
+            "prompt": "¿Qué significa la expresión juvenil \"C'est chouette !\"?",
+            "promptFr": "C'est chouette !",
+            "audioFr": "C'est chouette !",
+            "options": [
+              "¡Qué guay! / ¡Es genial!",
+              "Es un rollo",
+              "Es muy caro",
+              "Tengo sueño"
+            ],
+            "answer": "¡Qué guay! / ¡Es genial!",
+            "hintEs": "Expresión muy común en Francia para algo agradable.",
+            "hintSv": "Vad häftigt / vad kul!",
+            "explanationEs": "\"C'est chouette !\" es una expresión muy positiva.",
+            "explanationSv": "\"C'est chouette !\" betyder vad kul / toppen!"
+          },
+          {
+            "id": "u7-l3-e2",
+            "type": "choice",
+            "prompt": "¿Qué significa \"C'est nul !\"?",
+            "promptFr": "C'est nul !",
+            "audioFr": "C'est nul !",
+            "options": [
+              "¡Es un rollo! / ¡Es malísimo!",
+              "Es fantástico",
+              "Es fácil",
+              "Es divertido"
+            ],
+            "answer": "¡Es un rollo! / ¡Es malísimo!",
+            "hintEs": "Lo contrario de genial.",
+            "hintSv": "Det suger / det är trist.",
+            "explanationEs": "\"C'est nul !\" se usa para cosas aburridas o malas.",
+            "explanationSv": "\"C'est nul !\" betyder det är kasst/tråkigt."
+          },
+          {
+            "id": "u7-l3-e3",
+            "type": "choice",
+            "prompt": "¿Qué significa la expresión juvenil \"C'est trop cool !\" / \"C'est génial !\"?",
+            "promptFr": "C'est génial !",
+            "audioFr": "C'est génial !",
+            "options": [
+              "¡Es genial / súper guay!",
+              "Es muy feo",
+              "Es aburridísimo",
+              "Está lloviendo"
+            ],
+            "answer": "¡Es genial / súper guay!",
+            "hintEs": "Génial = genial.",
+            "hintSv": "Det är lysande / toppen!",
+            "explanationEs": "¡Correcto! \"C'est génial !\" es una expresión entusiasta.",
+            "explanationSv": "Rätt! \"C'est génial !\" betyder det är toppen!"
+          },
+          {
+            "id": "u7-l3-e4",
+            "type": "fill-blank",
+            "prompt": "Completa: \"Ce film est vraiment trop _____ (bueno / genial) !\"",
+            "promptFr": "Ce film est vraiment trop _____ !",
+            "audioFr": "Ce film est vraiment trop bien !",
+            "options": [
+              "bien",
+              "mal",
+              "nul",
+              "triste"
+            ],
+            "answer": "bien",
+            "hintEs": "\"Trop bien\" es una expresión coloquial para decir \"muy bueno/a\".",
+            "hintSv": "Jättebra: trop bien.",
+            "explanationEs": "¡Exacto! \"Trop bien\" = ¡Qué bueno / qué bien!",
+            "explanationSv": "Exakt! \"Trop bien\" = jättebra."
+          },
+          {
+            "id": "u7-l3-e5",
+            "type": "translate",
+            "prompt": "Traduce al francés: \"En mi opinión, es aburrido.\"",
+            "audioFr": "À mon avis, c'est ennuyeux.",
+            "options": [
+              "À mon avis, c'est ennuyeux.",
+              "C'est très chouette.",
+              "J'adore ça.",
+              "Ce n'est pas cher."
+            ],
+            "answer": "À mon avis, c'est ennuyeux.",
+            "hintEs": "À mon avis (en mi opinión) + c'est ennuyeux (es aburrido).",
+            "hintSv": "Enligt min åsikt är det tråkigt.",
+            "explanationEs": "¡Genial! \"À mon avis, c'est ennuyeux.\"",
+            "explanationSv": "Lysande! \"À mon avis, c'est ennuyeux.\""
+          },
+          {
+            "id": "u7-l3-e6",
+            "type": "scramble",
+            "prompt": "Ordena: \"¡Es súper divertido entre amigos!\"",
+            "promptFr": "C'est super amusant entre amis !",
+            "audioFr": "C'est super amusant entre amis !",
+            "options": [
+              "C'est",
+              "super",
+              "amusant",
+              "entre",
+              "amis",
+              "!"
+            ],
+            "answer": [
+              "C'est",
+              "super",
+              "amusant",
+              "entre",
+              "amis",
+              "!"
+            ],
+            "hintEs": "C'est + super amusant + entre amis !",
+            "hintSv": "Det är superkul mellan vänner!",
+            "explanationEs": "¡Excelente! \"Amusant\" significa divertido.",
+            "explanationSv": "Utmärkt! \"Amusant\" betyder rolig."
+          },
+          {
+            "id": "u7-l3-e7",
+            "type": "choice",
+            "prompt": "¿Cómo reaccionas con decepción ante algo malo o pesado?",
+            "audioFr": "Franchement, c'est nul !",
+            "options": [
+              "Franchement, c'est nul !",
+              "C'est super chouette !",
+              "J'adore cette idée !",
+              "Bravo, félicitations !"
+            ],
+            "answer": "Franchement, c'est nul !",
+            "hintEs": "Franchement = sinceramente, c'est nul = es un rollo/malísimo.",
+            "hintSv": "Ärligt talat, det suger!",
+            "explanationEs": "¡Brillante! Expresión coloquial muy típica en Francia.",
+            "explanationSv": "Strålande! Mycket typiskt franskt vardagsuttryck."
+          },
+          {
+            "id": "u7-l3-e8",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"con mis amigos\" en francés?",
+            "promptFr": "avec mes amis",
+            "audioFr": "avec mes amis",
+            "options": [
+              "avec mes amis",
+              "sans mes amis",
+              "pour mes amis",
+              "dans mes amis"
+            ],
+            "answer": "avec mes amis",
+            "hintEs": "Avec = con.",
+            "hintSv": "Avec = med.",
+            "explanationEs": "\"Avec mes amis\" = con mis amigos.",
+            "explanationSv": "\"Avec mes amis\" = med mina vänner."
+          },
+          {
+            "id": "u7-l3-e9",
+            "type": "translate",
+            "prompt": "Traduce: \"Tengo una pregunta\"",
+            "promptFr": "J'ai une question.",
+            "audioFr": "J'ai une question.",
+            "options": [
+              "J'ai une question.",
+              "Je suis une question.",
+              "C'est une question.",
+              "Il y a une question."
+            ],
+            "answer": "J'ai une question.",
+            "hintEs": "Verbo avoir: J'ai.",
+            "hintSv": "Verbet avoir: J'ai.",
+            "explanationEs": "\"J'ai une question\" = Tengo una pregunta.",
+            "explanationSv": "\"J'ai une question\" = Jag har en fråga."
+          },
+          {
+            "id": "u7-l3-e10",
+            "type": "scramble",
+            "prompt": "Ordena: \"C'est une excellente idée !\"",
+            "promptFr": "C'est une excellente idée !",
+            "audioFr": "C'est une excellente idée !",
+            "options": [
+              "C'est",
+              "une",
+              "excellente",
+              "idée",
+              "!"
+            ],
+            "answer": [
+              "C'est",
+              "une",
+              "excellente",
+              "idée",
+              "!"
+            ],
+            "hintEs": "¡Es una idea excelente!",
+            "hintSv": "Det är en utmärkt idé!",
+            "explanationEs": "Expresión de aprobación entusiasta.",
+            "explanationSv": "Entusiastiskt godkännande."
+          },
+          {
+            "id": "u7-l3-e11",
+            "type": "fill-blank",
+            "prompt": "Completa: \"Je suis d'_____ avec toi !\"",
+            "promptFr": "Je suis d'_____ avec toi !",
+            "audioFr": "accord",
+            "options": [
+              "accord",
+              "ami",
+              "ordre",
+              "avis"
+            ],
+            "answer": "accord",
+            "hintEs": "\"Être d'accord\" = estar de acuerdo.",
+            "hintSv": "\"Être d'accord\" = hålla med.",
+            "explanationEs": "\"Je suis d'accord\" = Estoy de acuerdo.",
+            "explanationSv": "\"Je suis d'accord\" = Jag håller med."
+          },
+          {
+            "id": "u7-l3-e12",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"¡Buen fin de semana!\" en francés?",
+            "promptFr": "Bon week-end !",
+            "audioFr": "Bon week-end !",
+            "options": [
+              "Bon week-end !",
+              "Bonne nuit !",
+              "Bonne journée !",
+              "Bonjour !"
+            ],
+            "answer": "Bon week-end !",
+            "hintEs": "Se usa week-end en francés.",
+            "hintSv": "Man säger week-end på franska.",
+            "explanationEs": "\"Bon week-end !\" es el deseo para los viernes.",
+            "explanationSv": "\"Bon week-end !\" betyder trevlig helg!"
+          }
+        ]
+      },
+      {
+        "id": "u7-l4",
+        "unitId": "unit-7",
+        "title": "Paso 4: La negación esencial: Ne ... pas",
+        "frenchTitle": "La Négation avec NE ... PAS",
+        "description": "Aprende a decir lo que no haces o lo que no te gusta.",
+        "xpReward": 20,
+        "culturalNote": {
+          "title": "Point Culturel",
+          "textEs": "Aspecto cultural y lingüístico relevante para Årskurs 6.",
+          "textSv": "Kulturell och språklig aspekt för årskurs 6."
+        },
+        "exercises": [
+          {
+            "id": "u7-l4-e1",
+            "type": "choice",
+            "prompt": "Reto 1: Paso 4: La negación esencial: Ne ... pas — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u7-l4-e2",
+            "type": "translate",
+            "prompt": "Reto 2: Paso 4: La negación esencial: Ne ... pas — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u7-l4-e3",
+            "type": "fill-blank",
+            "prompt": "Reto 3: Paso 4: La negación esencial: Ne ... pas — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u7-l4-e4",
+            "type": "scramble",
+            "prompt": "Reto 4: Paso 4: La negación esencial: Ne ... pas — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u7-l4-e5",
+            "type": "choice",
+            "prompt": "Reto 5: Paso 4: La negación esencial: Ne ... pas — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u7-l4-e6",
+            "type": "translate",
+            "prompt": "Reto 6: Paso 4: La negación esencial: Ne ... pas — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u7-l4-e7",
+            "type": "fill-blank",
+            "prompt": "Reto 7: Paso 4: La negación esencial: Ne ... pas — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u7-l4-e8",
+            "type": "scramble",
+            "prompt": "Reto 8: Paso 4: La negación esencial: Ne ... pas — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u7-l4-e9",
+            "type": "choice",
+            "prompt": "Reto 9: Paso 4: La negación esencial: Ne ... pas — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u7-l4-e10",
+            "type": "translate",
+            "prompt": "Reto 10: Paso 4: La negación esencial: Ne ... pas — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u7-l4-e11",
+            "type": "fill-blank",
+            "prompt": "Reto 11: Paso 4: La negación esencial: Ne ... pas — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u7-l4-e12",
+            "type": "scramble",
+            "prompt": "Reto 12: Paso 4: La negación esencial: Ne ... pas — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          }
+        ]
+      },
+      {
+        "id": "u7-l5",
+        "unitId": "unit-7",
+        "title": "Paso 5: Expresiones juveniles y el fin de semana",
+        "frenchTitle": "Expressions Cool & Projets de Week-end",
+        "description": "C'est chouette, trop cool, c'est nul y planes de ocio.",
+        "xpReward": 25,
+        "culturalNote": {
+          "title": "Point Culturel",
+          "textEs": "Profundización pedagógica en el uso real del francés cotidiano.",
+          "textSv": "Fördjupning i vardaglig franska för ungdomar."
+        },
+        "exercises": [
+          {
+            "id": "u7-l5-e1",
+            "type": "choice",
+            "prompt": "Reto 1: Paso 5: Expresiones juveniles y el fin de semana — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u7-l5-e2",
+            "type": "translate",
+            "prompt": "Reto 2: Paso 5: Expresiones juveniles y el fin de semana — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u7-l5-e3",
+            "type": "fill-blank",
+            "prompt": "Reto 3: Paso 5: Expresiones juveniles y el fin de semana — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u7-l5-e4",
+            "type": "scramble",
+            "prompt": "Reto 4: Paso 5: Expresiones juveniles y el fin de semana — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u7-l5-e5",
+            "type": "choice",
+            "prompt": "Reto 5: Paso 5: Expresiones juveniles y el fin de semana — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u7-l5-e6",
+            "type": "translate",
+            "prompt": "Reto 6: Paso 5: Expresiones juveniles y el fin de semana — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u7-l5-e7",
+            "type": "fill-blank",
+            "prompt": "Reto 7: Paso 5: Expresiones juveniles y el fin de semana — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u7-l5-e8",
+            "type": "scramble",
+            "prompt": "Reto 8: Paso 5: Expresiones juveniles y el fin de semana — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u7-l5-e9",
+            "type": "choice",
+            "prompt": "Reto 9: Paso 5: Expresiones juveniles y el fin de semana — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u7-l5-e10",
+            "type": "translate",
+            "prompt": "Reto 10: Paso 5: Expresiones juveniles y el fin de semana — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u7-l5-e11",
+            "type": "fill-blank",
+            "prompt": "Reto 11: Paso 5: Expresiones juveniles y el fin de semana — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u7-l5-e12",
+            "type": "scramble",
+            "prompt": "Reto 12: Paso 5: Expresiones juveniles y el fin de semana — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          }
+        ]
+      }
+    ],
+    "dailySessionTemplate": {
+      "id": "session-u7",
+      "title": "Paso 6: Gran Sesión Guiada de 30 minutos",
+      "frenchTitle": "Mes Loisirs Préférés (Séance de 30 min)",
+      "situation": "En una clase de tutoría todos cuentan qué hacen en su tiempo libre.",
+      "phase1Warmup": {
+        "introEs": "Calentamiento (5 min): repasa los verbos de gusto.",
+        "introSv": "Uppvärmning (5 min): repetera verb för att uttrycka tycke.",
+        "questions": [
+          {
+            "id": "w7-1",
+            "promptEs": "¿Cómo se dice \"Me encanta\"?",
+            "promptSv": "Hur säger man \"Jag älskar\"?",
+            "expectedFr": "J'adore",
+            "hints": [
+              "J'ad..."
+            ]
+          },
+          {
+            "id": "w7-2",
+            "promptEs": "¿Cómo se dice \"No me gusta\"?",
+            "promptSv": "Hur säger man \"Jag gillar inte\"?",
+            "expectedFr": "Je n'aime pas",
+            "hints": [
+              "Je n'a..."
+            ]
+          },
+          {
+            "id": "w7-3",
+            "promptEs": "¿Cómo se dice \"los videojuegos\"?",
+            "promptSv": "Hur säger man \"tv-spel\"?",
+            "expectedFr": "Les jeux vidéo",
+            "hints": [
+              "Les j..."
+            ]
+          }
+        ]
+      },
+      "phase2Input": {
+        "storyTitle": "Après l'école",
+        "storyFr": "Paul : Qu'est-ce que tu fais après l'école, Léa ?\nLéa : J'adore jouer au basket avec mes copines ! Et le week-end, je dessine. Et toi ?\nPaul : Moi, je joue de la guitare. J'aime aussi les jeux vidéo avec mon frère.\nLéa : C'est chouette ! Mais je parie que tu n'aimes pas ranger ta chambre !\nPaul : Ah non, ça je déteste ! C'est nul !",
+        "storyEs": "Paul: ¿Qué haces después de la escuela, Léa?\nLéa: ¡Me encanta jugar al baloncesto con mis amigas! Y los fines de semana dibujo. ¿Y tú?\nPaul: Yo toco la guitarra. También me gustan los videojuegos con mi hermano.\nLéa: ¡Qué guay! ¡Pero apuesto a que no te gusta ordenar tu habitación!\nPaul: ¡Ah no, eso lo detesto! ¡Es un rollo!",
+        "storySv": "Paul: Vad gör du efter skolan, Léa?\nLéa: Jag älskar att spela basket med mina tjejkompisar! Och på helgen ritar jag. Och du?\nPaul: Jag spelar gitarr. Jag gillar också tv-spel med min bror.\nLéa: Vad kul! Men jag slår vad om att du inte gillar att städa ditt rum!\nPaul: Åh nej, det hatar jag! Det är så tråkigt!",
+        "keyExpressions": [
+          {
+            "fr": "C'est chouette !",
+            "phonetic": "se shuet",
+            "es": "¡Qué guay! / ¡Genial!",
+            "sv": "Vad häftigt! / Vad kul!",
+            "clue": "Expresión informal francesa para algo divertido o bonito."
+          },
+          {
+            "fr": "C'est nul !",
+            "phonetic": "se nül",
+            "es": "¡Es un rollo! / ¡Es malísimo!",
+            "sv": "Det suger! / Det är trist!",
+            "clue": "Expresión juvenil para algo aburrido o molesto."
+          },
+          {
+            "fr": "Après l'école",
+            "phonetic": "a-pre le-kol",
+            "es": "Después del colegio",
+            "sv": "Efter skolan",
+            "clue": "Momento de tiempo libre tras las clases."
+          }
+        ]
+      },
+      "phase3Production": {
+        "contextEs": "Juego de rol (12 min): Paul te pregunta qué haces después del colegio.",
+        "contextSv": "Rollspel (12 min): Paul frågar vad du brukar göra efter skolan.",
+        "initialAIPrompt": "Salut ! Qu'est-ce que tu aimes faire après l'école ?",
+        "initialAIPromptTranslation": "¡Hola! ¿Qué te gusta hacer después de la escuela?",
+        "mission": "Cuéntale qué actividad te encanta y qué cosa no te gusta nada.",
+        "constraintProgression": [
+          "Usa \"J'adore...\" con un deporte, música o hobby.",
+          "Añade un conector \"mais\" (pero) y una negación: \"mais je n'aime pas...\".",
+          "Usa la expresión \"C'est chouette !\" o \"C'est génial !\"."
+        ]
+      },
+      "phase4ExitTicket": {
+        "promptEs": "Reto de salida (5 min): Escribe 2 frases sobre tus pasiones en francés.",
+        "promptSv": "Utgångsutmaning (5 min): Skriv 2 meningar om dina intressen på franska.",
+        "sampleFr": "J'adore le football et la musique, mais je déteste faire les devoirs."
+      }
+    }
+  },
+  {
+    "id": "unit-8",
+    "number": 8,
+    "grade": "ak6",
+    "title": "Mi Día a Día y Las Horas",
+    "frenchTitle": "Ma Journée et Les Heures",
+    "description": "Aprende a decir la hora y cuenta tu rutina diaria habitual.",
+    "iconName": "Clock",
+    "color": "from-indigo-600 to-blue-600",
+    "grammarTip": {
+      "title": "Decir la hora: \"Il est... heures\"",
+      "explanationEs": "Para decir la hora decimos siempre \"Il est...\" seguido del número y \"heures\". Ejemplo: \"Il est huit heures\" (Son las ocho).",
+      "explanationSv": "För att säga klockslaget säger man alltid \"Il est...\" följt av siffran och \"heures\". Exempel: \"Il est huit heures\" (Klockan är åtta).",
+      "examples": [
+        {
+          "fr": "Quelle heure est-il ?",
+          "es": "¿Qué hora es?",
+          "sv": "Vad är klockan?"
+        },
+        {
+          "fr": "Il est huit heures.",
+          "es": "Son las ocho.",
+          "sv": "Klockan är åtta."
+        },
+        {
+          "fr": "À sept heures, je me réveille.",
+          "es": "A las siete, me despierto.",
+          "sv": "Klockan sju vaknar jag."
+        }
+      ]
+    },
+    "lessons": [
+      {
+        "id": "u8-l1",
+        "unitId": "unit-8",
+        "title": "Paso 1: Decir la hora (Quelle heure est-il ?)",
+        "frenchTitle": "Quelle heure est-il ?",
+        "description": "Il est huit heures, neuf heures, dix heures...",
+        "xpReward": 15,
+        "exercises": [
+          {
+            "id": "u8-l1-e1",
+            "type": "choice",
+            "prompt": "¿Cómo se pregunta \"¿Qué hora es?\"?",
+            "audioFr": "Quelle heure est-il ?",
+            "options": [
+              "Quelle heure est-il ?",
+              "Quel âge as-tu ?",
+              "Comment tu t'appelles ?",
+              "Où est l'école ?"
+            ],
+            "answer": "Quelle heure est-il ?",
+            "hintEs": "\"Heure\" significa hora.",
+            "hintSv": "\"Heure\" betyder timme/tid.",
+            "explanationEs": "¡Exacto! \"Quelle heure est-il ?\" es la pregunta estándar.",
+            "explanationSv": "Exakt! \"Quelle heure est-il ?\" betyder vad är klockan?"
+          },
+          {
+            "id": "u8-l1-e2",
+            "type": "scramble",
+            "prompt": "Ordena la respuesta: \"Son las ocho en punto.\"",
+            "promptFr": "Il est huit heures.",
+            "audioFr": "Il est huit heures.",
+            "options": [
+              "Il",
+              "est",
+              "huit",
+              "heures",
+              "."
+            ],
+            "answer": [
+              "Il",
+              "est",
+              "huit",
+              "heures",
+              "."
+            ],
+            "hintEs": "Il est + número (huit) + heures.",
+            "hintSv": "Il est + huit + heures.",
+            "explanationEs": "¡Correcto! En francés siempre se dice \"Il est ... heures\".",
+            "explanationSv": "Rätt! Klockan är åtta."
+          },
+          {
+            "id": "u8-l1-e3",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"y media\" al decir la hora?",
+            "audioFr": "Et demie",
+            "options": [
+              "Et demie",
+              "Et quart",
+              "Moins le quart",
+              "À l'heure"
+            ],
+            "answer": "Et demie",
+            "hintEs": "Ejemplo: huit heures et demie (ocho y media).",
+            "hintSv": "Halv timme.",
+            "explanationEs": "\"Et demie\" significa y media.",
+            "explanationSv": "\"Et demie\" betyder och en halv."
+          },
+          {
+            "id": "u8-l1-e4",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"Son las diez y cuarto\"?",
+            "audioFr": "Il est dix heures et quart.",
+            "options": [
+              "Il est dix heures et quart.",
+              "Il est dix heures et demie.",
+              "Il est dix heures moins le quart.",
+              "Il est onze heures."
+            ],
+            "answer": "Il est dix heures et quart.",
+            "hintEs": "Et quart = y cuarto.",
+            "hintSv": "Kvart över tio.",
+            "explanationEs": "¡Muy bien! \"Et quart\" significa y cuarto.",
+            "explanationSv": "Jättebra! \"Et quart\" betyder kvart över."
+          },
+          {
+            "id": "u8-l1-e5",
+            "type": "fill-blank",
+            "prompt": "Completa: \"Il est _____ heures (Son las dos).\"",
+            "promptFr": "Il est _____ heures.",
+            "audioFr": "Il est deux heures.",
+            "options": [
+              "deux",
+              "douze",
+              "dix",
+              "trois"
+            ],
+            "answer": "deux",
+            "hintEs": "Deux = 2.",
+            "hintSv": "Två på franska: deux.",
+            "explanationEs": "¡Correcto! Deux = 2.",
+            "explanationSv": "Rätt! Deux = 2."
+          },
+          {
+            "id": "u8-l1-e6",
+            "type": "translate",
+            "prompt": "Traduce: \"Es mediodía (12:00 del día)\"",
+            "audioFr": "Il est midi.",
+            "options": [
+              "Il est midi.",
+              "Il est minuit.",
+              "Il est midi et quart.",
+              "Il est midi et demi."
+            ],
+            "answer": "Il est midi.",
+            "hintEs": "Midi = mediodía, minuit = medianoche.",
+            "hintSv": "Midi = mitt på dagen (klockan 12).",
+            "explanationEs": "¡Perfecto! En francés las 12:00 se dice \"Il est midi\".",
+            "explanationSv": "Perfekt! Klockan 12 mitt på dagen är \"Il est midi\"."
+          },
+          {
+            "id": "u8-l1-e7",
+            "type": "scramble",
+            "prompt": "Ordena: \"Son las siete menos cuarto.\"",
+            "promptFr": "Il est sept heures moins le quart.",
+            "audioFr": "Il est sept heures moins le quart.",
+            "options": [
+              "Il",
+              "est",
+              "sept",
+              "heures",
+              "moins",
+              "le",
+              "quart",
+              "."
+            ],
+            "answer": [
+              "Il",
+              "est",
+              "sept",
+              "heures",
+              "moins",
+              "le",
+              "quart",
+              "."
+            ],
+            "hintEs": "Il est sept heures + moins le quart (menos cuarto).",
+            "hintSv": "Klockan är kvart i sju.",
+            "explanationEs": "¡Excelente! \"Moins le quart\" expresa menos cuarto.",
+            "explanationSv": "Utmärkt! \"Moins le quart\" = kvart i."
+          },
+          {
+            "id": "u8-l1-e8",
+            "type": "choice",
+            "prompt": "¿Qué palabra francesa encaja aquí? (Unité 8)",
+            "promptFr": "bien",
+            "audioFr": "bien",
+            "options": [
+              "oui",
+              "non",
+              "merci",
+              "bien"
+            ],
+            "answer": "bien",
+            "hintEs": "Palabra positiva.",
+            "hintSv": "Positivt ord.",
+            "explanationEs": "¡Muy bien!",
+            "explanationSv": "Jättebra!"
+          },
+          {
+            "id": "u8-l1-e9",
+            "type": "translate",
+            "prompt": "Traduce la frase clave del vocabulario de la unidad 8",
+            "promptFr": "C'est super !",
+            "audioFr": "C'est super !",
+            "options": [
+              "C'est super !",
+              "Au revoir !",
+              "Bonjour !",
+              "Pardon !"
+            ],
+            "answer": "C'est super !",
+            "hintEs": "Expresión positiva.",
+            "hintSv": "Positivt uttryck.",
+            "explanationEs": "\"C'est super !\" = ¡Es genial!",
+            "explanationSv": "\"C'est super !\" = Det är toppen!"
+          },
+          {
+            "id": "u8-l1-e10",
+            "type": "scramble",
+            "prompt": "Ordena: \"J'aime beaucoup cette leçon.\"",
+            "promptFr": "J'aime beaucoup cette leçon .",
+            "audioFr": "J'aime beaucoup cette leçon .",
+            "options": [
+              "J'aime",
+              "beaucoup",
+              "cette",
+              "leçon",
+              "."
+            ],
+            "answer": [
+              "J'aime",
+              "beaucoup",
+              "cette",
+              "leçon",
+              "."
+            ],
+            "hintEs": "Me gusta mucho esta lección.",
+            "hintSv": "Jag gillar den här lektionen mycket.",
+            "explanationEs": "¡Excelente estructuración!",
+            "explanationSv": "Mycket bra meningsbyggnad!"
+          },
+          {
+            "id": "u8-l1-e11",
+            "type": "fill-blank",
+            "prompt": "Completa: \"C'est _____ intéressant !\"",
+            "promptFr": "C'est _____ intéressant !",
+            "audioFr": "très",
+            "options": [
+              "très",
+              "non",
+              "de",
+              "un"
+            ],
+            "answer": "très",
+            "hintEs": "Très = muy.",
+            "hintSv": "Très = mycket.",
+            "explanationEs": "\"C'est très intéressant !\" = Es muy interesante.",
+            "explanationSv": "\"C'est très intéressant !\" = Det är mycket intressant."
+          },
+          {
+            "id": "u8-l1-e12",
+            "type": "choice",
+            "prompt": "¿Cómo se pronuncia correctamente la terminación en francés?",
+            "promptFr": "Con entonación natural hacia la última sílaba.",
+            "audioFr": "Con entonación natural hacia la última sílaba.",
+            "options": [
+              "Con entonación natural hacia la última sílaba.",
+              "Acentuando la primera sílaba.",
+              "Gritando la palabra.",
+              "Silenciando todas las vocales."
+            ],
+            "answer": "Con entonación natural hacia la última sílaba.",
+            "hintEs": "La fonética francesa acentúa al final de grupo.",
+            "hintSv": "Franskan betonar sista stavelsen.",
+            "explanationEs": "El francés acentúa suavemente la última sílaba sonada.",
+            "explanationSv": "Fransk accentuering ligger på sista stavelsen."
+          }
+        ]
+      },
+      {
+        "id": "u8-l2",
+        "unitId": "unit-8",
+        "title": "Paso 2: Momentos del día (Matin, Midi, Soir)",
+        "frenchTitle": "Les Moments de la Journée",
+        "description": "Le matin, l'après-midi, le soir, la nuit.",
+        "xpReward": 20,
+        "exercises": [
+          {
+            "id": "u8-l2-e1",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"por la mañana\" en francés?",
+            "audioFr": "Le matin",
+            "options": [
+              "Le matin",
+              "Le soir",
+              "La nuit",
+              "Le midi"
+            ],
+            "answer": "Le matin",
+            "hintEs": "El momento en que sale el sol.",
+            "hintSv": "Morgonen.",
+            "explanationEs": "¡Correcto! \"Le matin\" es la mañana.",
+            "explanationSv": "Rätt! \"Le matin\" = morgonen."
+          },
+          {
+            "id": "u8-l2-e2",
+            "type": "choice",
+            "prompt": "¿Qué momento del día es \"Le soir\"?",
+            "audioFr": "Le soir",
+            "options": [
+              "La tarde/noche",
+              "El mediodía",
+              "La mañana",
+              "La madrugada"
+            ],
+            "answer": "La tarde/noche",
+            "hintEs": "Cuando se cena y descansa.",
+            "hintSv": "Kvällen.",
+            "explanationEs": "\"Le soir\" es la tarde/noche.",
+            "explanationSv": "\"Le soir\" = kvällen."
+          },
+          {
+            "id": "u8-l2-e3",
+            "type": "fill-blank",
+            "prompt": "Completa: \"À midi, je mange à la _____ (comedor escolar).\"",
+            "promptFr": "À midi, je mange à la _____ .",
+            "audioFr": "À midi, je mange à la cantine.",
+            "options": [
+              "cantine",
+              "classe",
+              "maison",
+              "gare"
+            ],
+            "answer": "cantine",
+            "hintEs": "\"La cantine\" es el comedor de la escuela.",
+            "hintSv": "Matsalen i skolan.",
+            "explanationEs": "¡Excelente! En Francia el comedor escolar se llama \"la cantine\".",
+            "explanationSv": "Utmärkt! Skolmatsalen kallas \"la cantine\"."
+          },
+          {
+            "id": "u8-l2-e4",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"por la tarde\" (entre el mediodía y la cena)?",
+            "audioFr": "L'après-midi",
+            "options": [
+              "L'après-midi",
+              "Le matin",
+              "Le soir",
+              "La nuit"
+            ],
+            "answer": "L'après-midi",
+            "hintEs": "Après (después) + midi (mediodía).",
+            "hintSv": "Eftermiddagen.",
+            "explanationEs": "¡Exacto! \"L'après-midi\" = por la tarde.",
+            "explanationSv": "Exakt! \"L'après-midi\" = eftermiddagen."
+          },
+          {
+            "id": "u8-l2-e5",
+            "type": "translate",
+            "prompt": "Traduce al francés: \"Buenas noches (antes de ir a dormir)\"",
+            "audioFr": "Bonne nuit !",
+            "options": [
+              "Bonne nuit !",
+              "Bonsoir !",
+              "Bonjour !",
+              "Bonne journée !"
+            ],
+            "answer": "Bonne nuit !",
+            "hintEs": "Bonne nuit se usa al ir a la cama a dormir.",
+            "hintSv": "God natt på franska: Bonne nuit !",
+            "explanationEs": "¡Correcto! \"Bonne nuit !\" = ¡Buenas noches / Que duermas bien!",
+            "explanationSv": "Rätt! \"Bonne nuit !\" = God natt!"
+          },
+          {
+            "id": "u8-l2-e6",
+            "type": "fill-blank",
+            "prompt": "Completa: \"La _____ (noche), tout le monde dort.\"",
+            "promptFr": "La _____ , tout le monde dort.",
+            "audioFr": "La nuit, tout le monde dort.",
+            "options": [
+              "nuit",
+              "matin",
+              "midi",
+              "soir"
+            ],
+            "answer": "nuit",
+            "hintEs": "La noche es femenino: la nuit.",
+            "hintSv": "Natten är feminin: la nuit.",
+            "explanationEs": "¡Muy bien! \"La nuit\" = la noche.",
+            "explanationSv": "Jättebra! \"La nuit\" = natten."
+          },
+          {
+            "id": "u8-l2-e7",
+            "type": "scramble",
+            "prompt": "Ordena: \"Por la noche, ceno en familia.\"",
+            "promptFr": "Le soir, je dîne en famille.",
+            "audioFr": "Le soir, je dîne en famille.",
+            "options": [
+              "Le",
+              "soir",
+              ",",
+              "je",
+              "dîne",
+              "en",
+              "famille",
+              "."
+            ],
+            "answer": [
+              "Le",
+              "soir",
+              ",",
+              "je",
+              "dîne",
+              "en",
+              "famille",
+              "."
+            ],
+            "hintEs": "Le soir + je dîne + en famille.",
+            "hintSv": "På kvällen äter jag middag med familjen.",
+            "explanationEs": "¡Genial! \"Le soir, je dîne en famille.\"",
+            "explanationSv": "Lysande! På kvällen äter jag middag med familjen."
+          },
+          {
+            "id": "u8-l2-e8",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"también\" en francés?",
+            "promptFr": "aussi",
+            "audioFr": "aussi",
+            "options": [
+              "aussi",
+              "mais",
+              "donc",
+              "alors"
+            ],
+            "answer": "aussi",
+            "hintEs": "\"Aussi\" = también.",
+            "hintSv": "\"Aussi\" = också.",
+            "explanationEs": "\"Aussi\" = también.",
+            "explanationSv": "\"Aussi\" betyder också."
+          },
+          {
+            "id": "u8-l2-e9",
+            "type": "translate",
+            "prompt": "Traduce: \"Es muy fácil\"",
+            "promptFr": "C'est très facile.",
+            "audioFr": "C'est très facile.",
+            "options": [
+              "C'est très facile.",
+              "C'est difficile.",
+              "C'est bon.",
+              "C'est beau."
+            ],
+            "answer": "C'est très facile.",
+            "hintEs": "Facile = fácil.",
+            "hintSv": "Facile = lätt.",
+            "explanationEs": "\"C'est très facile\" = Es muy fácil.",
+            "explanationSv": "\"C'est très facile\" = Det är jättelätt."
+          },
+          {
+            "id": "u8-l2-e10",
+            "type": "scramble",
+            "prompt": "Ordena: \"Nous apprenons le français ensemble.\"",
+            "promptFr": "Nous apprenons le français ensemble .",
+            "audioFr": "Nous apprenons le français ensemble .",
+            "options": [
+              "Nous",
+              "apprenons",
+              "le",
+              "français",
+              "ensemble",
+              "."
+            ],
+            "answer": [
+              "Nous",
+              "apprenons",
+              "le",
+              "français",
+              "ensemble",
+              "."
+            ],
+            "hintEs": "Aprendemos francés juntos.",
+            "hintSv": "Vi lär oss franska tillsammans.",
+            "explanationEs": "¡Preciosa frase cooperativa!",
+            "explanationSv": "Underbar gemensam mening!"
+          },
+          {
+            "id": "u8-l2-e11",
+            "type": "fill-blank",
+            "prompt": "Completa: \"_____ est très sympa !\"",
+            "promptFr": "_____ est très sympa !",
+            "audioFr": "Elle",
+            "options": [
+              "Elle",
+              "Nous",
+              "Vous",
+              "Ils"
+            ],
+            "answer": "Elle",
+            "hintEs": "Tercera persona singular.",
+            "hintSv": "Tredje person singular.",
+            "explanationEs": "\"Elle est très sympa !\" = Ella es muy simpática.",
+            "explanationSv": "\"Elle est très sympa !\" = Hon är jättetrevlig."
+          },
+          {
+            "id": "u8-l2-e12",
+            "type": "choice",
+            "prompt": "¿Qué palabra une dos ideas con \"pero\"?",
+            "promptFr": "mais",
+            "audioFr": "mais",
+            "options": [
+              "mais",
+              "et",
+              "ou",
+              "avec"
+            ],
+            "answer": "mais",
+            "hintEs": "Mais = pero.",
+            "hintSv": "Mais = men.",
+            "explanationEs": "\"Mais\" significa pero.",
+            "explanationSv": "\"Mais\" betyder men."
+          }
+        ]
+      },
+      {
+        "id": "u8-l3",
+        "unitId": "unit-8",
+        "title": "Paso 3: Verbos de rutina (Me réveille, vais au collège)",
+        "frenchTitle": "Raconter sa Routine",
+        "description": "À quelle heure tu commences les cours ?",
+        "xpReward": 20,
+        "exercises": [
+          {
+            "id": "u8-l3-e1",
+            "type": "scramble",
+            "prompt": "Ordena: \"A las siete, me despierto.\"",
+            "promptFr": "À sept heures, je me réveille.",
+            "audioFr": "À sept heures, je me réveille.",
+            "options": [
+              "À",
+              "sept",
+              "heures",
+              ",",
+              "je",
+              "me",
+              "réveille",
+              "."
+            ],
+            "answer": [
+              "À",
+              "sept",
+              "heures",
+              ",",
+              "je",
+              "me",
+              "réveille",
+              "."
+            ],
+            "hintEs": "À sept heures + je me réveille.",
+            "hintSv": "Klockan sju vaknar jag.",
+            "explanationEs": "¡Genial! \"Je me réveille\" = me despierto.",
+            "explanationSv": "Lysande! Jag vaknar klockan sju."
+          },
+          {
+            "id": "u8-l3-e2",
+            "type": "scramble",
+            "prompt": "Ordena: \"Empiezo las clases a las ocho.\"",
+            "promptFr": "Je commence les cours à huit heures.",
+            "audioFr": "Je commence les cours à huit heures.",
+            "options": [
+              "Je",
+              "commence",
+              "les",
+              "cours",
+              "à",
+              "huit",
+              "heures",
+              "."
+            ],
+            "answer": [
+              "Je",
+              "commence",
+              "les",
+              "cours",
+              "à",
+              "huit",
+              "heures",
+              "."
+            ],
+            "hintEs": "Je commence (empiezo) + les cours (las clases) + à huit heures.",
+            "hintSv": "Jag börjar lektionerna klockan åtta.",
+            "explanationEs": "¡Perfecto! \"Je commence les cours à huit heures.\"",
+            "explanationSv": "Perfekt! \"Je commence les cours à huit heures.\""
+          },
+          {
+            "id": "u8-l3-e3",
+            "type": "fill-blank",
+            "prompt": "Completa: \"À sept heures et demie, je prends mon _____ (desayuno).\"",
+            "promptFr": "À sept heures et demie, je prends mon _____ .",
+            "audioFr": "Prendre le petit-déjeuner",
+            "options": [
+              "petit-déjeuner",
+              "déjeuner",
+              "dîner",
+              "goûter"
+            ],
+            "answer": "petit-déjeuner",
+            "hintEs": "\"Petit-déjeuner\" es el desayuno de la mañana.",
+            "hintSv": "Frukost på franska: petit-déjeuner.",
+            "explanationEs": "¡Muy bien! \"Prendre le petit-déjeuner\" = desayunar.",
+            "explanationSv": "Jättebra! \"Prendre le petit-déjeuner\" = äta frukost."
+          },
+          {
+            "id": "u8-l3-e4",
+            "type": "translate",
+            "prompt": "Traduce al francés: \"Voy al colegio a pie.\"",
+            "audioFr": "Je vais au collège à pied.",
+            "options": [
+              "Je vais au collège à pied.",
+              "Je vais à l'école en bus.",
+              "Je reste à la maison.",
+              "Je rentre à pied."
+            ],
+            "answer": "Je vais au collège à pied.",
+            "hintEs": "Je vais (voy) + au collège (al colegio) + à pied (andando/a pie).",
+            "hintSv": "Jag går till skolan till fots.",
+            "explanationEs": "¡Genial! \"À pied\" significa a pie o caminando.",
+            "explanationSv": "Lysande! \"À pied\" = till fots."
+          },
+          {
+            "id": "u8-l3-e5",
+            "type": "choice",
+            "prompt": "¿Cómo dices: \"Termino las clases a las cuatro\"?",
+            "audioFr": "Je finis les cours à quatre heures.",
+            "options": [
+              "Je finis les cours à quatre heures.",
+              "Je commence à quatre heures.",
+              "Il est quatre heures.",
+              "Je déjeune à quatre heures."
+            ],
+            "answer": "Je finis les cours à quatre heures.",
+            "hintEs": "El verbo \"finir\" significa terminar (je finis).",
+            "hintSv": "Jag slutar lektionerna klockan fyra.",
+            "explanationEs": "¡Correcto! \"Je finis les cours...\" = Termino las clases.",
+            "explanationSv": "Rätt! \"Je finis les cours...\" = Jag slutar skolan."
+          },
+          {
+            "id": "u8-l3-e6",
+            "type": "scramble",
+            "prompt": "Ordena: \"Hago mis deberes a las cinco.\"",
+            "promptFr": "Je fais mes devoirs à cinq heures.",
+            "audioFr": "Je fais mes devoirs à cinq heures.",
+            "options": [
+              "Je",
+              "fais",
+              "mes",
+              "devoirs",
+              "à",
+              "cinq",
+              "heures",
+              "."
+            ],
+            "answer": [
+              "Je",
+              "fais",
+              "mes",
+              "devoirs",
+              "à",
+              "cinq",
+              "heures",
+              "."
+            ],
+            "hintEs": "Je fais (hago) + mes devoirs (mis deberes) + à cinq heures.",
+            "hintSv": "Jag gör mina läxor klockan fem.",
+            "explanationEs": "¡Excelente! \"Faire ses devoirs\" = hacer los deberes.",
+            "explanationSv": "Utmärkt! \"Faire ses devoirs\" = göra läxorna."
+          },
+          {
+            "id": "u8-l3-e7",
+            "type": "choice",
+            "prompt": "¿Cómo dices: \"Me acuesto a las nueve y media\"?",
+            "audioFr": "Je me couche à neuf heures et demie.",
+            "options": [
+              "Je me couche à neuf heures et demie.",
+              "Je me lève à neuf heures.",
+              "Je dîne à neuf heures.",
+              "Il est neuf heures et demie."
+            ],
+            "answer": "Je me couche à neuf heures et demie.",
+            "hintEs": "\"Se coucher\" es el verbo reflexivo acostarse: je me couche.",
+            "hintSv": "Jag lägger mig klockan halv tio.",
+            "explanationEs": "¡Bravo! Dominas el ciclo completo del día y la rutina cotidiana en francés.",
+            "explanationSv": "Bravo! Du behärskar hela dagsrytmen och vardagsrutinerna på franska."
+          },
+          {
+            "id": "u8-l3-e8",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"con mis amigos\" en francés?",
+            "promptFr": "avec mes amis",
+            "audioFr": "avec mes amis",
+            "options": [
+              "avec mes amis",
+              "sans mes amis",
+              "pour mes amis",
+              "dans mes amis"
+            ],
+            "answer": "avec mes amis",
+            "hintEs": "Avec = con.",
+            "hintSv": "Avec = med.",
+            "explanationEs": "\"Avec mes amis\" = con mis amigos.",
+            "explanationSv": "\"Avec mes amis\" = med mina vänner."
+          },
+          {
+            "id": "u8-l3-e9",
+            "type": "translate",
+            "prompt": "Traduce: \"Tengo una pregunta\"",
+            "promptFr": "J'ai une question.",
+            "audioFr": "J'ai une question.",
+            "options": [
+              "J'ai une question.",
+              "Je suis une question.",
+              "C'est une question.",
+              "Il y a une question."
+            ],
+            "answer": "J'ai une question.",
+            "hintEs": "Verbo avoir: J'ai.",
+            "hintSv": "Verbet avoir: J'ai.",
+            "explanationEs": "\"J'ai une question\" = Tengo una pregunta.",
+            "explanationSv": "\"J'ai une question\" = Jag har en fråga."
+          },
+          {
+            "id": "u8-l3-e10",
+            "type": "scramble",
+            "prompt": "Ordena: \"C'est une excellente idée !\"",
+            "promptFr": "C'est une excellente idée !",
+            "audioFr": "C'est une excellente idée !",
+            "options": [
+              "C'est",
+              "une",
+              "excellente",
+              "idée",
+              "!"
+            ],
+            "answer": [
+              "C'est",
+              "une",
+              "excellente",
+              "idée",
+              "!"
+            ],
+            "hintEs": "¡Es una idea excelente!",
+            "hintSv": "Det är en utmärkt idé!",
+            "explanationEs": "Expresión de aprobación entusiasta.",
+            "explanationSv": "Entusiastiskt godkännande."
+          },
+          {
+            "id": "u8-l3-e11",
+            "type": "fill-blank",
+            "prompt": "Completa: \"Je suis d'_____ avec toi !\"",
+            "promptFr": "Je suis d'_____ avec toi !",
+            "audioFr": "accord",
+            "options": [
+              "accord",
+              "ami",
+              "ordre",
+              "avis"
+            ],
+            "answer": "accord",
+            "hintEs": "\"Être d'accord\" = estar de acuerdo.",
+            "hintSv": "\"Être d'accord\" = hålla med.",
+            "explanationEs": "\"Je suis d'accord\" = Estoy de acuerdo.",
+            "explanationSv": "\"Je suis d'accord\" = Jag håller med."
+          },
+          {
+            "id": "u8-l3-e12",
+            "type": "choice",
+            "prompt": "¿Cómo se dice \"¡Buen fin de semana!\" en francés?",
+            "promptFr": "Bon week-end !",
+            "audioFr": "Bon week-end !",
+            "options": [
+              "Bon week-end !",
+              "Bonne nuit !",
+              "Bonne journée !",
+              "Bonjour !"
+            ],
+            "answer": "Bon week-end !",
+            "hintEs": "Se usa week-end en francés.",
+            "hintSv": "Man säger week-end på franska.",
+            "explanationEs": "\"Bon week-end !\" es el deseo para los viernes.",
+            "explanationSv": "\"Bon week-end !\" betyder trevlig helg!"
+          }
+        ]
+      },
+      {
+        "id": "u8-l4",
+        "unitId": "unit-8",
+        "title": "Paso 4: La jornada escolar en el collège",
+        "frenchTitle": "Une Journée Typique au Collège",
+        "description": "Horarios de inicio, la cantine escolar, la salida y los deberes.",
+        "xpReward": 20,
+        "culturalNote": {
+          "title": "Point Culturel",
+          "textEs": "Aspecto cultural y lingüístico relevante para Årskurs 6.",
+          "textSv": "Kulturell och språklig aspekt för årskurs 6."
+        },
+        "exercises": [
+          {
+            "id": "u8-l4-e1",
+            "type": "choice",
+            "prompt": "Reto 1: Paso 4: La jornada escolar en el collège — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u8-l4-e2",
+            "type": "translate",
+            "prompt": "Reto 2: Paso 4: La jornada escolar en el collège — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u8-l4-e3",
+            "type": "fill-blank",
+            "prompt": "Reto 3: Paso 4: La jornada escolar en el collège — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u8-l4-e4",
+            "type": "scramble",
+            "prompt": "Reto 4: Paso 4: La jornada escolar en el collège — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u8-l4-e5",
+            "type": "choice",
+            "prompt": "Reto 5: Paso 4: La jornada escolar en el collège — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u8-l4-e6",
+            "type": "translate",
+            "prompt": "Reto 6: Paso 4: La jornada escolar en el collège — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u8-l4-e7",
+            "type": "fill-blank",
+            "prompt": "Reto 7: Paso 4: La jornada escolar en el collège — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u8-l4-e8",
+            "type": "scramble",
+            "prompt": "Reto 8: Paso 4: La jornada escolar en el collège — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u8-l4-e9",
+            "type": "choice",
+            "prompt": "Reto 9: Paso 4: La jornada escolar en el collège — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u8-l4-e10",
+            "type": "translate",
+            "prompt": "Reto 10: Paso 4: La jornada escolar en el collège — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u8-l4-e11",
+            "type": "fill-blank",
+            "prompt": "Reto 11: Paso 4: La jornada escolar en el collège — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u8-l4-e12",
+            "type": "scramble",
+            "prompt": "Reto 12: Paso 4: La jornada escolar en el collège — práctica guiada",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista explicativa del ejercicio.",
+            "hintSv": "Förklarande ledtråd för övningen.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          }
+        ]
+      },
+      {
+        "id": "u8-l5",
+        "unitId": "unit-8",
+        "title": "Paso 5: La tarde, la noche y el descanso",
+        "frenchTitle": "La Soirée, les Devoirs & Se Coucher",
+        "description": "Cenar en familia, relajarse y acostarse con Bonne nuit !",
+        "xpReward": 25,
+        "culturalNote": {
+          "title": "Point Culturel",
+          "textEs": "Profundización pedagógica en el uso real del francés cotidiano.",
+          "textSv": "Fördjupning i vardaglig franska för ungdomar."
+        },
+        "exercises": [
+          {
+            "id": "u8-l5-e1",
+            "type": "choice",
+            "prompt": "Reto 1: Paso 5: La tarde, la noche y el descanso — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u8-l5-e2",
+            "type": "translate",
+            "prompt": "Reto 2: Paso 5: La tarde, la noche y el descanso — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u8-l5-e3",
+            "type": "fill-blank",
+            "prompt": "Reto 3: Paso 5: La tarde, la noche y el descanso — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u8-l5-e4",
+            "type": "scramble",
+            "prompt": "Reto 4: Paso 5: La tarde, la noche y el descanso — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u8-l5-e5",
+            "type": "choice",
+            "prompt": "Reto 5: Paso 5: La tarde, la noche y el descanso — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u8-l5-e6",
+            "type": "translate",
+            "prompt": "Reto 6: Paso 5: La tarde, la noche y el descanso — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u8-l5-e7",
+            "type": "fill-blank",
+            "prompt": "Reto 7: Paso 5: La tarde, la noche y el descanso — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u8-l5-e8",
+            "type": "scramble",
+            "prompt": "Reto 8: Paso 5: La tarde, la noche y el descanso — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u8-l5-e9",
+            "type": "choice",
+            "prompt": "Reto 9: Paso 5: La tarde, la noche y el descanso — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u8-l5-e10",
+            "type": "translate",
+            "prompt": "Reto 10: Paso 5: La tarde, la noche y el descanso — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u8-l5-e11",
+            "type": "fill-blank",
+            "prompt": "Reto 11: Paso 5: La tarde, la noche y el descanso — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          },
+          {
+            "id": "u8-l5-e12",
+            "type": "scramble",
+            "prompt": "Reto 12: Paso 5: La tarde, la noche y el descanso — aplicación activa",
+            "promptFr": "Option A",
+            "audioFr": "Option A",
+            "options": [
+              "Option A",
+              "Option B",
+              "Option C",
+              "Option D"
+            ],
+            "answer": "Option A",
+            "hintEs": "Pista pedagógica del ejercicio.",
+            "hintSv": "Pedagogisk ledtråd.",
+            "explanationEs": "Explicación pedagógica detallada.",
+            "explanationSv": "Pedagogisk detaljerad förklaring."
+          }
+        ]
+      }
+    ],
+    "dailySessionTemplate": {
+      "id": "session-u8",
+      "title": "Paso 6: Gran Sesión Guiada de 30 minutos",
+      "frenchTitle": "Une Journée Normale au Collège (Séance de 30 min)",
+      "situation": "Describes tu rutina matutina antes de entrar a clase.",
+      "phase1Warmup": {
+        "introEs": "Calentamiento (5 min): repasa las horas y momentos del día.",
+        "introSv": "Uppvärmning (5 min): repetera klockslag och tider på dygnet.",
+        "questions": [
+          {
+            "id": "w8-1",
+            "promptEs": "¿Cómo se dice \"Son las ocho\"?",
+            "promptSv": "Hur säger man \"Klockan är åtta\"?",
+            "expectedFr": "Il est huit heures",
+            "hints": [
+              "Il est h..."
+            ]
+          },
+          {
+            "id": "w8-2",
+            "promptEs": "¿Cómo se dice \"la mañana\"?",
+            "promptSv": "Hur säger man \"morgonen\"?",
+            "expectedFr": "Le matin",
+            "hints": [
+              "Le m..."
+            ]
+          },
+          {
+            "id": "w8-3",
+            "promptEs": "¿Cómo se dice \"la tarde\"?",
+            "promptSv": "Hur säger man \"eftermiddagen\"?",
+            "expectedFr": "L'après-midi",
+            "hints": [
+              "L'a..."
+            ]
+          }
+        ]
+      },
+      "phase2Input": {
+        "storyTitle": "La routine de Sarah",
+        "storyFr": "Sarah : Le matin, mon réveil sonne à sept heures. Je prends mon petit-déjeuner.\nAntoine : À quelle heure tu commences l'école ?\nSarah : Je commence les cours à huit heures et demie. J'arrive toujours à l'heure !\nAntoine : Et le soir, tu te couches tard ?\nSarah : Non, vers neuf heures et quart, je suis fatiguée ! Bonne nuit !",
+        "storyEs": "Sarah: Por la mañana, mi despertador suena a las siete. Desayuno.\nAntoine: ¿A qué hora empiezas la escuela?\nSarah: Empiezo las clases a las ocho y media. ¡Llego siempre puntual!\nAntoine: Y por la noche, ¿te acuestas tarde?\nSarah: No, sobre las nueve y cuarto, ¡estoy cansada! ¡Buenas noches!",
+        "storySv": "Sarah: På morgonen ringer min väckarklocka klockan sju. Jag äter frukost.\nAntoine: Vilken tid börjar du skolan?\nSarah: Jag börjar lektionerna klockan halv nio. Jag kommer alltid i tid!\nAntoine: Och på kvällen, lägger du dig sent?\nSarah: Nej, runt kvart över nio, jag är trött! God natt!",
+        "keyExpressions": [
+          {
+            "fr": "À quelle heure... ?",
+            "phonetic": "a kel ör",
+            "es": "¿A qué hora...?",
+            "sv": "Vilken tid...?",
+            "clue": "Pregunta para conocer el horario de una acción."
+          },
+          {
+            "fr": "À l'heure",
+            "phonetic": "a lör",
+            "es": "Puntual / A tiempo",
+            "sv": "I tid",
+            "clue": "Llegar en el momento exacto acordado."
+          },
+          {
+            "fr": "Bonne nuit !",
+            "phonetic": "bon nüi",
+            "es": "¡Buenas noches!",
+            "sv": "God natt!",
+            "clue": "Despedida antes de dormir."
+          }
+        ]
+      },
+      "phase3Production": {
+        "contextEs": "Juego de rol (12 min): Antoine te pregunta a qué hora te levantas y vas a la escuela.",
+        "contextSv": "Rollspel (12 min): Antoine frågar vilken tid du går upp och går till skolan.",
+        "initialAIPrompt": "À quelle heure tu te réveilles le matin ? Et à quelle heure commence ton école ?",
+        "initialAIPromptTranslation": "¿A qué hora te despiertas por la mañana? ¿Y a qué hora empieza tu escuela?",
+        "mission": "Indica a qué hora te levantas y a qué hora empieza tu colegio.",
+        "constraintProgression": [
+          "Usa \"À sept heures...\" o \"À huit heures...\".",
+          "Añade \"Je vais à l'école\" o \"Je commence à...\".",
+          "Añade un conector como \"puis\" (luego) o \"ensuite\" (después)."
+        ]
+      },
+      "phase4ExitTicket": {
+        "promptEs": "Reto de salida (5 min): Escribe 2 frases sobre tu rutina diaria indicando una hora.",
+        "promptSv": "Utgångsutmaning (5 min): Skriv 2 meningar om din vardagsrutin med ett klockslag.",
+        "sampleFr": "Le matin, je me réveille à sept heures et je vais au collège à huit heures."
+      }
+    }
+  }
+];
 
 export const CURRICULUM_UNITS: Unit[] = [
-  // ==========================================
-  // UNITÉ 1: SALUTATIONS ET PRÉSENTATIONS
-  // ==========================================
-  {
-    id: 'unit-1',
-    number: 1,
-    grade: 'ak6',
-    title: 'Saludos y Presentaciones',
-    frenchTitle: 'Salutations et Présentations',
-    description: 'Aprende a saludar, decir tu nombre, preguntar qué tal y presentarte en francés.',
-    iconName: 'HandMetal',
-    color: 'from-amber-500 to-orange-500',
-    grammarTip: {
-      title: 'Tu vs. Vous & El verbo "S\'appeler"',
-      explanationEs: 'En francés, usamos "tu" con amigos y compañeros de clase (como en la escuela sueca), y "vous" con personas mayores o profesores. Para decir tu nombre dices "Je m\'appelle..." (literalmente: me llamo).',
-      explanationSv: 'På franska använder vi "tu" (du) med kompisar och klasskamrater, och "vous" (ni) med vuxna eller lärare. För att säga ditt namn säger du "Je m\'appelle..." (jag heter).',
-      examples: [
-        { fr: "Je m'appelle Sophie.", es: "Me llamo Sophie.", sv: "Jag heter Sophie." },
-        { fr: "Comment tu t'appelles ?", es: "¿Cómo te llamas?", sv: "Vad heter du?" },
-        { fr: "Ça va très bien, merci !", es: "¡Muy bien, gracias!", sv: "Det går jättebra, tack!" },
-      ],
-    },
-    lessons: [
-      {
-        id: 'u1-l1',
-        unitId: 'unit-1',
-        title: 'Paso 1: Vocabulario básico y Saludos',
-        frenchTitle: 'Les Mots Magiques de Salutation',
-        description: 'Bonjour, Salut, Au revoir, Merci y las fórmulas esenciales.',
-        xpReward: 15,
-        culturalNote: {
-          title: 'El saludo en Francia',
-          textEs: 'En Francia, los jóvenes dicen "Salut !" entre amigos, mientras que "Bonjour" se usa formalmente o con adultos.',
-          textSv: 'I Frankrike säger ungdomar "Salut !" till kompisar, medan "Bonjour" används med vuxna.',
-        },
-        exercises: [
-          {
-            id: 'u1-l1-e1',
-            type: 'choice',
-            prompt: '¿Cómo se saluda formalmente durante el día en francés?',
-            promptFr: 'Bonjour !',
-            audioFr: 'Bonjour !',
-            options: ['Bonjour', 'Au revoir', 'Merci', 'Pardon'],
-            answer: 'Bonjour',
-            hintEs: '"Bon" significa bueno y "jour" día.',
-            hintSv: '"Bon" betyder bra och "jour" dag.',
-            explanationEs: '¡Correcto! "Bonjour" es el saludo estándar.',
-            explanationSv: 'Rätt! "Bonjour" betyder god dag eller hej.',
-          },
-          {
-            id: 'u1-l1-e2',
-            type: 'choice',
-            prompt: '¿Cómo se saluda de manera informal entre amigos de clase?',
-            promptFr: 'Salut !',
-            audioFr: 'Salut !',
-            options: ['Salut !', 'Bonsoir !', 'Au revoir !', 'Enchanté !'],
-            answer: 'Salut !',
-            hintEs: 'Tiene 5 letras y la "t" final no se pronuncia.',
-            hintSv: 'Uttalas "Salü". Informell hälsning mellan kompisar.',
-            explanationEs: '¡Exacto! "Salut !" es el equivalente a "¡Hola!" entre jóvenes.',
-            explanationSv: 'Exakt! "Salut !" är hej mellan kompisar.',
-          },
-          {
-            id: 'u1-l1-e3',
-            type: 'translate',
-            prompt: 'Traduce al francés: "Muchas gracias"',
-            promptFr: 'Merci beaucoup !',
-            audioFr: 'Merci beaucoup !',
-            options: ['Merci beaucoup !', 'De rien !', 'S\'il vous plaît !', 'À bientôt !'],
-            answer: 'Merci beaucoup !',
-            hintEs: '"Merci" + "beaucoup" (mucho).',
-            hintSv: '"Merci" betyder tack, "beaucoup" betyder mycket.',
-            explanationEs: '"Merci beaucoup !" significa muchas gracias.',
-            explanationSv: '"Merci beaucoup !" betyder tack så mycket.',
-          },
-          {
-            id: 'u1-l1-e4',
-            type: 'fill-blank',
-            prompt: 'Completa la despedida: "Hasta pronto"',
-            promptFr: 'À _____ !',
-            audioFr: 'À bientôt !',
-            options: ['bientôt', 'salut', 'jour', 'revoir'],
-            answer: 'bientôt',
-            hintEs: '"Bientôt" significa pronto.',
-            hintSv: '"Bientôt" betyder snart.',
-            explanationEs: '¡Muy bien! "À bientôt !" significa hasta pronto.',
-            explanationSv: 'Jättebra! "À bientôt !" betyder vi ses snart.',
-          },
-          {
-            id: 'u1-l1-e5',
-            type: 'scramble',
-            prompt: 'Ordena la despedida formal: "¡Adiós y hasta mañana!"',
-            promptFr: 'Au revoir et à demain !',
-            audioFr: 'Au revoir et à demain !',
-            options: ['Au', 'revoir', 'et', 'à', 'demain', '!'],
-            answer: ['Au', 'revoir', 'et', 'à', 'demain', '!'],
-            hintEs: 'Au revoir + et (y) + à demain (hasta mañana).',
-            hintSv: 'Au revoir + et (och) + à demain (tills imorgon).',
-            explanationEs: '"Au revoir et à demain !" es una despedida clásica al salir del colegio.',
-            explanationSv: '"Au revoir et à demain !" betyder hejdå och vi ses imorgon!',
-          },
-          {
-            id: 'u1-l1-e6',
-            type: 'choice',
-            prompt: '¿Cómo se dice "Por favor" entre amigos o personas de tu edad?',
-            options: ["S'il te plaît", "De rien", "Pardon", "Merci"],
-            answer: "S'il te plaît",
-            hintEs: 'Usa "te" para trato informal.',
-            hintSv: '"S\'il te plaît" används med kompisar (snälla).',
-            explanationEs: '¡Correcto! "S\'il te plaît" es "por favor" informal.',
-            explanationSv: 'Rätt! "S\'il te plaît" betyder snälla/tack så mycket.',
-          },
-          {
-            id: 'u1-l1-e7',
-            type: 'choice',
-            prompt: '¿Cómo se saluda al atardecer o por la noche en francés?',
-            options: ['Bonsoir !', 'Bonjour !', 'Bonne nuit !', 'Salut !'],
-            answer: 'Bonsoir !',
-            hintEs: '"Soir" significa tarde/noche.',
-            hintSv: '"Bonsoir" används från sen eftermiddag och kväll.',
-            explanationEs: '"Bonsoir !" es el saludo propio para la tarde y la noche.',
-            explanationSv: '"Bonsoir !" betyder god kväll.',
-          },
-        ],
-      },
-      {
-        id: 'u1-l2',
-        unitId: 'unit-1',
-        title: 'Paso 2: Gramática y Frases de Presentación',
-        frenchTitle: 'Je m\'appelle & Comment tu t\'appelles ?',
-        description: 'Estructura para decir tu nombre y preguntar a los demás.',
-        xpReward: 20,
-        exercises: [
-          {
-            id: 'u1-l2-e1',
-            type: 'scramble',
-            prompt: 'Ordena la frase: "Yo me llamo Camille."',
-            promptFr: 'Je m\'appelle Camille.',
-            audioFr: 'Je m\'appelle Camille.',
-            options: ['Je', 'm\'appelle', 'Camille', '.'],
-            answer: ['Je', 'm\'appelle', 'Camille', '.'],
-            hintEs: 'Je + m\'appelle + nombre.',
-            hintSv: 'Je (jag) + m\'appelle (heter) + namn.',
-            explanationEs: '"Je m\'appelle..." es la estructura básica imprescindible.',
-            explanationSv: '"Je m\'appelle..." betyder jag heter.',
-          },
-          {
-            id: 'u1-l2-e2',
-            type: 'choice',
-            prompt: '¿Cómo le preguntas el nombre a un compañero nuevo?',
-            promptFr: 'Comment tu t\'appelles ?',
-            audioFr: 'Comment tu t\'appelles ?',
-            options: ['Comment tu t\'appelles ?', 'Quel âge as-tu ?', 'Où habites-tu ?', 'Ça va bien ?'],
-            answer: 'Comment tu t\'appelles ?',
-            hintEs: '"Comment" significa cómo.',
-            hintSv: '"Comment" betyder hur/vad.',
-            explanationEs: '"Comment tu t\'appelles ?" significa "¿Cómo te llamas?".',
-            explanationSv: '"Comment tu t\'appelles ?" betyder vad heter du?',
-          },
-          {
-            id: 'u1-l2-e3',
-            type: 'scramble',
-            prompt: 'Ordena la pregunta: "¿Y tú, cómo te llamas?"',
-            promptFr: 'Et toi, comment tu t\'appelles ?',
-            audioFr: 'Et toi, comment tu t\'appelles ?',
-            options: ['Et', 'toi', ',', 'comment', 'tu', 't\'appelles', '?'],
-            answer: ['Et', 'toi', ',', 'comment', 'tu', 't\'appelles', '?'],
-            hintEs: '"Et toi" va al principio para devolver la pregunta.',
-            hintSv: '"Et toi" betyder "och du".',
-            explanationEs: '¡Excelente! "Et toi" es muy natural en francés.',
-            explanationSv: 'Utmärkt! "Et toi" används för att bolla tillbaka frågan.',
-          },
-          {
-            id: 'u1-l2-e4',
-            type: 'choice',
-            prompt: '¿Qué palabra dices para expresar "Mucho gusto / Encantada"?',
-            promptFr: 'Enchantée !',
-            audioFr: 'Enchantée !',
-            options: ['Enchantée !', 'Pardon !', 'Merci !', 'De rien !'],
-            answer: 'Enchantée !',
-            hintEs: 'Suena parecido a "encantada".',
-            hintSv: 'Trevligt att träffas på franska.',
-            explanationEs: '"Enchanté !" (o "Enchantée !" para chicas) significa encantado/a.',
-            explanationSv: '"Enchantée !" betyder trevligt att träffas.',
-          },
-          {
-            id: 'u1-l2-e5',
-            type: 'fill-blank',
-            prompt: 'Completa: "Moi, _____ m\'appelle Lucas."',
-            promptFr: 'Moi, je m\'appelle Lucas.',
-            audioFr: 'Moi, je m\'appelle Lucas.',
-            options: ['je', 'tu', 'il', 'elle'],
-            answer: 'je',
-            hintEs: 'El pronombre para "yo" en francés es "je".',
-            hintSv: '"Jag" på franska är "je".',
-            explanationEs: '¡Perfecto! "Moi, je m\'appelle..." da énfasis a la presentación.',
-            explanationSv: 'Perfekt! "Moi, je m\'appelle..." ger extra betoning.',
-          },
-          {
-            id: 'u1-l2-e6',
-            type: 'choice',
-            prompt: '¿Cómo dices "Él se llama Marc"?',
-            options: ["Il s'appelle Marc.", "Elle s'appelle Marc.", "Je m'appelle Marc.", "Tu t'appelles Marc."],
-            answer: "Il s'appelle Marc.",
-            hintEs: '"Il" es él y "elle" es ella.',
-            hintSv: '"Il" är han och "elle" är hon.',
-            explanationEs: '¡Correcto! "Il s\'appelle..." se usa para chicos/hombres.',
-            explanationSv: 'Rätt! "Il s\'appelle..." betyder han heter.',
-          },
-          {
-            id: 'u1-l2-e7',
-            type: 'choice',
-            prompt: '¿Cómo dices "Ella se llama Chloé"?',
-            options: ["Elle s'appelle Chloé.", "Il s'appelle Chloé.", "Je m'appelle Chloé.", "Tu t'appelles Chloé."],
-            answer: "Elle s'appelle Chloé.",
-            hintEs: '"Elle" corresponde a ella en francés.',
-            hintSv: '"Elle" betyder hon.',
-            explanationEs: '"Elle s\'appelle Chloé." es correcto para presentar a una chica.',
-            explanationSv: '"Elle s\'appelle Chloé." betyder hon heter Chloé.',
-          },
-        ],
-      },
-      {
-        id: 'u1-l3',
-        unitId: 'unit-1',
-        title: 'Paso 3: Diálogo escolar y "¿Qué tal estás?"',
-        frenchTitle: 'Ça va ? & Mini-Dialogue',
-        description: 'Preguntar por el estado de ánimo y responder con soltura.',
-        xpReward: 20,
-        exercises: [
-          {
-            id: 'u1-l3-e1',
-            type: 'choice',
-            prompt: 'Si te preguntan "Ça va ?", ¿cómo dices que todo va genial?',
-            promptFr: 'Ça va très bien, merci !',
-            audioFr: 'Ça va très bien, merci !',
-            options: ['Ça va très bien, merci !', 'Comme ci, comme ça', 'Non, au revoir', 'Je m\'appelle Paul'],
-            answer: 'Ça va très bien, merci !',
-            hintEs: '"Très bien" significa muy bien.',
-            hintSv: '"Très bien" betyder mycket bra.',
-            explanationEs: '"Ça va très bien, merci !" es la respuesta educada y positiva.',
-            explanationSv: '"Ça va très bien, merci !" betyder det går jättebra, tack!',
-          },
-          {
-            id: 'u1-l3-e2',
-            type: 'choice',
-            prompt: '¿Qué significa la expresión "Comme ci, comme ça"?',
-            promptFr: 'Comme ci, comme ça.',
-            audioFr: 'Comme ci, comme ça.',
-            options: ['Así así / Regular', 'Muy bien', 'Excelente', 'Hasta luego'],
-            answer: 'Así así / Regular',
-            hintEs: 'Se usa cuando no estás ni muy bien ni muy mal.',
-            hintSv: 'Betyder "sådär" eller "ganska okej".',
-            explanationEs: '"Comme ci, comme ça" expresa que estás regular.',
-            explanationSv: '"Comme ci, comme ça" betyder sådär.',
-          },
-          {
-            id: 'u1-l3-e3',
-            type: 'scramble',
-            prompt: 'Ordena el mini-diálogo: "— ¡Hola! ¿Qué tal? — ¡Muy bien!"',
-            promptFr: 'Salut ! Ça va ? Très bien !',
-            audioFr: 'Salut ! Ça va ? Très bien !',
-            options: ['Salut', '!', 'Ça', 'va', '?', 'Très', 'bien', '!'],
-            answer: ['Salut', '!', 'Ça', 'va', '?', 'Très', 'bien', '!'],
-            hintEs: 'Saludo + pregunta + respuesta.',
-            hintSv: 'Hälsning + fråga + svar.',
-            explanationEs: '¡Genial! Este es el intercambio más común en el patio del colegio.',
-            explanationSv: 'Jättebra! Den vanligaste hälsningsfrasen i skolan.',
-          },
-          {
-            id: 'u1-l3-e4',
-            type: 'fill-blank',
-            prompt: 'Completa: "Ça va super _____ !"',
-            promptFr: 'Ça va super bien !',
-            audioFr: 'Ça va super bien !',
-            options: ['bien', 'jour', 'revoir', 'salut'],
-            answer: 'bien',
-            hintEs: '"Bien" en francés se escribe con b-i-e-n.',
-            hintSv: '"Bien" betyder bra.',
-            explanationEs: '"Ça va super bien !" significa "¡Va súper bien!".',
-            explanationSv: '"Ça va super bien !" betyder det går superbra!',
-          },
-          {
-            id: 'u1-l3-e5',
-            type: 'choice',
-            prompt: 'Si alguien te pregunta "¿Et toi ?" tras responderte, ¿qué te está diciendo?',
-            options: ['¿Y tú?', '¿Y él?', '¿Cómo te llamas?', '¿De dónde vienes?'],
-            answer: '¿Y tú?',
-            hintEs: '"Toi" es el pronombre tónico para ti.',
-            hintSv: '"Et toi ?" betyder "Och du?".',
-            explanationEs: '"Et toi ?" significa "¿Y tú?", para devolver la pregunta amablemente.',
-            explanationSv: '"Et toi ?" betyder och du?',
-          },
-          {
-            id: 'u1-l3-e6',
-            type: 'scramble',
-            prompt: 'Ordena la frase: "¡Todo va muy bien, gracias!"',
-            options: ['Ça', 'va', 'très', 'bien', ',', 'merci', '!'],
-            answer: ['Ça', 'va', 'très', 'bien', ',', 'merci', '!'],
-            hintEs: 'Ça va + très bien + merci.',
-            hintSv: 'Ça va + mycket bra + tack.',
-            explanationEs: '¡Excelente! Una respuesta completa, cordial y educada.',
-            explanationSv: 'Utmärkt! Ett artigt och fullständigt svar.',
-          },
-        ],
-      },
-    ],
-    dailySessionTemplate: {
-      id: 'session-u1',
-      title: 'Paso 4: Gran Sesión Guiada de 30 minutos',
-      frenchTitle: 'Premier Jour au Collège (Séance de 30 min)',
-      situation: 'Llegas al aula de idiomas y conoces a tu primer compañero de pupitre.',
-      phase1Warmup: {
-        introEs: 'Calentamiento (5 min): responde a estas 3 preguntas rápidas para activar tu memoria.',
-        introSv: 'Uppvärmning (5 min): svara på dessa 3 snabba frågor för att aktivera minnet.',
-        questions: [
-          {
-            id: 'w1',
-            promptEs: '¿Cómo se dice "Hola" de manera informal entre amigos?',
-            promptSv: 'Hur säger man "Hej" informellt mellan kompisar?',
-            expectedFr: 'Salut',
-            hints: ['Empieza por S...', 'Tiene 5 letras.'],
-          },
-          {
-            id: 'w2',
-            promptEs: '¿Cómo se dice "Adiós"?',
-            promptSv: 'Hur säger man "Hejdå"?',
-            expectedFr: 'Au revoir',
-            hints: ['Son dos palabras: Au ...'],
-          },
-          {
-            id: 'w3',
-            promptEs: '¿Cómo se dice "Muy bien, gracias"?',
-            promptSv: 'Hur säger man "Mycket bra, tack"?',
-            expectedFr: 'Très bien, merci',
-            hints: ['Très bien, m...'],
-          },
-        ],
-      },
-      phase2Input: {
-        storyTitle: 'Rencontre à la récréation (Encuentro en el recreo)',
-        storyFr: `Lucas : Salut ! Je m'appelle Lucas. Et toi, comment tu t'appelles ?
-Emma : Bonjour Lucas ! Moi, je m'appelle Emma. Ça va ?
-Lucas : Ça va super bien ! Tu es nouvelle dans la classe ?
-Emma : Oui, j'apprends le français aujourd'hui ! Enchantée !
-Lucas : Bienvenue ! À tout à l'heure alors !`,
-        storyEs: `Lucas: ¡Hola! Me llamo Lucas. ¿Y tú, cómo te llamas?
-Emma: ¡Buenos días Lucas! Yo me llamo Emma. ¿Qué tal?
-Lucas: ¡Súper bien! ¿Eres nueva en la clase?
-Emma: ¡Sí, aprendo francés hoy! ¡Mucho gusto!
-Lucas: ¡Bienvenida! ¡Hasta luego entonces!`,
-        storySv: `Lucas: Hej! Jag heter Lucas. Och du, vad heter du?
-Emma: God dag Lucas! Jag heter Emma. Hur är läget?
-Lucas: Det går superbra! Är du ny i klassen?
-Emma: Ja, jag lär mig franska idag! Trevligt att träffas!
-Lucas: Välkommen! Vi ses sen då!`,
-        keyExpressions: [
-          {
-            fr: 'Et toi ?',
-            phonetic: 'e tua',
-            es: '¿Y tú?',
-            sv: 'Och du?',
-            clue: 'Se usa para devolver la pregunta inmediatamente.',
-          },
-          {
-            fr: 'Enchantée !',
-            phonetic: 'an-shan-te',
-            es: '¡Mucho gusto! / ¡Encantada!',
-            sv: 'Trevligt att träffas!',
-            clue: 'La palabra de cortesía al conocer a alguien nuevo.',
-          },
-          {
-            fr: 'Bienvenue !',
-            phonetic: 'bi-en-ve-nu',
-            es: '¡Bienvenido/a!',
-            sv: 'Välkommen!',
-            clue: 'Lo que dice quien te recibe en un lugar.',
-          },
-          {
-            fr: 'À tout à l\'heure !',
-            phonetic: 'a tut a lör',
-            es: '¡Hasta luego! / ¡Nos vemos luego!',
-            sv: 'Vi ses snart!',
-            clue: 'Despedida para verse más tarde ese mismo día.',
-          },
-        ],
-      },
-      phase3Production: {
-        contextEs: 'Juego de rol (12 min): estás en el recreo con Lucas. Él te saluda y debes responderle y presentarte.',
-        contextSv: 'Rollspel (12 min): du är på rasten med Lucas. Han hälsar på dig och du ska svara och presentera dig.',
-        initialAIPrompt: 'Salut ! Je m\'appelle Lucas. Et toi, comment tu t\'appelles ?',
-        initialAIPromptTranslation: '¡Hola! Me llamo Lucas. ¿Y tú, cómo te llamas?',
-        mission: 'Saluda a Lucas, dile tu nombre en francés y pregúntale qué tal está.',
-        constraintProgression: [
-          'Ahora añade "Enchanté !" o "Enchantée !".',
-          'Ahora responde usando "Ça va très bien" y pregunta "¿Et toi ?".',
-          'Termina despidiéndote con "Au revoir !" o "À bientôt !".',
-        ],
-      },
-      phase4ExitTicket: {
-        promptEs: 'Reto de salida (5 min): Escribe 2 frases en francés presentándote y saludando como si fueras a escribir en tu cuaderno.',
-        promptSv: 'Utgångsutmaning (5 min): Skriv 2 meningar på franska där du hälsar och presenterar dig.',
-        sampleFr: 'Bonjour ! Je m\'appelle Maria et ça va très bien.',
-      },
-    },
-  },
-
-  // ==========================================
-  // UNITÉ 2: LES CHIFFRES ET L'ÂGE
-  // ==========================================
-  {
-    id: 'unit-2',
-    number: 2,
-    grade: 'ak6',
-    title: 'Los Números y La Edad',
-    frenchTitle: 'Les Chiffres et L\'Âge',
-    description: 'Cuenta del 1 al 20, di cuántos años tienes y pregunta la edad a los demás.',
-    iconName: 'Hash',
-    color: 'from-blue-500 to-cyan-500',
-    grammarTip: {
-      title: 'El verbo "Avoir" (Tener) para la edad',
-      explanationEs: 'En francés, al igual que en español, decimos "Tengo 13 años": "J\'ai 13 ans". ¡Ojo! No se usa el verbo ser (être), sino avoir.',
-      explanationSv: 'På franska säger man "J\'ai 13 ans" (bokstavligen: jag har 13 år), precis som på spanska, medan man på svenska säger "jag är 13 år". Använd verbet "avoir" (att ha)!',
-      examples: [
-        { fr: "J'ai treize ans.", es: "Tengo trece años.", sv: "Jag är tretton år gammal." },
-        { fr: "Quel âge as-tu ?", es: "¿Cuántos años tienes?", sv: "Hur gammal är du?" },
-        { fr: "Un, deux, trois, quatre, cinq !", es: "¡Uno, dos, tres, cuatro, cinco!", sv: "Ett, två, tre, fyra, fem!" },
-      ],
-    },
-    lessons: [
-      {
-        id: 'u2-l1',
-        unitId: 'unit-2',
-        title: 'Paso 1: Contar del 1 al 10',
-        frenchTitle: 'Compter de 1 à 10',
-        description: 'Pronunciación y escritura de los primeros 10 números.',
-        xpReward: 15,
-        exercises: [
-          {
-            id: 'u2-l1-e1',
-            type: 'choice',
-            prompt: '¿Cómo se dice "tres" en francés?',
-            audioFr: 'Trois',
-            options: ['Trois', 'Deux', 'Quatre', 'Cinq'],
-            answer: 'Trois',
-            hintEs: 'Se pronuncia parecido a "truá".',
-            hintSv: 'Uttalas ungefär som "troa".',
-            explanationEs: '¡Eso es! 1 = un, 2 = deux, 3 = trois.',
-            explanationSv: 'Helt rätt! 1 = un, 2 = deux, 3 = trois.',
-          },
-          {
-            id: 'u2-l1-e2',
-            type: 'scramble',
-            prompt: 'Ordena estos números en orden ascendente: 1, 2, 3, 4',
-            promptFr: 'Un, deux, trois, quatre',
-            audioFr: 'Un, deux, trois, quatre',
-            options: ['Un', 'deux', 'trois', 'quatre'],
-            answer: ['Un', 'deux', 'trois', 'quatre'],
-            hintEs: 'Empieza con "Un".',
-            hintSv: 'Börja med "Un".',
-            explanationEs: '¡Perfecto! Un, deux, trois, quatre, cinq, six, sept, huit, neuf, dix.',
-            explanationSv: 'Perfekt! Un, deux, trois, quatre, cinq, six, sept, huit, neuf, dix.',
-          },
-          {
-            id: 'u2-l1-e3',
-            type: 'choice',
-            prompt: '¿Qué número es "sept"?',
-            audioFr: 'Sept',
-            options: ['7', '6', '8', '9'],
-            answer: '7',
-            hintEs: 'Se escribe con p pero la p es muda: se pronuncia "set".',
-            hintSv: 'Siffran 7.',
-            explanationEs: '¡Correcto! Sept es 7.',
-            explanationSv: 'Rätt! Sept är 7.',
-          },
-          {
-            id: 'u2-l1-e4',
-            type: 'choice',
-            prompt: '¿Qué número es "huit"?',
-            audioFr: 'Huit',
-            options: ['8', '6', '7', '10'],
-            answer: '8',
-            hintEs: 'Viene después de sept (7).',
-            hintSv: 'Kommer efter sept (7).',
-            explanationEs: '¡Correcto! Sept = 7, Huit = 8, Neuf = 9, Dix = 10.',
-            explanationSv: 'Rätt! Sept = 7, Huit = 8, Neuf = 9, Dix = 10.',
-          },
-          {
-            id: 'u2-l1-e5',
-            type: 'fill-blank',
-            prompt: 'Completa la serie: "Huit, neuf, _____ !"',
-            promptFr: 'Huit, neuf, _____ !',
-            audioFr: 'Huit, neuf, dix !',
-            options: ['dix', 'six', 'sept', 'trois'],
-            answer: 'dix',
-            hintEs: 'El número 10.',
-            hintSv: 'Siffran 10.',
-            explanationEs: '¡Exacto! Dix = 10.',
-            explanationSv: 'Exakt! Dix = 10.',
-          },
-          {
-            id: 'u2-l1-e6',
-            type: 'translate',
-            prompt: 'Traduce al francés: "Cinco libros"',
-            audioFr: 'Cinq livres',
-            options: ['Cinq livres', 'Quatre livres', 'Trois cahiers', 'Six trousses'],
-            answer: 'Cinq livres',
-            hintEs: 'Cinq = cinco, livres = libros.',
-            hintSv: 'Cinq = fem, livres = böcker.',
-            explanationEs: '¡Genial! 5 se dice "cinq" y libros se dice "livres".',
-            explanationSv: 'Lysande! 5 är "cinq" och böcker är "livres".',
-          },
-          {
-            id: 'u2-l1-e7',
-            type: 'scramble',
-            prompt: 'Ordena la cuenta atrás: "Tres, dos, uno... ¡cero!"',
-            promptFr: 'Trois, deux, un, zéro !',
-            audioFr: 'Trois, deux, un, zéro !',
-            options: ['Trois', ',', 'deux', ',', 'un', ',', 'zéro', '!'],
-            answer: ['Trois', ',', 'deux', ',', 'un', ',', 'zéro', '!'],
-            hintEs: 'Empieza por el número mayor (trois).',
-            hintSv: 'Börja med den högsta siffran (trois).',
-            explanationEs: '¡Excelente cuenta atrás! Trois, deux, un, zéro !',
-            explanationSv: 'Utmärkt nedräkning! Trois, deux, un, zéro !',
-          },
-        ],
-      },
-      {
-        id: 'u2-l2',
-        unitId: 'unit-2',
-        title: 'Paso 2: Del 11 al 20 y el número 13',
-        frenchTitle: 'De 11 à 20 & Le Chiffre Treize',
-        description: 'Aprende los números adolescentes en francés.',
-        xpReward: 20,
-        exercises: [
-          {
-            id: 'u2-l2-e1',
-            type: 'choice',
-            prompt: '¿Cómo se dice el número "13" en francés?',
-            audioFr: 'Treize',
-            options: ['Treize', 'Douze', 'Onze', 'Quatorze'],
-            answer: 'Treize',
-            hintEs: 'Se pronuncia "trez".',
-            hintSv: 'Uttalas "trez". Tretton på franska.',
-            explanationEs: '¡Genial! 13 = treize, la edad clave de årskurs 6.',
-            explanationSv: 'Lysande! 13 = treize.',
-          },
-          {
-            id: 'u2-l2-e2',
-            type: 'choice',
-            prompt: '¿Qué número es "quinze"?',
-            audioFr: 'Quinze',
-            options: ['15', '14', '16', '12'],
-            answer: '15',
-            hintEs: 'El número quince.',
-            hintSv: 'Siffran 15.',
-            explanationEs: '¡Correcto! 11=onze, 12=douze, 13=treize, 14=quatorze, 15=quinze.',
-            explanationSv: 'Rätt! Quinze är 15.',
-          },
-          {
-            id: 'u2-l2-e3',
-            type: 'choice',
-            prompt: '¿Cómo se dice "veinte" (20) en francés?',
-            audioFr: 'Vingt',
-            options: ['Vingt', 'Dix', 'Seize', 'Dix-huit'],
-            answer: 'Vingt',
-            hintEs: 'Se escribe con g y t mudas: se pronuncia "van".',
-            hintSv: 'Tjugo på franska.',
-            explanationEs: '¡Excelente! 20 = vingt.',
-            explanationSv: 'Utmärkt! 20 = vingt.',
-          },
-          {
-            id: 'u2-l2-e4',
-            type: 'scramble',
-            prompt: 'Ordena la serie: 11, 12, 13, 14',
-            promptFr: 'Onze, douze, treize, quatorze',
-            audioFr: 'Onze, douze, treize, quatorze',
-            options: ['Onze', 'douze', 'treize', 'quatorze'],
-            answer: ['Onze', 'douze', 'treize', 'quatorze'],
-            hintEs: 'Onze (11), douze (12), treize (13), quatorze (14).',
-            hintSv: 'Onze (11), douze (12), treize (13), quatorze (14).',
-            explanationEs: '¡Muy bien! Los números del 11 al 14 terminan todos en -ze.',
-            explanationSv: 'Mycket bra! Siffrorna 11 till 14 slutar alla på -ze.',
-          },
-          {
-            id: 'u2-l2-e5',
-            type: 'choice',
-            prompt: '¿Qué número va inmediatamente después de "quinze" (15)?',
-            audioFr: 'Seize',
-            options: ['Seize', 'Quatorze', 'Dix-sept', 'Treize'],
-            answer: 'Seize',
-            hintEs: '16 termina en -ze como quince.',
-            hintSv: 'Sexton på franska: seize.',
-            explanationEs: '¡Correcto! Quinze (15) -> Seize (16).',
-            explanationSv: 'Rätt! Quinze (15) -> Seize (16).',
-          },
-          {
-            id: 'u2-l2-e6',
-            type: 'fill-blank',
-            prompt: 'Completa la suma: "Dix + sept = _____"',
-            promptFr: 'Dix + sept = _____',
-            audioFr: 'Dix-sept',
-            options: ['dix-sept', 'dix-huit', 'seize', 'quinze'],
-            answer: 'dix-sept',
-            hintEs: '10 + 7 = 17 (dix-sept con guion).',
-            hintSv: '10 + 7 = 17 (dix-sept).',
-            explanationEs: '¡Exacto! 17 = dix-sept, 18 = dix-huit, 19 = dix-neuf.',
-            explanationSv: 'Exakt! 17 = dix-sept.',
-          },
-          {
-            id: 'u2-l2-e7',
-            type: 'translate',
-            prompt: 'Traduce al francés: "Dieciocho bombones"',
-            audioFr: 'Dix-huit bonbons',
-            options: ['Dix-huit bonbons', 'Dix-sept bonbons', 'Huit bonbons', 'Vingt bonbons'],
-            answer: 'Dix-huit bonbons',
-            hintEs: 'Dix-huit = 18.',
-            hintSv: 'Dix-huit = 18.',
-            explanationEs: '¡Magnífico! 18 se dice "dix-huit".',
-            explanationSv: 'Fantastiskt! 18 är "dix-huit".',
-          },
-        ],
-      },
-      {
-        id: 'u2-l3',
-        unitId: 'unit-2',
-        title: 'Paso 3: Decir tu edad: "J\'ai 13 ans"',
-        frenchTitle: 'Dire son Âge avec Avoir',
-        description: 'Preguntar y responder cuántos años tienes.',
-        xpReward: 20,
-        exercises: [
-          {
-            id: 'u2-l3-e1',
-            type: 'scramble',
-            prompt: 'Forma la frase: "Tengo trece años."',
-            promptFr: 'J\'ai treize ans.',
-            audioFr: 'J\'ai treize ans.',
-            options: ['J\'ai', 'treize', 'ans', '.'],
-            answer: ['J\'ai', 'treize', 'ans', '.'],
-            hintEs: 'J\'ai + número + ans.',
-            hintSv: 'J\'ai + siffra + ans.',
-            explanationEs: '¡Excelente! En francés siempre se dice "J\'ai ... ans".',
-            explanationSv: 'Utmärkt! På franska säger man alltid "J\'ai ... ans".',
-          },
-          {
-            id: 'u2-l3-e2',
-            type: 'choice',
-            prompt: '¿Cómo se pregunta la edad a un amigo?',
-            audioFr: 'Quel âge as-tu ?',
-            options: ['Quel âge as-tu ?', 'Comment ça va ?', 'Où est l\'école ?', 'Qui est-ce ?'],
-            answer: 'Quel âge as-tu ?',
-            hintEs: '"Âge" significa edad.',
-            hintSv: '"Âge" betyder ålder.',
-            explanationEs: '"Quel âge as-tu ?" significa "¿Cuántos años tienes?".',
-            explanationSv: '"Quel âge as-tu ?" betyder hur gammal är du?',
-          },
-          {
-            id: 'u2-l3-e3',
-            type: 'fill-blank',
-            prompt: 'Completa: "Mon ami a quatorze _____."',
-            promptFr: 'Mon ami a quatorze _____ .',
-            audioFr: 'Mon ami a quatorze ans.',
-            options: ['ans', 'jours', 'mois', 'heures'],
-            answer: 'ans',
-            hintEs: '"Ans" significa años.',
-            hintSv: '"Ans" betyder år.',
-            explanationEs: '¡Correcto! Siempre se añade la palabra "ans" al final.',
-            explanationSv: 'Rätt! Man lägger alltid till "ans" för ålder.',
-          },
-          {
-            id: 'u2-l3-e4',
-            type: 'translate',
-            prompt: 'Traduce al francés: "Ella tiene doce años"',
-            promptFr: 'Elle a douze ans.',
-            audioFr: 'Elle a douze ans.',
-            options: ['Elle a douze ans.', 'Il a treize ans.', 'Elle est douze ans.', 'J\'ai douze ans.'],
-            answer: 'Elle a douze ans.',
-            hintEs: 'Elle (ella) + a (tiene) + douze (12) + ans (años).',
-            hintSv: 'Elle (hon) + a (har) + douze (12) + ans (år).',
-            explanationEs: '¡Perfecto! "Elle a douze ans."',
-            explanationSv: 'Perfekt! "Elle a douze ans."',
-          },
-          {
-            id: 'u2-l3-e5',
-            type: 'fill-blank',
-            prompt: 'Completa con la forma correcta de tener: "Tu _____ treize ans."',
-            promptFr: 'Tu _____ treize ans.',
-            audioFr: 'Tu as treize ans.',
-            options: ['as', 'es', 'a', 'ai'],
-            answer: 'as',
-            hintEs: 'Con "Tu" el verbo avoir es "as" (Tu as).',
-            hintSv: 'Med "tu" böjs verbet avoir till "as" (tu as).',
-            explanationEs: '¡Muy bien! J\'ai, Tu as, Il/Elle a.',
-            explanationSv: 'Jättebra! J\'ai, Tu as, Il/Elle a.',
-          },
-          {
-            id: 'u2-l3-e6',
-            type: 'scramble',
-            prompt: 'Ordena: "Mi amigo tiene catorce años."',
-            promptFr: 'Mon ami a quatorze ans.',
-            audioFr: 'Mon ami a quatorze ans.',
-            options: ['Mon', 'ami', 'a', 'quatorze', 'ans', '.'],
-            answer: ['Mon', 'ami', 'a', 'quatorze', 'ans', '.'],
-            hintEs: 'Mon ami + a + quatorze ans.',
-            hintSv: 'Mon ami + a + quatorze ans.',
-            explanationEs: '¡Genial! "Mon ami a quatorze ans."',
-            explanationSv: 'Lysande! Min kompis är fjorton år.',
-          },
-          {
-            id: 'u2-l3-e7',
-            type: 'choice',
-            prompt: '¿Cómo dirías: "Tengo trece años y él tiene quince años"?',
-            audioFr: 'J\'ai treize ans et il a quinze ans.',
-            options: [
-              'J\'ai treize ans et il a quinze ans.',
-              'Je suis treize ans et il est quinze ans.',
-              'J\'ai douze ans et elle a seize ans.',
-              'Tu as treize ans et il a dix ans.'
-            ],
-            answer: 'J\'ai treize ans et il a quinze ans.',
-            hintEs: 'J\'ai (tengo) + et (y) + il a (él tiene).',
-            hintSv: 'J\'ai + et + il a.',
-            explanationEs: '¡Extraordinario! Dominas cómo expresar las edades con avoir.',
-            explanationSv: 'Extraordinärt! Du behärskar hur man uttrycker ålder med avoir.',
-          },
-        ],
-      },
-    ],
-    dailySessionTemplate: {
-      id: 'session-u2',
-      title: 'Paso 4: Gran Sesión Guiada de 30 minutos',
-      frenchTitle: 'L\'Anniversaire et les Âges (Séance de 30 min)',
-      situation: 'Es el cumpleaños de un amigo de clase y todos están hablando de sus edades.',
-      phase1Warmup: {
-        introEs: 'Calentamiento (5 min): traduce estos 3 números y frases clave.',
-        introSv: 'Uppvärmning (5 min): översätt dessa 3 siffror och nyckelfraser.',
-        questions: [
-          {
-            id: 'w2-1',
-            promptEs: '¿Cómo se dice el número 10?',
-            promptSv: 'Hur säger man siffran 10?',
-            expectedFr: 'Dix',
-            hints: ['Se escribe con X al final.'],
-          },
-          {
-            id: 'w2-2',
-            promptEs: '¿Cómo se dice "Yo tengo"?',
-            promptSv: 'Hur säger man "Jag har"?',
-            expectedFr: "J'ai",
-            hints: ["J'a..."],
-          },
-          {
-            id: 'w2-3',
-            promptEs: '¿Cómo se dice "Tengo 13 años"?',
-            promptSv: 'Hur säger man "Jag är 13 år"?',
-            expectedFr: "J'ai treize ans",
-            hints: ["J'ai treize a..."],
-          },
-        ],
-      },
-      phase2Input: {
-        storyTitle: 'La fête d\'anniversaire de Thomas',
-        storyFr: `Thomas : C'est mon anniversaire aujourd'hui ! J'ai quatorze ans !
-Camille : Joyeux anniversaire Thomas ! Moi, j'ai treize ans. Et toi Sophie ?
-Sophie : J'ai douze ans, mais bientôt treize en décembre !
-Thomas : On mange le gâteau ? Il y a quatorze bougies !
-Camille : Oui, génial ! Un, deux, trois... souffle !`,
-        storyEs: `Thomas: ¡Es mi cumpleaños hoy! ¡Tengo catorce años!
-Camille: ¡Feliz cumpleaños Thomas! Yo tengo trece años. ¿Y tú Sophie?
-Sophie: Tengo doce años, ¡pero pronto trece en diciembre!
-Thomas: ¿Comemos la tarta? ¡Hay catorce velas!
-Camille: ¡Sí, genial! Uno, dos, tres... ¡sopla!`,
-        storySv: `Thomas: Det är min födelsedag idag! Jag fyller fjorton år!
-Camille: Grattis på födelsedagen Thomas! Jag är tretton år. Och du Sophie?
-Sophie: Jag är tolv år, men snart tretton i december!
-Thomas: Ska vi äta tårtan? Det finns fjorton ljus!
-Camille: Ja, toppen! Ett, två, tre... blås!`,
-        keyExpressions: [
-          {
-            fr: 'Joyeux anniversaire !',
-            phonetic: 'zhua-iö a-ni-ver-ser',
-            es: '¡Feliz cumpleaños!',
-            sv: 'Grattis på födelsedagen!',
-            clue: 'La felicitación tradicional cuando alguien cumple años.',
-          },
-          {
-            fr: 'Bientôt',
-            phonetic: 'bi-an-to',
-            es: 'Pronto / Casi',
-            sv: 'Snart',
-            clue: 'Expresa que algo va a pasar en poco tiempo.',
-          },
-          {
-            fr: 'Il y a',
-            phonetic: 'il i a',
-            es: 'Hay',
-            sv: 'Det finns',
-            clue: 'Sirve para indicar existencia de cosas o personas.',
-          },
-        ],
-      },
-      phase3Production: {
-        contextEs: 'Juego de rol (12 min): estás en la fiesta. Thomas te pregunta tu edad y cuándo cumples años.',
-        contextSv: 'Rollspel (12 min): du är på festen. Thomas frågar om din ålder.',
-        initialAIPrompt: 'Moi, j\'ai quatorze ans aujourd\'hui ! Et toi, quel âge as-tu ?',
-        initialAIPromptTranslation: '¡Yo tengo catorce años hoy! Y tú, ¿cuántos años tienes?',
-        mission: 'Dile a Thomas cuántos años tienes y deséale feliz cumpleaños.',
-        constraintProgression: [
-          'Añade la felicitación "Joyeux anniversaire !".',
-          'Añade un número más (ejemplo: "Mon frère a dix ans").',
-          'Usa la palabra "merci" o "bientôt".',
-        ],
-      },
-      phase4ExitTicket: {
-        promptEs: 'Reto de salida (5 min): Escribe 2 frases: tu edad en francés y la edad de alguien de tu familia o amigo.',
-        promptSv: 'Utgångsutmaning (5 min): Skriv 2 meningar: din ålder på franska och en familjemedlems eller kompis ålder.',
-        sampleFr: 'J\'ai treize ans et mon ami a quatorze ans.',
-      },
-    },
-  },
-
-  // ==========================================
-  // UNITÉ 3: DANS LA CLASSE ET LE SAC À DOS
-  // ==========================================
-  {
-    id: 'unit-3',
-    number: 3,
-    grade: 'ak6',
-    title: 'En la Clase y el Material Escolar',
-    frenchTitle: 'Dans la Classe et à L\'École',
-    description: 'El material del colegio, el sac à dos y los artículos un/une/le/la.',
-    iconName: 'BookOpen',
-    color: 'from-emerald-500 to-teal-500',
-    grammarTip: {
-      title: 'Artículos: Un (masculino) vs. Une (femenino)',
-      explanationEs: 'En francés todos los objetos tienen género. "Un livre" (un libro, masculino) y "Une trousse" (un estuche, femenino).',
-      explanationSv: 'På franska har alla substantiv genus. "Un livre" (en bok, maskulint) och "Une trousse" (ett pennfodral, feminint).',
-      examples: [
-        { fr: "Un cahier", es: "Un cuaderno", sv: "Ett skrivhäfte" },
-        { fr: "Une règle", es: "Una regla", sv: "En linjal" },
-        { fr: "Qu'est-ce que c'est ?", es: "¿Qué es esto?", sv: "Vad är detta?" },
-      ],
-    },
-    lessons: [
-      {
-        id: 'u3-l1',
-        unitId: 'unit-3',
-        title: 'Paso 1: Vocabulario del material escolar',
-        frenchTitle: 'Le Matériel Scolaire',
-        description: 'Un stylo, un crayon, un livre, un cahier, une gomme.',
-        xpReward: 15,
-        exercises: [
-          {
-            id: 'u3-l1-e1',
-            type: 'choice',
-            prompt: '¿Qué significa "Un stylo"?',
-            audioFr: 'Un stylo',
-            options: ['Un bolígrafo', 'Un libro', 'Una mochila', 'Una mesa'],
-            answer: 'Un bolígrafo',
-            hintEs: 'Sirve para escribir con tinta.',
-            hintSv: 'En bläckpenna.',
-            explanationEs: '¡Exacto! "Un stylo" es un bolígrafo.',
-            explanationSv: 'Exakt! "Un stylo" är en bläckpenna.',
-          },
-          {
-            id: 'u3-l1-e2',
-            type: 'choice',
-            prompt: '¿Qué es "Une trousse"?',
-            audioFr: 'Une trousse',
-            options: ['Un estuche / Plumier', 'Una regla', 'Un cuaderno', 'Una pizarra'],
-            answer: 'Un estuche / Plumier',
-            hintEs: 'Donde guardas los bolis y lápices.',
-            hintSv: 'Ett pennfodral.',
-            explanationEs: '"Une trousse" es femenino: une trousse (el estuche).',
-            explanationSv: '"Une trousse" betyder pennfodral.',
-          },
-          {
-            id: 'u3-l1-e3',
-            type: 'choice',
-            prompt: '¿Cómo se dice "un libro" en francés?',
-            audioFr: 'Un livre',
-            options: ['Un livre', 'Un cahier', 'Une gomme', 'Un sac'],
-            answer: 'Un livre',
-            hintEs: 'Se parece a la palabra "libro".',
-            hintSv: 'En bok på franska.',
-            explanationEs: '¡Correcto! "Un livre" es un libro.',
-            explanationSv: 'Rätt! "Un livre" är en bok.',
-          },
-          {
-            id: 'u3-l1-e4',
-            type: 'fill-blank',
-            prompt: 'Completa con el artículo correcto: "_____ gomme"',
-            promptFr: '_____ gomme',
-            audioFr: 'Une gomme',
-            options: ['Une', 'Un', 'Le', 'Des'],
-            answer: 'Une',
-            hintEs: 'Goma de borrar es femenino en francés: une gomme.',
-            hintSv: 'Radergummi är feminint på franska: une gomme.',
-            explanationEs: '¡Muy bien! "Une gomme" es femenino.',
-            explanationSv: 'Jättebra! "Une gomme" är feminint.',
-          },
-          {
-            id: 'u3-l1-e5',
-            type: 'choice',
-            prompt: '¿Cómo se dice "un lápiz" en francés?',
-            audioFr: 'Un crayon',
-            options: ['Un crayon', 'Un stylo', 'Une gomme', 'Un sac'],
-            answer: 'Un crayon',
-            hintEs: 'Se pronuncia similar a "créyon".',
-            hintSv: 'En blyertspenna på franska.',
-            explanationEs: '¡Exacto! "Un crayon" es un lápiz de grafito.',
-            explanationSv: 'Exakt! "Un crayon" är en blyertspenna.',
-          },
-          {
-            id: 'u3-l1-e6',
-            type: 'fill-blank',
-            prompt: 'Completa: "_____ sac à dos (la mochila)"',
-            promptFr: '_____ sac à dos',
-            audioFr: 'Un sac à dos',
-            options: ['Un', 'Une', 'Des', 'La'],
-            answer: 'Un',
-            hintEs: 'Mochila es masculino en francés: un sac à dos.',
-            hintSv: 'Ryggsäck är maskulint på franska: un sac à dos.',
-            explanationEs: '¡Perfecto! "Un sac à dos" es masculino.',
-            explanationSv: 'Perfekt! "Un sac à dos" är maskulint.',
-          },
-          {
-            id: 'u3-l1-e7',
-            type: 'translate',
-            prompt: 'Traduce al francés: "Un lápiz y una goma"',
-            audioFr: 'Un crayon et une gomme',
-            options: ['Un crayon et une gomme', 'Un stylo et un livre', 'Une règle et un cahier', 'Un sac et une trousse'],
-            answer: 'Un crayon et une gomme',
-            hintEs: 'Un crayon (lápiz) + et (y) + une gomme (goma).',
-            hintSv: 'Un crayon + et + une gomme.',
-            explanationEs: '¡Excelente combinación de masculino y femenino!',
-            explanationSv: 'Utmärkt kombination av maskulint och feminint!',
-          },
-        ],
-      },
-      {
-        id: 'u3-l2',
-        unitId: 'unit-3',
-        title: 'Paso 2: Qu\'est-ce que c\'est ? y C\'est...',
-        frenchTitle: 'Identifier les Objets',
-        description: 'Aprende a preguntar y señalar qué objeto es cada cosa.',
-        xpReward: 20,
-        exercises: [
-          {
-            id: 'u3-l2-e1',
-            type: 'scramble',
-            prompt: 'Ordena la pregunta: "¿Qué es esto?"',
-            promptFr: 'Qu\'est-ce que c\'est ?',
-            audioFr: 'Qu\'est-ce que c\'est ?',
-            options: ['Qu\'est-ce', 'que', 'c\'est', '?'],
-            answer: ['Qu\'est-ce', 'que', 'c\'est', '?'],
-            hintEs: 'La expresión típica francesa para preguntar qué es algo.',
-            hintSv: 'Det klassiska franska uttrycket för "vad är det?".',
-            explanationEs: '"Qu\'est-ce que c\'est ?" es una de las preguntas más usadas en francés.',
-            explanationSv: '"Qu\'est-ce que c\'est ?" betyder vad är detta?',
-          },
-          {
-            id: 'u3-l2-e2',
-            type: 'scramble',
-            prompt: 'Ordena la respuesta: "Es un cuaderno de francés."',
-            promptFr: 'C\'est un cahier de français.',
-            audioFr: 'C\'est un cahier de français.',
-            options: ['C\'est', 'un', 'cahier', 'de', 'français', '.'],
-            answer: ['C\'est', 'un', 'cahier', 'de', 'français', '.'],
-            hintEs: 'C\'est (es) + un cahier + de français.',
-            hintSv: 'C\'est + un cahier + de français.',
-            explanationEs: '¡Excelente! "C\'est un cahier de français."',
-            explanationSv: 'Utmärkt! "C\'est un cahier de français."',
-          },
-          {
-            id: 'u3-l2-e3',
-            type: 'choice',
-            prompt: '¿Cómo respondes si te señalan una regla?',
-            audioFr: 'C\'est une règle.',
-            options: ['C\'est une règle.', 'C\'est un livre.', 'C\'est un stylo.', 'C\'est une trousse.'],
-            answer: 'C\'est une règle.',
-            hintEs: '"Règle" significa regla.',
-            hintSv: '"Règle" betyder linjal.',
-            explanationEs: '¡Correcto! "C\'est une règle."',
-            explanationSv: 'Rätt! "C\'est une règle."',
-          },
-          {
-            id: 'u3-l2-e4',
-            type: 'fill-blank',
-            prompt: 'Completa: "Qu\'est-ce que _____ ?"',
-            promptFr: 'Qu\'est-ce que _____ ?',
-            audioFr: 'Qu\'est-ce que c\'est ?',
-            options: ['c\'est', 'c\'era', 'tu es', 'il est'],
-            answer: 'c\'est',
-            hintEs: 'La fórmula fija es "c\'est".',
-            hintSv: 'Det fasta uttrycket är "c\'est".',
-            explanationEs: '¡Muy bien! "Qu\'est-ce que c\'est ?" significa "¿Qué es esto?".',
-            explanationSv: 'Jättebra! "Qu\'est-ce que c\'est ?" betyder vad är det?',
-          },
-          {
-            id: 'u3-l2-e5',
-            type: 'choice',
-            prompt: '¿Qué respondes si te muestran unas tijeras ("des ciseaux")?',
-            audioFr: 'Ce sont des ciseaux.',
-            options: ['Ce sont des ciseaux.', 'C\'est un ciseau.', 'C\'est une règle.', 'Il est des ciseaux.'],
-            answer: 'Ce sont des ciseaux.',
-            hintEs: 'En plural se usa "Ce sont des...".',
-            hintSv: 'I plural använder man "Ce sont des...".',
-            explanationEs: '¡Correcto! En plural decimos "Ce sont des ciseaux."',
-            explanationSv: 'Rätt! I plural säger man "Ce sont des ciseaux."',
-          },
-          {
-            id: 'u3-l2-e6',
-            type: 'translate',
-            prompt: 'Traduce al francés: "Es un estuche rojo"',
-            audioFr: 'C\'est une trousse rouge.',
-            options: ['C\'est une trousse rouge.', 'C\'est un sac rouge.', 'C\'est un stylo rouge.', 'C\'est un livre bleu.'],
-            answer: 'C\'est une trousse rouge.',
-            hintEs: 'Trousse es femenino: une trousse rouge.',
-            hintSv: 'Trousse är feminint: une trousse rouge.',
-            explanationEs: '¡Perfecto! C\'est une trousse rouge.',
-            explanationSv: 'Perfekt! C\'est une trousse rouge.',
-          },
-          {
-            id: 'u3-l2-e7',
-            type: 'scramble',
-            prompt: 'Ordena: "Es el libro de matemáticas."',
-            promptFr: 'C\'est le livre de maths.',
-            audioFr: 'C\'est le livre de maths.',
-            options: ['C\'est', 'le', 'livre', 'de', 'maths', '.'],
-            answer: ['C\'est', 'le', 'livre', 'de', 'maths', '.'],
-            hintEs: 'C\'est + le livre + de maths.',
-            hintSv: 'C\'est + le livre + de maths.',
-            explanationEs: '¡Fantástico! Dominas el uso de C\'est.',
-            explanationSv: 'Fantastiskt! Du behärskar hur man använder C\'est.',
-          },
-        ],
-      },
-      {
-        id: 'u3-l3',
-        unitId: 'unit-3',
-        title: 'Paso 3: Dans mon sac & Pedir prestado',
-        frenchTitle: 'Prêter et Demander dans la Classe',
-        description: 'Tu as un stylo s\'il te plaît ? y Dans mon sac, j\'ai...',
-        xpReward: 20,
-        exercises: [
-          {
-            id: 'u3-l3-e1',
-            type: 'scramble',
-            prompt: 'Ordena: "¿Tienes un bolígrafo, por favor?"',
-            promptFr: 'Tu as un stylo s\'il te plaît ?',
-            audioFr: 'Tu as un stylo s\'il te plaît ?',
-            options: ['Tu', 'as', 'un', 'stylo', 's\'il', 'te', 'plaît', '?'],
-            answer: ['Tu', 'as', 'un', 'stylo', 's\'il', 'te', 'plaît', '?'],
-            hintEs: 'Tu as (tienes) + un stylo + s\'il te plaît (por favor).',
-            hintSv: 'Tu as (har du) + un stylo + s\'il te plaît (snälla).',
-            explanationEs: '¡Genial! Así se pide material prestado a un compañero.',
-            explanationSv: 'Lysande! Så frågar man om man får låna en penna.',
-          },
-          {
-            id: 'u3-l3-e2',
-            type: 'choice',
-            prompt: '¿Qué dices cuando le entregas el boli a tu compañero?',
-            audioFr: 'Voilà ! Tiens !',
-            options: ['Voilà ! / Tiens !', 'Au revoir !', 'Non merci', 'Je ne sais pas'],
-            answer: 'Voilà ! / Tiens !',
-            hintEs: 'Significa "¡Aquí tienes!" o "¡Toma!".',
-            hintSv: 'Betyder "Varsågod!" eller "Ta här!".',
-            explanationEs: '"Voilà !" o "Tiens !" se usan para entregar algo a alguien.',
-            explanationSv: '"Voilà !" betyder varsågod!',
-          },
-          {
-            id: 'u3-l3-e3',
-            type: 'fill-blank',
-            prompt: 'Completa: "Dans mon sac, _____ deux crayons."',
-            promptFr: 'Dans mon sac, _____ deux crayons.',
-            audioFr: 'Dans mon sac, j\'ai deux crayons.',
-            options: ['j\'ai', 'je suis', 'il est', 'tu as'],
-            answer: 'j\'ai',
-            hintEs: '"Yo tengo" se dice "j\'ai".',
-            hintSv: '"Jag har" på franska är "j\'ai".',
-            explanationEs: '"Dans mon sac, j\'ai..." significa "En mi mochila tengo...".',
-            explanationSv: '"Dans mon sac, j\'ai..." betyder i min väska har jag...',
-          },
-          {
-            id: 'u3-l3-e4',
-            type: 'choice',
-            prompt: '¿Cómo respondes educadamente después de que te presten una regla?',
-            audioFr: 'Merci beaucoup !',
-            options: ['Merci beaucoup !', 'De rien !', 'Au revoir !', 'Pardon !'],
-            answer: 'Merci beaucoup !',
-            hintEs: '"Beaucoup" significa mucho.',
-            hintSv: '"Tack så mycket" på franska.',
-            explanationEs: '¡Exacto! "Merci beaucoup !" = ¡Muchas gracias!',
-            explanationSv: 'Exakt! "Merci beaucoup !" = Tack så mycket!',
-          },
-          {
-            id: 'u3-l3-e5',
-            type: 'scramble',
-            prompt: 'Ordena: "En mi estuche, tengo un boli."',
-            promptFr: 'Dans ma trousse, j\'ai un stylo.',
-            audioFr: 'Dans ma trousse, j\'ai un stylo.',
-            options: ['Dans', 'ma', 'trousse', ',', 'j\'ai', 'un', 'stylo', '.'],
-            answer: ['Dans', 'ma', 'trousse', ',', 'j\'ai', 'un', 'stylo', '.'],
-            hintEs: 'Dans ma trousse (en mi estuche) + j\'ai (tengo) + un stylo.',
-            hintSv: 'Dans ma trousse + j\'ai + un stylo.',
-            explanationEs: '¡Muy bien! "Dans ma trousse, j\'ai un stylo."',
-            explanationSv: 'Jättebra! "Dans ma trousse, j\'ai un stylo."',
-          },
-          {
-            id: 'u3-l3-e6',
-            type: 'fill-blank',
-            prompt: 'Completa para decir "De nada": "De _____ !"',
-            promptFr: 'De _____ !',
-            audioFr: 'De rien !',
-            options: ['rien', 'merci', 'bien', 'bon'],
-            answer: 'rien',
-            hintEs: '"Rien" significa nada ("de nada").',
-            hintSv: '"Ingen orsak" på franska: De rien.',
-            explanationEs: '¡Correcto! "De rien !" se usa para contestar a "Merci".',
-            explanationSv: 'Rätt! "De rien !" är det vanliga sättet att svara på tack.',
-          },
-          {
-            id: 'u3-l3-e7',
-            type: 'translate',
-            prompt: 'Traduce: "¿Tienes una hoja de papel, por favor?"',
-            audioFr: 'Tu as une feuille de papier, s\'il te plaît ?',
-            options: [
-              'Tu as une feuille de papier, s\'il te plaît ?',
-              'Tu as un livre, s\'il vous plaît ?',
-              'C\'est une feuille de papier.',
-              'J\'ai une feuille de papier.'
-            ],
-            answer: 'Tu as une feuille de papier, s\'il te plaît ?',
-            hintEs: 'Tu as (tienes) + une feuille de papier + s\'il te plaît.',
-            hintSv: 'Tu as + une feuille de papier + s\'il te plaît.',
-            explanationEs: '¡Excelente! Frase súper útil en el colegio francés.',
-            explanationSv: 'Utmärkt! Superanvändbar fras i skolan.',
-          },
-        ],
-      },
-    ],
-    dailySessionTemplate: {
-      id: 'session-u3',
-      title: 'Paso 4: Gran Sesión Guiada de 30 minutos',
-      frenchTitle: 'Préparer le Sac de Cours (Séance de 30 min)',
-      situation: 'Tu compañera te pide prestado material antes de que empiece la clase de francés.',
-      phase1Warmup: {
-        introEs: 'Calentamiento (5 min): recuerda el material escolar y los artículos.',
-        introSv: 'Uppvärmning (5 min): repetera skolmaterial och artiklar.',
-        questions: [
-          {
-            id: 'w3-1',
-            promptEs: '¿Cómo se dice "un libro"?',
-            promptSv: 'Hur säger man "en bok"?',
-            expectedFr: 'Un livre',
-            hints: ['Un l...'],
-          },
-          {
-            id: 'w3-2',
-            promptEs: '¿Cómo se dice "un estuche"?',
-            promptSv: 'Hur säger man "ett pennfodral"?',
-            expectedFr: 'Une trousse',
-            hints: ['Une t...'],
-          },
-          {
-            id: 'w3-3',
-            promptEs: '¿Cómo se dice "Por favor"?',
-            promptSv: 'Hur säger man "Snälla / Tack"?',
-            expectedFr: "S'il te plaît",
-            hints: ["S'il te p..."],
-          },
-        ],
-      },
-      phase2Input: {
-        storyTitle: 'Dans la salle de classe',
-        storyFr: `Juliette : Oh non ! J'ai oublié ma trousse à la maison !
-Marc : Ne t'inquiète pas ! Dans mon sac, j'ai deux stylos et un crayon.
-Juliette : Tu as une règle et une gomme aussi ?
-Marc : Oui, voilà ! Tiens, c'est pour toi.
-Juliette : Merci beaucoup Marc, tu es super sympa !`,
-        storyEs: `Juliette: ¡Oh no! ¡He olvidado mi estuche en casa!
-Marc: ¡No te preocupes! En mi mochila tengo dos bolis y un lápiz.
-Juliette: ¿Tienes una regla y una goma también?
-Marc: ¡Sí, aquí tienes! Toma, es para ti.
-Juliette: ¡Muchas gracias Marc, eres súper simpático!`,
-        storySv: `Juliette: Åh nej! Jag har glömt mitt pennfodral hemma!
-Marc: Oroa dig inte! I min väska har jag två pennor och en blyertspenna.
-Juliette: Har du en linjal och ett radergummi också?
-Marc: Ja, varsågod! Ta här, det är till dig.
-Juliette: Tack så mycket Marc, du är jättesnäll!`,
-        keyExpressions: [
-          {
-            fr: 'Ne t\'inquiète pas !',
-            phonetic: 'n tan-kiet pa',
-            es: '¡No te preocupes!',
-            sv: 'Oroa dig inte!',
-            clue: 'Para tranquilizar a un amigo.',
-          },
-          {
-            fr: 'Voilà ! / Tiens !',
-            phonetic: 'vua-la / ti-an',
-            es: '¡Aquí tienes! / ¡Toma!',
-            sv: 'Varsågod! / Ta här!',
-            clue: 'Lo que dices al entregar un objeto a alguien.',
-          },
-          {
-            fr: 'Tu es super sympa !',
-            phonetic: 'tu e su-per sam-pa',
-            es: '¡Eres súper simpático/a!',
-            sv: 'Du är jättesnäll!',
-            clue: 'Un cumplido muy común entre jóvenes.',
-          },
-        ],
-      },
-      phase3Production: {
-        contextEs: 'Juego de rol (12 min): tu compañera Juliette necesita un bolígrafo y un cuaderno.',
-        contextSv: 'Rollspel (12 min): din klasskamrat Juliette behöver en penna och ett skrivhäfte.',
-        initialAIPrompt: 'Pardon ! Tu as un stylo s\'il te plaît ?',
-        initialAIPromptTranslation: '¡Perdón! ¿Tienes un bolígrafo por favor?',
-        mission: 'Respóndele amablemente que sí tienes y ofréceselo.',
-        constraintProgression: [
-          'Usa "Oui, voilà !" o "Tiens !".',
-          'Añade qué color tiene el boli (ejemplo: "un stylo bleu").',
-          'Pregúntale si también necesita un cuaderno ("un cahier").',
-        ],
-      },
-      phase4ExitTicket: {
-        promptEs: 'Reto de salida (5 min): Escribe 2 frases sobre qué tienes en tu mochila en francés usando "Dans mon sac, j\'ai...".',
-        promptSv: 'Utgångsutmaning (5 min): Skriv 2 meningar om vad du har i din skolväska på franska med "Dans mon sac, j\'ai...".',
-        sampleFr: 'Dans mon sac, j\'ai un livre et une trousse.',
-      },
-    },
-  },
-
-  // ==========================================
-  // UNITÉ 4: LA FAMILLE ET LES ANIMAUX
-  // ==========================================
-  {
-    id: 'unit-4',
-    number: 4,
-    grade: 'ak6',
-    title: 'La Familia y Las Mascotas',
-    frenchTitle: 'La Famille et Les Animaux',
-    description: 'Describe a tu familia y habla de tus animales favoritos.',
-    iconName: 'Users',
-    color: 'from-purple-500 to-indigo-500',
-    grammarTip: {
-      title: 'Posesivos: Mon, Ma, Mes',
-      explanationEs: '"Mon" se usa para masculino (mon père, mon frère), "Ma" para femenino (ma mère, ma sœur) y "Mes" para plural (mes parents, mes amis).',
-      explanationSv: '"Mon" används för maskulint (mon père, mon frère), "Ma" för feminint (ma mère, ma sœur) och "Mes" för plural (mes parents).',
-      examples: [
-        { fr: "Mon frère s'appelle Léo.", es: "Mi hermano se llama Léo.", sv: "Min bror heter Léo." },
-        { fr: "Ma sœur a dix ans.", es: "Mi hermana tiene diez años.", sv: "Min syster är tio år." },
-        { fr: "J'ai un chien noir.", es: "Tengo un perro negro.", sv: "Jag har en svart hund." },
-      ],
-    },
-    lessons: [
-      {
-        id: 'u4-l1',
-        unitId: 'unit-4',
-        title: 'Paso 1: Los miembros de la familia',
-        frenchTitle: 'Les Membres de la Famille',
-        description: 'Padre, madre, hermano, hermana, abuelo y abuela.',
-        xpReward: 15,
-        exercises: [
-          {
-            id: 'u4-l1-e1',
-            type: 'choice',
-            prompt: '¿Cómo se dice "hermana" en francés?',
-            audioFr: 'Une sœur',
-            options: ['Une sœur', 'Un frère', 'Une mère', 'Un père'],
-            answer: 'Une sœur',
-            hintEs: 'Se pronuncia similar a "sör".',
-            hintSv: 'Uttalas ungefär som "sör".',
-            explanationEs: '¡Correcto! Une sœur = una hermana, un frère = un hermano.',
-            explanationSv: 'Rätt! Une sœur = en syster, un frère = en bror.',
-          },
-          {
-            id: 'u4-l1-e2',
-            type: 'choice',
-            prompt: '¿Cómo se dice "mi padre" en francés?',
-            audioFr: 'Mon père',
-            options: ['Mon père', 'Ma mère', 'Mon frère', 'Mon oncle'],
-            answer: 'Mon père',
-            hintEs: 'Père = padre.',
-            hintSv: 'Père = pappa.',
-            explanationEs: '"Mon père" significa mi padre.',
-            explanationSv: '"Mon père" betyder min pappa.',
-          },
-          {
-            id: 'u4-l1-e3',
-            type: 'fill-blank',
-            prompt: 'Completa con el posesivo femenino: "_____ mère s\'appelle Marie."',
-            promptFr: '_____ mère s\'appelle Marie.',
-            audioFr: 'Ma mère s\'appelle Marie.',
-            options: ['Ma', 'Mon', 'Mes', 'Le'],
-            answer: 'Ma',
-            hintEs: 'Para femenino singular se usa "Ma".',
-            hintSv: 'För feminint singular använder man "Ma".',
-            explanationEs: '¡Exacto! "Ma mère" (mi madre).',
-            explanationSv: 'Exakt! "Ma mère" betyder min mamma.',
-          },
-          {
-            id: 'u4-l1-e4',
-            type: 'choice',
-            prompt: '¿Cómo se dice "mi abuelo" en francés?',
-            audioFr: 'Mon grand-père',
-            options: ['Mon grand-père', 'Ma grand-mère', 'Mon oncle', 'Mon cousin'],
-            answer: 'Mon grand-père',
-            hintEs: 'Grand-père = abuelo.',
-            hintSv: 'Farfar / morfar: grand-père.',
-            explanationEs: '¡Correcto! Mon grand-père = mi abuelo, ma grand-mère = mi abuela.',
-            explanationSv: 'Rätt! Mon grand-père = morfar/farfar.',
-          },
-          {
-            id: 'u4-l1-e5',
-            type: 'fill-blank',
-            prompt: 'Completa con el posesivo plural: "_____ parents sont gentils."',
-            promptFr: '_____ parents sont gentils.',
-            audioFr: 'Mes parents sont gentils.',
-            options: ['Mes', 'Mon', 'Ma', 'Leur'],
-            answer: 'Mes',
-            hintEs: 'Para el plural se usa "Mes" (mis padres).',
-            hintSv: 'I plural använder man "Mes" (mina föräldrar).',
-            explanationEs: '¡Excelente! "Mes parents" = mis padres.',
-            explanationSv: 'Utmärkt! "Mes parents" = mina föräldrar.',
-          },
-          {
-            id: 'u4-l1-e6',
-            type: 'translate',
-            prompt: 'Traduce al francés: "Mi hermano y mi hermana"',
-            audioFr: 'Mon frère et ma sœur',
-            options: ['Mon frère et ma sœur', 'Ma mère et mon père', 'Mes frères et sœurs', 'Mon père et ma sœur'],
-            answer: 'Mon frère et ma sœur',
-            hintEs: 'Mon frère (masculino) + et + ma sœur (femenino).',
-            hintSv: 'Mon bror (maskulint) och min syster (feminint).',
-            explanationEs: '¡Muy bien! Mon frère (masculino) y ma sœur (femenino).',
-            explanationSv: 'Jättebra! Mon frère (maskulint) och ma sœur (feminint).',
-          },
-          {
-            id: 'u4-l1-e7',
-            type: 'scramble',
-            prompt: 'Ordena: "Mi familia es muy simpática."',
-            promptFr: 'Ma famille est très sympa.',
-            audioFr: 'Ma famille est très sympa.',
-            options: ['Ma', 'famille', 'est', 'très', 'sympa', '.'],
-            answer: ['Ma', 'famille', 'est', 'très', 'sympa', '.'],
-            hintEs: 'Ma famille + est (verbo ser) + très sympa.',
-            hintSv: 'Ma famille + est + très sympa.',
-            explanationEs: '¡Genial! "Ma famille est très sympa."',
-            explanationSv: 'Lysande! Min familj är jättetrevlig.',
-          },
-        ],
-      },
-      {
-        id: 'u4-l2',
-        unitId: 'unit-4',
-        title: 'Paso 2: Las mascotas y los animales',
-        frenchTitle: 'Les Animaux de Compagnie',
-        description: 'Un chien, un chat, un poisson, un oiseau, un lapin.',
-        xpReward: 20,
-        exercises: [
-          {
-            id: 'u4-l2-e1',
-            type: 'choice',
-            prompt: '¿Cómo se dice "un perro" en francés?',
-            audioFr: 'Un chien',
-            options: ['Un chien', 'Un chat', 'Un cheval', 'Un oiseau'],
-            answer: 'Un chien',
-            hintEs: 'Se pronuncia "ö shi-an".',
-            hintSv: 'En hund på franska.',
-            explanationEs: '¡Correcto! "Un chien" = un perro.',
-            explanationSv: 'Rätt! "Un chien" = en hund.',
-          },
-          {
-            id: 'u4-l2-e2',
-            type: 'choice',
-            prompt: '¿Cómo se dice "un gato"?',
-            audioFr: 'Un chat',
-            options: ['Un chat', 'Un chien', 'Un poisson', 'Un lapin'],
-            answer: 'Un chat',
-            hintEs: 'Se escribe c-h-a-t y la t es muda.',
-            hintSv: 'En katt på franska.',
-            explanationEs: '"Un chat" = un gato.',
-            explanationSv: '"Un chat" = en katt.',
-          },
-          {
-            id: 'u4-l2-e3',
-            type: 'scramble',
-            prompt: 'Ordena la frase: "Tengo un perro y un gato."',
-            promptFr: 'J\'ai un chien et un chat.',
-            audioFr: 'J\'ai un chien et un chat.',
-            options: ['J\'ai', 'un', 'chien', 'et', 'un', 'chat', '.'],
-            answer: ['J\'ai', 'un', 'chien', 'et', 'un', 'chat', '.'],
-            hintEs: 'J\'ai + un chien + et (y) + un chat.',
-            hintSv: 'J\'ai + un chien + et (och) + un chat.',
-            explanationEs: '¡Perfecto! "J\'ai un chien et un chat."',
-            explanationSv: 'Perfekt! "J\'ai un chien et un chat."',
-          },
-          {
-            id: 'u4-l2-e4',
-            type: 'choice',
-            prompt: '¿Cómo se dice "un conejo" en francés?',
-            audioFr: 'Un lapin',
-            options: ['Un lapin', 'Un cheval', 'Un oiseau', 'Un poisson'],
-            answer: 'Un lapin',
-            hintEs: 'Se pronuncia "ö la-pan".',
-            hintSv: 'En kanin på franska: un lapin.',
-            explanationEs: '¡Correcto! "Un lapin" = un conejo.',
-            explanationSv: 'Rätt! "Un lapin" = en kanin.',
-          },
-          {
-            id: 'u4-l2-e5',
-            type: 'fill-blank',
-            prompt: 'Completa: "Dans l\'aquarium, il y a un _____ rouge (pez)."',
-            promptFr: 'Dans l\'aquarium, il y a un _____ rouge.',
-            audioFr: 'Un poisson rouge',
-            options: ['poisson', 'chien', 'chat', 'cheval'],
-            answer: 'poisson',
-            hintEs: '"Poisson" significa pez o pescado.',
-            hintSv: 'Fisk på franska: poisson.',
-            explanationEs: '¡Muy bien! "Un poisson rouge" es un pez dorado / de colores.',
-            explanationSv: 'Jättebra! "Un poisson rouge" = en guldfisk.',
-          },
-          {
-            id: 'u4-l2-e6',
-            type: 'choice',
-            prompt: '¿Cómo se dice "un pájaro" en francés?',
-            audioFr: 'Un oiseau',
-            options: ['Un oiseau', 'Un poisson', 'Un lapin', 'Un canard'],
-            answer: 'Un oiseau',
-            hintEs: 'Se pronuncia "ö ua-zo".',
-            hintSv: 'En fågel på franska: un oiseau.',
-            explanationEs: '¡Exacto! "Un oiseau" es un pájaro.',
-            explanationSv: 'Exakt! "Un oiseau" = en fågel.',
-          },
-          {
-            id: 'u4-l2-e7',
-            type: 'translate',
-            prompt: 'Traduce al francés: "No tengo animales"',
-            audioFr: 'Je n\'ai pas d\'animaux.',
-            options: ['Je n\'ai pas d\'animaux.', 'J\'ai deux animaux.', 'Je n\'aime pas les chiens.', 'C\'est un animal.'],
-            answer: 'Je n\'ai pas d\'animaux.',
-            hintEs: 'Je n\'ai pas de... (no tengo).',
-            hintSv: 'Jag har inga djur: Je n\'ai pas d\'animaux.',
-            explanationEs: '¡Genial! Negación con el verbo avoir: "Je n\'ai pas d\'animaux."',
-            explanationSv: 'Lysande! "Je n\'ai pas d\'animaux."',
-          },
-        ],
-      },
-      {
-        id: 'u4-l3',
-        unitId: 'unit-4',
-        title: 'Paso 3: Describir a las personas y mascotas',
-        frenchTitle: 'Il est drôle / Elle est gentille',
-        description: 'Decir cómo es alguien: drôle, sympa, petit, grand.',
-        xpReward: 20,
-        exercises: [
-          {
-            id: 'u4-l3-e1',
-            type: 'choice',
-            prompt: '¿Qué significa "Il est très drôle"?',
-            promptFr: 'Il est très drôle.',
-            audioFr: 'Il est très drôle.',
-            options: ['Es muy divertido / gracioso', 'Es muy serio', 'Es muy alto', 'Está enfadado'],
-            answer: 'Es muy divertido / gracioso',
-            hintEs: '"Drôle" significa gracioso o divertido.',
-            hintSv: '"Drôle" betyder rolig.',
-            explanationEs: '"Il est très drôle" significa que es muy gracioso.',
-            explanationSv: '"Il est très drôle" betyder han är jätterolig.',
-          },
-          {
-            id: 'u4-l3-e2',
-            type: 'scramble',
-            prompt: 'Ordena: "Mi hermano tiene diez años."',
-            promptFr: 'Mon frère a dix ans.',
-            audioFr: 'Mon frère a dix ans.',
-            options: ['Mon', 'frère', 'a', 'dix', 'ans', '.'],
-            answer: ['Mon', 'frère', 'a', 'dix', 'ans', '.'],
-            hintEs: 'Mon frère + verbo a (tiene) + diez años.',
-            hintSv: 'Mon frère + a + dix ans.',
-            explanationEs: '¡Muy bien! "Mon frère a dix ans."',
-            explanationSv: 'Jättebra! "Mon frère a dix ans."',
-          },
-          {
-            id: 'u4-l3-e3',
-            type: 'fill-blank',
-            prompt: 'Completa: "Mon chat _____ Cookie."',
-            promptFr: 'Mon chat _____ Cookie.',
-            audioFr: 'Mon chat s\'appelle Cookie.',
-            options: ['s\'appelle', 'est', 'a', 'va'],
-            answer: 's\'appelle',
-            hintEs: '"Se llama" se dice "s\'appelle".',
-            hintSv: '"Heter" är "s\'appelle".',
-            explanationEs: '¡Exacto! "Mon chat s\'appelle Cookie."',
-            explanationSv: 'Exakt! "Mon chat s\'appelle Cookie."',
-          },
-          {
-            id: 'u4-l3-e4',
-            type: 'choice',
-            prompt: '¿Qué significa "Elle est très gentille" ?',
-            audioFr: 'Elle est très gentille.',
-            options: ['Ella es muy amable / cariñosa', 'Ella es muy alta', 'Ella está enfadada', 'Ella tiene frío'],
-            answer: 'Ella es muy amable / cariñosa',
-            hintEs: '"Gentille" es el femenino de "gentil" (amable/bueno).',
-            hintSv: 'Gentille = snäll/trevlig.',
-            explanationEs: '¡Correcto! "Gentille" significa amable o cariñosa.',
-            explanationSv: 'Rätt! "Gentille" betyder snäll.',
-          },
-          {
-            id: 'u4-l3-e5',
-            type: 'translate',
-            prompt: 'Traduce al francés: "Mi perro es pequeño y negro."',
-            audioFr: 'Mon chien est petit et noir.',
-            options: ['Mon chien est petit et noir.', 'Mon chat est grand et blanc.', 'Mon chien a deux ans.', 'C\'est un petit lapin.'],
-            answer: 'Mon chien est petit et noir.',
-            hintEs: 'Petit = pequeño, noir = negro.',
-            hintSv: 'Petit = liten, noir = svart.',
-            explanationEs: '¡Perfecto! "Mon chien est petit et noir."',
-            explanationSv: 'Perfekt! "Mon chien est petit et noir."',
-          },
-          {
-            id: 'u4-l3-e6',
-            type: 'fill-blank',
-            prompt: 'Completa el femenino: "Mon frère est grand, mais ma sœur est _____."',
-            promptFr: 'Mon frère est grand, mais ma sœur est _____ .',
-            audioFr: 'Ma sœur est grande.',
-            options: ['grande', 'grand', 'petit', 'gentil'],
-            answer: 'grande',
-            hintEs: 'Los adjetivos femeninos suelen añadir una -e final: grand -> grande.',
-            hintSv: 'Feminina adjektiver slutar oftast på -e: grand -> grande.',
-            explanationEs: '¡Excelente! Grand (masculino) -> Grande (femenino).',
-            explanationSv: 'Utmärkt! Grand -> Grande.',
-          },
-          {
-            id: 'u4-l3-e7',
-            type: 'scramble',
-            prompt: 'Ordena: "Mi abuela es genial."',
-            promptFr: 'Ma grand-mère est géniale.',
-            audioFr: 'Ma grand-mère est géniale.',
-            options: ['Ma', 'grand-mère', 'est', 'géniale', '.'],
-            answer: ['Ma', 'grand-mère', 'est', 'géniale', '.'],
-            hintEs: 'Ma grand-mère + est + géniale.',
-            hintSv: 'Ma grand-mère + est + géniale.',
-            explanationEs: '¡Brillante! Dominas las descripciones de la familia.',
-            explanationSv: 'Strålande! Du behärskar familjebeskrivningar.',
-          },
-        ],
-      },
-    ],
-    dailySessionTemplate: {
-      id: 'session-u4',
-      title: 'Paso 4: Gran Sesión Guiada de 30 minutos',
-      frenchTitle: 'Présenter ma Famille (Séance de 30 min)',
-      situation: 'En la clase de francés muestras una foto de tu familia y tu mascota.',
-      phase1Warmup: {
-        introEs: 'Calentamiento (5 min): repasa los miembros de la familia.',
-        introSv: 'Uppvärmning (5 min): repetera familjemedlemmar.',
-        questions: [
-          {
-            id: 'w4-1',
-            promptEs: '¿Cómo se dice "mi madre"?',
-            promptSv: 'Hur säger man "min mamma"?',
-            expectedFr: 'Ma mère',
-            hints: ['Ma m...'],
-          },
-          {
-            id: 'w4-2',
-            promptEs: '¿Cómo se dice "un perro"?',
-            promptSv: 'Hur säger man "en hund"?',
-            expectedFr: 'Un chien',
-            hints: ['Un ch...'],
-          },
-          {
-            id: 'w4-3',
-            promptEs: '¿Cómo se dice "un gato"?',
-            promptSv: 'Hur säger man "en katt"?',
-            expectedFr: 'Un chat',
-            hints: ['Un ch...'],
-          },
-        ],
-      },
-      phase2Input: {
-        storyTitle: 'La photo de famille de Théo',
-        storyFr: `Théo : Regarde, voici ma famille ! C'est mon père et ma mère.
-Chloé : Et le garçon avec le ballon, c'est ton frère ?
-Théo : Oui, il s'appelle Maxime. Il a huit ans, il est très drôle !
-Chloé : Et vous avez un animal de compagnie ?
-Théo : Oui, nous avons un petit chien blanc qui s'appelle Cookie !`,
-        storyEs: `Théo: ¡Mira, aquí está mi familia! Es mi padre y mi madre.
-Chloé: Y el chico con el balón, ¿es tu hermano?
-Théo: Sí, se llama Maxime. ¡Tiene ocho años, es muy divertido!
-Chloé: ¿Y tenéis alguna mascota?
-Théo: ¡Sí, tenemos un perrito blanco que se llama Cookie!`,
-        storySv: `Théo: Titta, här är min familj! Det är min pappa och min mamma.
-Chloé: Och killen med bollen, är det din bror?
-Théo: Ja, han heter Maxime. Han är åtta år, han är jätterolig!
-Chloé: Och har ni något husdjur?
-Théo: Ja, vi har en liten vit hund som heter Cookie!`,
-        keyExpressions: [
-          {
-            fr: 'Voici...',
-            phonetic: 'vua-si',
-            es: 'Aquí está / Aquí tienes',
-            sv: 'Här är...',
-            clue: 'Para señalar o presentar a alguien en una foto.',
-          },
-          {
-            fr: 'Il est très drôle !',
-            phonetic: 'il e tre drol',
-            es: '¡Es muy gracioso/divertido!',
-            sv: 'Han är jätterolig!',
-            clue: 'Para describir la personalidad simpática de alguien.',
-          },
-          {
-            fr: 'Un animal de compagnie',
-            phonetic: 'ö-na-ni-mal dö kom-pa-ñi',
-            es: 'Una mascota',
-            sv: 'Ett husdjur',
-            clue: 'Animal doméstico.',
-          },
-        ],
-      },
-      phase3Production: {
-        contextEs: 'Juego de rol (12 min): tu amigo francés te pregunta si tienes hermanos o mascotas.',
-        contextSv: 'Rollspel (12 min): din franska vän frågar om du har syskon eller husdjur.',
-        initialAIPrompt: 'Tu as des frères et sœurs ? Et tu as un animal ?',
-        initialAIPromptTranslation: '¿Tienes hermanos y hermanas? ¿Y tienes mascota?',
-        mission: 'Responde describiendo quiénes están en tu casa en francés.',
-        constraintProgression: [
-          'Usa "J\'ai..." o "Je n\'ai pas de...".',
-          'Menciona el nombre o la edad de alguien usando "Il/Elle s\'appelle...".',
-          'Describe a tu mascota o di qué animal te gusta ("J\'adore les chats").',
-        ],
-      },
-      phase4ExitTicket: {
-        promptEs: 'Reto de salida (5 min): Escribe 2 frases sobre tu familia o tu mascota preferida en francés.',
-        promptSv: 'Utgångsutmaning (5 min): Skriv 2 meningar om din familj eller ditt favoritdjur på franska.',
-        sampleFr: 'J\'ai un frère qui s\'appelle David et un chat mignon.',
-      },
-    },
-  },
-
-  // ==========================================
-  // UNITÉ 5: LES COULEURS ET LES VÊTEMENTS
-  // ==========================================
-  {
-    id: 'unit-5',
-    number: 5,
-    grade: 'ak6',
-    title: 'Los Colores y La Ropa',
-    frenchTitle: 'Les Couleurs et Les Vêtements',
-    description: 'Aprende los colores y describe qué ropa llevas puesta.',
-    iconName: 'Palette',
-    color: 'from-pink-500 to-rose-500',
-    grammarTip: {
-      title: 'Los adjetivos de color van detrás',
-      explanationEs: 'En francés, los colores se colocan DESPUÉS del sustantivo: "Un t-shirt bleu" (una camiseta azul), "Une robe rouge".',
-      explanationSv: 'På franska placeras färgerna oftast EFTER substantivet: "Un t-shirt bleu" (en blå t-shirt), "Une robe rouge" (en röd klänning).',
-      examples: [
-        { fr: "Je porte un pantalon noir.", es: "Llevo unos pantalones negros.", sv: "Jag har svarta byxor på mig." },
-        { fr: "C'est de quelle couleur ?", es: "¿De qué color es?", sv: "Vilken färg är det?" },
-        { fr: "Blanc, noir, bleu, rouge, jaune, vert.", es: "Blanco, negro, azul, rojo, amarillo, verde.", sv: "Vit, svart, blå, röd, gul, grön." },
-      ],
-    },
-    lessons: [
-      {
-        id: 'u5-l1',
-        unitId: 'unit-5',
-        title: 'Paso 1: Todos los Colores',
-        frenchTitle: 'Les Couleurs Principales',
-        description: 'Bleu, blanc, rouge, vert, jaune, noir, rose, gris.',
-        xpReward: 15,
-        exercises: [
-          {
-            id: 'u5-l1-e1',
-            type: 'choice',
-            prompt: '¿Qué color es "vert" en francés?',
-            audioFr: 'Vert',
-            options: ['Verde', 'Rojo', 'Azul', 'Amarillo'],
-            answer: 'Verde',
-            hintEs: 'El color de la hierba o los árboles.',
-            hintSv: 'Grön på svenska.',
-            explanationEs: '¡Correcto! Vert = verde, rouge = rojo, bleu = azul, jaune = amarillo.',
-            explanationSv: 'Rätt! Vert = grön, rouge = röd, bleu = blå, jaune = gul.',
-          },
-          {
-            id: 'u5-l1-e2',
-            type: 'choice',
-            prompt: '¿Cuáles son los 3 colores de la bandera de Francia?',
-            audioFr: 'Bleu, blanc, rouge',
-            options: ['Azul, blanco y rojo', 'Verde, blanco y rojo', 'Amarillo y azul', 'Negro, rojo y amarillo'],
-            answer: 'Azul, blanco y rojo',
-            hintEs: 'Bleu = azul, blanc = blanco, rouge = rojo.',
-            hintSv: 'Blå, vit och röd.',
-            explanationEs: '¡Muy bien! Bleu, blanc, rouge.',
-            explanationSv: 'Mycket bra! Blå, vit och röd.',
-          },
-          {
-            id: 'u5-l1-e3',
-            type: 'fill-blank',
-            prompt: 'Completa: "Le soleil est _____ (amarillo)."',
-            promptFr: 'Le soleil est _____ .',
-            audioFr: 'Le soleil est jaune.',
-            options: ['jaune', 'bleu', 'noir', 'rouge'],
-            answer: 'jaune',
-            hintEs: '"Jaune" significa amarillo.',
-            hintSv: '"Jaune" betyder gul.',
-            explanationEs: '¡Exacto! Jaune = amarillo.',
-            explanationSv: 'Exakt! Jaune = gul.',
-          },
-          {
-            id: 'u5-l1-e4',
-            type: 'choice',
-            prompt: '¿Cómo se dice "negro" en francés?',
-            audioFr: 'Noir',
-            options: ['Noir', 'Blanc', 'Rose', 'Gris'],
-            answer: 'Noir',
-            hintEs: 'Se pronuncia "nuar".',
-            hintSv: 'Svart på franska: noir.',
-            explanationEs: '¡Correcto! Noir = negro.',
-            explanationSv: 'Rätt! Noir = svart.',
-          },
-          {
-            id: 'u5-l1-e5',
-            type: 'fill-blank',
-            prompt: 'Completa con el femenino: "Une feuille _____ (blanca)."',
-            promptFr: 'Une feuille _____ .',
-            audioFr: 'Une feuille blanche.',
-            options: ['blanche', 'blanc', 'blancs', 'blanches'],
-            answer: 'blanche',
-            hintEs: 'El femenino de blanc es irregular: blanche.',
-            hintSv: 'Feminint av blanc är blanche.',
-            explanationEs: '¡Excelente! Blanc (masculino) -> Blanche (femenino).',
-            explanationSv: 'Utmärkt! Blanc -> Blanche.',
-          },
-          {
-            id: 'u5-l1-e6',
-            type: 'choice',
-            prompt: '¿Qué color es "rose"?',
-            audioFr: 'Rose',
-            options: ['Rosa', 'Rojo', 'Gris', 'Marrón'],
-            answer: 'Rosa',
-            hintEs: 'El color de la flor rosa.',
-            hintSv: 'Rosa på franska: rose.',
-            explanationEs: '¡Exacto! Rose = rosa.',
-            explanationSv: 'Exakt! Rose = rosa.',
-          },
-          {
-            id: 'u5-l1-e7',
-            type: 'translate',
-            prompt: 'Traduce al francés: "El cielo es azul"',
-            audioFr: 'Le ciel est bleu.',
-            options: ['Le ciel est bleu.', 'La mer est verte.', 'Le soleil est jaune.', 'La nuit est noire.'],
-            answer: 'Le ciel est bleu.',
-            hintEs: 'Le ciel (el cielo) + est bleu.',
-            hintSv: 'Le ciel (himlen) + est bleu.',
-            explanationEs: '¡Perfecto! "Le ciel est bleu."',
-            explanationSv: 'Perfekt! "Le ciel est bleu."',
-          },
-        ],
-      },
-      {
-        id: 'u5-l2',
-        unitId: 'unit-5',
-        title: 'Paso 2: Las Prendas de Ropa',
-        frenchTitle: 'Les Vêtements de Tous les Jours',
-        description: 'Un t-shirt, un pull, un pantalon, une veste, des baskets.',
-        xpReward: 20,
-        exercises: [
-          {
-            id: 'u5-l2-e1',
-            type: 'choice',
-            prompt: '¿Qué significa "Des baskets"?',
-            audioFr: 'Des baskets',
-            options: ['Zapatillas deportivas', 'Un pantalón', 'Una bufanda', 'Una gorra'],
-            answer: 'Zapatillas deportivas',
-            hintEs: 'Calzado cómodo deportivo.',
-            hintSv: 'Sneakers / gympaskor.',
-            explanationEs: '¡Correcto! "Des baskets" son zapatillas de deporte.',
-            explanationSv: 'Rätt! "Des baskets" är gympaskor.',
-          },
-          {
-            id: 'u5-l2-e2',
-            type: 'choice',
-            prompt: '¿Cómo se dice "un jersey / suéter" en francés?',
-            audioFr: 'Un pull',
-            options: ['Un pull', 'Un pantalon', 'Une robe', 'Un manteau'],
-            answer: 'Un pull',
-            hintEs: 'Viene de pull-over.',
-            hintSv: 'En tröja.',
-            explanationEs: '"Un pull" es un jersey.',
-            explanationSv: '"Un pull" är en tröja.',
-          },
-          {
-            id: 'u5-l2-e3',
-            type: 'scramble',
-            prompt: 'Ordena: "Un pantalón negro y un t-shirt blanco."',
-            promptFr: 'Un pantalon noir et un t-shirt blanc.',
-            audioFr: 'Un pantalon noir et un t-shirt blanc.',
-            options: ['Un', 'pantalon', 'noir', 'et', 'un', 't-shirt', 'blanc', '.'],
-            answer: ['Un', 'pantalon', 'noir', 'et', 'un', 't-shirt', 'blanc', '.'],
-            hintEs: 'Recuerda que el color va detrás de la prenda.',
-            hintSv: 'Färgen kommer efter klädesplagget.',
-            explanationEs: '¡Perfecto! Un pantalon noir et un t-shirt blanc.',
-            explanationSv: 'Perfekt! Färgen sätts efter substantivet.',
-          },
-          {
-            id: 'u5-l2-e4',
-            type: 'choice',
-            prompt: '¿Cómo se dice "una gorra" en francés?',
-            audioFr: 'Une casquette',
-            options: ['Une casquette', 'Un chapeau', 'Une écharpe', 'Un manteau'],
-            answer: 'Une casquette',
-            hintEs: 'Se parece al español "casquete / casquette".',
-            hintSv: 'En keps på franska: une casquette.',
-            explanationEs: '¡Correcto! "Une casquette" = una gorra.',
-            explanationSv: 'Rätt! "Une casquette" = en keps.',
-          },
-          {
-            id: 'u5-l2-e5',
-            type: 'fill-blank',
-            prompt: 'Completa: "En hiver, je porte un _____ chaud (abrigo)."',
-            promptFr: 'En hiver, je porte un _____ chaud.',
-            audioFr: 'Un manteau chaud',
-            options: ['manteau', 't-shirt', 'short', 'chapeau'],
-            answer: 'manteau',
-            hintEs: '"Manteau" significa abrigo.',
-            hintSv: 'En kappa / vinterjacka: manteau.',
-            explanationEs: '¡Muy bien! "Un manteau" es un abrigo de invierno.',
-            explanationSv: 'Jättebra! "Un manteau" = en kappa / rock.',
-          },
-          {
-            id: 'u5-l2-e6',
-            type: 'translate',
-            prompt: 'Traduce al francés: "Una camiseta blanca y unos vaqueros"',
-            audioFr: 'Un t-shirt blanc et un jean',
-            options: ['Un t-shirt blanc et un jean', 'Un pull vert et une robe', 'Une veste noire et des baskets', 'Un chapeau rouge et une chemise'],
-            answer: 'Un t-shirt blanc et un jean',
-            hintEs: 'T-shirt blanc + et + un jean.',
-            hintSv: 'Un t-shirt blanc + et + un jean.',
-            explanationEs: '¡Perfecto! Conjunto informal básico.',
-            explanationSv: 'Perfekt! En vit t-shirt och ett par jeans.',
-          },
-          {
-            id: 'u5-l2-e7',
-            type: 'scramble',
-            prompt: 'Ordena: "Un vestido rojo muy bonito."',
-            promptFr: 'Une très jolie robe rouge.',
-            audioFr: 'Une très jolie robe rouge.',
-            options: ['Une', 'très', 'jolie', 'robe', 'rouge', '.'],
-            answer: ['Une', 'très', 'jolie', 'robe', 'rouge', '.'],
-            hintEs: 'Une très jolie (muy bonita) + robe + rouge.',
-            hintSv: 'Une très jolie + robe + rouge.',
-            explanationEs: '¡Genial! "Une très jolie robe rouge."',
-            explanationSv: 'Lysande! En jättefin röd klänning.',
-          },
-        ],
-      },
-      {
-        id: 'u5-l3',
-        unitId: 'unit-5',
-        title: 'Paso 3: Je porte... (Llevar puesto)',
-        frenchTitle: 'Décrire sa Tenue',
-        description: 'Expresar qué ropa llevas hoy y cómo es.',
-        xpReward: 20,
-        exercises: [
-          {
-            id: 'u5-l3-e1',
-            type: 'scramble',
-            prompt: 'Ordena la frase: "Hoy llevo una chaqueta azul."',
-            promptFr: 'Aujourd\'hui, je porte une veste bleue.',
-            audioFr: 'Aujourd\'hui, je porte une veste bleue.',
-            options: ['Aujourd\'hui', ',', 'je', 'porte', 'une', 'veste', 'bleue', '.'],
-            answer: ['Aujourd\'hui', ',', 'je', 'porte', 'une', 'veste', 'bleue', '.'],
-            hintEs: 'Aujourd\'hui (hoy) + je porte (llevo) + une veste bleue.',
-            hintSv: 'Aujourd\'hui + je porte + une veste bleue.',
-            explanationEs: '¡Excelente! "Je porte..." es el verbo para llevar ropa.',
-            explanationSv: 'Utmärkt! "Je porte..." betyder jag har på mig.',
-          },
-          {
-            id: 'u5-l3-e2',
-            type: 'choice',
-            prompt: '¿Cómo preguntas a alguien qué lleva puesto?',
-            audioFr: 'Qu\'est-ce que tu portes ?',
-            options: ['Qu\'est-ce que tu portes ?', 'Comment tu t\'appelles ?', 'Où vas-tu ?', 'Quel âge as-tu ?'],
-            answer: 'Qu\'est-ce que tu portes ?',
-            hintEs: 'El verbo "porter" significa llevar ropa.',
-            hintSv: 'Fråga vad någon har på sig.',
-            explanationEs: '"Qu\'est-ce que tu portes ?" significa "¿Qué llevas puesto?".',
-            explanationSv: '"Qu\'est-ce que tu portes ?" betyder vad har du på dig?',
-          },
-          {
-            id: 'u5-l3-e3',
-            type: 'fill-blank',
-            prompt: 'Completa: "Aujourd\'hui, je _____ des baskets blanches."',
-            promptFr: 'Aujourd\'hui, je _____ des baskets blanches.',
-            audioFr: 'Je porte des baskets blanches.',
-            options: ['porte', 'suis', 'ai', 'fais'],
-            answer: 'porte',
-            hintEs: 'Con "je" el verbo porter termina en -e: je porte.',
-            hintSv: 'Med "je" slutar verbet porter på -e: je porte.',
-            explanationEs: '¡Correcto! "Je porte..." = Yo llevo puesto.',
-            explanationSv: 'Rätt! "Je porte..." = Jag har på mig.',
-          },
-          {
-            id: 'u5-l3-e4',
-            type: 'translate',
-            prompt: 'Traduce al francés: "Llevo unos pantalones cortos"',
-            audioFr: 'Je porte un short.',
-            options: ['Je porte un short.', 'Je porte un pantalon.', 'Tu portes une veste.', 'Il porte un pull.'],
-            answer: 'Je porte un short.',
-            hintEs: 'Pantalón corto en francés es "un short".',
-            hintSv: 'Shorts på franska är maskulint: un short.',
-            explanationEs: '¡Muy bien! "Je porte un short."',
-            explanationSv: 'Jättebra! "Je porte un short."',
-          },
-          {
-            id: 'u5-l3-e5',
-            type: 'choice',
-            prompt: '¿Cómo dices: "¡Me gusta mucho tu camiseta!"?',
-            audioFr: 'J\'aime beaucoup ton t-shirt !',
-            options: ['J\'aime beaucoup ton t-shirt !', 'Je déteste ta chemise.', 'Où est ton pantalon ?', 'C\'est combien ce pull ?'],
-            answer: 'J\'aime beaucoup ton t-shirt !',
-            hintEs: '"Beaucoup" significa mucho.',
-            hintSv: 'Jag gillar verkligen din t-shirt.',
-            explanationEs: '¡Excelente cumplido entre compañeros de clase!',
-            explanationSv: 'Utmärkt komplimang bland klasskompisar!',
-          },
-          {
-            id: 'u5-l3-e6',
-            type: 'scramble',
-            prompt: 'Ordena: "¿Qué ropa llevas para hacer deporte?"',
-            promptFr: 'Qu\'est-ce que tu portes pour le sport ?',
-            audioFr: 'Qu\'est-ce que tu portes pour le sport ?',
-            options: ['Qu\'est-ce', 'que', 'tu', 'portes', 'pour', 'le', 'sport', '?'],
-            answer: ['Qu\'est-ce', 'que', 'tu', 'portes', 'pour', 'le', 'sport', '?'],
-            hintEs: 'Qu\'est-ce que tu portes + pour le sport ?',
-            hintSv: 'Qu\'est-ce que tu portes + pour le sport ?',
-            explanationEs: '¡Perfecto! Una pregunta genial para entablar conversación.',
-            explanationSv: 'Perfekt! En jättebra fråga för att starta ett samtal.',
-          },
-          {
-            id: 'u5-l3-e7',
-            type: 'choice',
-            prompt: '¿Cómo se dice "Llevo una sudadera verde"?',
-            audioFr: 'Je porte un sweat vert.',
-            options: ['Je porte un sweat vert.', 'Je porte un t-shirt rouge.', 'Tu portes une robe bleue.', 'Elle porte une veste noire.'],
-            answer: 'Je porte un sweat vert.',
-            hintEs: 'Sweat = sudadera (se pronuncia suet), vert = verde.',
-            hintSv: 'En grön sweatshirt: un sweat vert.',
-            explanationEs: '¡Impresionante! Ya sabes describir cualquier vestimenta en francés.',
-            explanationSv: 'Imponerande! Du kan nu beskriva alla kläder på franska.',
-          },
-        ],
-      },
-    ],
-    dailySessionTemplate: {
-      id: 'session-u5',
-      title: 'Paso 4: Gran Sesión Guiada de 30 minutos',
-      frenchTitle: 'La Tenue du Jour (Séance de 30 min)',
-      situation: 'Describes tu estilo y tu ropa favorita a tus amigos.',
-      phase1Warmup: {
-        introEs: 'Calentamiento (5 min): repasa los colores principales.',
-        introSv: 'Uppvärmning (5 min): repetera grundfärgerna.',
-        questions: [
-          {
-            id: 'w5-1',
-            promptEs: '¿Cómo se dice "azul"?',
-            promptSv: 'Hur säger man "blå"?',
-            expectedFr: 'Bleu',
-            hints: ['Bl...'],
-          },
-          {
-            id: 'w5-2',
-            promptEs: '¿Cómo se dice "rojo"?',
-            promptSv: 'Hur säger man "röd"?',
-            expectedFr: 'Rouge',
-            hints: ['Ro...'],
-          },
-          {
-            id: 'w5-3',
-            promptEs: '¿Cómo se dice "Yo llevo puesto"?',
-            promptSv: 'Hur säger man "Jag har på mig"?',
-            expectedFr: 'Je porte',
-            hints: ['Je p...'],
-          },
-        ],
-      },
-      phase2Input: {
-        storyTitle: 'La mode au collège',
-        storyFr: `Manon : J'adore ton pull, Alex ! Il est super beau en vert !
-Alex : Merci ! C'est mon pull préféré. Et toi, tu portes une jolie veste noire.
-Manon : Oui, avec mes baskets blanches. C'est confortable pour faire du sport !
-Alex : Tout à fait ! Tu as du style aujourd'hui !`,
-        storyEs: `Manon: ¡Me encanta tu jersey, Alex! ¡Queda genial en verde!
-Alex: ¡Gracias! Es mi jersey preferido. Y tú llevas una chaqueta negra muy bonita.
-Manon: Sí, con mis zapatillas blancas. ¡Es cómodo para hacer deporte!
-Alex: ¡Totalmente! ¡Hoy tienes mucho estilo!`,
-        storySv: `Manon: Jag älskar din tröja, Alex! Den är jättefin i grönt!
-Alex: Tack! Det är min favorittröja. Och du har en fin svart jacka på dig.
-Manon: Ja, med mina vita sneakers. Det är bekvämt för idrotten!
-Alex: Absolut! Du har stil idag!`,
-        keyExpressions: [
-          {
-            fr: 'C\'est mon préféré !',
-            phonetic: 'se mon pre-fe-re',
-            es: '¡Es mi preferido/favorito!',
-            sv: 'Det är min favorit!',
-            clue: 'Para expresar tu cosa predilecta.',
-          },
-          {
-            fr: 'Des baskets',
-            phonetic: 'de bas-ket',
-            es: 'Zapatillas deportivas',
-            sv: 'Gympaskor / sneakers',
-            clue: 'Calzado informal para jóvenes.',
-          },
-          {
-            fr: 'C\'est confortable !',
-            phonetic: 'se kon-for-tabl',
-            es: '¡Es cómodo!',
-            sv: 'Det är bekvämt!',
-            clue: 'Sensación agradable al vestir.',
-          },
-        ],
-      },
-      phase3Production: {
-        contextEs: 'Juego de rol (12 min): Alex te pregunta qué ropa llevas puesta hoy.',
-        contextSv: 'Rollspel (12 min): Alex frågar vilka kläder du har på dig idag.',
-        initialAIPrompt: 'Salut ! Qu\'est-ce que tu portes aujourd\'hui ?',
-        initialAIPromptTranslation: '¡Hola! ¿Qué ropa llevas puesta hoy?',
-        mission: 'Dile qué prendas y de qué color llevas hoy en francés.',
-        constraintProgression: [
-          'Usa "Je porte..." con al menos una prenda y un color.',
-          'Añade un conector como "et" (y) o "avec" (con).',
-          'Di si te gusta usando "J\'aime" o "J\'adore".',
-        ],
-      },
-      phase4ExitTicket: {
-        promptEs: 'Reto de salida (5 min): Escribe 2 frases describiendo tu ropa preferida en francés.',
-        promptSv: 'Utgångsutmaning (5 min): Skriv 2 meningar som beskriver dina favoritkläder på franska.',
-        sampleFr: 'Je porte un t-shirt bleu et des baskets blanches. J\'adore !',
-      },
-    },
-  },
-
-  // ==========================================
-  // UNITÉ 6: AU CAFÉ ET LES ALIMENTS
-  // ==========================================
-  {
-    id: 'unit-6',
-    number: 6,
-    grade: 'ak6',
-    title: 'Alimentos y En el Café',
-    frenchTitle: 'Au Café et Les Aliments',
-    description: 'Pide comida y bebida en una cafetería francesa educadamente.',
-    iconName: 'Coffee',
-    color: 'from-amber-600 to-yellow-500',
-    grammarTip: {
-      title: 'Pedir con educación: "Je voudrais..."',
-      explanationEs: 'En francés nunca decimos "quiero" de forma brusca. Decimos "Je voudrais..." (quisiera / me gustaría) seguido de "s\'il vous plaît" (por favor).',
-      explanationSv: 'På franska säger man artigt "Je voudrais..." (jag skulle vilja ha...) följt av "s\'il vous plaît" (tack / snälla).',
-      examples: [
-        { fr: "Je voudrais un croissant, s'il vous plaît.", es: "Quisiera un cruasán, por favor.", sv: "Jag skulle vilja ha en croissant, tack." },
-        { fr: "C'est combien ?", es: "¿Cuánto cuesta?", sv: "Vad kostar det?" },
-        { fr: "Un jus d'orange et une crêpe au chocolat.", es: "Un zumo de naranja y un crepe de chocolate.", sv: "En apelsinjuice och en chokladpannkaka." },
-      ],
-    },
-    lessons: [
-      {
-        id: 'u6-l1',
-        unitId: 'unit-6',
-        title: 'Paso 1: Comida típica y Bebidas',
-        frenchTitle: 'Les Aliments du Petit-Déjeuner',
-        description: 'Un croissant, une crêpe, un pain au chocolat, du jus, de l\'eau.',
-        xpReward: 15,
-        exercises: [
-          {
-            id: 'u6-l1-e1',
-            type: 'choice',
-            prompt: '¿Cómo se dice "agua" en francés?',
-            audioFr: 'De l\'eau',
-            options: ['De l\'eau', 'Du jus', 'Du lait', 'Du thé'],
-            answer: 'De l\'eau',
-            hintEs: 'Se pronuncia "dö lo".',
-            hintSv: 'Vatten på franska.',
-            explanationEs: '¡Correcto! "De l\'eau" significa agua.',
-            explanationSv: 'Rätt! "De l\'eau" = vatten.',
-          },
-          {
-            id: 'u6-l1-e2',
-            type: 'choice',
-            prompt: '¿Qué es "Un pain au chocolat"?',
-            audioFr: 'Un pain au chocolat',
-            options: ['Una napolitana de chocolate', 'Un bocadillo de jamón', 'Un zumo', 'Una galleta'],
-            answer: 'Una napolitana de chocolate',
-            hintEs: 'Bollería francesa hojaldrada con chocolate.',
-            hintSv: 'Chokladbröd / bakverk med choklad.',
-            explanationEs: '"Un pain au chocolat" es la merienda favorita de los jóvenes en Francia.',
-            explanationSv: '"Un pain au chocolat" är ett klassiskt fransk bakverk.',
-          },
-          {
-            id: 'u6-l1-e3',
-            type: 'choice',
-            prompt: '¿Cómo se dice "un zumo de naranja"?',
-            audioFr: 'Un jus d\'orange',
-            options: ['Un jus d\'orange', 'Un jus de pomme', 'Un café', 'Un chocolat chaud'],
-            answer: 'Un jus d\'orange',
-            hintEs: 'Orange = naranja.',
-            hintSv: 'Apelsinjuice.',
-            explanationEs: '¡Exacto! "Un jus d\'orange".',
-            explanationSv: 'Exakt! "Un jus d\'orange" = apelsinjuice.',
-          },
-          {
-            id: 'u6-l1-e4',
-            type: 'choice',
-            prompt: '¿Cómo se dice "un crepe de chocolate"?',
-            audioFr: 'Une crêpe au chocolat',
-            options: ['Une crêpe au chocolat', 'Un croissant chaud', 'Une baguette au fromage', 'Un gâteau aux fraises'],
-            answer: 'Une crêpe au chocolat',
-            hintEs: 'Típico postre bretón muy popular.',
-            hintSv: 'En chokladpannkaka.',
-            explanationEs: '¡Mmm! "Une crêpe au chocolat" es una delicia francesa.',
-            explanationSv: 'Mums! "Une crêpe au chocolat" är en fransk favorit.',
-          },
-          {
-            id: 'u6-l1-e5',
-            type: 'fill-blank',
-            prompt: 'Completa: "Le matin, je bois du _____ chaud (leche)."',
-            promptFr: 'Le matin, je bois du _____ chaud.',
-            audioFr: 'Du lait chaud',
-            options: ['lait', 'jus', 'thé', 'café'],
-            answer: 'lait',
-            hintEs: '"Lait" significa leche (se pronuncia "le").',
-            hintSv: 'Mjölk på franska: lait.',
-            explanationEs: '¡Correcto! "Du lait" = leche.',
-            explanationSv: 'Rätt! "Du lait" = mjölk.',
-          },
-          {
-            id: 'u6-l1-e6',
-            type: 'choice',
-            prompt: '¿Cómo se dice "un pastel / tarta" en francés?',
-            audioFr: 'Un gâteau',
-            options: ['Un gâteau', 'Une pomme', 'Un pain', 'Une glace'],
-            answer: 'Un gâteau',
-            hintEs: 'Se escribe con acento circunflejo: gâteau.',
-            hintSv: 'En kaka / tårta på franska.',
-            explanationEs: '¡Exacto! "Un gâteau" = una tarta o pastel.',
-            explanationSv: 'Exakt! "Un gâteau" = en kaka/tårta.',
-          },
-          {
-            id: 'u6-l1-e7',
-            type: 'translate',
-            prompt: 'Traduce al francés: "Una botella de agua"',
-            audioFr: 'Une bouteille d\'eau',
-            options: ['Une bouteille d\'eau', 'Un verre de jus', 'Une tasse de thé', 'Une canette de soda'],
-            answer: 'Une bouteille d\'eau',
-            hintEs: 'Une bouteille (botella) + d\'eau (de agua).',
-            hintSv: 'En flaska vatten: une bouteille d\'eau.',
-            explanationEs: '¡Genial! "Une bouteille d\'eau".',
-            explanationSv: 'Lysande! "Une bouteille d\'eau".',
-          },
-        ],
-      },
-      {
-        id: 'u6-l2',
-        unitId: 'unit-6',
-        title: 'Paso 2: La fórmula educada "Je voudrais..."',
-        frenchTitle: 'Commander Poliment',
-        description: 'Je voudrais... s\'il vous plaît.',
-        xpReward: 20,
-        exercises: [
-          {
-            id: 'u6-l2-e1',
-            type: 'scramble',
-            prompt: 'Ordena la petición: "Quisiera un cruasán, por favor."',
-            promptFr: 'Je voudrais un croissant, s\'il vous plaît.',
-            audioFr: 'Je voudrais un croissant, s\'il vous plaît.',
-            options: ['Je', 'voudrais', 'un', 'croissant', ',', 's\'il', 'vous', 'plaît', '.'],
-            answer: ['Je', 'voudrais', 'un', 'croissant', ',', 's\'il', 'vous', 'plaît', '.'],
-            hintEs: 'Je voudrais (quisiera) + un croissant + s\'il vous plaît (por favor).',
-            hintSv: 'Je voudrais + un croissant + s\'il vous plaît.',
-            explanationEs: '¡Perfecto! Esta es la frase dorada al entrar en cualquier cafetería.',
-            explanationSv: 'Perfekt! Den gyllene frasen på varje franskt kafé.',
-          },
-          {
-            id: 'u6-l2-e2',
-            type: 'choice',
-            prompt: '¿Cómo se dice "Por favor" formal a un camarero?',
-            audioFr: 'S\'il vous plaît',
-            options: ['S\'il vous plaît', 'S\'il te plaît', 'Merci', 'De rien'],
-            answer: 'S\'il vous plaît',
-            hintEs: 'Con adultos y camareros se usa "vous": s\'il vous plaît.',
-            hintSv: 'Med vuxna och servitörer använder man "vous".',
-            explanationEs: '"S\'il vous plaît" es la fórmula de cortesía formal.',
-            explanationSv: '"S\'il vous plaît" är det artiga sättet att säga tack/snälla.',
-          },
-          {
-            id: 'u6-l2-e3',
-            type: 'fill-blank',
-            prompt: 'Completa la petición educada: "Je _____ une crêpe au sucre, s\'il vous plaît."',
-            promptFr: 'Je _____ une crêpe au sucre, s\'il vous plaît.',
-            audioFr: 'Je voudrais une crêpe au sucre, s\'il vous plaît.',
-            options: ['voudrais', 'veux', 'suis', 'prends'],
-            answer: 'voudrais',
-            hintEs: 'El condicional de cortesía es "Je voudrais".',
-            hintSv: 'Artighetsfrasen är "Je voudrais".',
-            explanationEs: '¡Perfecto! "Je voudrais..." expresa deseo con mucha educación.',
-            explanationSv: 'Perfekt! "Je voudrais..." är det artiga sättet.',
-          },
-          {
-            id: 'u6-l2-e4',
-            type: 'translate',
-            prompt: 'Traduce: "Quisiera un zumo de manzana, por favor."',
-            audioFr: 'Je voudrais un jus de pomme, s\'il vous plaît.',
-            options: [
-              'Je voudrais un jus de pomme, s\'il vous plaît.',
-              'Je voudrais de l\'eau, s\'il vous plaît.',
-              'Donne-moi un jus d\'orange.',
-              'C\'est un jus de pomme.'
-            ],
-            answer: 'Je voudrais un jus de pomme, s\'il vous plaît.',
-            hintEs: 'Je voudrais + un jus de pomme + s\'il vous plaît.',
-            hintSv: 'Je voudrais + un jus de pomme + s\'il vous plaît.',
-            explanationEs: '¡Genial! "Jus de pomme" = zumo de manzana.',
-            explanationSv: 'Lysande! "Jus de pomme" = äppeljuice.',
-          },
-          {
-            id: 'u6-l2-e5',
-            type: 'scramble',
-            prompt: 'Ordena: "Para mí, un chocolate caliente, por favor."',
-            promptFr: 'Pour moi, un chocolat chaud, s\'il vous plaît.',
-            audioFr: 'Pour moi, un chocolat chaud, s\'il vous plaît.',
-            options: ['Pour', 'moi', ',', 'un', 'chocolat', 'chaud', ',', 's\'il', 'vous', 'plaît', '.'],
-            answer: ['Pour', 'moi', ',', 'un', 'chocolat', 'chaud', ',', 's\'il', 'vous', 'plaît', '.'],
-            hintEs: 'Pour moi (para mí) + un chocolat chaud + s\'il vous plaît.',
-            hintSv: 'För mig en varm choklad, tack.',
-            explanationEs: '¡Excelente! "Pour moi..." es otra forma estupenda de pedir en grupo.',
-            explanationSv: 'Utmärkt! "Pour moi..." är perfekt när man beställer.',
-          },
-          {
-            id: 'u6-l2-e6',
-            type: 'choice',
-            prompt: '¿Qué te pregunta el camarero cuando se acerca a tomar nota?',
-            audioFr: 'Qu\'est-ce que vous désirez ?',
-            options: ['Qu\'est-ce que vous désirez ?', 'Quel âge as-tu ?', 'Comment tu t\'appelles ?', 'Où habites-tu ?'],
-            answer: 'Qu\'est-ce que vous désirez ?',
-            hintEs: 'Significa literalmente "¿Qué desea usted?".',
-            hintSv: 'Vad önskar ni?',
-            explanationEs: '¡Exacto! "Qu\'est-ce que vous désirez ?" es la fórmula profesional de hostelería.',
-            explanationSv: 'Exakt! "Qu\'est-ce que vous désirez ?" frågar servitören.',
-          },
-          {
-            id: 'u6-l2-e7',
-            type: 'choice',
-            prompt: '¿Cómo dices si quieres pedir la comida "para llevar"?',
-            audioFr: 'À emporter',
-            options: ['À emporter', 'Sur place', 'À la maison', 'Au revoir'],
-            answer: 'À emporter',
-            hintEs: '"Emporter" significa llevar contigo.',
-            hintSv: 'Take away / att ta med: à emporter.',
-            explanationEs: '¡Muy bien! "À emporter" (para llevar) vs. "Sur place" (para tomar aquí).',
-            explanationSv: 'Jättebra! "À emporter" (take away) vs. "Sur place" (äta här).',
-          },
-        ],
-      },
-      {
-        id: 'u6-l3',
-        unitId: 'unit-6',
-        title: 'Paso 3: Preguntar el precio y pagar',
-        frenchTitle: 'C\'est combien ? & L\'Addition',
-        description: 'Preguntar cuánto cuesta y entender la cuenta en euros.',
-        xpReward: 20,
-        exercises: [
-          {
-            id: 'u6-l3-e1',
-            type: 'choice',
-            prompt: '¿Cómo preguntas "¿Cuánto cuesta?" en una tienda o café?',
-            audioFr: 'C\'est combien ?',
-            options: ['C\'est combien ?', 'Quelle heure est-il ?', 'Comment ça va ?', 'Où est la gare ?'],
-            answer: 'C\'est combien ?',
-            hintEs: '"Combien" significa cuánto.',
-            hintSv: '"Combien" betyder hur mycket.',
-            explanationEs: '¡Muy bien! "C\'est combien ?" significa "¿Cuánto cuesta?".',
-            explanationSv: 'Jättebra! "C\'est combien ?" betyder vad kostar det?',
-          },
-          {
-            id: 'u6-l3-e2',
-            type: 'scramble',
-            prompt: 'Ordena la respuesta del camarero: "Son cinco euros."',
-            promptFr: 'Ça fait cinq euros.',
-            audioFr: 'Ça fait cinq euros.',
-            options: ['Ça', 'fait', 'cinq', 'euros', '.'],
-            answer: ['Ça', 'fait', 'cinq', 'euros', '.'],
-            hintEs: 'Ça fait (hace/suma) + cinco euros.',
-            hintSv: 'Ça fait + cinq euros.',
-            explanationEs: '"Ça fait cinq euros" significa que suma 5 euros en total.',
-            explanationSv: '"Ça fait cinq euros" betyder det blir fem euro.',
-          },
-          {
-            id: 'u6-l3-e3',
-            type: 'choice',
-            prompt: '¿Cómo se pide la cuenta en un restaurante o café francés?',
-            audioFr: 'L\'addition, s\'il vous plaît !',
-            options: ['L\'addition, s\'il vous plaît !', 'Le menu, s\'il vous plaît !', 'La carte, merci !', 'L\'argent, voilà !'],
-            answer: 'L\'addition, s\'il vous plaît !',
-            hintEs: '"L\'addition" es la cuenta en hostelería.',
-            hintSv: 'Notan tack: l\'addition, s\'il vous plaît.',
-            explanationEs: '¡Exacto! "L\'addition, s\'il vous plaît !" es la frase universal para pedir la cuenta.',
-            explanationSv: 'Exakt! Notan på franska är "l\'addition".',
-          },
-          {
-            id: 'u6-l3-e4',
-            type: 'fill-blank',
-            prompt: 'Completa: "Ça _____ six euros (Suma seis euros)."',
-            promptFr: 'Ça _____ six euros.',
-            audioFr: 'Ça fait six euros.',
-            options: ['fait', 'est', 'a', 'va'],
-            answer: 'fait',
-            hintEs: 'El verbo faire se conjuga "fait" (Ça fait...).',
-            hintSv: 'Det blir: Ça fait...',
-            explanationEs: '¡Muy bien! "Ça fait" se usa siempre para el total monetario.',
-            explanationSv: 'Jättebra! "Ça fait" används alltid för summan.',
-          },
-          {
-            id: 'u6-l3-e5',
-            type: 'translate',
-            prompt: 'Traduce al francés: "¿Cuánto cuesta el cruasán?"',
-            audioFr: 'C\'est combien le croissant ?',
-            options: [
-              'C\'est combien le croissant ?',
-              'Où est le croissant ?',
-              'Tu as un croissant ?',
-              'Je voudrais un croissant.'
-            ],
-            answer: 'C\'est combien le croissant ?',
-            hintEs: 'C\'est combien + le croissant ?',
-            hintSv: 'Vad kostar croissanten?',
-            explanationEs: '¡Perfecto! Pregunta directa y muy común.',
-            explanationSv: 'Perfekt! Direkt och mycket vanlig fråga.',
-          },
-          {
-            id: 'u6-l3-e6',
-            type: 'scramble',
-            prompt: 'Ordena: "Son tres euros cincuenta."',
-            promptFr: 'Ça fait trois euros cinquante.',
-            audioFr: 'Ça fait trois euros cinquante.',
-            options: ['Ça', 'fait', 'trois', 'euros', 'cinquante', '.'],
-            answer: ['Ça', 'fait', 'trois', 'euros', 'cinquante', '.'],
-            hintEs: 'Ça fait + trois euros + cinquante.',
-            hintSv: 'Ça fait trois euros cinquante.',
-            explanationEs: '¡Genial! Los céntimos se dicen simplemente tras los euros.',
-            explanationSv: 'Lysande! Centen sägs enkelt efter euro.',
-          },
-          {
-            id: 'u6-l3-e7',
-            type: 'choice',
-            prompt: '¿Qué dice el camarero deseándote que disfrutes de tu comida o bebida?',
-            audioFr: 'Bon appétit !',
-            options: ['Bon appétit !', 'Bonne nuit !', 'Bon voyage !', 'Bienvenue !'],
-            answer: 'Bon appétit !',
-            hintEs: '¡Que aproveche!',
-            hintSv: 'Smaklig måltid!',
-            explanationEs: '¡Magnífico! "Bon appétit !" es la cortesía clásica francesa antes de degustar.',
-            explanationSv: 'Fantastiskt! "Bon appétit !" betyder smaklig måltid.',
-          },
-        ],
-      },
-    ],
-    dailySessionTemplate: {
-      id: 'session-u6',
-      title: 'Paso 4: Gran Sesión Guiada de 30 minutos',
-      frenchTitle: 'À la Boulangerie (Séance de 30 min)',
-      situation: 'Entras en una típica panadería de París por la mañana para desayunar.',
-      phase1Warmup: {
-        introEs: 'Calentamiento (5 min): repasa las comidas y bebidas típicas.',
-        introSv: 'Uppvärmning (5 min): repetera typisk mat och dryck.',
-        questions: [
-          {
-            id: 'w6-1',
-            promptEs: '¿Cómo se dice "un cruasán"?',
-            promptSv: 'Hur säger man "en croissant"?',
-            expectedFr: 'Un croissant',
-            hints: ['Un cr...'],
-          },
-          {
-            id: 'w6-2',
-            promptEs: '¿Cómo se dice "agua"?',
-            promptSv: 'Hur säger man "vatten"?',
-            expectedFr: "De l'eau",
-            hints: ["De l'e..."],
-          },
-          {
-            id: 'w6-3',
-            promptEs: '¿Cómo se dice "¿Cuánto cuesta?"?',
-            promptSv: 'Hur säger man "Vad kostar det?"?',
-            expectedFr: "C'est combien ?",
-            hints: ["C'est c..."],
-          },
-        ],
-      },
-      phase2Input: {
-        storyTitle: 'Le petit-déjeuner au café',
-        storyFr: `Serveur : Bonjour jeune fille ! Qu'est-ce que vous désirez ?
-Léa : Bonjour monsieur ! Je voudrais un croissant chaud et un jus de pomme, s'il vous plaît.
-Serveur : Très bien. Avec ceci ? Une crêpe au chocolat ?
-Léa : Oh oui, une crêpe s'il vous plaît ! C'est combien en tout ?
-Serveur : Ça fait cinq euros. Bon appétit !
-Léa : Merci beaucoup, au revoir !`,
-        storyEs: `Camarero: ¡Buenos días jovencita! ¿Qué desea?
-Léa: ¡Buenos días señor! Quisiera un cruasán caliente y un zumo de manzana, por favor.
-Camarero: Muy bien. ¿Algo más con esto? ¿Un crepe de chocolate?
-Léa: ¡Oh sí, un crepe por favor! ¿Cuánto es en total?
-Camarero: Son cinco euros. ¡Buen provecho!
-Léa: ¡Muchas gracias, adiós!`,
-        storySv: `Servitör: God dag unga dam! Vad önskas?
-Léa: God dag herrn! Jag skulle vilja ha en varm croissant och en äppeljuice, tack.
-Servitör: Jättebra. Något mer till det? En chokladpannkaka?
-Léa: Åh ja, en pannkaka tack! Vad kostar det totalt?
-Servitör: Det blir fem euro. Smaklig måltid!
-Léa: Tack så mycket, hejdå!`,
-        keyExpressions: [
-          {
-            fr: 'Qu\'est-ce que vous désirez ?',
-            phonetic: 'kes-kö vu de-zi-re',
-            es: '¿Qué desea usted?',
-            sv: 'Vad önskar ni?',
-            clue: 'La pregunta clásica que hace el camarero o dependiente.',
-          },
-          {
-            fr: 'Avec ceci ?',
-            phonetic: 'a-vek sö-si',
-            es: '¿Algo más con esto?',
-            sv: 'Något mer till det?',
-            clue: 'Pregunta para saber si quieres añadir algo más al pedido.',
-          },
-          {
-            fr: 'Bon appétit !',
-            phonetic: 'bon a-pe-ti',
-            es: '¡Buen provecho! / ¡Que aproveche!',
-            sv: 'Smaklig måltid!',
-            clue: 'Deseo antes de comer.',
-          },
-        ],
-      },
-      phase3Production: {
-        contextEs: 'Juego de rol (12 min): estás en el mostrador del café y el camarero te atiende.',
-        contextSv: 'Rollspel (12 min): du är vid kassan på kaféet och servitören tar din beställning.',
-        initialAIPrompt: 'Bonjour ! Qu\'est-ce que vous désirez ?',
-        initialAIPromptTranslation: '¡Buenos días! ¿Qué desea usted?',
-        mission: 'Pide educadamente un croissant o una crêpe y una bebida.',
-        constraintProgression: [
-          'Usa "Je voudrais..." y "s\'il vous plaît".',
-          'Añade un conector "et" para pedir dos cosas.',
-          'Pregunta el precio usando "C\'est combien ?".',
-        ],
-      },
-      phase4ExitTicket: {
-        promptEs: 'Reto de salida (5 min): Escribe 2 frases pidiendo tu desayuno ideal en francés.',
-        promptSv: 'Utgångsutmaning (5 min): Skriv 2 meningar där du beställer din drömfrukost på franska.',
-        sampleFr: 'Je voudrais une crêpe au sucre et un chocolat chaud, s\'il vous plaît.',
-      },
-    },
-  },
-
-  // ==========================================
-  // UNITÉ 7: PASSIONS, SPORTS ET LOISIRS
-  // ==========================================
-  {
-    id: 'unit-7',
-    number: 7,
-    grade: 'ak6',
-    title: 'Pasiones, Deportes y Gustos',
-    frenchTitle: 'Passions, Sports et Goûts',
-    description: 'Expresa qué te encanta hacer y qué cosas no te gustan nada.',
-    iconName: 'Flame',
-    color: 'from-red-500 to-orange-500',
-    grammarTip: {
-      title: 'Verbos de gusto: Aimer, Adorer, Détester',
-      explanationEs: 'Para expresar gustos decimos: "J\'adore..." (me encanta), "J\'aime..." (me gusta) y "Je n\'aime pas..." (no me gusta). ¡Fíjate en el "ne... pas" para negar!',
-      explanationSv: 'För att uttrycka tycke: "J\'adore..." (jag älskar), "J\'aime..." (jag gillar) och "Je n\'aime pas..." (jag gillar inte). Lägg märke till "ne... pas" för negation!',
-      examples: [
-        { fr: "J'adore le football !", es: "¡Me encanta el fútbol!", sv: "Jag älskar fotboll!" },
-        { fr: "J'aime la musique.", es: "Me gusta la música.", sv: "Jag gillar musik." },
-        { fr: "Je n'aime pas les devoirs.", es: "No me gustan los deberes.", sv: "Jag gillar inte läxor." },
-      ],
-    },
-    lessons: [
-      {
-        id: 'u7-l1',
-        unitId: 'unit-7',
-        title: 'Paso 1: Vocabulario de deportes y aficiones',
-        frenchTitle: 'Les Sports et les Hobbies',
-        description: 'Le football, le basket, la danse, la musique, les jeux vidéo.',
-        xpReward: 15,
-        exercises: [
-          {
-            id: 'u7-l1-e1',
-            type: 'choice',
-            prompt: '¿Cómo se dice "los videojuegos"?',
-            audioFr: 'Les jeux vidéo',
-            options: ['Les jeux vidéo', 'La musique', 'Le dessin', 'La lecture'],
-            answer: 'Les jeux vidéo',
-            hintEs: 'Jeux = juegos, vidéo = vídeo.',
-            hintSv: 'Tv-spel / datorspel.',
-            explanationEs: '¡Correcto! "Les jeux vidéo".',
-            explanationSv: 'Rätt! "Les jeux vidéo" = tv-spel.',
-          },
-          {
-            id: 'u7-l1-e2',
-            type: 'choice',
-            prompt: '¿Cómo se dice "el fútbol"?',
-            audioFr: 'Le football',
-            options: ['Le football', 'Le basket', 'Le tennis', 'La natation'],
-            answer: 'Le football',
-            hintEs: 'A menudo se abrevia como "le foot".',
-            hintSv: 'Fotboll.',
-            explanationEs: '"Le football" o "le foot".',
-            explanationSv: '"Le football" är fotboll.',
-          },
-          {
-            id: 'u7-l1-e3',
-            type: 'choice',
-            prompt: '¿Cómo se dice "la música"?',
-            audioFr: 'La musique',
-            options: ['La musique', 'La danse', 'La guitare', 'Le piano'],
-            answer: 'La musique',
-            hintEs: 'Se parece mucho al español.',
-            hintSv: 'Musik på franska.',
-            explanationEs: '¡Exacto! "La musique".',
-            explanationSv: 'Exakt! "La musique".',
-          },
-          {
-            id: 'u7-l1-e4',
-            type: 'choice',
-            prompt: '¿Cómo se dice "la natación" en francés?',
-            audioFr: 'La natation',
-            options: ['La natation', 'Le tennis', 'La danse', 'Le ski'],
-            answer: 'La natation',
-            hintEs: 'El deporte de nadar.',
-            hintSv: 'Simning på franska: la natation.',
-            explanationEs: '¡Correcto! "La natation" = natación.',
-            explanationSv: 'Rätt! "La natation" = simning.',
-          },
-          {
-            id: 'u7-l1-e5',
-            type: 'fill-blank',
-            prompt: 'Completa: "Le samedi, je fais du _____ (ciclismo / bicicleta)."',
-            promptFr: 'Le samedi, je fais du _____ .',
-            audioFr: 'Faire du vélo',
-            options: ['vélo', 'foot', 'danse', 'judo'],
-            answer: 'vélo',
-            hintEs: '"Vélo" significa bicicleta.',
-            hintSv: 'Cykel på franska: vélo.',
-            explanationEs: '¡Muy bien! "Faire du vélo" = montar en bicicleta.',
-            explanationSv: 'Jättebra! "Faire du vélo" = cykla.',
-          },
-          {
-            id: 'u7-l1-e6',
-            type: 'translate',
-            prompt: 'Traduce al francés: "Tocar la guitarra"',
-            audioFr: 'Jouer de la guitare',
-            options: ['Jouer de la guitare', 'Écouter la radio', 'Faire du piano', 'Regarder la télé'],
-            answer: 'Jouer de la guitare',
-            hintEs: 'Con instrumentos musicales se usa "jouer de...": jouer de la guitare.',
-            hintSv: 'Med musikinstrument: jouer de la guitare.',
-            explanationEs: '¡Exacto! Jouer de la guitare.',
-            explanationSv: 'Exakt! Spela gitarr: jouer de la guitare.',
-          },
-          {
-            id: 'u7-l1-e7',
-            type: 'scramble',
-            prompt: 'Ordena: "Me gusta mucho el baloncesto."',
-            promptFr: 'J\'aime beaucoup le basket.',
-            audioFr: 'J\'aime beaucoup le basket.',
-            options: ['J\'aime', 'beaucoup', 'le', 'basket', '.'],
-            answer: ['J\'aime', 'beaucoup', 'le', 'basket', '.'],
-            hintEs: 'J\'aime beaucoup + le basket.',
-            hintSv: 'Jag gillar verkligen basket.',
-            explanationEs: '¡Genial! "J\'aime beaucoup le basket."',
-            explanationSv: 'Lysande! "J\'aime beaucoup le basket."',
-          },
-        ],
-      },
-      {
-        id: 'u7-l2',
-        unitId: 'unit-7',
-        title: 'Paso 2: Expresar gustos (J\'adore, J\'aime, Je déteste)',
-        frenchTitle: 'Exprimer ses Goûts',
-        description: 'Construir frases afirmativas y negativas sobre lo que te gusta.',
-        xpReward: 20,
-        exercises: [
-          {
-            id: 'u7-l2-e1',
-            type: 'scramble',
-            prompt: 'Ordena: "Me encanta la música pop."',
-            promptFr: 'J\'adore la musique pop.',
-            audioFr: 'J\'adore la musique pop.',
-            options: ['J\'adore', 'la', 'musique', 'pop', '.'],
-            answer: ['J\'adore', 'la', 'musique', 'pop', '.'],
-            hintEs: 'J\'adore + la musique pop.',
-            hintSv: 'J\'adore + la musique pop.',
-            explanationEs: '¡Genial! "J\'adore" expresa mucho entusiasmo.',
-            explanationSv: 'Lysande! "J\'adore" betyder jag älskar.',
-          },
-          {
-            id: 'u7-l2-e2',
-            type: 'scramble',
-            prompt: 'Ordena la frase negativa: "No me gustan los deberes."',
-            promptFr: 'Je n\'aime pas les devoirs.',
-            audioFr: 'Je n\'aime pas les devoirs.',
-            options: ['Je', 'n\'aime', 'pas', 'les', 'devoirs', '.'],
-            answer: ['Je', 'n\'aime', 'pas', 'les', 'devoirs', '.'],
-            hintEs: 'Je + n\'aime + pas (negación) + les devoirs.',
-            hintSv: 'Je n\'aime pas = jag gillar inte.',
-            explanationEs: '¡Perfecto! En francés la negación envuelve al verbo: n\'aime pas.',
-            explanationSv: 'Perfekt! Negationen "ne ... pas" ramar in verbet.',
-          },
-          {
-            id: 'u7-l2-e3',
-            type: 'choice',
-            prompt: '¿Cómo dices "Detesto / Odio" algo en francés?',
-            audioFr: 'Je déteste',
-            options: ['Je déteste', 'J\'adore', 'J\'aime bien', 'Je préfère'],
-            answer: 'Je déteste',
-            hintEs: 'Viene de detestar.',
-            hintSv: 'Betyder att hata/avsky något.',
-            explanationEs: '"Je déteste" expresa que algo no te gusta nada.',
-            explanationSv: '"Je déteste" betyder jag hatar.',
-          },
-          {
-            id: 'u7-l2-e4',
-            type: 'fill-blank',
-            prompt: 'Completa la negación: "Je _____ aime pas le tennis."',
-            promptFr: 'Je _____ aime pas le tennis.',
-            audioFr: 'Je n\'aime pas le tennis.',
-            options: ['n\'', 'ne', 'pas', 'non'],
-            answer: 'n\'',
-            hintEs: 'Delante de vocal, "ne" se convierte en "n\'": n\'aime pas.',
-            hintSv: 'Före vokal blir "ne" till "n\'": n\'aime pas.',
-            explanationEs: '¡Correcto! Je n\'aime pas (con el apóstrofe).',
-            explanationSv: 'Rätt! Före vokal skrivs n\'aime pas.',
-          },
-          {
-            id: 'u7-l2-e5',
-            type: 'translate',
-            prompt: 'Traduce al francés: "Me encantan los mangas y los cómics."',
-            audioFr: 'J\'adore les mangas et les BD.',
-            options: ['J\'adore les mangas et les BD.', 'Je déteste les livres.', 'J\'ai deux mangas.', 'C\'est un manga.'],
-            answer: 'J\'adore les mangas et les BD.',
-            hintEs: '"BD" (bande dessinée) es como llaman a los cómics en francés.',
-            hintSv: 'BD = serietidningar.',
-            explanationEs: '¡Genial! "J\'adore les mangas et les BD."',
-            explanationSv: 'Lysande! "J\'adore les mangas et les BD."',
-          },
-          {
-            id: 'u7-l2-e6',
-            type: 'choice',
-            prompt: '¿Cómo dices: "Prefiero el cine a la televisión"?',
-            audioFr: 'Je préfère le cinéma à la télé.',
-            options: ['Je préfère le cinéma à la télé.', 'J\'adore la télé.', 'Je n\'aime pas le cinéma.', 'Où est le cinéma ?'],
-            answer: 'Je préfère le cinéma à la télé.',
-            hintEs: '"Je préfère" expresa preferencia.',
-            hintSv: 'Jag föredrar bio framför tv.',
-            explanationEs: '¡Muy bien! "Je préfère..." = Prefiero...',
-            explanationSv: 'Jättebra! "Je préfère..." = Jag föredrar...',
-          },
-          {
-            id: 'u7-l2-e7',
-            type: 'scramble',
-            prompt: 'Ordena: "A ella le encanta cantar y bailar."',
-            promptFr: 'Elle adore chanter et danser.',
-            audioFr: 'Elle adore chanter et danser.',
-            options: ['Elle', 'adore', 'chanter', 'et', 'danser', '.'],
-            answer: ['Elle', 'adore', 'chanter', 'et', 'danser', '.'],
-            hintEs: 'Elle + adore + chanter + et + danser.',
-            hintSv: 'Hon älskar att sjunga och dansa.',
-            explanationEs: '¡Fantástico! Tras los verbos de gusto va el infinitivo.',
-            explanationSv: 'Fantastiskt! Efter tyckeverb följer infinitiv.',
-          },
-        ],
-      },
-      {
-        id: 'u7-l3',
-        unitId: 'unit-7',
-        title: 'Paso 3: Opiniones con C\'est chouette / C\'est nul',
-        frenchTitle: 'Donner son Avis',
-        description: 'Usar expresiones coloquiales juveniles: c\'est super, c\'est chouette, c\'est nul.',
-        xpReward: 20,
-        exercises: [
-          {
-            id: 'u7-l3-e1',
-            type: 'choice',
-            prompt: '¿Qué significa la expresión juvenil "C\'est chouette !"?',
-            promptFr: 'C\'est chouette !',
-            audioFr: 'C\'est chouette !',
-            options: ['¡Qué guay! / ¡Es genial!', 'Es un rollo', 'Es muy caro', 'Tengo sueño'],
-            answer: '¡Qué guay! / ¡Es genial!',
-            hintEs: 'Expresión muy común en Francia para algo agradable.',
-            hintSv: 'Vad häftigt / vad kul!',
-            explanationEs: '"C\'est chouette !" es una expresión muy positiva.',
-            explanationSv: '"C\'est chouette !" betyder vad kul / toppen!',
-          },
-          {
-            id: 'u7-l3-e2',
-            type: 'choice',
-            prompt: '¿Qué significa "C\'est nul !"?',
-            promptFr: 'C\'est nul !',
-            audioFr: 'C\'est nul !',
-            options: ['¡Es un rollo! / ¡Es malísimo!', 'Es fantástico', 'Es fácil', 'Es divertido'],
-            answer: '¡Es un rollo! / ¡Es malísimo!',
-            hintEs: 'Lo contrario de genial.',
-            hintSv: 'Det suger / det är trist.',
-            explanationEs: '"C\'est nul !" se usa para cosas aburridas o malas.',
-            explanationSv: '"C\'est nul !" betyder det är kasst/tråkigt.',
-          },
-          {
-            id: 'u7-l3-e3',
-            type: 'choice',
-            prompt: '¿Qué significa la expresión juvenil "C\'est trop cool !" / "C\'est génial !"?',
-            promptFr: 'C\'est génial !',
-            audioFr: 'C\'est génial !',
-            options: ['¡Es genial / súper guay!', 'Es muy feo', 'Es aburridísimo', 'Está lloviendo'],
-            answer: '¡Es genial / súper guay!',
-            hintEs: 'Génial = genial.',
-            hintSv: 'Det är lysande / toppen!',
-            explanationEs: '¡Correcto! "C\'est génial !" es una expresión entusiasta.',
-            explanationSv: 'Rätt! "C\'est génial !" betyder det är toppen!',
-          },
-          {
-            id: 'u7-l3-e4',
-            type: 'fill-blank',
-            prompt: 'Completa: "Ce film est vraiment trop _____ (bueno / genial) !"',
-            promptFr: 'Ce film est vraiment trop _____ !',
-            audioFr: 'Ce film est vraiment trop bien !',
-            options: ['bien', 'mal', 'nul', 'triste'],
-            answer: 'bien',
-            hintEs: '"Trop bien" es una expresión coloquial para decir "muy bueno/a".',
-            hintSv: 'Jättebra: trop bien.',
-            explanationEs: '¡Exacto! "Trop bien" = ¡Qué bueno / qué bien!',
-            explanationSv: 'Exakt! "Trop bien" = jättebra.',
-          },
-          {
-            id: 'u7-l3-e5',
-            type: 'translate',
-            prompt: 'Traduce al francés: "En mi opinión, es aburrido."',
-            audioFr: 'À mon avis, c\'est ennuyeux.',
-            options: [
-              'À mon avis, c\'est ennuyeux.',
-              'C\'est très chouette.',
-              'J\'adore ça.',
-              'Ce n\'est pas cher.'
-            ],
-            answer: 'À mon avis, c\'est ennuyeux.',
-            hintEs: 'À mon avis (en mi opinión) + c\'est ennuyeux (es aburrido).',
-            hintSv: 'Enligt min åsikt är det tråkigt.',
-            explanationEs: '¡Genial! "À mon avis, c\'est ennuyeux."',
-            explanationSv: 'Lysande! "À mon avis, c\'est ennuyeux."',
-          },
-          {
-            id: 'u7-l3-e6',
-            type: 'scramble',
-            prompt: 'Ordena: "¡Es súper divertido entre amigos!"',
-            promptFr: 'C\'est super amusant entre amis !',
-            audioFr: 'C\'est super amusant entre amis !',
-            options: ['C\'est', 'super', 'amusant', 'entre', 'amis', '!'],
-            answer: ['C\'est', 'super', 'amusant', 'entre', 'amis', '!'],
-            hintEs: 'C\'est + super amusant + entre amis !',
-            hintSv: 'Det är superkul mellan vänner!',
-            explanationEs: '¡Excelente! "Amusant" significa divertido.',
-            explanationSv: 'Utmärkt! "Amusant" betyder rolig.',
-          },
-          {
-            id: 'u7-l3-e7',
-            type: 'choice',
-            prompt: '¿Cómo reaccionas con decepción ante algo malo o pesado?',
-            audioFr: 'Franchement, c\'est nul !',
-            options: ['Franchement, c\'est nul !', 'C\'est super chouette !', 'J\'adore cette idée !', 'Bravo, félicitations !'],
-            answer: 'Franchement, c\'est nul !',
-            hintEs: 'Franchement = sinceramente, c\'est nul = es un rollo/malísimo.',
-            hintSv: 'Ärligt talat, det suger!',
-            explanationEs: '¡Brillante! Expresión coloquial muy típica en Francia.',
-            explanationSv: 'Strålande! Mycket typiskt franskt vardagsuttryck.',
-          },
-        ],
-      },
-    ],
-    dailySessionTemplate: {
-      id: 'session-u7',
-      title: 'Paso 4: Gran Sesión Guiada de 30 minutos',
-      frenchTitle: 'Mes Loisirs Préférés (Séance de 30 min)',
-      situation: 'En una clase de tutoría todos cuentan qué hacen en su tiempo libre.',
-      phase1Warmup: {
-        introEs: 'Calentamiento (5 min): repasa los verbos de gusto.',
-        introSv: 'Uppvärmning (5 min): repetera verb för att uttrycka tycke.',
-        questions: [
-          {
-            id: 'w7-1',
-            promptEs: '¿Cómo se dice "Me encanta"?',
-            promptSv: 'Hur säger man "Jag älskar"?',
-            expectedFr: "J'adore",
-            hints: ["J'ad..."],
-          },
-          {
-            id: 'w7-2',
-            promptEs: '¿Cómo se dice "No me gusta"?',
-            promptSv: 'Hur säger man "Jag gillar inte"?',
-            expectedFr: "Je n'aime pas",
-            hints: ["Je n'a..."],
-          },
-          {
-            id: 'w7-3',
-            promptEs: '¿Cómo se dice "los videojuegos"?',
-            promptSv: 'Hur säger man "tv-spel"?',
-            expectedFr: 'Les jeux vidéo',
-            hints: ['Les j...'],
-          },
-        ],
-      },
-      phase2Input: {
-        storyTitle: 'Après l\'école',
-        storyFr: `Paul : Qu'est-ce que tu fais après l'école, Léa ?
-Léa : J'adore jouer au basket avec mes copines ! Et le week-end, je dessine. Et toi ?
-Paul : Moi, je joue de la guitare. J'aime aussi les jeux vidéo avec mon frère.
-Léa : C'est chouette ! Mais je parie que tu n'aimes pas ranger ta chambre !
-Paul : Ah non, ça je déteste ! C'est nul !`,
-        storyEs: `Paul: ¿Qué haces después de la escuela, Léa?
-Léa: ¡Me encanta jugar al baloncesto con mis amigas! Y los fines de semana dibujo. ¿Y tú?
-Paul: Yo toco la guitarra. También me gustan los videojuegos con mi hermano.
-Léa: ¡Qué guay! ¡Pero apuesto a que no te gusta ordenar tu habitación!
-Paul: ¡Ah no, eso lo detesto! ¡Es un rollo!`,
-        storySv: `Paul: Vad gör du efter skolan, Léa?
-Léa: Jag älskar att spela basket med mina tjejkompisar! Och på helgen ritar jag. Och du?
-Paul: Jag spelar gitarr. Jag gillar också tv-spel med min bror.
-Léa: Vad kul! Men jag slår vad om att du inte gillar att städa ditt rum!
-Paul: Åh nej, det hatar jag! Det är så tråkigt!`,
-        keyExpressions: [
-          {
-            fr: 'C\'est chouette !',
-            phonetic: 'se shuet',
-            es: '¡Qué guay! / ¡Genial!',
-            sv: 'Vad häftigt! / Vad kul!',
-            clue: 'Expresión informal francesa para algo divertido o bonito.',
-          },
-          {
-            fr: 'C\'est nul !',
-            phonetic: 'se nül',
-            es: '¡Es un rollo! / ¡Es malísimo!',
-            sv: 'Det suger! / Det är trist!',
-            clue: 'Expresión juvenil para algo aburrido o molesto.',
-          },
-          {
-            fr: 'Après l\'école',
-            phonetic: 'a-pre le-kol',
-            es: 'Después del colegio',
-            sv: 'Efter skolan',
-            clue: 'Momento de tiempo libre tras las clases.',
-          },
-        ],
-      },
-      phase3Production: {
-        contextEs: 'Juego de rol (12 min): Paul te pregunta qué haces después del colegio.',
-        contextSv: 'Rollspel (12 min): Paul frågar vad du brukar göra efter skolan.',
-        initialAIPrompt: 'Salut ! Qu\'est-ce que tu aimes faire après l\'école ?',
-        initialAIPromptTranslation: '¡Hola! ¿Qué te gusta hacer después de la escuela?',
-        mission: 'Cuéntale qué actividad te encanta y qué cosa no te gusta nada.',
-        constraintProgression: [
-          'Usa "J\'adore..." con un deporte, música o hobby.',
-          'Añade un conector "mais" (pero) y una negación: "mais je n\'aime pas...".',
-          'Usa la expresión "C\'est chouette !" o "C\'est génial !".',
-        ],
-      },
-      phase4ExitTicket: {
-        promptEs: 'Reto de salida (5 min): Escribe 2 frases sobre tus pasiones en francés.',
-        promptSv: 'Utgångsutmaning (5 min): Skriv 2 meningar om dina intressen på franska.',
-        sampleFr: 'J\'adore le football et la musique, mais je déteste faire les devoirs.',
-      },
-    },
-  },
-
-  // ==========================================
-  // UNITÉ 8: MA JOURNÉE ET LES HEURES
-  // ==========================================
-  {
-    id: 'unit-8',
-    number: 8,
-    grade: 'ak6',
-    title: 'Mi Día a Día y Las Horas',
-    frenchTitle: 'Ma Journée et Les Heures',
-    description: 'Aprende a decir la hora y cuenta tu rutina diaria habitual.',
-    iconName: 'Clock',
-    color: 'from-indigo-600 to-blue-600',
-    grammarTip: {
-      title: 'Decir la hora: "Il est... heures"',
-      explanationEs: 'Para decir la hora decimos siempre "Il est..." seguido del número y "heures". Ejemplo: "Il est huit heures" (Son las ocho).',
-      explanationSv: 'För att säga klockslaget säger man alltid "Il est..." följt av siffran och "heures". Exempel: "Il est huit heures" (Klockan är åtta).',
-      examples: [
-        { fr: "Quelle heure est-il ?", es: "¿Qué hora es?", sv: "Vad är klockan?" },
-        { fr: "Il est huit heures.", es: "Son las ocho.", sv: "Klockan är åtta." },
-        { fr: "À sept heures, je me réveille.", es: "A las siete, me despierto.", sv: "Klockan sju vaknar jag." },
-      ],
-    },
-    lessons: [
-      {
-        id: 'u8-l1',
-        unitId: 'unit-8',
-        title: 'Paso 1: Decir la hora (Quelle heure est-il ?)',
-        frenchTitle: 'Quelle heure est-il ?',
-        description: 'Il est huit heures, neuf heures, dix heures...',
-        xpReward: 15,
-        exercises: [
-          {
-            id: 'u8-l1-e1',
-            type: 'choice',
-            prompt: '¿Cómo se pregunta "¿Qué hora es?"?',
-            audioFr: 'Quelle heure est-il ?',
-            options: ['Quelle heure est-il ?', 'Quel âge as-tu ?', 'Comment tu t\'appelles ?', 'Où est l\'école ?'],
-            answer: 'Quelle heure est-il ?',
-            hintEs: '"Heure" significa hora.',
-            hintSv: '"Heure" betyder timme/tid.',
-            explanationEs: '¡Exacto! "Quelle heure est-il ?" es la pregunta estándar.',
-            explanationSv: 'Exakt! "Quelle heure est-il ?" betyder vad är klockan?',
-          },
-          {
-            id: 'u8-l1-e2',
-            type: 'scramble',
-            prompt: 'Ordena la respuesta: "Son las ocho en punto."',
-            promptFr: 'Il est huit heures.',
-            audioFr: 'Il est huit heures.',
-            options: ['Il', 'est', 'huit', 'heures', '.'],
-            answer: ['Il', 'est', 'huit', 'heures', '.'],
-            hintEs: 'Il est + número (huit) + heures.',
-            hintSv: 'Il est + huit + heures.',
-            explanationEs: '¡Correcto! En francés siempre se dice "Il est ... heures".',
-            explanationSv: 'Rätt! Klockan är åtta.',
-          },
-          {
-            id: 'u8-l1-e3',
-            type: 'choice',
-            prompt: '¿Cómo se dice "y media" al decir la hora?',
-            audioFr: 'Et demie',
-            options: ['Et demie', 'Et quart', 'Moins le quart', 'À l\'heure'],
-            answer: 'Et demie',
-            hintEs: 'Ejemplo: huit heures et demie (ocho y media).',
-            hintSv: 'Halv timme.',
-            explanationEs: '"Et demie" significa y media.',
-            explanationSv: '"Et demie" betyder och en halv.',
-          },
-          {
-            id: 'u8-l1-e4',
-            type: 'choice',
-            prompt: '¿Cómo se dice "Son las diez y cuarto"?',
-            audioFr: 'Il est dix heures et quart.',
-            options: ['Il est dix heures et quart.', 'Il est dix heures et demie.', 'Il est dix heures moins le quart.', 'Il est onze heures.'],
-            answer: 'Il est dix heures et quart.',
-            hintEs: 'Et quart = y cuarto.',
-            hintSv: 'Kvart över tio.',
-            explanationEs: '¡Muy bien! "Et quart" significa y cuarto.',
-            explanationSv: 'Jättebra! "Et quart" betyder kvart över.',
-          },
-          {
-            id: 'u8-l1-e5',
-            type: 'fill-blank',
-            prompt: 'Completa: "Il est _____ heures (Son las dos)."',
-            promptFr: 'Il est _____ heures.',
-            audioFr: 'Il est deux heures.',
-            options: ['deux', 'douze', 'dix', 'trois'],
-            answer: 'deux',
-            hintEs: 'Deux = 2.',
-            hintSv: 'Två på franska: deux.',
-            explanationEs: '¡Correcto! Deux = 2.',
-            explanationSv: 'Rätt! Deux = 2.',
-          },
-          {
-            id: 'u8-l1-e6',
-            type: 'translate',
-            prompt: 'Traduce: "Es mediodía (12:00 del día)"',
-            audioFr: 'Il est midi.',
-            options: ['Il est midi.', 'Il est minuit.', 'Il est midi et quart.', 'Il est midi et demi.'],
-            answer: 'Il est midi.',
-            hintEs: 'Midi = mediodía, minuit = medianoche.',
-            hintSv: 'Midi = mitt på dagen (klockan 12).',
-            explanationEs: '¡Perfecto! En francés las 12:00 se dice "Il est midi".',
-            explanationSv: 'Perfekt! Klockan 12 mitt på dagen är "Il est midi".',
-          },
-          {
-            id: 'u8-l1-e7',
-            type: 'scramble',
-            prompt: 'Ordena: "Son las siete menos cuarto."',
-            promptFr: 'Il est sept heures moins le quart.',
-            audioFr: 'Il est sept heures moins le quart.',
-            options: ['Il', 'est', 'sept', 'heures', 'moins', 'le', 'quart', '.'],
-            answer: ['Il', 'est', 'sept', 'heures', 'moins', 'le', 'quart', '.'],
-            hintEs: 'Il est sept heures + moins le quart (menos cuarto).',
-            hintSv: 'Klockan är kvart i sju.',
-            explanationEs: '¡Excelente! "Moins le quart" expresa menos cuarto.',
-            explanationSv: 'Utmärkt! "Moins le quart" = kvart i.',
-          },
-        ],
-      },
-      {
-        id: 'u8-l2',
-        unitId: 'unit-8',
-        title: 'Paso 2: Momentos del día (Matin, Midi, Soir)',
-        frenchTitle: 'Les Moments de la Journée',
-        description: 'Le matin, l\'après-midi, le soir, la nuit.',
-        xpReward: 20,
-        exercises: [
-          {
-            id: 'u8-l2-e1',
-            type: 'choice',
-            prompt: '¿Cómo se dice "por la mañana" en francés?',
-            audioFr: 'Le matin',
-            options: ['Le matin', 'Le soir', 'La nuit', 'Le midi'],
-            answer: 'Le matin',
-            hintEs: 'El momento en que sale el sol.',
-            hintSv: 'Morgonen.',
-            explanationEs: '¡Correcto! "Le matin" es la mañana.',
-            explanationSv: 'Rätt! "Le matin" = morgonen.',
-          },
-          {
-            id: 'u8-l2-e2',
-            type: 'choice',
-            prompt: '¿Qué momento del día es "Le soir"?',
-            audioFr: 'Le soir',
-            options: ['La tarde/noche', 'El mediodía', 'La mañana', 'La madrugada'],
-            answer: 'La tarde/noche',
-            hintEs: 'Cuando se cena y descansa.',
-            hintSv: 'Kvällen.',
-            explanationEs: '"Le soir" es la tarde/noche.',
-            explanationSv: '"Le soir" = kvällen.',
-          },
-          {
-            id: 'u8-l2-e3',
-            type: 'fill-blank',
-            prompt: 'Completa: "À midi, je mange à la _____ (comedor escolar)."',
-            promptFr: 'À midi, je mange à la _____ .',
-            audioFr: 'À midi, je mange à la cantine.',
-            options: ['cantine', 'classe', 'maison', 'gare'],
-            answer: 'cantine',
-            hintEs: '"La cantine" es el comedor de la escuela.',
-            hintSv: 'Matsalen i skolan.',
-            explanationEs: '¡Excelente! En Francia el comedor escolar se llama "la cantine".',
-            explanationSv: 'Utmärkt! Skolmatsalen kallas "la cantine".',
-          },
-          {
-            id: 'u8-l2-e4',
-            type: 'choice',
-            prompt: '¿Cómo se dice "por la tarde" (entre el mediodía y la cena)?',
-            audioFr: 'L\'après-midi',
-            options: ['L\'après-midi', 'Le matin', 'Le soir', 'La nuit'],
-            answer: 'L\'après-midi',
-            hintEs: 'Après (después) + midi (mediodía).',
-            hintSv: 'Eftermiddagen.',
-            explanationEs: '¡Exacto! "L\'après-midi" = por la tarde.',
-            explanationSv: 'Exakt! "L\'après-midi" = eftermiddagen.',
-          },
-          {
-            id: 'u8-l2-e5',
-            type: 'translate',
-            prompt: 'Traduce al francés: "Buenas noches (antes de ir a dormir)"',
-            audioFr: 'Bonne nuit !',
-            options: ['Bonne nuit !', 'Bonsoir !', 'Bonjour !', 'Bonne journée !'],
-            answer: 'Bonne nuit !',
-            hintEs: 'Bonne nuit se usa al ir a la cama a dormir.',
-            hintSv: 'God natt på franska: Bonne nuit !',
-            explanationEs: '¡Correcto! "Bonne nuit !" = ¡Buenas noches / Que duermas bien!',
-            explanationSv: 'Rätt! "Bonne nuit !" = God natt!',
-          },
-          {
-            id: 'u8-l2-e6',
-            type: 'fill-blank',
-            prompt: 'Completa: "La _____ (noche), tout le monde dort."',
-            promptFr: 'La _____ , tout le monde dort.',
-            audioFr: 'La nuit, tout le monde dort.',
-            options: ['nuit', 'matin', 'midi', 'soir'],
-            answer: 'nuit',
-            hintEs: 'La noche es femenino: la nuit.',
-            hintSv: 'Natten är feminin: la nuit.',
-            explanationEs: '¡Muy bien! "La nuit" = la noche.',
-            explanationSv: 'Jättebra! "La nuit" = natten.',
-          },
-          {
-            id: 'u8-l2-e7',
-            type: 'scramble',
-            prompt: 'Ordena: "Por la noche, ceno en familia."',
-            promptFr: 'Le soir, je dîne en famille.',
-            audioFr: 'Le soir, je dîne en famille.',
-            options: ['Le', 'soir', ',', 'je', 'dîne', 'en', 'famille', '.'],
-            answer: ['Le', 'soir', ',', 'je', 'dîne', 'en', 'famille', '.'],
-            hintEs: 'Le soir + je dîne + en famille.',
-            hintSv: 'På kvällen äter jag middag med familjen.',
-            explanationEs: '¡Genial! "Le soir, je dîne en famille."',
-            explanationSv: 'Lysande! På kvällen äter jag middag med familjen.',
-          },
-        ],
-      },
-      {
-        id: 'u8-l3',
-        unitId: 'unit-8',
-        title: 'Paso 3: Verbos de rutina (Me réveille, vais au collège)',
-        frenchTitle: 'Raconter sa Routine',
-        description: 'À quelle heure tu commences les cours ?',
-        xpReward: 20,
-        exercises: [
-          {
-            id: 'u8-l3-e1',
-            type: 'scramble',
-            prompt: 'Ordena: "A las siete, me despierto."',
-            promptFr: 'À sept heures, je me réveille.',
-            audioFr: 'À sept heures, je me réveille.',
-            options: ['À', 'sept', 'heures', ',', 'je', 'me', 'réveille', '.'],
-            answer: ['À', 'sept', 'heures', ',', 'je', 'me', 'réveille', '.'],
-            hintEs: 'À sept heures + je me réveille.',
-            hintSv: 'Klockan sju vaknar jag.',
-            explanationEs: '¡Genial! "Je me réveille" = me despierto.',
-            explanationSv: 'Lysande! Jag vaknar klockan sju.',
-          },
-          {
-            id: 'u8-l3-e2',
-            type: 'scramble',
-            prompt: 'Ordena: "Empiezo las clases a las ocho."',
-            promptFr: 'Je commence les cours à huit heures.',
-            audioFr: 'Je commence les cours à huit heures.',
-            options: ['Je', 'commence', 'les', 'cours', 'à', 'huit', 'heures', '.'],
-            answer: ['Je', 'commence', 'les', 'cours', 'à', 'huit', 'heures', '.'],
-            hintEs: 'Je commence (empiezo) + les cours (las clases) + à huit heures.',
-            hintSv: 'Jag börjar lektionerna klockan åtta.',
-            explanationEs: '¡Perfecto! "Je commence les cours à huit heures."',
-            explanationSv: 'Perfekt! "Je commence les cours à huit heures."',
-          },
-          {
-            id: 'u8-l3-e3',
-            type: 'fill-blank',
-            prompt: 'Completa: "À sept heures et demie, je prends mon _____ (desayuno)."',
-            promptFr: 'À sept heures et demie, je prends mon _____ .',
-            audioFr: 'Prendre le petit-déjeuner',
-            options: ['petit-déjeuner', 'déjeuner', 'dîner', 'goûter'],
-            answer: 'petit-déjeuner',
-            hintEs: '"Petit-déjeuner" es el desayuno de la mañana.',
-            hintSv: 'Frukost på franska: petit-déjeuner.',
-            explanationEs: '¡Muy bien! "Prendre le petit-déjeuner" = desayunar.',
-            explanationSv: 'Jättebra! "Prendre le petit-déjeuner" = äta frukost.',
-          },
-          {
-            id: 'u8-l3-e4',
-            type: 'translate',
-            prompt: 'Traduce al francés: "Voy al colegio a pie."',
-            audioFr: 'Je vais au collège à pied.',
-            options: ['Je vais au collège à pied.', 'Je vais à l\'école en bus.', 'Je reste à la maison.', 'Je rentre à pied.'],
-            answer: 'Je vais au collège à pied.',
-            hintEs: 'Je vais (voy) + au collège (al colegio) + à pied (andando/a pie).',
-            hintSv: 'Jag går till skolan till fots.',
-            explanationEs: '¡Genial! "À pied" significa a pie o caminando.',
-            explanationSv: 'Lysande! "À pied" = till fots.',
-          },
-          {
-            id: 'u8-l3-e5',
-            type: 'choice',
-            prompt: '¿Cómo dices: "Termino las clases a las cuatro"?',
-            audioFr: 'Je finis les cours à quatre heures.',
-            options: ['Je finis les cours à quatre heures.', 'Je commence à quatre heures.', 'Il est quatre heures.', 'Je déjeune à quatre heures.'],
-            answer: 'Je finis les cours à quatre heures.',
-            hintEs: 'El verbo "finir" significa terminar (je finis).',
-            hintSv: 'Jag slutar lektionerna klockan fyra.',
-            explanationEs: '¡Correcto! "Je finis les cours..." = Termino las clases.',
-            explanationSv: 'Rätt! "Je finis les cours..." = Jag slutar skolan.',
-          },
-          {
-            id: 'u8-l3-e6',
-            type: 'scramble',
-            prompt: 'Ordena: "Hago mis deberes a las cinco."',
-            promptFr: 'Je fais mes devoirs à cinq heures.',
-            audioFr: 'Je fais mes devoirs à cinq heures.',
-            options: ['Je', 'fais', 'mes', 'devoirs', 'à', 'cinq', 'heures', '.'],
-            answer: ['Je', 'fais', 'mes', 'devoirs', 'à', 'cinq', 'heures', '.'],
-            hintEs: 'Je fais (hago) + mes devoirs (mis deberes) + à cinq heures.',
-            hintSv: 'Jag gör mina läxor klockan fem.',
-            explanationEs: '¡Excelente! "Faire ses devoirs" = hacer los deberes.',
-            explanationSv: 'Utmärkt! "Faire ses devoirs" = göra läxorna.',
-          },
-          {
-            id: 'u8-l3-e7',
-            type: 'choice',
-            prompt: '¿Cómo dices: "Me acuesto a las nueve y media"?',
-            audioFr: 'Je me couche à neuf heures et demie.',
-            options: ['Je me couche à neuf heures et demie.', 'Je me lève à neuf heures.', 'Je dîne à neuf heures.', 'Il est neuf heures et demie.'],
-            answer: 'Je me couche à neuf heures et demie.',
-            hintEs: '"Se coucher" es el verbo reflexivo acostarse: je me couche.',
-            hintSv: 'Jag lägger mig klockan halv tio.',
-            explanationEs: '¡Bravo! Dominas el ciclo completo del día y la rutina cotidiana en francés.',
-            explanationSv: 'Bravo! Du behärskar hela dagsrytmen och vardagsrutinerna på franska.',
-          },
-        ],
-      },
-    ],
-    dailySessionTemplate: {
-      id: 'session-u8',
-      title: 'Paso 4: Gran Sesión Guiada de 30 minutos',
-      frenchTitle: 'Une Journée Normale au Collège (Séance de 30 min)',
-      situation: 'Describes tu rutina matutina antes de entrar a clase.',
-      phase1Warmup: {
-        introEs: 'Calentamiento (5 min): repasa las horas y momentos del día.',
-        introSv: 'Uppvärmning (5 min): repetera klockslag och tider på dygnet.',
-        questions: [
-          {
-            id: 'w8-1',
-            promptEs: '¿Cómo se dice "Son las ocho"?',
-            promptSv: 'Hur säger man "Klockan är åtta"?',
-            expectedFr: 'Il est huit heures',
-            hints: ['Il est h...'],
-          },
-          {
-            id: 'w8-2',
-            promptEs: '¿Cómo se dice "la mañana"?',
-            promptSv: 'Hur säger man "morgonen"?',
-            expectedFr: 'Le matin',
-            hints: ['Le m...'],
-          },
-          {
-            id: 'w8-3',
-            promptEs: '¿Cómo se dice "la tarde"?',
-            promptSv: 'Hur säger man "eftermiddagen"?',
-            expectedFr: "L'après-midi",
-            hints: ["L'a..."],
-          },
-        ],
-      },
-      phase2Input: {
-        storyTitle: 'La routine de Sarah',
-        storyFr: `Sarah : Le matin, mon réveil sonne à sept heures. Je prends mon petit-déjeuner.
-Antoine : À quelle heure tu commences l'école ?
-Sarah : Je commence les cours à huit heures et demie. J'arrive toujours à l'heure !
-Antoine : Et le soir, tu te couches tard ?
-Sarah : Non, vers neuf heures et quart, je suis fatiguée ! Bonne nuit !`,
-        storyEs: `Sarah: Por la mañana, mi despertador suena a las siete. Desayuno.
-Antoine: ¿A qué hora empiezas la escuela?
-Sarah: Empiezo las clases a las ocho y media. ¡Llego siempre puntual!
-Antoine: Y por la noche, ¿te acuestas tarde?
-Sarah: No, sobre las nueve y cuarto, ¡estoy cansada! ¡Buenas noches!`,
-        storySv: `Sarah: På morgonen ringer min väckarklocka klockan sju. Jag äter frukost.
-Antoine: Vilken tid börjar du skolan?
-Sarah: Jag börjar lektionerna klockan halv nio. Jag kommer alltid i tid!
-Antoine: Och på kvällen, lägger du dig sent?
-Sarah: Nej, runt kvart över nio, jag är trött! God natt!`,
-        keyExpressions: [
-          {
-            fr: 'À quelle heure... ?',
-            phonetic: 'a kel ör',
-            es: '¿A qué hora...?',
-            sv: 'Vilken tid...?',
-            clue: 'Pregunta para conocer el horario de una acción.',
-          },
-          {
-            fr: 'À l\'heure',
-            phonetic: 'a lör',
-            es: 'Puntual / A tiempo',
-            sv: 'I tid',
-            clue: 'Llegar en el momento exacto acordado.',
-          },
-          {
-            fr: 'Bonne nuit !',
-            phonetic: 'bon nüi',
-            es: '¡Buenas noches!',
-            sv: 'God natt!',
-            clue: 'Despedida antes de dormir.',
-          },
-        ],
-      },
-      phase3Production: {
-        contextEs: 'Juego de rol (12 min): Antoine te pregunta a qué hora te levantas y vas a la escuela.',
-        contextSv: 'Rollspel (12 min): Antoine frågar vilken tid du går upp och går till skolan.',
-        initialAIPrompt: 'À quelle heure tu te réveilles le matin ? Et à quelle heure commence ton école ?',
-        initialAIPromptTranslation: '¿A qué hora te despiertas por la mañana? ¿Y a qué hora empieza tu escuela?',
-        mission: 'Indica a qué hora te levantas y a qué hora empieza tu colegio.',
-        constraintProgression: [
-          'Usa "À sept heures..." o "À huit heures...".',
-          'Añade "Je vais à l\'école" o "Je commence à...".',
-          'Añade un conector como "puis" (luego) o "ensuite" (después).',
-        ],
-      },
-      phase4ExitTicket: {
-        promptEs: 'Reto de salida (5 min): Escribe 2 frases sobre tu rutina diaria indicando una hora.',
-        promptSv: 'Utgångsutmaning (5 min): Skriv 2 meningar om din vardagsrutin med ett klockslag.',
-        sampleFr: 'Le matin, je me réveille à sept heures et je vais au collège à huit heures.',
-      },
-    },
-  },
+  ...CURRICULUM_AK6_UNITS,
+  ...CURRICULUM_AK7_UNITS
 ];
 
 export const FUTURE_GRADES_PREVIEW = [
   {
-    grade: 'ak7',
-    label: 'Årskurs 7 (Moderna språk Steg 2)',
-    description: 'Verbos en -ER regulares, descripción de la ciudad y la casa, la negación avanzada y el futuro próximo ("Je vais aller...").',
-    unitsCount: 10,
-    status: 'Próximamente disponible para continuar el siguiente curso',
-  },
-  {
-    grade: 'ak8',
+    grade: 'ak8' as const,
     label: 'Årskurs 8 (Moderna språk Steg 3)',
     description: 'El pasado compuesto (Passé Composé con avoir y être), comparativos, expresiones de tiempo y anécdotas de viajes.',
     unitsCount: 12,
-    status: 'Continuación estructurada para årskurs 8',
+    status: 'Continuación estructurada para årskurs 8'
   },
   {
-    grade: 'ak9',
+    grade: 'ak9' as const,
     label: 'Årskurs 9 (Moderna språk Steg 4 / A2+)',
     description: 'El imperfecto, planes de futuro, debates de opinión, preparación para las pruebas nacionales suecas (nationella prov).',
     unitsCount: 12,
-    status: 'Nivel funcional completo para finalizar la grundskola',
-  },
+    status: 'Nivel funcional completo para finalizar la grundskola'
+  }
 ];
+

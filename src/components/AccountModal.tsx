@@ -30,6 +30,7 @@ export const AccountModal: React.FC<AccountModalProps> = ({
   profile,
   onUpdateProfile,
   onLogout,
+  onResetProgress,
 }) => {
   const { user, signOut } = useAuth();
   const [isEditingName, setIsEditingName] = useState(false);

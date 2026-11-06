@@ -279,7 +279,7 @@ export const DailySessionView: React.FC<DailySessionViewProps> = ({
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-[11px] font-bold text-indigo-600 uppercase tracking-wider bg-indigo-50 px-2 py-0.5 rounded-md">
-                  Unité {unit.number} · Årskurs 6
+                  Unité {unit.number} · {unit.grade === 'ak7' ? 'Årskurs 7' : 'Årskurs 6'}
                 </span>
                 {onSelectUnit && (
                   <select
@@ -299,7 +299,9 @@ export const DailySessionView: React.FC<DailySessionViewProps> = ({
                   >
                     {CURRICULUM_UNITS.map((u) => (
                       <option key={u.id} value={u.id}>
-                        {isSwedish ? `Byt till Enhet ${u.number}: ${u.frenchTitle}` : `Cambiar a Unidad ${u.number}: ${u.frenchTitle}`}
+                        {isSwedish 
+                          ? `[${u.grade === 'ak7' ? 'Åk 7' : 'Åk 6'}] Enhet ${u.number}: ${u.frenchTitle}` 
+                          : `[${u.grade === 'ak7' ? 'Åk 7' : 'Åk 6'}] Unidad ${u.number}: ${u.frenchTitle}`}
                       </option>
                     ))}
                   </select>

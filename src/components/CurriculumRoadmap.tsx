@@ -33,24 +33,30 @@ export const CurriculumRoadmap: React.FC<CurriculumRoadmapProps> = ({
 
   const isSwedish = profile.supportLanguage === 'sv';
 
-  // Helper functions for sequential progression unlocking
+  // Filter active units for current selected grade
+  const activeUnits = CURRICULUM_UNITS.filter((u) => u.grade === selectedGrade);
+
+  // Helper functions for sequential progression unlocking within selected grade
   const isUnitUnlocked = (unitIndex: number): boolean => {
-    if (unitIndex === 0) return true; // First unit is always open
-    const prevUnit = CURRICULUM_UNITS[unitIndex - 1];
+    if (unitIndex === 0) return true; // First unit of any active course is always unlocked for direct access
+    const prevUnit = activeUnits[unitIndex - 1];
+    if (!prevUnit) return true;
     return profile.completedSessionIds.includes(prevUnit.dailySessionTemplate.id);
   };
 
   const isLessonUnlocked = (unitIndex: number, lessonIndex: number): boolean => {
     if (!isUnitUnlocked(unitIndex)) return false;
     if (lessonIndex === 0) return true; // Step 1 is open if unit is open
-    const unit = CURRICULUM_UNITS[unitIndex];
+    const unit = activeUnits[unitIndex];
+    if (!unit) return false;
     const prevLesson = unit.lessons[lessonIndex - 1];
     return profile.completedLessonIds.includes(prevLesson.id);
   };
 
   const isSessionUnlocked = (unitIndex: number): boolean => {
     if (!isUnitUnlocked(unitIndex)) return false;
-    const unit = CURRICULUM_UNITS[unitIndex];
+    const unit = activeUnits[unitIndex];
+    if (!unit) return false;
     return unit.lessons.every((lesson) => profile.completedLessonIds.includes(lesson.id));
   };
 
@@ -82,20 +88,32 @@ export const CurriculumRoadmap: React.FC<CurriculumRoadmapProps> = ({
           }`}
         >
           <Sparkles className="w-4 h-4 text-amber-400" />
-          <span>Årskurs 6 · Steg 1 (Activo)</span>
+          <span>Årskurs 6 · Steg 1</span>
+        </button>
+
+        {/* Årskurs 7 */}
+        <button
+          onClick={() => setSelectedGrade('ak7')}
+          className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap shrink-0 flex items-center gap-2 ${
+            selectedGrade === 'ak7'
+              ? 'bg-slate-900 text-white shadow-sm'
+              : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+          }`}
+        >
+          <GraduationCap className="w-4 h-4 text-amber-400" />
+          <span>Årskurs 7 · Steg 2</span>
         </button>
 
         {FUTURE_GRADES_PREVIEW.map((g) => {
+          let gradeLabelFormatted = '';
           let lockExplanation = '';
-          if (g.grade === 'ak7') {
+          if (g.grade === 'ak8') {
+            gradeLabelFormatted = 'Årskurs 8 · Steg 3';
             lockExplanation = isSwedish
-              ? 'Låst: Slutför alla 8 enheter i årskurs 6 för att låsa upp årskurs 7'
-              : 'Bloqueado: Completa las 8 unidades de Årskurs 6 para desbloquear Årskurs 7';
-          } else if (g.grade === 'ak8') {
-            lockExplanation = isSwedish
-              ? 'Låst: Slutför årskurs 7 för att låsa upp årskurs 8'
-              : 'Bloqueado: Completa Årskurs 7 para desbloquear Årskurs 8';
+              ? 'Låst: Slutför alla 8 enheter i årskurs 7 för att låsa upp årskurs 8'
+              : 'Bloqueado: Completa las 8 unidades de Årskurs 7 para desbloquear Årskurs 8';
           } else {
+            gradeLabelFormatted = 'Årskurs 9 · Steg 4';
             lockExplanation = isSwedish
               ? 'Låst: Slutför årskurs 8 för att låsa upp årskurs 9'
               : 'Bloqueado: Completa Årskurs 8 para desbloquear Årskurs 9';
@@ -111,7 +129,7 @@ export const CurriculumRoadmap: React.FC<CurriculumRoadmapProps> = ({
                 className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-colors whitespace-nowrap flex items-center gap-2 bg-slate-100/90 border border-slate-200 text-slate-400 opacity-70 cursor-not-allowed`}
               >
                 <Lock className="w-3.5 h-3.5 text-slate-400" />
-                <span>{g.label.split('(')[0]}</span>
+                <span>{gradeLabelFormatted}</span>
               </button>
 
               {/* Tooltip on hover */}
@@ -125,10 +143,53 @@ export const CurriculumRoadmap: React.FC<CurriculumRoadmapProps> = ({
         })}
       </div>
 
-      {/* Content for Årskurs 6 Units */}
-      {selectedGrade === 'ak6' ? (
+      {/* Content for Units of Current Grade */}
+      {activeUnits.length > 0 ? (
         <div className="space-y-8">
-          {CURRICULUM_UNITS.map((unit, unitIdx) => {
+          {selectedGrade === 'ak7' && (
+            <>
+              <div className="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 border border-indigo-200/80 rounded-2xl p-5 sm:p-6 mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xs">
+                <div className="flex items-start gap-3.5">
+                  <div className="w-11 h-11 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                    <GraduationCap className="w-6 h-6 text-amber-300" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h2 className="font-extrabold text-slate-900 text-base sm:text-lg">
+                        {isSwedish ? 'Årskurs 7 · Moderna språk Franska (Steg 2)' : 'Årskurs 7 · Francés Moderna Språk (Steg 2)'}
+                      </h2>
+                      <span className="text-[10px] font-extrabold bg-indigo-600 text-white uppercase px-2 py-0.5 rounded-full">
+                        Högstadiet
+                      </span>
+                    </div>
+                    <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl leading-relaxed">
+                      {isSwedish
+                        ? 'Komplett kurs för årskurs 7: 8 enheter med -ER verb, staden, hemmet, futur proche, väder, restaurang, hälsa och resor (480 övningar).'
+                        : 'Curso completo para Årskurs 7: 8 unidades con verbos -ER, la ciudad, el hogar, futur proche, el clima, restaurante, salud y viajes (480 ejercicios interactivos).'}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 shrink-0 bg-white/80 border border-indigo-100 px-3 py-1.5 rounded-xl shadow-2xs">
+                  <Sparkles className="w-4 h-4 text-indigo-600" />
+                  <span className="text-xs font-bold text-indigo-900">
+                    {isSwedish ? '8 enheter · 480 övningar' : '8 unidades · 480 ejercicios'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Test/Preview Note for Evaluation */}
+              <div className="bg-amber-50/90 border border-amber-200/80 rounded-xl px-4 py-2.5 mb-6 flex items-center gap-2.5 text-xs text-amber-900 shadow-2xs">
+                <Info className="w-4 h-4 text-amber-600 shrink-0" />
+                <span>
+                  {isSwedish
+                    ? 'Utvärderingsläge aktivt: Årskurs 7 är tillgänglig för testning. För elever i vanlig skolgång låses den upp automatiskt när årskurs 6 slutförs.'
+                    : 'Modo Evaluación y Pruebas activo: El Paso 1 de Årskurs 7 está abierto para que puedas testar el curso. En el flujo habitual de clase, los alumnos lo desbloquean al completar las 8 unidades de Årskurs 6.'}
+                </span>
+              </div>
+            </>
+          )}
+
+          {activeUnits.map((unit, unitIdx) => {
             const unitUnlocked = isUnitUnlocked(unitIdx);
             const isSessionDone = profile.completedSessionIds.includes(unit.dailySessionTemplate.id);
             const totalSteps = unit.lessons.length + 1;
@@ -136,8 +197,8 @@ export const CurriculumRoadmap: React.FC<CurriculumRoadmapProps> = ({
             const isUnitComplete = completedSteps === totalSteps;
 
             const unitLockMessage = isSwedish
-              ? `Enhet låst: Slutför Enhet ${unitIdx} (${CURRICULUM_UNITS[unitIdx - 1]?.frenchTitle}) först!`
-              : `Unidad bloqueada: Completa la Unité ${unitIdx} (${CURRICULUM_UNITS[unitIdx - 1]?.frenchTitle}) primero.`;
+              ? `Enhet låst: Slutför Enhet ${unitIdx} (${activeUnits[unitIdx - 1]?.frenchTitle}) först!`
+              : `Unidad bloqueada: Completa la Unité ${unitIdx} (${activeUnits[unitIdx - 1]?.frenchTitle}) primero.`;
 
             return (
               <div
@@ -210,8 +271,8 @@ export const CurriculumRoadmap: React.FC<CurriculumRoadmapProps> = ({
                   </div>
                 </div>
 
-                {/* 4 Progressive Steps: 3 Preparatory Lessons + Capstone 30-min Session */}
-                <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {/* 6 Progressive Steps: 5 Preparatory Lessons + Capstone 30-min Session */}
+                <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {unit.lessons.map((lesson, lessonIdx) => {
                     const isDone = profile.completedLessonIds.includes(lesson.id);
                     const isUnlocked = isLessonUnlocked(unitIdx, lessonIdx);
@@ -338,7 +399,7 @@ export const CurriculumRoadmap: React.FC<CurriculumRoadmapProps> = ({
                     );
                   })}
 
-                  {/* Culminating Step 4: 30-Minute Structured Session Card with Locked State */}
+                  {/* Culminating Step 6: 30-Minute Structured Session Card with Locked State */}
                   {(() => {
                     const isSessionDone = profile.completedSessionIds.includes(unit.dailySessionTemplate.id);
                     const isSessionOpen = isSessionUnlocked(unitIdx);
@@ -346,8 +407,8 @@ export const CurriculumRoadmap: React.FC<CurriculumRoadmapProps> = ({
                     const sessionLockReason = !unitUnlocked
                       ? unitLockMessage
                       : isSwedish
-                      ? 'Låst: Slutför alla tre steg (Steg 1, 2 och 3) för att låsa upp 30-minuters passet!'
-                      : 'Bloqueado: Completa los 3 pasos anteriores para desbloquear la Gran Sesión de 30 minutos.';
+                      ? 'Låst: Slutför alla fem förberedande steg (Steg 1 till 5) för att låsa upp 30-minuters passet!'
+                      : 'Bloqueado: Completa los 5 pasos anteriores para desbloquear la Gran Sesión de 30 minutos.';
 
                     return (
                       <div className="relative group flex flex-col">
@@ -381,14 +442,14 @@ export const CurriculumRoadmap: React.FC<CurriculumRoadmapProps> = ({
                                   <>
                                     <Lock className="w-3.5 h-3.5 text-slate-400" />
                                     <span className="text-slate-400 font-medium">
-                                      {isSwedish ? 'Paso 4 (Låst)' : 'Paso 4 (Bloqueado)'}
+                                      {isSwedish ? 'Steg 6 (Låst)' : 'Paso 6 (Bloqueado)'}
                                     </span>
                                   </>
                                 ) : (
                                   <>
                                     <Sparkles className="w-4 h-4 text-amber-500 animate-pulse" />
                                     <span className="text-indigo-700">
-                                      {isSwedish ? 'Steg 4 (30 min)' : 'Paso 4 (Sesión 30 min)'}
+                                      {isSwedish ? 'Steg 6 (30 min)' : 'Paso 6 (Sesión 30 min)'}
                                     </span>
                                   </>
                                 )}
