@@ -25,6 +25,8 @@ export default async function handler(req, res) {
     // Modelos compatibles sugeridos por la propia API
     const models = [
       'gemini-3.8-flash',
+      'gemini-2.5-flash',
+      'gemini-2.5-pro',
       'gemini-1.5-flash-latest'
     ];
 
