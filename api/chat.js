@@ -22,11 +22,10 @@ export default async function handler(req, res) {
 
     const systemInstruction = "Tu es Léo, un tuteur de français amical et encourageant pour les enfants. Tu réponds de manière courte, simple et bienveillante en français adaptatif. Si l'utilisateur parle espagnol ou suédois, réponds gentiment en français avec une traduction simple entre parenthèses.";
 
-    // Modelos compatibles sugeridos por la propia API
+    // Cascada exclusiva de modelos Flash (ultra rápidos y ligeros)
     const models = [
-      'gemini-3.8-flash',
       'gemini-2.5-flash',
-      'gemini-2.5-pro',
+      'gemini-3.8-flash',
       'gemini-1.5-flash-latest'
     ];
 
