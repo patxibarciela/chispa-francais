@@ -107,8 +107,8 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ profile }) => {
         throw new Error('La IA no devolvió contenido en la respuesta.');
       }
 
-      if (data.modelUsed) {
-        setLastModelUsed(data.modelUsed);
+      if (data.usedModel || data.modelUsed) {
+        setLastModelUsed(data.usedModel || data.modelUsed);
       }
 
       const assistantMsg: ChatMessageItem = {
