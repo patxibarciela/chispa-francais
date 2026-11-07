@@ -538,7 +538,7 @@ export const INITIAL_VOCABULARY: Flashcard[] = [
   // Unit 1 (Åk 7): Voyage et Ville
   {
     id: 'v28',
-    unitId: 'ak7-u1',
+    unitId: 'ak7-unit-1',
     grade: 'ak7',
     french: 'La gare',
     phonetic: 'la gar',
@@ -555,7 +555,7 @@ export const INITIAL_VOCABULARY: Flashcard[] = [
   },
   {
     id: 'v29',
-    unitId: 'ak7-u1',
+    unitId: 'ak7-unit-1',
     grade: 'ak7',
     french: 'Le train',
     phonetic: 'lö tran',
@@ -572,7 +572,7 @@ export const INITIAL_VOCABULARY: Flashcard[] = [
   },
   {
     id: 'v30',
-    unitId: 'ak7-u1',
+    unitId: 'ak7-unit-1',
     grade: 'ak7',
     french: 'Où est... ?',
     phonetic: 'u e',
@@ -589,7 +589,7 @@ export const INITIAL_VOCABULARY: Flashcard[] = [
   },
   {
     id: 'v31',
-    unitId: 'ak7-u1',
+    unitId: 'ak7-unit-1',
     grade: 'ak7',
     french: 'Le musée',
     phonetic: 'lö mü-ze',
@@ -608,7 +608,7 @@ export const INITIAL_VOCABULARY: Flashcard[] = [
   // Unit 2 (Åk 7): Maison et Chambre
   {
     id: 'v32',
-    unitId: 'ak7-u2',
+    unitId: 'ak7-unit-2',
     grade: 'ak7',
     french: 'La maison',
     phonetic: 'la me-zon',
@@ -625,7 +625,7 @@ export const INITIAL_VOCABULARY: Flashcard[] = [
   },
   {
     id: 'v33',
-    unitId: 'ak7-u2',
+    unitId: 'ak7-unit-2',
     grade: 'ak7',
     french: 'La chambre',
     phonetic: 'la shan-br',
@@ -642,7 +642,7 @@ export const INITIAL_VOCABULARY: Flashcard[] = [
   },
   {
     id: 'v34',
-    unitId: 'ak7-u2',
+    unitId: 'ak7-unit-2',
     grade: 'ak7',
     french: 'La cuisine',
     phonetic: 'la küi-zin',
@@ -661,7 +661,7 @@ export const INITIAL_VOCABULARY: Flashcard[] = [
   // Unit 3 (Åk 7): Météo et Saisons
   {
     id: 'v35',
-    unitId: 'ak7-u3',
+    unitId: 'ak7-unit-3',
     grade: 'ak7',
     french: 'Il fait beau',
     phonetic: 'il fe bo',
@@ -678,7 +678,7 @@ export const INITIAL_VOCABULARY: Flashcard[] = [
   },
   {
     id: 'v36',
-    unitId: 'ak7-u3',
+    unitId: 'ak7-unit-3',
     grade: 'ak7',
     french: 'Il pleut',
     phonetic: 'il plö',
@@ -695,7 +695,7 @@ export const INITIAL_VOCABULARY: Flashcard[] = [
   },
   {
     id: 'v37',
-    unitId: 'ak7-u3',
+    unitId: 'ak7-unit-3',
     grade: 'ak7',
     french: "L'été / L'hiver",
     phonetic: 'le-te / li-ver',
@@ -714,7 +714,7 @@ export const INITIAL_VOCABULARY: Flashcard[] = [
   // Unit 4 (Åk 7): Achats et Magasins
   {
     id: 'v38',
-    unitId: 'ak7-u4',
+    unitId: 'ak7-unit-4',
     grade: 'ak7',
     french: 'Combien ça coûte ?',
     phonetic: 'kon-bi-an sa kut',
@@ -731,7 +731,7 @@ export const INITIAL_VOCABULARY: Flashcard[] = [
   },
   {
     id: 'v39',
-    unitId: 'ak7-u4',
+    unitId: 'ak7-unit-4',
     grade: 'ak7',
     french: "C'est cher",
     phonetic: 'se sher',
@@ -748,7 +748,7 @@ export const INITIAL_VOCABULARY: Flashcard[] = [
   },
   {
     id: 'v40',
-    unitId: 'ak7-u4',
+    unitId: 'ak7-unit-4',
     grade: 'ak7',
     french: 'Le magasin',
     phonetic: 'lö ma-ga-zan',
@@ -767,7 +767,7 @@ export const INITIAL_VOCABULARY: Flashcard[] = [
   // Unit 5 (Åk 7): Au restaurant et Gastronomie
   {
     id: 'v41',
-    unitId: 'ak7-u5',
+    unitId: 'ak7-unit-5',
     grade: 'ak7',
     french: "L'addition, s'il vous plaît",
     phonetic: 'la-di-si-on sil vu ple',
@@ -784,7 +784,7 @@ export const INITIAL_VOCABULARY: Flashcard[] = [
   },
   {
     id: 'v42',
-    unitId: 'ak7-u5',
+    unitId: 'ak7-unit-5',
     grade: 'ak7',
     french: 'Le serveur / La serveuse',
     phonetic: 'lö ser-vör / la ser-vöz',
@@ -801,7 +801,7 @@ export const INITIAL_VOCABULARY: Flashcard[] = [
   },
   {
     id: 'v43',
-    unitId: 'ak7-u5',
+    unitId: 'ak7-unit-5',
     grade: 'ak7',
     french: "C'est délicieux",
     phonetic: 'se de-li-si-ö',
@@ -820,7 +820,7 @@ export const INITIAL_VOCABULARY: Flashcard[] = [
   // Unit 6 (Åk 7): Corps humain et Santé
   {
     id: 'v44',
-    unitId: 'ak7-u6',
+    unitId: 'ak7-unit-6',
     grade: 'ak7',
     french: "J'ai mal à la tête",
     phonetic: 'zhe mal a la tet',
@@ -837,7 +837,7 @@ export const INITIAL_VOCABULARY: Flashcard[] = [
   },
   {
     id: 'v45',
-    unitId: 'ak7-u6',
+    unitId: 'ak7-unit-6',
     grade: 'ak7',
     french: 'Le médecin',
     phonetic: 'lö med-san',
@@ -854,7 +854,7 @@ export const INITIAL_VOCABULARY: Flashcard[] = [
   },
   {
     id: 'v46',
-    unitId: 'ak7-u6',
+    unitId: 'ak7-unit-6',
     grade: 'ak7',
     french: 'La pharmacie',
     phonetic: 'la far-ma-si',
@@ -873,7 +873,7 @@ export const INITIAL_VOCABULARY: Flashcard[] = [
   // Unit 7 (Åk 7): Loisirs numériques et Technologie
   {
     id: 'v47',
-    unitId: 'ak7-u7',
+    unitId: 'ak7-unit-7',
     grade: 'ak7',
     french: 'Télécharger',
     phonetic: 'te-le-shar-zhe',
@@ -890,7 +890,7 @@ export const INITIAL_VOCABULARY: Flashcard[] = [
   },
   {
     id: 'v48',
-    unitId: 'ak7-u7',
+    unitId: 'ak7-unit-7',
     grade: 'ak7',
     french: 'Le téléphone portable',
     phonetic: 'lö te-le-fon por-tabl',
@@ -907,7 +907,7 @@ export const INITIAL_VOCABULARY: Flashcard[] = [
   },
   {
     id: 'v49',
-    unitId: 'ak7-u7',
+    unitId: 'ak7-unit-7',
     grade: 'ak7',
     french: 'Les réseaux sociaux',
     phonetic: 'le re-zo so-si-o',
@@ -926,7 +926,7 @@ export const INITIAL_VOCABULARY: Flashcard[] = [
   // Unit 8 (Åk 7): Projets d'avenir et Métiers
   {
     id: 'v50',
-    unitId: 'ak7-u8',
+    unitId: 'ak7-unit-8',
     grade: 'ak7',
     french: 'Demain / Plus tard',
     phonetic: 'dö-man / plü tar',
@@ -943,7 +943,7 @@ export const INITIAL_VOCABULARY: Flashcard[] = [
   },
   {
     id: 'v51',
-    unitId: 'ak7-u8',
+    unitId: 'ak7-unit-8',
     grade: 'ak7',
     french: 'Voyager dans le monde',
     phonetic: 'vua-ia-zhe dan lö mond',
@@ -960,7 +960,7 @@ export const INITIAL_VOCABULARY: Flashcard[] = [
   },
   {
     id: 'v52',
-    unitId: 'ak7-u8',
+    unitId: 'ak7-unit-8',
     grade: 'ak7',
     french: 'Le métier de mes rêves',
     phonetic: 'lö me-ti-e dö me rev',

@@ -15,6 +15,7 @@ import {
 } from 'firebase/firestore';
 import { auth, db, googleProvider, handleFirestoreError, OperationType } from '../firebase';
 import { UserProfile, Flashcard } from '../types';
+import { INITIAL_VOCABULARY } from '../data/vocabulary';
 
 export type SyncStatus = 'guest' | 'synced' | 'saving' | 'offline' | 'error';
 
@@ -94,24 +95,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const cardsSnap = await getDocs(collection(db, 'users', uid, 'flashcards'));
       let cardsData: Flashcard[] | null = null;
       if (!cardsSnap.empty) {
+        const vocabMap = new Map(INITIAL_VOCABULARY.map((v) => [v.id, v]));
         cardsData = cardsSnap.docs.map((d) => {
           const c = d.data();
+          const cardId = c.id || d.id;
+          const master = vocabMap.get(cardId);
           return {
-            id: c.id || d.id,
-            french: c.french,
-            spanish: c.spanish,
-            swedish: c.swedish,
-            phonetic: c.phonetic || '',
-            exampleFr: c.exampleFr || '',
-            exampleEs: c.exampleEs || '',
-            exampleSv: c.exampleSv || '',
-            category: c.category || 'general',
+            id: cardId,
+            french: c.french || master?.french || '',
+            spanish: c.spanish || master?.spanish || '',
+            swedish: c.swedish || master?.swedish || '',
+            phonetic: c.phonetic || master?.phonetic || '',
+            exampleFr: c.exampleFr || master?.exampleFr || '',
+            exampleEs: c.exampleEs || master?.exampleEs || '',
+            exampleSv: c.exampleSv || master?.exampleSv || '',
+            category: c.category || master?.category || 'general',
             box: (c.box || 1) as 1 | 2 | 3,
             nextReviewDate: c.nextReviewDate || new Date().toISOString(),
             timesReviewed: c.timesReviewed || 0,
             correctStreak: c.correctStreak || 0,
+            grade: master?.grade || c.grade,
+            unitId: master?.unitId || c.unitId,
           };
         });
+
+        // Append any new curriculum cards not yet in user's cloud collection
+        const existingIds = new Set(cardsData.map((c) => c.id));
+        const missingCards = INITIAL_VOCABULARY.filter((v) => !existingIds.has(v.id));
+        if (missingCards.length > 0) {
+          cardsData = [...cardsData, ...missingCards];
+        }
       }
 
       setLastSyncedAt(new Date());
@@ -170,6 +183,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               nextReviewDate: card.nextReviewDate,
               timesReviewed: card.timesReviewed,
               correctStreak: card.correctStreak,
+              grade: card.grade || null,
+              unitId: card.unitId || null,
               lastReviewed: new Date().toISOString(),
             }, { merge: true });
           });

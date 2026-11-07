@@ -146,18 +146,39 @@ export function loadFlashcards(): Flashcard[] {
     if (!raw) return INITIAL_VOCABULARY;
     const cards = JSON.parse(raw);
     if (Array.isArray(cards) && cards.length > 0) {
-      const existingIds = new Set(cards.map((c: Flashcard) => c.id));
-      const missing = INITIAL_VOCABULARY.filter((c) => !existingIds.has(c.id));
-      if (missing.length > 0) {
-        const merged = [...cards, ...missing];
-        try {
-          localStorage.setItem(STORAGE_KEY_CARDS, JSON.stringify(merged));
-        } catch {
-          // Ignore storage quota errors
+      const vocabMap = new Map(INITIAL_VOCABULARY.map((c) => [c.id, c]));
+      
+      // Hydrate all existing cards with master metadata (grade, unitId, phonetic, examples)
+      // while preserving the user's box (1, 2, 3), nextReviewDate, timesReviewed, correctStreak
+      const hydrated = cards.map((c: Flashcard) => {
+        const master = vocabMap.get(c.id);
+        if (master) {
+          return {
+            ...master,
+            ...c,
+            grade: master.grade,
+            unitId: master.unitId,
+            category: master.category || c.category,
+            phonetic: master.phonetic || c.phonetic,
+            exampleFr: master.exampleFr || c.exampleFr,
+            exampleEs: master.exampleEs || c.exampleEs,
+            exampleSv: master.exampleSv || c.exampleSv,
+          };
         }
-        return merged;
+        return c;
+      });
+
+      // Append any new cards from INITIAL_VOCABULARY that aren't yet in storage
+      const existingIds = new Set(hydrated.map((c: Flashcard) => c.id));
+      const missing = INITIAL_VOCABULARY.filter((c) => !existingIds.has(c.id));
+      const result = missing.length > 0 ? [...hydrated, ...missing] : hydrated;
+
+      try {
+        localStorage.setItem(STORAGE_KEY_CARDS, JSON.stringify(result));
+      } catch {
+        // Ignore quota errors
       }
-      return cards;
+      return result;
     }
     return INITIAL_VOCABULARY;
   } catch {

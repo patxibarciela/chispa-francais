@@ -236,54 +236,71 @@ function playNativeSpeechSynthesis(cleanText: string, slow = false): Promise<boo
     }
 
     try {
-      // Unfreeze synthesis engine in Chrome
+      // Unfreeze synthesis engine in Chromium/Safari
       if (window.speechSynthesis.paused) {
         window.speechSynthesis.resume();
       }
 
-      // If already speaking, safely cancel with brief delay to avoid Chrome race bug
+      // If already speaking, cancel so new phrase triggers immediately
       if (window.speechSynthesis.speaking) {
         window.speechSynthesis.cancel();
       }
 
-      setTimeout(() => {
-        try {
-          const utterance = new SpeechSynthesisUtterance(cleanText);
-          utterance.lang = 'fr-FR';
-          utterance.rate = slow ? 0.78 : 0.94;
-          utterance.pitch = 1.04;
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.lang = 'fr-FR';
+      utterance.rate = slow ? 0.78 : 0.95;
+      utterance.pitch = 1.02;
 
-          if (!cachedFrenchVoice) {
-            updateFrenchVoiceCache();
-          }
-          if (cachedFrenchVoice) {
-            utterance.voice = cachedFrenchVoice;
-          }
+      if (!cachedFrenchVoice) {
+        updateFrenchVoiceCache();
+      }
+      if (cachedFrenchVoice) {
+        utterance.voice = cachedFrenchVoice;
+      }
 
-          // Retain utterance in global Set to prevent GC premature cut-off in Chromium
-          if ((window as any).__chispaSpeechSet) {
-            (window as any).__chispaSpeechSet.add(utterance);
-          }
+      // Retain utterance in global Set to prevent GC cut-off in Chromium
+      if ((window as any).__chispaSpeechSet) {
+        (window as any).__chispaSpeechSet.add(utterance);
+      }
 
-          utterance.onend = () => {
-            if ((window as any).__chispaSpeechSet) {
-              (window as any).__chispaSpeechSet.delete(utterance);
-            }
-            resolve(true);
-          };
+      let hasResolved = false;
 
-          utterance.onerror = () => {
-            if ((window as any).__chispaSpeechSet) {
-              (window as any).__chispaSpeechSet.delete(utterance);
-            }
-            resolve(false);
-          };
+      utterance.onstart = () => {
+        if (!hasResolved) {
+          hasResolved = true;
+          resolve(true);
+        }
+      };
 
-          window.speechSynthesis.speak(utterance);
-        } catch {
+      utterance.onend = () => {
+        if ((window as any).__chispaSpeechSet) {
+          (window as any).__chispaSpeechSet.delete(utterance);
+        }
+        if (!hasResolved) {
+          hasResolved = true;
+          resolve(true);
+        }
+      };
+
+      utterance.onerror = () => {
+        if ((window as any).__chispaSpeechSet) {
+          (window as any).__chispaSpeechSet.delete(utterance);
+        }
+        if (!hasResolved) {
+          hasResolved = true;
           resolve(false);
         }
-      }, 35);
+      };
+
+      window.speechSynthesis.speak(utterance);
+
+      // Fast watchdog to ensure resolution if browser does not fire onstart
+      setTimeout(() => {
+        if (!hasResolved) {
+          hasResolved = true;
+          resolve(true);
+        }
+      }, 80);
     } catch {
       resolve(false);
     }
@@ -293,9 +310,9 @@ function playNativeSpeechSynthesis(cleanText: string, slow = false): Promise<boo
 /**
  * Universal speakFrench function:
  * 1. Synchronously unlocks AudioContext on click.
- * 2. Attempts studio-quality /api/tts/fr stream via HTML5 Audio.
- * 3. Falls back smoothly to SpeechSynthesis if offline/static.
- * 4. Provides subtle acoustic feedback so clicks are never dead.
+ * 2. Instantaneous Native SpeechSynthesis (<30ms, no network delay).
+ * 3. Fast Server-side French TTS stream fallback if client has no French voice.
+ * 4. Subtle acoustic feedback so clicks always feel tactile and responsive.
  */
 export async function speakFrench(text: string, slow = false): Promise<void> {
   if (typeof window === 'undefined') return;
@@ -306,7 +323,17 @@ export async function speakFrench(text: string, slow = false): Promise<void> {
   // Immediately unlock audio context in the active user gesture
   soundEffects.unlock();
 
-  // Try Server-side French TTS endpoint first
+  // 1. High-speed Instant Native SpeechSynthesis FIRST (<30ms, zero download lag)
+  if ('speechSynthesis' in window) {
+    try {
+      const nativeOk = await playNativeSpeechSynthesis(cleanText, slow);
+      if (nativeOk) return; // Played instantaneously!
+    } catch {
+      // Fallback to server audio stream
+    }
+  }
+
+  // 2. Server-side TTS fallback (for environments without French native voices)
   try {
     if (activeAudioElement) {
       activeAudioElement.pause();
@@ -321,16 +348,9 @@ export async function speakFrench(text: string, slow = false): Promise<void> {
     const playPromise = audio.play();
     if (playPromise !== undefined) {
       await playPromise;
-      return; // Played successfully!
+      return;
     }
   } catch {
-    // Server TTS not reachable or static environment, continue to native speech synthesis
-  }
-
-  // Fallback to Native SpeechSynthesis
-  const synthSuccess = await playNativeSpeechSynthesis(cleanText, slow);
-  if (!synthSuccess) {
-    // If both failed, provide subtle acoustic feedback so user knows the button registered
     soundEffects.playTap();
   }
 }

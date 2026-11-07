@@ -2,28 +2,25 @@ import React, { useState } from 'react';
 import { 
   Volume2, 
   RotateCw, 
-  Check, 
-  X, 
-  Sparkles, 
   Brain, 
   Search, 
-  Layers, 
-  VolumeX,
-  Play,
   HelpCircle,
   ChevronDown,
   ChevronUp,
-  Gem,
-  CheckCircle2,
-  Calendar,
-  ArrowRight,
+  X,
   GraduationCap,
-  BookOpen
+  BookOpen,
+  Lock,
+  Unlock,
+  CheckCircle2,
+  Sparkles,
+  Compass
 } from 'lucide-react';
 import { Flashcard, UserProfile, Unit, GradeLevel } from '../types';
 import { speakFrench, soundEffects } from '../utils/audio';
 import { updateCardReview, saveFlashcards } from '../utils/storage';
 import { SectionBanner } from './SectionBanner';
+import { INITIAL_VOCABULARY } from '../data/vocabulary';
 
 interface SpacedRepetitionDeckProps {
   cards: Flashcard[];
@@ -40,6 +37,8 @@ export const SpacedRepetitionDeck: React.FC<SpacedRepetitionDeckProps> = ({
 }) => {
   const isSwedish = profile.supportLanguage === 'sv';
 
+  // Mode: 'unlocked' (only words from units currently unlocked in learning roadmap) vs 'all' (free exploration of all 55 cards)
+  const [studyScope, setStudyScope] = useState<'unlocked' | 'all'>('unlocked');
   const [selectedGrade, setSelectedGrade] = useState<'all' | 'ak6' | 'ak7'>('all');
   const [selectedUnitId, setSelectedUnitId] = useState<'all' | string>('all');
   const [currentBoxFilter, setCurrentBoxFilter] = useState<number | 'all'>('all');
@@ -48,16 +47,89 @@ export const SpacedRepetitionDeck: React.FC<SpacedRepetitionDeckProps> = ({
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
   const [showGuide, setShowGuide] = useState<boolean>(false);
 
+  // Check if Årskurs 6 is fully completed
+  const ak6Units = (units || []).filter((u) => u.grade === 'ak6');
+  const isAk6Completed =
+    ak6Units.length > 0 &&
+    ak6Units.every(
+      (u) =>
+        profile.completedSessionIds.includes(u.dailySessionTemplate.id) ||
+        u.lessons.every((l) => profile.completedLessonIds.includes(l.id))
+    );
+
+  // Check if a specific curriculum unit is unlocked in student's roadmap
+  const isUnitUnlockedInRoadmap = (unit: Unit): boolean => {
+    if (unit.grade === 'ak7' && !isAk6Completed) {
+      return false;
+    }
+    const gradeUnits = (units || []).filter((u) => u.grade === unit.grade);
+    const unitIdx = gradeUnits.findIndex((u) => u.id === unit.id);
+    if (unitIdx <= 0) return true; // First unit of an unlocked grade is open
+
+    const prevUnit = gradeUnits[unitIdx - 1];
+    if (!prevUnit) return true;
+    return (
+      profile.completedSessionIds.includes(prevUnit.dailySessionTemplate.id) ||
+      prevUnit.lessons.every((l) => profile.completedLessonIds.includes(l.id)) ||
+      unit.lessons.some((l) => profile.completedLessonIds.includes(l.id))
+    );
+  };
+
+  // Normalize cards with INITIAL_VOCABULARY master metadata and roadmap unlock status
+  const vocabMap = new Map(INITIAL_VOCABULARY.map((v) => [v.id, v]));
+  const normalizedCards = cards.map((c) => {
+    const master = vocabMap.get(c.id);
+    const numId = parseInt(c.id.replace(/\D/g, ''), 10) || 1;
+    const grade = (c.grade || master?.grade || (numId >= 28 ? 'ak7' : 'ak6')) as GradeLevel;
+    const unitId = c.unitId || master?.unitId || (numId >= 28 ? 'ak7-unit-1' : 'unit-1');
+
+    const cardUnit = (units || []).find((u) => 
+      u.id === unitId || 
+      u.id === unitId?.replace('ak7-u', 'ak7-unit-') ||
+      (grade && u.grade === grade && `unit-${u.number}` === unitId)
+    );
+
+    const isUnlockedInRoadmap = cardUnit ? isUnitUnlockedInRoadmap(cardUnit) : (grade === 'ak6');
+
+    return {
+      ...c,
+      grade,
+      unitId,
+      cardUnit,
+      isUnlockedInRoadmap,
+    };
+  });
+
+  // Calculate unlock metrics
+  const totalCardsCount = normalizedCards.length;
+  const unlockedCardsCount = normalizedCards.filter((c) => c.isUnlockedInRoadmap).length;
+  const lockedCardsCount = totalCardsCount - unlockedCardsCount;
+
   // Available units for the selected grade
   const availableUnits = (units || []).filter(
     (u) => selectedGrade === 'all' || u.grade === selectedGrade
   );
 
-  // Filter cards by grade, unit, box, and search query
-  const filteredCards = cards.filter((c) => {
-    if (selectedGrade !== 'all' && c.grade && c.grade !== selectedGrade) return false;
-    if (selectedUnitId !== 'all' && c.unitId && c.unitId !== selectedUnitId) return false;
+  // Cards filtered by scope, grade, unit, box, and search query
+  const filteredCards = normalizedCards.filter((c) => {
+    // 1. Study Scope filter
+    if (studyScope === 'unlocked' && !c.isUnlockedInRoadmap) return false;
+
+    // 2. Grade filter
+    if (selectedGrade !== 'all' && c.grade !== selectedGrade) return false;
+
+    // 3. Unit filter
+    if (selectedUnitId !== 'all') {
+      const matchExact = c.unitId === selectedUnitId;
+      const matchNormalized = c.unitId === selectedUnitId.replace('ak7-unit-', 'ak7-u');
+      const matchUnitObj = c.cardUnit?.id === selectedUnitId;
+      if (!matchExact && !matchNormalized && !matchUnitObj) return false;
+    }
+
+    // 4. Box filter
     if (currentBoxFilter !== 'all' && c.box !== currentBoxFilter) return false;
+
+    // 5. Text search query
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       return (
@@ -70,12 +142,18 @@ export const SpacedRepetitionDeck: React.FC<SpacedRepetitionDeckProps> = ({
     return true;
   });
 
-  const currentCard: Flashcard | undefined = filteredCards[activeCardIndex];
+  const currentCard = filteredCards[activeCardIndex];
 
-  // Box statistics
-  const countBox1 = cards.filter((c) => c.box === 1).length;
-  const countBox2 = cards.filter((c) => c.box === 2).length;
-  const countBox3 = cards.filter((c) => c.box === 3).length;
+  // Box statistics based on the active scope
+  const activeDeckScopeCards = normalizedCards.filter((c) => 
+    studyScope === 'all' ? true : c.isUnlockedInRoadmap
+  );
+  const countBox1 = activeDeckScopeCards.filter((c) => c.box === 1).length;
+  const countBox2 = activeDeckScopeCards.filter((c) => c.box === 2).length;
+  const countBox3 = activeDeckScopeCards.filter((c) => c.box === 3).length;
+
+  const countAk6 = normalizedCards.filter((c) => c.grade === 'ak6').length;
+  const countAk7 = normalizedCards.filter((c) => c.grade === 'ak7').length;
 
   const handleFlip = () => {
     setIsFlipped(!isFlipped);
@@ -86,7 +164,7 @@ export const SpacedRepetitionDeck: React.FC<SpacedRepetitionDeckProps> = ({
     if (!currentCard) return;
 
     const updated = updateCardReview(currentCard, outcome);
-    const newCards = cards.map((c) => (c.id === currentCard.id ? updated : c));
+    const newCards = cards.map((c) => (c.id === currentCard.id ? { ...currentCard, ...updated } : c));
 
     onUpdateCards(newCards);
     saveFlashcards(newCards);
@@ -109,7 +187,7 @@ export const SpacedRepetitionDeck: React.FC<SpacedRepetitionDeckProps> = ({
 
   return (
     <div>
-      {/* Unified Section Header matching Chispa style */}
+      {/* Section Header */}
       <SectionBanner
         categoryBadge={isSwedish ? 'LEITNER-SYSTEMET · REPETITION' : 'SISTEMA LEITNER · INTERVALOS ÓPTIMOS'}
         categoryIcon={Brain}
@@ -122,13 +200,102 @@ export const SpacedRepetitionDeck: React.FC<SpacedRepetitionDeckProps> = ({
         metrics={[
           { value: countBox1, label: isSwedish ? 'Låda 1 (Daglig)' : 'Caja 1 (A reforzar)', colorClass: 'text-rose-600' },
           { value: countBox2, label: isSwedish ? 'Låda 2 (3 dagar)' : 'Caja 2 (En repaso)', colorClass: 'text-amber-600' },
-          { value: countBox3, label: isSwedish ? 'Låda 3 (Mästare)' : 'Caja 3 (Dominadas)', colorClass: 'text-purple-600' },
+          { value: countBox3, label: isSwedish ? 'Låda 3 (Dominadas)' : 'Caja 3 (Dominadas 💎)', colorClass: 'text-purple-600' },
         ]}
       />
 
       <div className="max-w-4xl mx-auto px-4 py-4">
 
-      {/* Grade and Unit Roadmap Linker */}
+      {/* Roadmap Integration & Progression Clarifier Banner */}
+      <div className="bg-gradient-to-r from-indigo-50/90 via-blue-50/60 to-purple-50/60 border border-indigo-200/80 rounded-2xl p-4 sm:p-5 mb-6 shadow-xs">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-indigo-100">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0">
+              <Sparkles className="w-4 h-4 text-amber-300" />
+            </div>
+            <div>
+              <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                <span>{isSwedish ? 'Synkning med Inlärningsvägen' : 'Conexión con tu Ruta de Aprendizaje'}</span>
+                <span className="text-[10px] font-bold bg-indigo-600 text-white px-2 py-0.5 rounded-full">
+                  {studyScope === 'unlocked' ? (isSwedish ? 'Progressivt läge' : 'Modo Progresivo') : (isSwedish ? 'Utforskarläge' : 'Modo Libre')}
+                </span>
+              </h3>
+              <p className="text-xs text-slate-600">
+                {isSwedish
+                  ? 'I vägen lär du dig nya ord; här repeteras de automatiskt i intervall.'
+                  : 'En la Ruta descubres palabras paso a paso; aquí el algoritmo las afianza en tu memoria.'}
+              </p>
+            </div>
+          </div>
+
+          {/* Mode Switcher Segmented Control */}
+          <div className="flex items-center p-1 bg-white border border-indigo-200 rounded-xl shadow-2xs self-stretch sm:self-auto">
+            <button
+              type="button"
+              onClick={() => {
+                setStudyScope('unlocked');
+                setSelectedUnitId('all');
+                setActiveCardIndex(0);
+              }}
+              className={`flex-1 sm:flex-initial px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                studyScope === 'unlocked'
+                  ? 'bg-indigo-600 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+              title="Solo palabras de unidades que has desbloqueado en tu Ruta"
+            >
+              <CheckCircle2 className="w-3.5 h-3.5 text-amber-300" />
+              <span>{isSwedish ? `Upplåsta i din väg (${unlockedCardsCount})` : `Desbloqueadas en Ruta (${unlockedCardsCount})`}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setStudyScope('all');
+                setSelectedUnitId('all');
+                setActiveCardIndex(0);
+              }}
+              className={`flex-1 sm:flex-initial px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                studyScope === 'all'
+                  ? 'bg-indigo-600 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+              title="Todas las 55 tarjetas del currículo completo"
+            >
+              <Compass className="w-3.5 h-3.5" />
+              <span>{isSwedish ? `Hela ordförrådet (${totalCardsCount})` : `Modo Libre (${totalCardsCount})`}</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Dynamic Context Explanation */}
+        <div className="pt-2.5 text-xs text-slate-600 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+          {studyScope === 'unlocked' ? (
+            <p className="flex items-center gap-1.5 leading-snug">
+              <span className="font-semibold text-indigo-900">
+                {isSwedish ? '🎯 Progressivt läge aktivt:' : '🎯 Modo Progresivo activo:'}
+              </span>
+              <span>
+                {isSwedish
+                  ? `Du repeterar endast de ${unlockedCardsCount} ord som du har låst upp i lektionerna. När du slutför fler enheter i vägen aktiveras de återstående ${lockedCardsCount} orden automatiskt!`
+                  : `Solo repasas las ${unlockedCardsCount} palabras de las unidades que tienes desbloqueadas en tus lecciones. A medida que avances en tu Ruta, las ${lockedCardsCount} restantes se irán incorporando solas a tu mazo.`}
+              </span>
+            </p>
+          ) : (
+            <p className="flex items-center gap-1.5 leading-snug text-amber-900">
+              <span className="font-semibold">
+                {isSwedish ? '🌐 Utforskarläge aktivt:' : '🌐 Modo Libre activo:'}
+              </span>
+              <span>
+                {isSwedish
+                  ? 'Du kan bläddra och träna på alla 55 ord från Årskurs 6 och 7 fritt, även om lektionerna inte är klara ännu.'
+                  : 'Puedes explorar y entrenar las 55 palabras de Årskurs 6 y 7 libremente, incluso las de unidades que aún tienes bloqueadas en la Ruta.'}
+              </span>
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* Grade and Unit Filter Bar */}
       <div className="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 mb-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div className="flex items-center gap-1.5 flex-wrap">
@@ -149,7 +316,7 @@ export const SpacedRepetitionDeck: React.FC<SpacedRepetitionDeckProps> = ({
                   : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
               }`}
             >
-              {isSwedish ? 'Alla kurser' : 'Todos'} ({cards.length})
+              {isSwedish ? 'Alla kurser' : 'Todos'} ({normalizedCards.length})
             </button>
             <button
               type="button"
@@ -164,7 +331,7 @@ export const SpacedRepetitionDeck: React.FC<SpacedRepetitionDeckProps> = ({
                   : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
               }`}
             >
-              Årskurs 6 ({cards.filter((c) => c.grade === 'ak6').length})
+              Årskurs 6 ({countAk6})
             </button>
             <button
               type="button"
@@ -179,11 +346,11 @@ export const SpacedRepetitionDeck: React.FC<SpacedRepetitionDeckProps> = ({
                   : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
               }`}
             >
-              Årskurs 7 ({cards.filter((c) => c.grade === 'ak7').length})
+              Årskurs 7 ({countAk7})
             </button>
           </div>
 
-          {/* Unit selector dropdown */}
+          {/* Unit selector dropdown with unlock indicators */}
           <div className="w-full sm:w-auto flex items-center gap-2">
             <span className="text-xs text-slate-500 font-medium whitespace-nowrap flex items-center gap-1">
               <BookOpen className="w-3 h-3 text-indigo-600" />
@@ -195,16 +362,24 @@ export const SpacedRepetitionDeck: React.FC<SpacedRepetitionDeckProps> = ({
                 setSelectedUnitId(e.target.value);
                 setActiveCardIndex(0);
               }}
-              className="text-xs bg-white border border-slate-200 rounded-xl px-2.5 py-1.5 text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer w-full sm:w-64"
+              className="text-xs bg-white border border-slate-200 rounded-xl px-2.5 py-1.5 text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer w-full sm:w-72"
             >
               <option value="all">
-                {isSwedish ? '📚 Alla enheter (Hela ordförrådet)' : '📚 Todas las unidades del curso'}
+                {studyScope === 'unlocked'
+                  ? (isSwedish ? '📚 Alla upplåsta enheter i din väg' : '📚 Todas las unidades desbloqueadas en tu ruta')
+                  : (isSwedish ? '📚 Alla enheter (Hela ordförrådet)' : '📚 Todas las unidades del curso')}
               </option>
               {availableUnits.map((u) => {
-                const unitCardsCount = cards.filter((c) => c.unitId === u.id).length;
+                const isUnlocked = isUnitUnlockedInRoadmap(u);
+                const unitCardsCount = normalizedCards.filter((c) => c.cardUnit?.id === u.id || c.unitId === u.id).length;
+                const prefix = isUnlocked ? '✓ ' : '🔒 ';
+                const statusTag = isUnlocked
+                  ? (isSwedish ? 'upplåst' : 'activa')
+                  : (isSwedish ? 'låst i väg' : 'bloqueada en ruta');
+
                 return (
                   <option key={u.id} value={u.id}>
-                    {u.grade === 'ak6' ? 'Åk 6' : 'Åk 7'} · U{u.number}: {u.title} ({unitCardsCount} {isSwedish ? 'ord' : 'palabras'})
+                    {prefix}{u.grade === 'ak6' ? 'Åk 6' : 'Åk 7'} · U{u.number}: {u.title} ({unitCardsCount} ord · {statusTag})
                   </option>
                 );
               })}
@@ -289,7 +464,7 @@ export const SpacedRepetitionDeck: React.FC<SpacedRepetitionDeckProps> = ({
             {countBox3}
           </span>
           <span className="text-xs text-slate-500">
-            {isSwedish ? 'Behärskade (Var 7:e dag)' : 'Dominadas'}
+            {isSwedish ? 'Behärskade (Gemas 💎)' : 'Dominadas (Gemas 💎)'}
           </span>
         </button>
       </div>
@@ -309,7 +484,7 @@ export const SpacedRepetitionDeck: React.FC<SpacedRepetitionDeckProps> = ({
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            {isSwedish ? 'Alla kort' : 'Todas'} ({cards.length})
+            {isSwedish ? 'Alla' : 'Todas'} ({filteredCards.length})
           </button>
           <button
             onClick={() => {
@@ -393,14 +568,14 @@ export const SpacedRepetitionDeck: React.FC<SpacedRepetitionDeckProps> = ({
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-full">
-                  {isSwedish ? 'Intervallrepetition' : 'Repetición Espaciada'}
+                  {isSwedish ? 'Intervallrepetition & Progression' : 'Repetición Espaciada & Progresión'}
                 </span>
                 <span className="text-xs text-slate-500 font-medium">
                   {isSwedish ? 'Vetenskaplig inlärningsmetod' : 'Método científico de memorización'}
                 </span>
               </div>
               <h4 className="text-base font-bold text-slate-900">
-                {isSwedish ? 'Så här fungerar Leitner-systemet i Chispa' : '¿Cómo funciona el Sistema Leitner en Chispa?'}
+                {isSwedish ? 'Så här hänger ordförrådslådan ihop med din Inlärningsväg' : '¿Cómo se conecta esta sección con tu Ruta de Aprendizaje?'}
               </h4>
             </div>
             <button
@@ -413,8 +588,8 @@ export const SpacedRepetitionDeck: React.FC<SpacedRepetitionDeckProps> = ({
 
           <p className="text-xs text-slate-600 leading-relaxed mb-4">
             {isSwedish
-              ? 'Leitner-systemet hjälper dig att flytta ord från korttidsminnet till långtidsminnet genom att repetera dem precis innan hjärnan hinner glömma dem.'
-              : 'El Sistema Leitner traslada las palabras de la memoria a corto plazo a la memoria a largo plazo revisándolas con intervalos crecientes, justo antes de que tu cerebro las olvide.'}
+              ? 'I din Inlärningsväg möter du lektioner, grammatik och dialoger. Här i Ordförrådslådan aktiveras orden automatiskt så fort du låser upp en enhet, så att du repeterar dem i optimala intervall och aldrig glömmer dem.'
+              : 'En tu Ruta de Aprendizaje estudias las lecciones, gramática y diálogos por primera vez. Aquí en la Caja de Vocabulario, las palabras de las unidades que vas desbloqueando se activan automáticamente para que las consolides con intervalos óptimos y nunca se te olviden.'}
           </p>
 
           {/* 3 Boxes description */}
@@ -455,41 +630,6 @@ export const SpacedRepetitionDeck: React.FC<SpacedRepetitionDeckProps> = ({
               </p>
             </div>
           </div>
-
-          {/* 3 Step usage instructions */}
-          <div className="bg-white/80 rounded-xl p-3 border border-indigo-50 text-xs text-slate-600 space-y-1.5">
-            <div className="flex items-center gap-2">
-              <span className="w-5 h-5 rounded-full bg-indigo-600 text-white font-bold text-[10px] flex items-center justify-center shrink-0">1</span>
-              <span>
-                <strong>{isSwedish ? 'Lyssna:' : 'Escucha:'}</strong> {isSwedish ? 'Klicka på högtalaren (eller 0.75x för långsamt) och försök minnas betydelsen innan du kollar.' : 'Pulsa el altavoz (o 0.75x para velocidad lenta) e intenta recordar qué significa antes de voltear.'}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-5 h-5 rounded-full bg-indigo-600 text-white font-bold text-[10px] flex items-center justify-center shrink-0">2</span>
-              <span>
-                <strong>{isSwedish ? 'Vänd:' : 'Gira:'}</strong> {isSwedish ? 'Klicka på kortet för att se översättningen och ett exempel med uttal.' : 'Haz clic en la tarjeta para ver la solución y una frase real de ejemplo con audio.'}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-5 h-5 rounded-full bg-indigo-600 text-white font-bold text-[10px] flex items-center justify-center shrink-0">3</span>
-              <span>
-                <strong>{isSwedish ? 'Värdera:' : 'Evalúa:'}</strong> {isSwedish ? 'Välj "Svårt" (tillbaka till Låda 1), "Bra" (till Låda 2) eller "Lätt / Kan det" (flyttas till Låda 3 och ger gemas).' : 'Elige "Difícil" (vuelve a Caja 1), "Bien" (pasa a Caja 2) o "Fácil / Dominada" (sube a Caja 3 y suma gemas).'}
-              </span>
-            </div>
-          </div>
-
-          {/* Integration with Learning Roadmap explanation */}
-          <div className="mt-3.5 pt-3 border-t border-indigo-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-[11px] text-slate-600">
-            <div className="flex items-center gap-1.5 text-indigo-700 font-bold">
-              <BookOpen className="w-3.5 h-3.5" />
-              <span>{isSwedish ? 'Koppling till Inlärningsvägen:' : 'Conexión con la Ruta de Aprendizaje:'}</span>
-            </div>
-            <p className="leading-tight text-slate-600">
-              {isSwedish
-                ? 'Korten är direkt kopplade till kursens 16 enheter i Årskurs 6 och 7. Använd enhetsväljaren för att öva på just den lektion du studerar nu!'
-                : 'Las palabras provienen directamente de las 16 unidades del currículo (Åk 6 y 7). Usa el selector superior para repasar la unidad que estés estudiando en tu ruta.'}
-            </p>
-          </div>
         </div>
       )}
 
@@ -498,25 +638,29 @@ export const SpacedRepetitionDeck: React.FC<SpacedRepetitionDeckProps> = ({
         <div className="max-w-lg mx-auto">
           {/* Progress label & Curriculum linkage */}
           {(() => {
-            const cardUnit = units?.find((u) => u.id === currentCard.unitId);
+            const cardUnit = currentCard.cardUnit;
+            const isUnlocked = currentCard.isUnlockedInRoadmap;
+
             return (
-              <div className="flex items-center justify-between text-xs text-slate-500 mb-2 px-1 gap-2 flex-wrap">
-                <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="font-semibold text-indigo-600">
-                    {cardUnit ? (
-                      <>
-                        <span className="bg-indigo-50 text-indigo-700 px-1.5 py-0.5 rounded text-[11px] font-bold mr-1 border border-indigo-100">
-                          {cardUnit.grade === 'ak6' ? 'Åk 6' : 'Åk 7'} · U{cardUnit.number}
-                        </span>
-                        <span>{cardUnit.title}</span>
-                      </>
-                    ) : (
-                      `Categoría: ${currentCard.category}`
-                    )}
+              <div className="flex items-center justify-between text-xs text-slate-500 mb-2.5 px-1 gap-2 flex-wrap">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="bg-indigo-100 text-indigo-800 px-2.5 py-0.5 rounded-md text-[11px] font-extrabold border border-indigo-200/80 shadow-2xs">
+                    {cardUnit ? (cardUnit.grade === 'ak6' ? 'Årskurs 6' : 'Årskurs 7') : (currentCard.grade === 'ak6' ? 'Årskurs 6' : 'Årskurs 7')} · Unité {cardUnit?.number || 1}
                   </span>
-                  {cardUnit && profile.completedLessonIds.some((lid) => cardUnit.lessons.some((l) => l.id === lid)) && (
-                    <span className="text-[10px] bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded font-medium border border-emerald-200">
-                      {isSwedish ? '✓ Pågående i din väg' : '✓ En progreso en tu Ruta'}
+                  <span className="text-slate-800 font-bold text-xs">
+                    {cardUnit ? cardUnit.title : currentCard.category}
+                  </span>
+                  
+                  {/* Unlock Status Pill */}
+                  {isUnlocked ? (
+                    <span className="text-[10px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-semibold border border-emerald-200 flex items-center gap-1">
+                      <CheckCircle2 className="w-3 h-3" />
+                      <span>{isSwedish ? 'Upplåst i din väg' : 'Desbloqueada en tu ruta'}</span>
+                    </span>
+                  ) : (
+                    <span className="text-[10px] bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full font-semibold border border-amber-200 flex items-center gap-1">
+                      <Lock className="w-3 h-3" />
+                      <span>{isSwedish ? 'Låst i väg (Framtida enhet)' : 'Bloqueada en ruta (Unidad futura)'}</span>
                     </span>
                   )}
                 </div>
@@ -663,25 +807,48 @@ export const SpacedRepetitionDeck: React.FC<SpacedRepetitionDeckProps> = ({
             >
               <span>{isSwedish ? 'Lätt / Kan det' : 'Fácil / Dominada'}</span>
               <span className="text-[10px] font-normal text-emerald-500">
-                {isSwedish ? '→ Låda 3' : '→ Caja 3'}
+                {isSwedish ? '→ Låda 3 💎' : '→ Caja 3 💎'}
               </span>
             </button>
           </div>
         </div>
       ) : (
-        <div className="bg-white rounded-2xl border border-slate-200 p-8 text-center max-w-md mx-auto">
-          <p className="text-slate-600 font-medium text-sm mb-4">
-            {isSwedish ? 'Inga kort matchar din sökning.' : 'No hay tarjetas que coincidan con la búsqueda.'}
+        <div className="bg-white rounded-2xl border border-slate-200 p-8 text-center max-w-md mx-auto shadow-xs">
+          <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto mb-3">
+            <Lock className="w-6 h-6 text-slate-400" />
+          </div>
+          <h4 className="font-bold text-slate-900 text-sm mb-1">
+            {isSwedish ? 'Inga kort i detta urval' : 'No hay tarjetas activas en esta vista'}
+          </h4>
+          <p className="text-slate-600 text-xs mb-4 leading-relaxed">
+            {studyScope === 'unlocked'
+              ? (isSwedish
+                  ? 'Enheten du valt är ännu låst i din Inlärningsväg. Slutför föregående enhet för att låsa upp den, eller byt till Utforskarläge för att öva fritt.'
+                  : 'La unidad seleccionada aún está bloqueada en tu Ruta de Aprendizaje. Completa las lecciones de la unidad previa para activarla aquí, o activa el Modo Libre para practicarla ya.')
+              : (isSwedish
+                  ? 'Inga kort matchar din filtrering eller sökning.'
+                  : 'Ninguna tarjeta coincide con los filtros o la búsqueda.')}
           </p>
-          <button
-            onClick={() => {
-              setCurrentBoxFilter('all');
-              setSearchQuery('');
-            }}
-            className="px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-semibold cursor-pointer hover:bg-indigo-700 transition-colors"
-          >
-            {isSwedish ? 'Visa alla kort' : 'Ver todas las tarjetas'}
-          </button>
+          <div className="flex items-center justify-center gap-2">
+            {studyScope === 'unlocked' && (
+              <button
+                onClick={() => setStudyScope('all')}
+                className="px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-semibold cursor-pointer hover:bg-indigo-700 transition-colors shadow-xs"
+              >
+                {isSwedish ? 'Växla till Utforskarläge' : 'Cambiar a Modo Libre'}
+              </button>
+            )}
+            <button
+              onClick={() => {
+                setSelectedUnitId('all');
+                setCurrentBoxFilter('all');
+                setSearchQuery('');
+              }}
+              className="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-semibold cursor-pointer hover:bg-slate-200 transition-colors"
+            >
+              {isSwedish ? 'Återställ filter' : 'Restablecer filtros'}
+            </button>
+          </div>
         </div>
       )}
       </div>

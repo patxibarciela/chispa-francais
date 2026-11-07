@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { GoogleGenAI } from '@google/genai';
+import chatHandler from './api/chat.js';
 
 dotenv.config();
 
@@ -10,9 +11,14 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = Number(process.env.PORT) || 3000;
+const PORT = 3000;
 
 app.use(express.json());
+
+// Forward /api/chat to serverless handler
+app.all('/api/chat', async (req, res) => {
+  await chatHandler(req, res);
+});
 
 // Dynamic Google GenAI client resolver
 function getGeminiClient(): GoogleGenAI | null {
@@ -42,7 +48,9 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Resilient French Audio TTS Proxy Endpoint (bypasses browser Referer blocks and missing local OS voices)
+// Resilient French Audio TTS Proxy Endpoint with in-memory caching
+const ttsBufferCache = new Map<string, Buffer>();
+
 app.get('/api/tts/fr', async (req, res) => {
   try {
     const rawText = String(req.query.text || '').replace(/<[^>]*>/g, '').trim();
@@ -50,6 +58,15 @@ app.get('/api/tts/fr', async (req, res) => {
       return res.status(400).send('Text query param is required');
     }
     const cleanText = rawText.slice(0, 200);
+
+    // Check memory cache first
+    const cached = ttsBufferCache.get(cleanText);
+    if (cached) {
+      res.setHeader('Content-Type', 'audio/mpeg');
+      res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=86400');
+      return res.send(cached);
+    }
+
     const googleTtsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=fr&client=tw-ob&q=${encodeURIComponent(cleanText)}`;
     
     const upstreamRes = await fetch(googleTtsUrl, {
@@ -65,8 +82,9 @@ app.get('/api/tts/fr', async (req, res) => {
 
     res.setHeader('Content-Type', 'audio/mpeg');
     res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=86400');
-    const buffer = await upstreamRes.arrayBuffer();
-    return res.send(Buffer.from(buffer));
+    const buffer = Buffer.from(await upstreamRes.arrayBuffer());
+    ttsBufferCache.set(cleanText, buffer);
+    return res.send(buffer);
   } catch (err: any) {
     console.error('Server TTS proxy error:', err);
     return res.status(500).send('Internal TTS error');
@@ -252,12 +270,16 @@ Formato JSON exacto:
 // Setup Vite dev server or static file serving
 async function startServer() {
   const isProd = process.env.NODE_ENV === 'production';
+  let vite: any = null;
 
   if (!isProd) {
     // Development mode with Vite middleware
     const { createServer: createViteServer } = await import('vite');
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
+    vite = await createViteServer({
+      server: {
+        middlewareMode: true,
+        hmr: process.env.DISABLE_HMR === 'true' ? false : undefined,
+      },
       appType: 'spa',
     });
     app.use(vite.middlewares);
@@ -270,9 +292,28 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
+  const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server listening on port ${PORT} (${isProd ? 'production' : 'development'})`);
   });
+
+  server.on('error', (err: any) => {
+    if (err.code === 'EADDRINUSE') {
+      console.warn(`[Server] Port ${PORT} already in use. Existing process is actively serving requests.`);
+    } else {
+      console.error('[Server] Unhandled server error:', err);
+    }
+  });
+
+  // Graceful shutdown on process termination
+  const handleShutdown = async () => {
+    if (vite) {
+      await vite.close().catch(() => {});
+    }
+    server.close();
+  };
+
+  process.once('SIGTERM', handleShutdown);
+  process.once('SIGINT', handleShutdown);
 }
 
 startServer().catch((err) => {

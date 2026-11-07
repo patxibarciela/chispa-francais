@@ -197,7 +197,7 @@ export const LoginLandingView: React.FC<LoginLandingViewProps> = ({
                   <MessageSquare className="w-5 h-5" />
                 </div>
                 <h3 className="font-bold text-slate-900 text-sm mb-1">
-                  {isEs ? 'Tutor Francés Léo' : 'Fransklärare Léo'}
+                  {isEs ? 'Charla con Camille' : 'Samtal med Camille'}
                 </h3>
                 <p className="text-xs text-slate-500 leading-relaxed">
                   {isEs 

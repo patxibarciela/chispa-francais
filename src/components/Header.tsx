@@ -252,7 +252,7 @@ export const Header: React.FC<HeaderProps> = ({
               activeTab === 'tutor' ? 'bg-purple-600 text-white' : 'text-slate-700 hover:bg-slate-100'
             }`}
           >
-            <span>{isEs ? 'Tutor Francés' : 'Fransklärare Léo'}</span>
+            <span>{isEs ? 'Charla con Camille' : 'Samtal med Camille'}</span>
           </button>
           <button
             type="button"

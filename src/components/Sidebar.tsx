@@ -41,9 +41,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
     },
     {
       id: 'tutor' as const,
-      label: isEs ? 'Tutor Francés' : 'Fransklärare Léo',
+      label: isEs ? 'Charla con Camille' : 'Samtal med Camille',
       icon: MessageSquare,
-      subtitle: isEs ? 'Chat y juego de rol' : 'Chatt och rollspel',
+      subtitle: isEs ? 'Compañera de francés' : 'Fransk samtalspartner',
     },
     {
       id: 'achievements' as const,
