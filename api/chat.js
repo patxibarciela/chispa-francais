@@ -11,10 +11,11 @@ import { GoogleGenAI } from '@google/genai';
  * Expects body: { messages: [{ role: 'user' | 'model', parts: [{ text: '...' }] }] }
  */
 
-const FALLBACK_MODELS = [
+const models = [
   'gemini-2.5-flash',
   'gemini-2.0-flash',
-  'gemini-2.5-pro',
+  'gemini-1.5-flash',
+  'gemini-3.1-pro-preview'
 ];
 
 const SYSTEM_INSTRUCTION = `Eres Camille, una compañera de conversación amigable que ayuda a una estudiante principiante a dar sus primeros pasos en el aprendizaje del francés desde cero.
@@ -106,8 +107,8 @@ export default async function handler(req, res) {
   let lastError = null;
   const attemptedErrors = [];
 
-  // Attempt each model in priority sequence: gemini-2.5-flash -> gemini-2.0-flash -> gemini-2.5-pro
-  for (const model of FALLBACK_MODELS) {
+  // Attempt each model in priority sequence: gemini-2.5-flash -> gemini-2.0-flash -> gemini-1.5-flash -> gemini-3.1-pro-preview
+  for (const model of models) {
     try {
       console.log(`[Tutor Chat] Intentando generar respuesta con modelo: ${model}`);
 
@@ -151,17 +152,19 @@ export default async function handler(req, res) {
         });
       }
     } catch (err) {
-      console.warn(`[Tutor Chat] Fallo con modelo ${model}:`, err?.message || err);
-      attemptedErrors.push({ model, error: err?.message || String(err) });
+      // Si el modelo devuelve 404 (no encontrado / no disponible), 429 (cuota agotada) u otro error, pasa al siguiente
+      const errStr = err?.message || String(err);
+      console.warn(`[Tutor Chat] Fallo con modelo ${model} (error 404/429 o similar):`, errStr);
+      attemptedErrors.push({ model, error: errStr });
       lastError = err;
-      // Continúa al siguiente modelo de la cadena de fallback
+      // El bucle for continúa inmediatamente con el siguiente modelo de la lista
     }
   }
 
   console.error('[Tutor Chat] Todos los modelos fallaron:', attemptedErrors);
 
   return res.status(500).json({
-    error: `No se pudo obtener respuesta del tutor IA tras probar ${FALLBACK_MODELS.join(', ')}.`,
+    error: `No se pudo obtener respuesta del tutor IA tras probar ${models.join(', ')}.`,
     details: attemptedErrors,
   });
 }
