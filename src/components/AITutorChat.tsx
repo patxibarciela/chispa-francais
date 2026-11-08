@@ -86,7 +86,7 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ profile }) => {
     }));
 
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 12000);
+    const timeoutId = setTimeout(() => controller.abort(), 25000);
 
     try {
       const response = await fetch('/api/chat', {
@@ -101,9 +101,10 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ profile }) => {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(
-          errorData.error || `Error en el servidor al consultar a la IA (código ${response.status})`
-        );
+        const detailedErr = errorData.details
+          ? `${errorData.error} (${typeof errorData.details === 'object' ? JSON.stringify(errorData.details) : errorData.details})`
+          : (errorData.error || `Error en el servidor al consultar a la IA (código ${response.status})`);
+        throw new Error(detailedErr);
       }
 
       const data = await response.json();

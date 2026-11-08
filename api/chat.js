@@ -1,14 +1,15 @@
+import { GoogleGenAI } from '@google/genai';
+
 /**
  * Serverless function for Chispa Français AI French Companion ("Camille")
  * Compatible with Vercel Serverless Functions, Node.js, and Express dev server.
  */
 
-// Prioritized fallback models: fast, stable, and free-tier compatible
+// Prioritized fallback models: fast, modern, and officially supported
 const MODEL_FALLBACK_LIST = [
-  'gemini-2.5-flash',
-  'gemini-2.0-flash',
-  'gemini-1.5-flash',
-  'gemini-3.8-flash'
+  'gemini-3.8-flash',
+  'gemini-3.1-flash-lite',
+  'gemini-2.5-flash'
 ];
 
 const SYSTEM_INSTRUCTION = `Eres Camille, una compañera de conversación amigable que ayuda a una estudiante principiante a dar sus primeros pasos en el aprendizaje del francés desde cero.
@@ -33,44 +34,6 @@ FORMATO DE RESPUESTA:
 Escribe tu respuesta amigable, cálida y natural directamente para la estudiante (2 a 3 oraciones en total).`;
 
 /**
- * Robust Google Generative Language REST fetch with strict per-model timeout
- */
-async function callModelWithTimeout(modelName, contents, systemInstruction, apiKey, timeoutMs = 4500) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
-
-  try {
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        signal: controller.signal,
-        body: JSON.stringify({
-          system_instruction: { parts: [{ text: systemInstruction }] },
-          contents,
-          generationConfig: {
-            temperature: 0.7,
-            maxOutputTokens: 250,
-          }
-        })
-      }
-    );
-
-    const data = await response.json().catch(() => ({}));
-
-    if (response.ok && data.candidates?.[0]?.content?.parts?.[0]?.text) {
-      return data.candidates[0].content.parts[0].text;
-    }
-
-    const errorMsg = data?.error?.message || (data?.error ? JSON.stringify(data.error) : `HTTP ${response.status}`);
-    throw new Error(errorMsg);
-  } finally {
-    clearTimeout(timer);
-  }
-}
-
-/**
  * Extracts real text safely from any turn structure (m.parts, m.content, m.text)
  */
 function extractTurnText(m) {
@@ -90,13 +53,25 @@ function extractTurnText(m) {
 /**
  * Core chat executor supporting both Vercel Web Standard and Node/Express
  */
-async function processChatRequest(rawMessages, apiKey) {
+async function processChatRequest(rawMessages, rawApiKey) {
+  const apiKey = (rawApiKey || '').replace(/['"\s]+/g, '').trim();
+
   if (!apiKey) {
-    return { status: 500, data: { error: 'GEMINI_API_KEY no configurada en las variables de entorno de Vercel/servidor.' } };
+    return {
+      status: 500,
+      data: {
+        success: false,
+        error: 'GEMINI_API_KEY no configurada en las variables de entorno de Vercel.',
+        details: 'Añade la variable GEMINI_API_KEY en Vercel > Settings > Environment Variables y haz un redeploy.'
+      }
+    };
   }
 
   if (!rawMessages || !Array.isArray(rawMessages) || rawMessages.length === 0) {
-    return { status: 400, data: { error: 'No se enviaron mensajes en la petición.' } };
+    return {
+      status: 400,
+      data: { success: false, error: 'No se enviaron mensajes en la petición.' }
+    };
   }
 
   // 1. Normalize turns safely extracting non-empty text
@@ -120,50 +95,118 @@ async function processChatRequest(rawMessages, apiKey) {
   }
 
   if (contents.length === 0) {
-    // If the conversation only had greeting turns, make a greeting prompt
     contents.push({
       role: 'user',
       parts: [{ text: 'Bonjour !' }]
     });
   }
 
-  // 2. Sequential fallback across models
+  // 2. Sequential attempt across models with reasonable 14s timeout
   let lastError = null;
+
+  // Initialize official SDK
+  let ai = null;
+  try {
+    ai = new GoogleGenAI({
+      apiKey,
+      httpOptions: {
+        headers: {
+          'User-Agent': 'aistudio-build',
+        },
+        timeout: 6500, // 6.5s per model ensures full execution stays within Vercel's limits
+      },
+    });
+  } catch (err) {
+    console.warn('[Tutor Chat] Error inicializando SDK:', err?.message || err);
+  }
 
   for (const model of MODEL_FALLBACK_LIST) {
     try {
       console.log(`[Tutor Chat] Intentando modelo: ${model}`);
-      const replyText = await callModelWithTimeout(model, contents, SYSTEM_INSTRUCTION, apiKey, 4500);
+      let replyText = '';
 
-      if (replyText && replyText.trim()) {
-        console.log(`[Tutor Chat] Éxito con ${model}`);
+      // 1. Try official SDK first
+      if (ai) {
+        try {
+          const response = await ai.models.generateContent({
+            model,
+            contents,
+            config: {
+              systemInstruction: SYSTEM_INSTRUCTION,
+              maxOutputTokens: 250,
+            },
+          });
+          replyText = response.text?.trim() || '';
+        } catch (sdkErr) {
+          console.warn(`[Tutor Chat] SDK fallo con ${model}:`, sdkErr?.message || sdkErr);
+          lastError = sdkErr?.message || String(sdkErr);
+        }
+      }
+
+      // 2. Direct REST fetch fallback if SDK didn't return text
+      if (!replyText) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 6500);
+
+        try {
+          const restRes = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              signal: controller.signal,
+              body: JSON.stringify({
+                system_instruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
+                contents,
+                generationConfig: {
+                  temperature: 0.7,
+                  maxOutputTokens: 250,
+                }
+              })
+            }
+          );
+
+          const data = await restRes.json().catch(() => ({}));
+          if (restRes.ok && data.candidates?.[0]?.content?.parts?.[0]?.text) {
+            replyText = data.candidates[0].content.parts[0].text.trim();
+          } else {
+            const errDetail = data?.error?.message || (data?.error ? JSON.stringify(data.error) : `Status ${restRes.status}`);
+            throw new Error(errDetail);
+          }
+        } finally {
+          clearTimeout(timer);
+        }
+      }
+
+      if (replyText) {
+        console.log(`[Tutor Chat] Éxito con ${model} (${replyText.length} caracteres)`);
         return {
           status: 200,
           data: {
             success: true,
-            reply: replyText.trim(),
+            reply: replyText,
             usedModel: model
           }
         };
       }
     } catch (err) {
-      console.warn(`[Tutor Chat] Fallo con ${model}:`, err?.message || err);
-      lastError = err;
+      const errMessage = err?.message || String(err);
+      console.warn(`[Tutor Chat] Fallo con ${model}:`, errMessage);
+      lastError = errMessage;
 
       // If rate limited (429), pause briefly before trying next model
-      if (String(err?.message || '').includes('429')) {
-        await new Promise((r) => setTimeout(r, 400));
+      if (errMessage.includes('429')) {
+        await new Promise((r) => setTimeout(r, 300));
       }
     }
   }
 
-  const detailMessage = lastError?.message || 'Los modelos no respondieron a tiempo';
   return {
     status: 503,
     data: {
       success: false,
-      error: 'No se pudo obtener respuesta del tutor IA a tiempo.',
-      details: detailMessage
+      error: 'No se pudo obtener respuesta del tutor IA.',
+      details: lastError || 'Los modelos de Gemini no respondieron a tiempo.'
     }
   };
 }
@@ -186,7 +229,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
     const { messages } = req.body || {};
     const result = await processChatRequest(messages, apiKey);
     return res.status(result.status).json(result.data);
@@ -201,7 +244,7 @@ export default async function handler(req, res) {
  */
 export async function POST(request) {
   try {
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
     const body = await request.json().catch(() => ({}));
     const result = await processChatRequest(body.messages, apiKey);
     return new Response(JSON.stringify(result.data), {
