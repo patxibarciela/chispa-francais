@@ -19,7 +19,6 @@ import {
 import { Flashcard, UserProfile, Unit, GradeLevel } from '../types';
 import { speakFrench, soundEffects } from '../utils/audio';
 import { updateCardReview, saveFlashcards } from '../utils/storage';
-import { SectionBanner } from './SectionBanner';
 import { INITIAL_VOCABULARY } from '../data/vocabulary';
 
 interface SpacedRepetitionDeckProps {
@@ -186,50 +185,65 @@ export const SpacedRepetitionDeck: React.FC<SpacedRepetitionDeckProps> = ({
   };
 
   return (
-    <div>
-      {/* Section Header */}
-      <SectionBanner
-        categoryBadge={isSwedish ? 'LEITNER-SYSTEMET · REPETITION' : 'SISTEMA LEITNER · INTERVALOS ÓPTIMOS'}
-        categoryIcon={Brain}
-        title={isSwedish ? 'Ordförrådslådan' : 'La Caja de Vocabulario Activo'}
-        description={
-          isSwedish
-            ? 'Orden flyttas mellan lådorna baserat på intervallrepetition. Låda 3 = ord du behärskar helt!'
-            : 'Las palabras avanzan de caja conforme las recuerdas. ¡El algoritmo calcula los intervalos ideales para consolidar tu memoria!'
-        }
-        metrics={[
-          { value: countBox1, label: isSwedish ? 'Låda 1 (Daglig)' : 'Caja 1 (A reforzar)', colorClass: 'text-rose-600' },
-          { value: countBox2, label: isSwedish ? 'Låda 2 (3 dagar)' : 'Caja 2 (En repaso)', colorClass: 'text-amber-600' },
-          { value: countBox3, label: isSwedish ? 'Låda 3 (Dominadas)' : 'Caja 3 (Dominadas 💎)', colorClass: 'text-purple-600' },
-        ]}
-      />
-
-      <div className="max-w-4xl mx-auto px-4 py-4">
-
-      {/* Roadmap Integration & Progression Clarifier Banner */}
-      <div className="bg-gradient-to-r from-indigo-50/90 via-blue-50/60 to-purple-50/60 border border-indigo-200/80 rounded-2xl p-4 sm:p-5 mb-6 shadow-xs">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-indigo-100">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0">
-              <Sparkles className="w-4 h-4 text-amber-300" />
+    <div className="max-w-4xl mx-auto px-4 py-3 sm:py-4">
+      {/* Integrated Compact Leitner Header */}
+      <div className="bg-white rounded-2xl border border-slate-200/90 p-3.5 sm:p-4 mb-4 shadow-2xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center shrink-0">
+              <Brain className="w-5 h-5 text-purple-600" />
             </div>
             <div>
-              <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                <span>{isSwedish ? 'Synkning med Inlärningsvägen' : 'Conexión con tu Ruta de Aprendizaje'}</span>
-                <span className="text-[10px] font-bold bg-indigo-600 text-white px-2 py-0.5 rounded-full">
-                  {studyScope === 'unlocked' ? (isSwedish ? 'Progressivt läge' : 'Modo Progresivo') : (isSwedish ? 'Utforskarläge' : 'Modo Libre')}
+              <div className="flex items-center gap-2">
+                <h2 className="font-bold text-slate-900 text-sm sm:text-base">
+                  {isSwedish ? 'Ordförrådslådan' : 'Caja de Vocabulario'}
+                </h2>
+                <span className="text-[10px] font-bold text-purple-700 bg-purple-50 border border-purple-200/60 px-2 py-0.5 rounded-full">
+                  Sistema Leitner
                 </span>
-              </h3>
-              <p className="text-xs text-slate-600">
+              </div>
+              <p className="text-xs text-slate-500 leading-tight">
                 {isSwedish
-                  ? 'I vägen lär du dig nya ord; här repeteras de automatiskt i intervall.'
-                  : 'En la Ruta descubres palabras paso a paso; aquí el algoritmo las afianza en tu memoria.'}
+                  ? 'Intervallrepetition: Orden flyttas mellan lådorna för att minnas dem'
+                  : 'Repetición espaciada: Las palabras avanzan de caja conforme las recuerdas'}
               </p>
             </div>
           </div>
 
-          {/* Mode Switcher Segmented Control */}
-          <div className="flex items-center p-1 bg-white border border-indigo-200 rounded-xl shadow-2xs self-stretch sm:self-auto">
+          {/* Leitner Box Counters inline */}
+          <div className="flex items-center gap-1.5 self-start sm:self-auto flex-wrap">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold" title="Caja 1: Repaso diario">
+              <span className="w-2 h-2 rounded-full bg-rose-500" />
+              <span>{countBox1}</span>
+              <span className="text-[10px] font-normal text-rose-600 hidden md:inline">{isSwedish ? 'Daglig' : 'Caja 1'}</span>
+            </span>
+
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 text-xs font-bold" title="Caja 2: En repaso cada 3 días">
+              <span className="w-2 h-2 rounded-full bg-amber-500" />
+              <span>{countBox2}</span>
+              <span className="text-[10px] font-normal text-amber-600 hidden md:inline">{isSwedish ? '3 dgr' : 'Caja 2'}</span>
+            </span>
+
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-purple-50 border border-purple-200 text-purple-700 text-xs font-bold" title="Caja 3: Dominadas">
+              <span className="w-2 h-2 rounded-full bg-purple-500" />
+              <span>{countBox3}</span>
+              <span className="text-[10px] font-normal text-purple-600 hidden md:inline">{isSwedish ? 'Klar' : 'Caja 3 💎'}</span>
+            </span>
+          </div>
+        </div>
+
+        {/* Integrated Mode Switcher Segmented Control */}
+        <div className="pt-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+          <div className="flex items-center gap-1.5 text-slate-500">
+            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+            <span className="font-medium">
+              {studyScope === 'unlocked'
+                ? (isSwedish ? `${unlockedCardsCount} ord upplåsta i din väg` : `${unlockedCardsCount} palabras desbloqueadas en tu Ruta`)
+                : (isSwedish ? `Utforskar alla ${totalCardsCount} ord i kursen` : `Explorando todas las ${totalCardsCount} palabras del curso`)}
+            </span>
+          </div>
+
+          <div className="flex items-center p-0.5 bg-slate-100 rounded-xl self-stretch sm:self-auto border border-slate-200/60">
             <button
               type="button"
               onClick={() => {
@@ -237,15 +251,15 @@ export const SpacedRepetitionDeck: React.FC<SpacedRepetitionDeckProps> = ({
                 setSelectedUnitId('all');
                 setActiveCardIndex(0);
               }}
-              className={`flex-1 sm:flex-initial px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`flex-1 sm:flex-initial px-3 py-1 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                 studyScope === 'unlocked'
-                  ? 'bg-indigo-600 text-white shadow-xs'
+                  ? 'bg-white text-indigo-700 shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
               title="Solo palabras de unidades que has desbloqueado en tu Ruta"
             >
-              <CheckCircle2 className="w-3.5 h-3.5 text-amber-300" />
-              <span>{isSwedish ? `Upplåsta i din väg (${unlockedCardsCount})` : `Desbloqueadas en Ruta (${unlockedCardsCount})`}</span>
+              <CheckCircle2 className="w-3.5 h-3.5 text-indigo-600" />
+              <span>{isSwedish ? `Upplåsta (${unlockedCardsCount})` : `En Ruta (${unlockedCardsCount})`}</span>
             </button>
             <button
               type="button"
@@ -254,44 +268,17 @@ export const SpacedRepetitionDeck: React.FC<SpacedRepetitionDeckProps> = ({
                 setSelectedUnitId('all');
                 setActiveCardIndex(0);
               }}
-              className={`flex-1 sm:flex-initial px-3 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+              className={`flex-1 sm:flex-initial px-3 py-1 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                 studyScope === 'all'
-                  ? 'bg-indigo-600 text-white shadow-xs'
+                  ? 'bg-white text-indigo-700 shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
-              title="Todas las 55 tarjetas del currículo completo"
+              title="Todas las tarjetas del currículo completo"
             >
               <Compass className="w-3.5 h-3.5" />
-              <span>{isSwedish ? `Hela ordförrådet (${totalCardsCount})` : `Modo Libre (${totalCardsCount})`}</span>
+              <span>{isSwedish ? `Alla (${totalCardsCount})` : `Modo Libre (${totalCardsCount})`}</span>
             </button>
           </div>
-        </div>
-
-        {/* Dynamic Context Explanation */}
-        <div className="pt-2.5 text-xs text-slate-600 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-          {studyScope === 'unlocked' ? (
-            <p className="flex items-center gap-1.5 leading-snug">
-              <span className="font-semibold text-indigo-900">
-                {isSwedish ? '🎯 Progressivt läge aktivt:' : '🎯 Modo Progresivo activo:'}
-              </span>
-              <span>
-                {isSwedish
-                  ? `Du repeterar endast de ${unlockedCardsCount} ord som du har låst upp i lektionerna. När du slutför fler enheter i vägen aktiveras de återstående ${lockedCardsCount} orden automatiskt!`
-                  : `Solo repasas las ${unlockedCardsCount} palabras de las unidades que tienes desbloqueadas en tus lecciones. A medida que avances en tu Ruta, las ${lockedCardsCount} restantes se irán incorporando solas a tu mazo.`}
-              </span>
-            </p>
-          ) : (
-            <p className="flex items-center gap-1.5 leading-snug text-amber-900">
-              <span className="font-semibold">
-                {isSwedish ? '🌐 Utforskarläge aktivt:' : '🌐 Modo Libre activo:'}
-              </span>
-              <span>
-                {isSwedish
-                  ? 'Du kan bläddra och träna på alla 55 ord från Årskurs 6 och 7 fritt, även om lektionerna inte är klara ännu.'
-                  : 'Puedes explorar y entrenar las 55 palabras de Årskurs 6 y 7 libremente, incluso las de unidades que aún tienes bloqueadas en la Ruta.'}
-              </span>
-            </p>
-          )}
         </div>
       </div>
 
@@ -851,7 +838,6 @@ export const SpacedRepetitionDeck: React.FC<SpacedRepetitionDeckProps> = ({
           </div>
         </div>
       )}
-      </div>
     </div>
   );
 };

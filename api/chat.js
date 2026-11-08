@@ -7,31 +7,62 @@ import { GoogleGenAI } from '@google/genai';
 
 // Prioritized fallback models: fast, modern, and officially supported
 const MODEL_FALLBACK_LIST = [
-  'gemini-3.8-flash',
   'gemini-3.1-flash-lite',
+  'gemini-3.8-flash',
   'gemini-2.5-flash'
 ];
 
-const SYSTEM_INSTRUCTION = `Eres Camille, una compañera de conversación amigable que ayuda a una estudiante principiante a dar sus primeros pasos en el aprendizaje del francés desde cero.
+/**
+ * Builds dynamic Camille system prompt with persistent student memory
+ */
+function buildSystemInstruction(studentName, studentFacts, supportLanguage) {
+  const isSv = supportLanguage === 'sv';
+  const realName = studentFacts?.name || (studentName && studentName !== 'Élève' ? studentName : null);
+
+  const factsList = [];
+  if (realName) factsList.push(`- Nombre de la estudiante: ${realName}`);
+  if (studentFacts?.age) factsList.push(`- Edad: ${studentFacts.age} años`);
+  if (Array.isArray(studentFacts?.pets) && studentFacts.pets.length > 0) {
+    factsList.push(`- Mascotas: ${studentFacts.pets.join(', ')}`);
+  }
+  if (Array.isArray(studentFacts?.favoriteFoods) && studentFacts.favoriteFoods.length > 0) {
+    factsList.push(`- Comida favorita: ${studentFacts.favoriteFoods.join(', ')}`);
+  }
+  if (Array.isArray(studentFacts?.hobbies) && studentFacts.hobbies.length > 0) {
+    factsList.push(`- Aficiones e intereses: ${studentFacts.hobbies.join(', ')}`);
+  }
+  if (studentFacts?.cityOrCountry) {
+    factsList.push(`- Lugar: ${studentFacts.cityOrCountry}`);
+  }
+  if (Array.isArray(studentFacts?.otherFacts) && studentFacts.otherFacts.length > 0) {
+    factsList.push(`- Otros datos: ${studentFacts.otherFacts.join(', ')}`);
+  }
+
+  const memoryBlock = factsList.length > 0
+    ? `DATOS RECORDADOS DE LA ESTUDIANTE (MEMORIA ACTIVA Y PERSISTENTE):
+${factsList.join('\n')}
+
+INSTRUCCIONES CLAVE DE MEMORIA:
+${realName ? `1. La estudiante se llama REALMENTE ${realName}.
+2. Si te pregunta si te acuerdas de su nombre, de cómo se llama, o quién es, responde de inmediato y con total certeza: «¡Claro que sí! Te llamas ${realName}.» NUNCA dudes, NUNCA le pidas que te lo repita y JAMÁS digas que se llama "Sophie".` : ''}`
+    : `DATOS RECORDADOS:
+- Aún no ha compartido datos personales. Si te dice su nombre, recuérdalo. ¡JAMÁS asumas que se llama "Sophie"!`;
+
+  return `Eres Camille, una compañera de conversación amigable que ayuda a una estudiante principiante a dar sus primeros pasos en el aprendizaje del francés desde cero.
 
 PAUTAS DE IDIOMA Y ENFOQUE PEDAGÓGICO:
-1. Idioma base: La estudiante aún no habla francés. Tu idioma principal es el ESPAÑOL (o sueco si la estudiante escribe en sueco), pero introduces palabras, saludos o expresiones breves en francés de forma progresiva (método sándwich: español + palabra/frase en francés en cursiva + traducción o ayuda de pronunciación sencilla entre paréntesis).
-   Ejemplo de estilo exacto: «¡Qué bien! A mí también me encanta la música. En francés, canción se dice *chanson* (se pronuncia 'shansón'). ¿Qué tipo de música sueles escuchar?».
-2. Brevedad: Respuestas cortas, de 2 a 3 oraciones en total. Evita explicaciones teóricas largas o textos extensos.
-3. Pronunciación: Cuando introduzcas una palabra nueva en francés, escribe siempre entre paréntesis una aproximación sencilla de su sonido para que sea fácil de leer (ej: *bonjour* (se pronuncia 'bonyúr'), *chat* (se pronuncia 'sha')).
+1. Idioma base: El ${isSv ? 'SUECO' : 'ESPAÑOL'} (la estudiante está empezando). Introduces palabras en francés de forma progresiva con el método sándwich: español + palabra en francés en cursiva + ayuda de pronunciación sencilla entre paréntesis.
+   Ejemplo: «¡Qué bien! A mí también me encanta. En francés, canción se dice *chanson* (se pronuncia 'shansón'). ¿Qué música te gusta?».
+2. Pronunciación: Escribe siempre entre paréntesis una aproximación sencilla (ej: *bonjour* (se pronuncia 'bonyúr'), *chat* (se pronuncia 'sha')).
 
-REGLAS DE CONVERSACIÓN:
-1. Hilo temático: Conecta siempre tu respuesta de manera directa con lo que la estudiante acaba de escribir. No cambies de asunto de forma repentina.
-2. Cierre guiado: Termina siempre con una sola pregunta fácil de responder (idealmente con opciones A/B o de respuesta corta) para facilitar la continuidad de la charla.
-3. Fidelidad a la información real: No inventes detalles personales, aficiones, mascotas o rutinas que la estudiante no haya compartido previamente.
-4. Corrección formativa: Si la estudiante intenta escribir en francés y comete algún fallo, valida su esfuerzo con amabilidad y muestra la forma adecuada de forma natural dentro de tu frase, sin desanimarla.
+LONGITUD Y FORMATO DE CHAT (REGLA ESTRICTA DE BREVEDAD):
+1. RESPUESTAS MUY BREVES: MÁXIMO 2 O 3 ORACIONES CORTAS en total. Es un chat de mensajería instantánea para móvil. Sé directa, cálida y conversacional. ¡CERO párrafos largos!
+2. Hilo temático: Conecta siempre de inmediato con lo que la estudiante acaba de escribir.
+3. Cierre guiado: Termina siempre con una sola pregunta corta y fácil de responder (idealmente con opciones A/B o respuesta corta).
+4. Corrección formativa: Si la estudiante intenta escribir en francés y comete algún fallo, valida su esfuerzo con amabilidad y muestra la forma adecuada dentro de tu frase, sin desanimarla.
 
-MEMORIA Y CONTEXTO:
-- Ten en cuenta los datos que la estudiante vaya compartiendo sobre sus gustos, aficiones y preferencias para retomarlos en turnos posteriores.
-- Si la estudiante menciona un dato personal duradero (mascota, comida favorita, deporte, pasatiempo), recuérdalo para futuras conversaciones.
-
-FORMATO DE RESPUESTA:
-Escribe tu respuesta amigable, cálida y natural directamente para la estudiante (2 a 3 oraciones en total).`;
+${memoryBlock}`;
+}
 
 /**
  * Extracts real text safely from any turn structure (m.parts, m.content, m.text)
@@ -53,7 +84,7 @@ function extractTurnText(m) {
 /**
  * Core chat executor supporting both Vercel Web Standard and Node/Express
  */
-async function processChatRequest(rawMessages, rawApiKey) {
+async function processChatRequest(rawMessages, rawApiKey, studentName, studentFacts, supportLanguage) {
   const apiKey = (rawApiKey || '').replace(/['"\s]+/g, '').trim();
 
   if (!apiKey) {
@@ -101,8 +132,29 @@ async function processChatRequest(rawMessages, rawApiKey) {
     });
   }
 
-  // 2. Sequential attempt across models with reasonable 14s timeout
+  // Prepend explicit memory facts to the conversation turns so the model always adheres to them
+  const realName = studentFacts?.name || (studentName && studentName !== 'Élève' ? studentName : null);
+  const memoryNotes = [];
+  if (realName) memoryNotes.push(`El estudiante se llama ${realName}.`);
+  if (studentFacts?.age) memoryNotes.push(`Tiene ${studentFacts.age} años.`);
+  if (Array.isArray(studentFacts?.pets) && studentFacts.pets.length > 0) {
+    memoryNotes.push(`Mascotas: ${studentFacts.pets.join(', ')}.`);
+  }
+  if (Array.isArray(studentFacts?.favoriteFoods) && studentFacts.favoriteFoods.length > 0) {
+    memoryNotes.push(`Comida favorita: ${studentFacts.favoriteFoods.join(', ')}.`);
+  }
+  if (Array.isArray(studentFacts?.hobbies) && studentFacts.hobbies.length > 0) {
+    memoryNotes.push(`Aficiones: ${studentFacts.hobbies.join(', ')}.`);
+  }
+
+  if (memoryNotes.length > 0 && contents.length > 0 && contents[0].parts?.[0]) {
+    const memoryHeader = `[Memoria del estudiante: ${memoryNotes.join(' ')}]\n\n`;
+    contents[0].parts[0].text = memoryHeader + contents[0].parts[0].text;
+  }
+
+  // 2. Sequential attempt across models with fast per-model timeout
   let lastError = null;
+  const systemInstruction = buildSystemInstruction(studentName, studentFacts, supportLanguage);
 
   // Initialize official SDK
   let ai = null;
@@ -120,6 +172,8 @@ async function processChatRequest(rawMessages, rawApiKey) {
     console.warn('[Tutor Chat] Error inicializando SDK:', err?.message || err);
   }
 
+  const modelErrors = {};
+
   for (const model of MODEL_FALLBACK_LIST) {
     try {
       console.log(`[Tutor Chat] Intentando modelo: ${model}`);
@@ -132,8 +186,8 @@ async function processChatRequest(rawMessages, rawApiKey) {
             model,
             contents,
             config: {
-              systemInstruction: SYSTEM_INSTRUCTION,
-              maxOutputTokens: 250,
+              systemInstruction,
+              maxOutputTokens: 150, // Strict chat brevity: 2 to 3 short sentences
             },
           });
           replyText = response.text?.trim() || '';
@@ -156,11 +210,11 @@ async function processChatRequest(rawMessages, rawApiKey) {
               headers: { 'Content-Type': 'application/json' },
               signal: controller.signal,
               body: JSON.stringify({
-                system_instruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
+                system_instruction: { parts: [{ text: systemInstruction }] },
                 contents,
                 generationConfig: {
                   temperature: 0.7,
-                  maxOutputTokens: 250,
+                  maxOutputTokens: 150,
                 }
               })
             }
@@ -192,6 +246,7 @@ async function processChatRequest(rawMessages, rawApiKey) {
     } catch (err) {
       const errMessage = err?.message || String(err);
       console.warn(`[Tutor Chat] Fallo con ${model}:`, errMessage);
+      modelErrors[model] = errMessage;
       lastError = errMessage;
 
       // If rate limited (429), pause briefly before trying next model
@@ -230,8 +285,8 @@ export default async function handler(req, res) {
 
   try {
     const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
-    const { messages } = req.body || {};
-    const result = await processChatRequest(messages, apiKey);
+    const { messages, studentName, studentFacts, supportLanguage } = req.body || {};
+    const result = await processChatRequest(messages, apiKey, studentName, studentFacts, supportLanguage);
     return res.status(result.status).json(result.data);
   } catch (error) {
     console.error('[Tutor Chat] Error general:', error);
@@ -246,7 +301,8 @@ export async function POST(request) {
   try {
     const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
     const body = await request.json().catch(() => ({}));
-    const result = await processChatRequest(body.messages, apiKey);
+    const { messages, studentName, studentFacts, supportLanguage } = body || {};
+    const result = await processChatRequest(messages, apiKey, studentName, studentFacts, supportLanguage);
     return new Response(JSON.stringify(result.data), {
       status: result.status,
       headers: {

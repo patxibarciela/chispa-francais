@@ -121,6 +121,16 @@ export interface DailySessionTemplate {
   };
 }
 
+export interface StudentMemoryFacts {
+  name?: string;
+  age?: string | number;
+  pets?: string[];
+  favoriteFoods?: string[];
+  hobbies?: string[];
+  cityOrCountry?: string;
+  otherFacts?: string[];
+}
+
 export interface UserProfile {
   id?: string;
   name: string;
@@ -139,6 +149,7 @@ export interface UserProfile {
   supportLanguage: LanguagePreference;
   dailyGoalMinutes: number;
   minutesToday: number;
+  chatMemory?: StudentMemoryFacts;
 }
 
 export interface Achievement {

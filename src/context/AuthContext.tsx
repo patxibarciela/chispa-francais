@@ -87,6 +87,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           completedLessonIds: Array.isArray(raw.completedLessons) ? raw.completedLessons : [],
           completedSessionIds: Array.isArray(raw.completedSessions) ? raw.completedSessions : [],
           currentGrade: raw.currentGrade || 'ak6',
+          chatMemory: raw.chatMemory || undefined,
         };
       }
 
@@ -162,6 +163,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           xp: profile.totalXp,
           completedLessons: profile.completedLessonIds,
           completedSessions: profile.completedSessionIds,
+          chatMemory: profile.chatMemory || null,
           updatedAt: new Date().toISOString(),
         };
 

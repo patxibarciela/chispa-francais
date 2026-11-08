@@ -1,4 +1,4 @@
-import { UserProfile, Flashcard, Achievement } from '../types';
+import { UserProfile, Flashcard, Achievement, StudentMemoryFacts } from '../types';
 import { INITIAL_VOCABULARY } from '../data/vocabulary';
 
 const STORAGE_KEY_PROFILE = 'chispa_francais_profile_v2';
@@ -332,5 +332,157 @@ export function resetAllProgress(): { profile: UserProfile; cards: Flashcard[] }
   saveFlashcards(cleanCards);
 
   return { profile: cleanProfile, cards: cleanCards };
+}
+
+/* =====================================================================
+   CHAT CONVERSATION & STUDENT FACTS MEMORY PERSISTENCE
+   ===================================================================== */
+
+const STORAGE_PREFIX_CHAT = 'chispa_francais_chat_';
+const STORAGE_PREFIX_FACTS = 'chispa_francais_facts_';
+
+export function getChatStorageKey(profileId?: string): string {
+  return `${STORAGE_PREFIX_CHAT}${profileId || 'default'}`;
+}
+
+export function getFactsStorageKey(profileId?: string): string {
+  return `${STORAGE_PREFIX_FACTS}${profileId || 'default'}`;
+}
+
+export function loadChatHistory(profileId?: string): any[] | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = localStorage.getItem(getChatStorageKey(profileId));
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+export function saveChatHistory(messages: any[], profileId?: string): void {
+  if (typeof window === 'undefined') return;
+  try {
+    // Keep the most recent 40 messages to prevent excessive storage while ensuring rich context
+    localStorage.setItem(getChatStorageKey(profileId), JSON.stringify(messages.slice(-40)));
+  } catch (e) {
+    console.warn('Failed to save chat history:', e);
+  }
+}
+
+export function clearChatHistory(profileId?: string): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.removeItem(getChatStorageKey(profileId));
+  } catch {}
+}
+
+export function loadStudentFacts(profileId?: string, fallbackName?: string): StudentMemoryFacts {
+  const defaultFacts: StudentMemoryFacts = {
+    name: fallbackName && fallbackName !== 'Élève' ? fallbackName : undefined,
+    pets: [],
+    favoriteFoods: [],
+    hobbies: [],
+    otherFacts: [],
+  };
+
+  if (typeof window === 'undefined') return defaultFacts;
+  try {
+    const raw = localStorage.getItem(getFactsStorageKey(profileId));
+    if (!raw) return defaultFacts;
+    const parsed = JSON.parse(raw);
+    return {
+      ...defaultFacts,
+      ...parsed,
+      name: parsed.name || defaultFacts.name,
+    };
+  } catch {
+    return defaultFacts;
+  }
+}
+
+export function saveStudentFacts(facts: StudentMemoryFacts, profileId?: string): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(getFactsStorageKey(profileId), JSON.stringify(facts));
+  } catch (e) {
+    console.warn('Failed to save student facts:', e);
+  }
+}
+
+/**
+ * Intelligent client-side fact extractor:
+ * Automatically captures name, age, pets, food, hobbies from the student's natural messages
+ */
+export function extractFactsFromUserMessage(
+  text: string,
+  currentFacts: StudentMemoryFacts
+): { facts: StudentMemoryFacts; updated: boolean } {
+  const updatedFacts: StudentMemoryFacts = {
+    ...currentFacts,
+    pets: [...(currentFacts.pets || [])],
+    favoriteFoods: [...(currentFacts.favoriteFoods || [])],
+    hobbies: [...(currentFacts.hobbies || [])],
+    otherFacts: [...(currentFacts.otherFacts || [])],
+  };
+  let updated = false;
+
+  const clean = text.trim();
+
+  // 1. Name detection (e.g. "Me llamo Patxi", "Je m'appelle Patxi", "Soy Patxi", "Mi nombre es Patxi", "Jag heter Patxi")
+  const nameMatch = clean.match(/(?:me llamo|je m'appelle|je mappelle|soy|mi nombre es|jag heter)\s+([A-Za-zÀ-ÿ0-9_-]+)/i);
+  if (nameMatch && nameMatch[1]) {
+    const extractedName = nameMatch[1].trim();
+    const stopWords = ['un', 'une', 'el', 'la', 'en', 'de', 'du', 'des', 'bien', 'muy', 'amigo', 'estudiante'];
+    if (!stopWords.includes(extractedName.toLowerCase()) && extractedName.length >= 2) {
+      if (updatedFacts.name !== extractedName) {
+        updatedFacts.name = extractedName;
+        updated = true;
+      }
+    }
+  }
+
+  // 2. Age detection (e.g. "Tengo 13 años", "J'ai 13 ans", "Jag är 13 år")
+  const ageMatch = clean.match(/(?:tengo|j'ai|jag är)\s+(\d{1,2})\s*(?:ans|años|år)/i);
+  if (ageMatch && ageMatch[1]) {
+    const ageNum = parseInt(ageMatch[1], 10);
+    if (ageNum >= 5 && ageNum <= 99 && updatedFacts.age !== ageNum) {
+      updatedFacts.age = ageNum;
+      updated = true;
+    }
+  }
+
+  // 3. Pets detection (e.g. "Tengo un perro", "J'ai un chat", "Mi perro se llama...")
+  const petMatch = clean.match(/(?:tengo|j'ai|jag har|mi|mon|min)\s+(?:un|une|el|la|en|ett)?\s*(perro|chien|hund|gato|chat|katt|conejo|lapin|kanin|pájaro|oiseau|fågel|caballo|cheval|häst)/i);
+  if (petMatch && petMatch[1]) {
+    const pet = petMatch[1].toLowerCase();
+    if (!updatedFacts.pets?.includes(pet)) {
+      updatedFacts.pets = Array.from(new Set([...(updatedFacts.pets || []), pet]));
+      updated = true;
+    }
+  }
+
+  // 4. Favorite food detection (e.g. "Me gusta la pizza", "J'aime la pizza", "Mi comida favorita es la pasta")
+  const foodMatch = clean.match(/(?:me gusta|j'aime|jag gillar|favorita es|favorit är)\s+(?:la|le|el|les|de)?\s*(pizza|pasta|queso|fromage|ost|crêpes|crepes|croissant|tacos|chocolate|chocolat|choklad|hamburguesa|burger|helado|glace|glass)/i);
+  if (foodMatch && foodMatch[1]) {
+    const food = foodMatch[1].toLowerCase();
+    if (!updatedFacts.favoriteFoods?.includes(food)) {
+      updatedFacts.favoriteFoods = Array.from(new Set([...(updatedFacts.favoriteFoods || []), food]));
+      updated = true;
+    }
+  }
+
+  // 5. Hobbies / activities detection
+  const hobbyMatch = clean.match(/(?:me gusta|j'aime|jag gillar|juego al|je joue au|spelar)\s+(?:el|la|au|aux)?\s*(fútbol|football|fotboll|música|musique|musik|videojuegos|jeux vidéo|tv-spel|baloncesto|basket|tenis|tennis|natación|natation|simning|dibujar|dessiner|teckna)/i);
+  if (hobbyMatch && hobbyMatch[1]) {
+    const hobby = hobbyMatch[1].toLowerCase();
+    if (!updatedFacts.hobbies?.includes(hobby)) {
+      updatedFacts.hobbies = Array.from(new Set([...(updatedFacts.hobbies || []), hobby]));
+      updated = true;
+    }
+  }
+
+  return { facts: updatedFacts, updated };
 }
 

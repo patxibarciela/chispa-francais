@@ -14,69 +14,60 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({ profile }) => {
   const totalCompleted = completedCount + sessionsCount;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-2">
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-violet-100/90 via-indigo-50/80 to-pink-50/90 border border-indigo-100 p-6 sm:p-8 shadow-xs">
-        {/* Subtle decorative background stars */}
-        <div className="absolute right-4 top-4 text-3xl opacity-20 select-none pointer-events-none">
-          🪐
-        </div>
-        <div className="absolute right-24 bottom-3 text-2xl opacity-20 select-none pointer-events-none">
-          ✨
-        </div>
-
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-3 pb-1">
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-violet-100/70 via-indigo-50/60 to-pink-50/70 border border-indigo-100/80 p-3.5 sm:p-4 shadow-2xs">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
           {/* Greeting Column */}
-          <div className="space-y-2">
-            {/* Pill Header */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/90 text-amber-700 text-xs font-bold shadow-2xs border border-amber-200/60">
-              <Flame className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-              <span>
-                {isEs 
-                  ? `RACHA DE ${profile.streakDays} DÍAS • Objetivo del día: ${Math.min(profile.totalXp, 30)}/30 XP` 
-                  : `${profile.streakDays} DAGARS SVIT • Dagens mål: ${Math.min(profile.totalXp, 30)}/30 XP`}
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/95 text-amber-700 text-xs font-bold shadow-2xs border border-amber-200/60">
+                <Flame className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+                <span>
+                  {isEs 
+                    ? `Racha de ${profile.streakDays} días` 
+                    : `${profile.streakDays} dagars svit`}
+                </span>
               </span>
+
+              <h1 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
+                {isEs 
+                  ? `¡Hola, ${profile.name}! ¿Qué practicamos hoy?` 
+                  : `Hej ${profile.name}! Vad tränar vi på idag?`}
+              </h1>
             </div>
 
-            {/* Big Greeting */}
-            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+            <p className="text-xs text-slate-600 line-clamp-1">
               {isEs 
-                ? `¡Hola, ${profile.name}! ¿Qué practicamos hoy?` 
-                : `Hej ${profile.name}! Vad tränar vi på idag?`}
-            </h1>
-
-            {/* Encouraging text with French flair */}
-            <p className="text-sm text-slate-600 max-w-xl">
-              {isEs 
-                ? `Tu racha actual: ${profile.streakDays} días seguidos practicando francés con Chispa. ¡Tu fluidez sigue progresando!` 
-                : `Din aktuella svit: ${profile.streakDays} dagars träning i franska. Fortsätt framåt!`}
+                ? `Objetivo del día: ${Math.min(profile.totalXp, 30)}/30 XP • Tu fluidez en francés sigue progresando paso a paso.` 
+                : `Dagens mål: ${Math.min(profile.totalXp, 30)}/30 XP • Fortsätt framåt med din franska träning.`}
             </p>
           </div>
 
-          {/* Quick Stats Group */}
-          <div className="flex items-center gap-3 self-start md:self-auto shrink-0">
-            <div className="bg-white/95 rounded-2xl px-4 py-3 border border-slate-200/80 shadow-2xs text-center min-w-[85px]">
-              <span className="block text-xl font-black text-indigo-600">
+          {/* Quick Stats Group - compact inline pills */}
+          <div className="flex items-center gap-2 self-start md:self-auto shrink-0 flex-wrap">
+            <div className="bg-white/90 rounded-xl px-2.5 py-1 border border-slate-200/80 shadow-2xs text-center flex items-center gap-1.5">
+              <span className="text-xs font-bold text-indigo-600">
                 {CURRICULUM_UNITS.length}
               </span>
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+              <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">
                 {isEs ? 'Unidades' : 'Enheter'}
               </span>
             </div>
 
-            <div className="bg-white/95 rounded-2xl px-4 py-3 border border-slate-200/80 shadow-2xs text-center min-w-[85px]">
-              <span className="block text-xl font-black text-emerald-600">
+            <div className="bg-white/90 rounded-xl px-2.5 py-1 border border-slate-200/80 shadow-2xs text-center flex items-center gap-1.5">
+              <span className="text-xs font-bold text-emerald-600">
                 {totalCompleted > 0 ? '100%' : '0%'}
               </span>
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+              <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">
                 {isEs ? 'Precisión' : 'Precision'}
               </span>
             </div>
 
-            <div className="bg-white/95 rounded-2xl px-4 py-3 border border-slate-200/80 shadow-2xs text-center min-w-[85px]">
-              <span className="block text-xl font-black text-purple-600">
+            <div className="bg-white/90 rounded-xl px-2.5 py-1 border border-slate-200/80 shadow-2xs text-center flex items-center gap-1.5">
+              <span className="text-xs font-bold text-purple-600">
                 {profile.currentGrade === 'ak7' ? 'Åk 7' : 'Åk 6'}
               </span>
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+              <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">
                 {isEs ? 'Etapa' : 'Stadie'}
               </span>
             </div>

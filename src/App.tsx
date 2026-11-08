@@ -98,6 +98,7 @@ function ChispaFrançaisApp() {
             completedLessonIds: mergedLessons,
             completedSessionIds: mergedSessions,
             currentGrade: remoteProfile.currentGrade || local.currentGrade,
+            chatMemory: remoteProfile.chatMemory || local.chatMemory,
           };
         }
 

@@ -308,6 +308,27 @@ function playNativeSpeechSynthesis(cleanText: string, slow = false): Promise<boo
 }
 
 /**
+ * Clean and normalize text before sending to SpeechSynthesis or TTS:
+ * - Completely strips asterisks (*bonjour* -> bonjour, **chanson** -> chanson)
+ *   so the speech engine never says "asterisco" or "astérisque".
+ * - Strips HTML tags, markdown underscores, backticks, and header symbols.
+ * - Collapses redundant whitespace.
+ */
+export function cleanTextForSpeech(text: string): string {
+  if (!text) return '';
+  return text
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/\*+/g, '')
+    .replace(/(^|\s)_+([^_]+)_+($|\s)/g, '$1$2$3')
+    .replace(/_{2,}/g, '')
+    .replace(/`+/g, '')
+    .replace(/^#+\s+/gm, '')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
  * Universal speakFrench function:
  * 1. Synchronously unlocks AudioContext on click.
  * 2. Instantaneous Native SpeechSynthesis (<30ms, no network delay).
@@ -317,7 +338,7 @@ function playNativeSpeechSynthesis(cleanText: string, slow = false): Promise<boo
 export async function speakFrench(text: string, slow = false): Promise<void> {
   if (typeof window === 'undefined') return;
 
-  const cleanText = text.replace(/<[^>]*>/g, '').trim();
+  const cleanText = cleanTextForSpeech(text);
   if (!cleanText) return;
 
   // Immediately unlock audio context in the active user gesture

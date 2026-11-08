@@ -23,55 +23,43 @@ export const SectionBanner: React.FC<SectionBannerProps> = ({
   metrics,
 }) => {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-2">
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-violet-100/90 via-indigo-50/80 to-pink-50/90 border border-indigo-100 p-6 sm:p-8 shadow-xs">
-        {/* Subtle decorative background symbols matching Chispa */}
-        <div className="absolute right-4 top-4 text-3xl opacity-20 select-none pointer-events-none">
-          🪐
-        </div>
-        <div className="absolute right-24 bottom-3 text-2xl opacity-20 select-none pointer-events-none">
-          ✨
-        </div>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-3 pb-1">
+      <div className="rounded-2xl bg-white/80 backdrop-blur-xs border border-slate-200/80 px-4 py-3 sm:px-5 sm:py-3.5 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-3">
+        {/* Left info: category badge + title + description inline */}
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 min-w-0">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-purple-50 text-purple-700 text-xs font-bold shrink-0 border border-purple-200/50">
+            <CategoryIcon className="w-3.5 h-3.5 text-purple-600" />
+            <span>{categoryBadge}</span>
+          </div>
 
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          {/* Header Info */}
-          <div className="space-y-2 max-w-2xl">
-            {/* Pill Header */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/90 text-purple-800 text-xs font-bold shadow-2xs border border-purple-200/60">
-              <CategoryIcon className="w-3.5 h-3.5 text-purple-600" />
-              <span>{categoryBadge}</span>
-            </div>
-
-            {/* Big Title */}
-            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight leading-tight">
+          <div className="min-w-0">
+            <h1 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight leading-snug truncate">
               {title}
             </h1>
-
-            {/* Subtitle */}
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            <p className="text-xs text-slate-500 leading-normal line-clamp-1 hidden sm:block">
               {description}
             </p>
           </div>
-
-          {/* Metrics Group matching Chispa Español */}
-          {metrics && metrics.length > 0 && (
-            <div className="flex items-center gap-2.5 sm:gap-3 self-start md:self-auto shrink-0 flex-wrap">
-              {metrics.map((m, idx) => (
-                <div
-                  key={idx}
-                  className="bg-white/95 rounded-2xl px-4 py-3 border border-slate-200/80 shadow-2xs text-center min-w-[85px] sm:min-w-[95px]"
-                >
-                  <span className={`block text-xl font-black ${m.colorClass || 'text-purple-600'}`}>
-                    {m.value}
-                  </span>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mt-0.5">
-                    {m.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
         </div>
+
+        {/* Right metrics: sleek inline pill chips */}
+        {metrics && metrics.length > 0 && (
+          <div className="flex items-center gap-2 shrink-0 flex-wrap">
+            {metrics.map((m, idx) => (
+              <div
+                key={idx}
+                className="bg-slate-50/90 rounded-xl px-2.5 py-1 border border-slate-200/70 text-center flex items-center gap-1.5"
+              >
+                <span className={`text-xs font-bold ${m.colorClass || 'text-purple-600'}`}>
+                  {m.value}
+                </span>
+                <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wider">
+                  {m.label}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -13,7 +13,6 @@ import {
 } from 'lucide-react';
 import { UserProfile, Flashcard } from '../types';
 import { calculateLevel, getAchievements } from '../utils/storage';
-import { SectionBanner } from './SectionBanner';
 
 interface AchievementsViewProps {
   profile: UserProfile;
@@ -33,27 +32,38 @@ export const AchievementsView: React.FC<AchievementsViewProps> = ({ profile, car
   };
 
   return (
-    <div>
-      {/* Unified Section Header matching Chispa style */}
-      <SectionBanner
-        categoryBadge={isSwedish ? 'FRAMSTEG & UTMÄRKELSER' : 'PROGRESO & RECOMPENSAS'}
-        categoryIcon={Trophy}
-        title={isSwedish ? 'Mina Utmärkelser & Mål' : 'Mis Logros y Medallas'}
-        description={
-          isSwedish
-            ? 'Följ din progression i årskurs 6, samla erfarenhetspoäng och lås upp officiella medaljer.'
-            : 'Sigue tu progresión paso a paso en Årskurs 6, acumula puntos de experiencia y desbloquea insignias.'
-        }
-        metrics={[
-          { value: `${profile.totalXp} XP`, label: isSwedish ? 'Total XP' : 'XP Total', colorClass: 'text-purple-600' },
-          { value: `${profile.completedLessonIds.length}`, label: isSwedish ? 'Lektioner' : 'Pasos hechos', colorClass: 'text-emerald-600' },
-          { value: `${profile.streakDays}d`, label: isSwedish ? 'Svit' : 'Racha', colorClass: 'text-amber-600' },
-        ]}
-      />
+    <div className="max-w-4xl mx-auto px-4 py-3 sm:py-4">
+      {/* Integrated Section Title & Quick Stats */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+        <div>
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 text-xs font-bold mb-1 border border-purple-200/50">
+            <Trophy className="w-3.5 h-3.5 text-purple-600" />
+            <span>{isSwedish ? 'FRAMSTEG & UTMÄRKELSER' : 'PROGRESO & RECOMPENSAS'}</span>
+          </div>
+          <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+            {isSwedish ? 'Mina Utmärkelser & Mål' : 'Mis Logros y Medallas'}
+          </h1>
+        </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-4">
+        {/* Compact stats chips */}
+        <div className="flex items-center gap-2 self-start sm:self-auto flex-wrap">
+          <div className="bg-white rounded-xl px-3 py-1.5 border border-slate-200/80 shadow-2xs flex items-center gap-1.5 text-xs">
+            <span className="font-bold text-purple-600">{profile.totalXp} XP</span>
+            <span className="text-slate-400">Total</span>
+          </div>
+          <div className="bg-white rounded-xl px-3 py-1.5 border border-slate-200/80 shadow-2xs flex items-center gap-1.5 text-xs">
+            <span className="font-bold text-emerald-600">{profile.completedLessonIds.length}</span>
+            <span className="text-slate-400">{isSwedish ? 'lektioner' : 'lecciones'}</span>
+          </div>
+          <div className="bg-white rounded-xl px-3 py-1.5 border border-slate-200/80 shadow-2xs flex items-center gap-1.5 text-xs">
+            <span className="font-bold text-amber-600">{profile.streakDays}d</span>
+            <span className="text-slate-400">{isSwedish ? 'svit' : 'racha'}</span>
+          </div>
+        </div>
+      </div>
+
       {/* Profile & Level Spotlight */}
-      <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm mb-8 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div className="bg-white rounded-3xl border border-slate-200 p-5 sm:p-6 shadow-2xs mb-6 flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex items-center gap-5">
           <div className="w-20 h-20 rounded-2xl bg-gradient-to-tr from-amber-400 to-orange-500 text-white flex items-center justify-center font-black text-3xl shadow-md shrink-0">
             {level}
@@ -240,7 +250,6 @@ export const AchievementsView: React.FC<AchievementsViewProps> = ({ profile, car
           </div>
         </div>
       </div>
-    </div>
     </div>
   );
 };

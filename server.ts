@@ -53,7 +53,13 @@ const ttsBufferCache = new Map<string, Buffer>();
 
 app.get('/api/tts/fr', async (req, res) => {
   try {
-    const rawText = String(req.query.text || '').replace(/<[^>]*>/g, '').trim();
+    const rawText = String(req.query.text || '')
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/\*+/g, '')
+      .replace(/`+/g, '')
+      .replace(/_{2,}/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
     if (!rawText) {
       return res.status(400).send('Text query param is required');
     }
