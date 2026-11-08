@@ -85,14 +85,19 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ profile }) => {
       parts: m.parts,
     }));
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 12000);
+
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        signal: controller.signal,
         body: JSON.stringify({ messages: chatHistory }),
       });
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -121,9 +126,13 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ profile }) => {
       setMessages((prev) => [...prev, assistantMsg]);
       speakFrench(replyText);
     } catch (err: any) {
+      clearTimeout(timeoutId);
       console.error('Error al comunicarse con /api/chat:', err);
+      const isTimeout = err?.name === 'AbortError';
       setErrorMessage(
-        err.message || (isSwedish ? 'Kunde inte ansluta till Camille.' : 'No se pudo conectar con Camille.')
+        isTimeout
+          ? (isSwedish ? 'Tiden gick ut. Försök igen.' : 'La respuesta tardó demasiado. Pulsa Reintentar.')
+          : (err.message || (isSwedish ? 'Kunde inte ansluta till Camille.' : 'No se pudo conectar con Camille.'))
       );
     } finally {
       setIsLoading(false);
