@@ -319,20 +319,8 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ profile }) => {
           </div>
 
           <div className="flex items-center gap-2 self-end sm:self-auto flex-wrap">
-            {/* Immersion Selector Toggle */}
+            {/* Immersion Selector Toggle (orden creciente de francés) */}
             <div className="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200/80 text-[11px] font-semibold">
-              <button
-                type="button"
-                onClick={() => handleSetImmersion('high')}
-                className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
-                  immersionLevel === 'high'
-                    ? 'bg-purple-600 text-white font-bold shadow-2xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-                title="Francés sencillo como idioma principal con apoyo breve"
-              >
-                🇫🇷 {isSwedish ? 'Mer franska' : 'Más Francés'}
-              </button>
               <button
                 type="button"
                 onClick={() => handleSetImmersion('balanced')}
@@ -347,6 +335,18 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ profile }) => {
               </button>
               <button
                 type="button"
+                onClick={() => handleSetImmersion('high')}
+                className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
+                  immersionLevel === 'high'
+                    ? 'bg-purple-600 text-white font-bold shadow-2xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+                title="Francés sencillo como idioma principal con apoyo breve"
+              >
+                🇫🇷 {isSwedish ? 'Mer franska' : 'Más Francés'}
+              </button>
+              <button
+                type="button"
                 onClick={() => handleSetImmersion('french-only')}
                 className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
                   immersionLevel === 'french-only'
@@ -355,7 +355,7 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ profile }) => {
                 }`}
                 title="100% en francés fácil adaptado A1/A2"
               >
-                🥖 {isSwedish ? 'Bara' : 'Solo FR'}
+                🥖 {isSwedish ? 'Bara franska' : 'Solo Francés'}
               </button>
             </div>
 
