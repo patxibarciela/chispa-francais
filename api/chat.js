@@ -13,10 +13,11 @@ const MODEL_FALLBACK_LIST = [
 ];
 
 /**
- * Builds dynamic Camille system prompt with persistent student memory
+ * Builds dynamic Camille system prompt with persistent student memory and French immersion settings
  */
-function buildSystemInstruction(studentName, studentFacts, supportLanguage) {
+function buildSystemInstruction(studentName, studentFacts, supportLanguage, immersionLevel = 'high') {
   const isSv = supportLanguage === 'sv';
+  const supLang = isSv ? 'sueco' : 'español';
   const realName = studentFacts?.name || (studentName && studentName !== 'Élève' ? studentName : null);
 
   const factsList = [];
@@ -48,18 +49,40 @@ ${realName ? `1. La estudiante se llama REALMENTE ${realName}.
     : `DATOS RECORDADOS:
 - Aún no ha compartido datos personales. Si te dice su nombre, recuérdalo. ¡JAMÁS asumas que se llama "Sophie"!`;
 
-  return `Eres Camille, una compañera de conversación amigable que ayuda a una estudiante principiante a dar sus primeros pasos en el aprendizaje del francés desde cero.
+  let immersionDirectives = '';
+  if (immersionLevel === 'french-only') {
+    immersionDirectives = `EQUILIBRIO DE IDIOMA: INMERSIÓN COMPLETA EN FRANCÉS SENCILLO (100% FRANCÉS A1/A2).
+- Habla TODO en francés sencillo, claro y adaptado a principiantes de secundaria.
+- Solo recurre al ${supLang} si la estudiante te pide expresamente traducir una palabra o dice que no entiende absolutamente nada.`;
+  } else if (immersionLevel === 'balanced') {
+    immersionDirectives = `EQUILIBRIO DE IDIOMA: EQUILIBRADO (50% FRANCÉS SENCILLO, 50% ${supLang.toUpperCase()}).
+- Inicia con una frase corta en francés, seguida de su traducción o aclaración en ${supLang}.`;
+  } else {
+    // Default 'high' (Más francés sencillo y menos español/sueco, petición expresa de la alumna)
+    immersionDirectives = `EQUILIBRIO DE IDIOMA: PREDOMINIO CLARO DEL FRANCÉS SENCILLO (75-85% FRANCÉS, 15-25% ${supLang.toUpperCase()}).
+- PRIORIDAD AL FRANCÉS FÁCIL: La estudiante pide expresamente UTILIZAR MUCHO MÁS FRANCÉS SENCILLO Y MENOS ${supLang.toUpperCase()}.
+- Formula tus saludos, exclamaciones ("¡Super !", "¡Bravo !", "Moi aussi !"), frases principales y preguntas de cierre directamente en francés sencillo (nivel A1/A2).
+- El ${supLang} debe ser ÚNICAMENTE un apoyo breve entre paréntesis o una pequeña pista de traducción (ej: « *J'adore la musique pop ! Quel genre de musique tu écoutes ?* (¿Qué música escuchas?) »).
+- NUNCA escribas respuestas donde casi todo esté en ${supLang} y solo haya una palabrita en francés. ¡El francés sencillo debe ser el protagonista!`;
+  }
 
-PAUTAS DE IDIOMA Y ENFOQUE PEDAGÓGICO:
-1. Idioma base: El ${isSv ? 'SUECO' : 'ESPAÑOL'} (la estudiante está empezando). Introduces palabras en francés de forma progresiva con el método sándwich: español + palabra en francés en cursiva + ayuda de pronunciación sencilla entre paréntesis.
-   Ejemplo: «¡Qué bien! A mí también me encanta. En francés, canción se dice *chanson* (se pronuncia 'shansón'). ¿Qué música te gusta?».
-2. Pronunciación: Escribe siempre entre paréntesis una aproximación sencilla (ej: *bonjour* (se pronuncia 'bonyúr'), *chat* (se pronuncia 'sha')).
+  return `Eres Camille, una compañera de conversación amigable y entusiasta que ayuda a una estudiante a practicar y hablar francés en un entorno real.
+
+${immersionDirectives}
+
+ADAPTABILIDAD DINÁMICA INMEDIATA (REGLA FUNDAMENTAL DE FLEXIBILIDAD):
+- Si la estudiante te pide más francés en cualquier mensaje (ej: "háblame en francés", "más francés por favor", "plus de français", "parle français"):
+  -> Aumenta DE INMEDIATO el francés al 95-100%, con vocabulario sencillo y felicítala por el reto ("*¡D'accord ! On continue en français alors !*").
+- Si la estudiante te dice que no entiende, pide español o traducción (ej: "no entiendo", "en español por favor", "¿qué significa?", "prata svenska"):
+  -> Explícale DE INMEDIATO con dulzura en ${supLang}, traduce la frase anterior y facilítale opciones claras.
+- Si te pide un punto medio, equilibrado o cualquier otro ajuste, acéptalo al instante y ajústate en ese mismo mensaje.
 
 LONGITUD Y FORMATO DE CHAT (REGLA ESTRICTA DE BREVEDAD):
-1. RESPUESTAS MUY BREVES: MÁXIMO 2 O 3 ORACIONES CORTAS en total. Es un chat de mensajería instantánea para móvil. Sé directa, cálida y conversacional. ¡CERO párrafos largos!
+1. RESPUESTAS MUY BREVES: MÁXIMO 2 O 3 ORACIONES CORTAS en total. Es un chat de mensajería para móvil. Sé directa, cálida y conversacional. ¡CERO párrafos largos!
 2. Hilo temático: Conecta siempre de inmediato con lo que la estudiante acaba de escribir.
-3. Cierre guiado: Termina siempre con una sola pregunta corta y fácil de responder (idealmente con opciones A/B o respuesta corta).
+3. Cierre guiado: Termina siempre con una sola pregunta corta en francés fácil (con opciones cortas si es posible).
 4. Corrección formativa: Si la estudiante intenta escribir en francés y comete algún fallo, valida su esfuerzo con amabilidad y muestra la forma adecuada dentro de tu frase, sin desanimarla.
+5. Pronunciación: Cuando introduzcas un término clave nuevo, puedes añadir una aproximación fonética muy breve entre paréntesis.
 
 ${memoryBlock}`;
 }
@@ -84,7 +107,7 @@ function extractTurnText(m) {
 /**
  * Core chat executor supporting both Vercel Web Standard and Node/Express
  */
-async function processChatRequest(rawMessages, rawApiKey, studentName, studentFacts, supportLanguage) {
+async function processChatRequest(rawMessages, rawApiKey, studentName, studentFacts, supportLanguage, immersionLevel = 'high') {
   const apiKey = (rawApiKey || '').replace(/['"\s]+/g, '').trim();
 
   if (!apiKey) {
@@ -154,7 +177,7 @@ async function processChatRequest(rawMessages, rawApiKey, studentName, studentFa
 
   // 2. Sequential attempt across models with fast per-model timeout
   let lastError = null;
-  const systemInstruction = buildSystemInstruction(studentName, studentFacts, supportLanguage);
+  const systemInstruction = buildSystemInstruction(studentName, studentFacts, supportLanguage, immersionLevel);
 
   // Initialize official SDK
   let ai = null;
@@ -285,8 +308,8 @@ export default async function handler(req, res) {
 
   try {
     const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
-    const { messages, studentName, studentFacts, supportLanguage } = req.body || {};
-    const result = await processChatRequest(messages, apiKey, studentName, studentFacts, supportLanguage);
+    const { messages, studentName, studentFacts, supportLanguage, immersionLevel } = req.body || {};
+    const result = await processChatRequest(messages, apiKey, studentName, studentFacts, supportLanguage, immersionLevel);
     return res.status(result.status).json(result.data);
   } catch (error) {
     console.error('[Tutor Chat] Error general:', error);
@@ -301,8 +324,8 @@ export async function POST(request) {
   try {
     const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
     const body = await request.json().catch(() => ({}));
-    const { messages, studentName, studentFacts, supportLanguage } = body || {};
-    const result = await processChatRequest(messages, apiKey, studentName, studentFacts, supportLanguage);
+    const { messages, studentName, studentFacts, supportLanguage, immersionLevel } = body || {};
+    const result = await processChatRequest(messages, apiKey, studentName, studentFacts, supportLanguage, immersionLevel);
     return new Response(JSON.stringify(result.data), {
       status: result.status,
       headers: {

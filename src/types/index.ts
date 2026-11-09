@@ -131,6 +131,8 @@ export interface StudentMemoryFacts {
   otherFacts?: string[];
 }
 
+export type ImmersionLevel = 'balanced' | 'high' | 'french-only';
+
 export interface UserProfile {
   id?: string;
   name: string;
@@ -147,6 +149,7 @@ export interface UserProfile {
   soundEnabled: boolean;
   voiceSpeed: number; // 0.8 or 1.0
   supportLanguage: LanguagePreference;
+  frenchImmersionLevel?: ImmersionLevel;
   dailyGoalMinutes: number;
   minutesToday: number;
   chatMemory?: StudentMemoryFacts;

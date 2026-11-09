@@ -23,6 +23,20 @@ interface LessonModalProps {
   onClose: () => void;
 }
 
+interface ScrambleTile {
+  id: string;
+  word: string;
+}
+
+function shuffleArray<T>(items: T[]): T[] {
+  const arr = [...items];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
 export const LessonModal: React.FC<LessonModalProps> = ({
   lesson,
   unit,
@@ -35,7 +49,9 @@ export const LessonModal: React.FC<LessonModalProps> = ({
 
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const [scramblePicks, setScramblePicks] = useState<string[]>([]);
+  const [shuffledOptions, setShuffledOptions] = useState<string[]>([]);
+  const [scrambleTiles, setScrambleTiles] = useState<ScrambleTile[]>([]);
+  const [pickedTileIds, setPickedTileIds] = useState<string[]>([]);
   const [isAnswerChecked, setIsAnswerChecked] = useState<boolean>(false);
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
   const [isFinished, setIsFinished] = useState<boolean>(false);
@@ -54,14 +70,61 @@ export const LessonModal: React.FC<LessonModalProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
 
-  // Reset exercise state upon step change (do NOT auto-play answer in advance)
+  // Reset exercise state upon step change and randomize options/scramble order
   useEffect(() => {
     setSelectedOption(null);
-    setScramblePicks([]);
     setIsAnswerChecked(false);
     setShowHint(false);
     setPlayingText(null);
-  }, [currentIndex]);
+    setPickedTileIds([]);
+
+    if (!currentExercise) return;
+
+    if (currentExercise.type === 'scramble') {
+      // Collect raw words
+      let rawWords: string[] = [];
+      if (Array.isArray(currentExercise.options) && currentExercise.options.length > 0) {
+        rawWords = [...currentExercise.options];
+      } else if (Array.isArray(currentExercise.answer)) {
+        rawWords = [...currentExercise.answer];
+      } else if (typeof currentExercise.answer === 'string') {
+        rawWords = currentExercise.answer.split(/\s+/).filter(Boolean);
+      }
+
+      const targetStr = (Array.isArray(currentExercise.answer)
+        ? currentExercise.answer.join(' ')
+        : String(currentExercise.answer || '')
+      ).trim();
+
+      // Scramble words so they NEVER start in the correct target solution order
+      let shuffled = shuffleArray(rawWords);
+      let attempts = 0;
+      while (shuffled.join(' ').trim() === targetStr && shuffled.length > 1 && attempts < 20) {
+        shuffled = shuffleArray(rawWords);
+        attempts++;
+      }
+      if (shuffled.join(' ').trim() === targetStr && shuffled.length > 1) {
+        [shuffled[0], shuffled[1]] = [shuffled[1], shuffled[0]];
+      }
+
+      const tiles: ScrambleTile[] = shuffled.map((word, idx) => ({
+        id: `tile-${idx}-${word}-${Math.random().toString(36).slice(2, 7)}`,
+        word,
+      }));
+
+      setScrambleTiles(tiles);
+      setShuffledOptions([]);
+    } else {
+      // Choice / translate / listen / fill-blank: randomize options so correct answer is not always first
+      if (Array.isArray(currentExercise.options) && currentExercise.options.length > 0) {
+        const shuffled = shuffleArray(currentExercise.options);
+        setShuffledOptions(shuffled);
+      } else {
+        setShuffledOptions([]);
+      }
+      setScrambleTiles([]);
+    }
+  }, [currentIndex, currentExercise]);
 
   const triggerAudio = (text: string) => {
     setPlayingText(text);
@@ -90,15 +153,15 @@ export const LessonModal: React.FC<LessonModalProps> = ({
   const promptQuotedMatch = currentExercise.prompt.match(/«([^»]+)»|"([^"]+)"|'([^']+)'/);
   const promptQuotedWord = promptQuotedMatch ? (promptQuotedMatch[1] || promptQuotedMatch[2] || promptQuotedMatch[3]) : null;
 
-  const handlePickScrambleWord = (word: string) => {
-    if (isAnswerChecked) return;
-    setScramblePicks((prev) => [...prev, word]);
-    triggerAudio(word);
+  const handlePickScrambleTile = (tile: ScrambleTile) => {
+    if (isAnswerChecked || pickedTileIds.includes(tile.id)) return;
+    setPickedTileIds((prev) => [...prev, tile.id]);
+    triggerAudio(tile.word);
   };
 
-  const handleRemoveScrambleWord = (index: number) => {
+  const handleRemoveScrambleTile = (index: number) => {
     if (isAnswerChecked) return;
-    setScramblePicks((prev) => prev.filter((_, i) => i !== index));
+    setPickedTileIds((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleCheckAnswer = () => {
@@ -109,7 +172,8 @@ export const LessonModal: React.FC<LessonModalProps> = ({
 
     if (currentExercise.type === 'scramble') {
       const targetArr = Array.isArray(currentExercise.answer) ? currentExercise.answer : [currentExercise.answer];
-      const userStr = scramblePicks.join(' ').trim();
+      const pickedWords = pickedTileIds.map((id) => scrambleTiles.find((t) => t.id === id)?.word || '');
+      const userStr = pickedWords.join(' ').trim();
       targetAnswer = targetArr.join(' ').trim();
       correct = userStr === targetAnswer;
     } else {
@@ -194,7 +258,7 @@ export const LessonModal: React.FC<LessonModalProps> = ({
                 <h2 className="text-base sm:text-lg font-black text-slate-900 leading-tight">
                   {currentExercise.prompt}
                 </h2>
-                {promptQuotedWord && !shouldShowPromptFr(currentExercise) && (
+                {promptQuotedWord && currentExercise.type !== 'scramble' && !shouldShowPromptFr(currentExercise) && (
                   <button
                     type="button"
                     onClick={() => triggerAudio(promptQuotedWord)}
@@ -239,45 +303,46 @@ export const LessonModal: React.FC<LessonModalProps> = ({
                 <div className="space-y-3">
                   {/* Construction Drop Zone */}
                   <div className="min-h-[52px] p-2.5 rounded-2xl border-2 border-dashed border-purple-200 bg-purple-50/20 flex flex-wrap gap-1.5 items-center">
-                    {scramblePicks.length === 0 ? (
+                    {pickedTileIds.length === 0 ? (
                       <span className="text-xs text-slate-400 italic px-2">
                         {isSwedish ? 'Tryck på orden nedan i rätt ordning' : 'Pulsa sobre las palabras para ordenar la frase'}
                       </span>
                     ) : (
-                      scramblePicks.map((word, idx) => (
-                        <button
-                          key={idx}
-                          type="button"
-                          onClick={() => handleRemoveScrambleWord(idx)}
-                          disabled={isAnswerChecked}
-                          className="px-3 py-1 rounded-xl bg-purple-600 text-white font-semibold text-xs sm:text-sm shadow-xs hover:bg-purple-700 transition-all cursor-pointer active:scale-95"
-                        >
-                          {word}
-                        </button>
-                      ))
+                      pickedTileIds.map((tileId, idx) => {
+                        const tile = scrambleTiles.find((t) => t.id === tileId);
+                        if (!tile) return null;
+                        return (
+                          <button
+                            key={tile.id}
+                            type="button"
+                            onClick={() => handleRemoveScrambleTile(idx)}
+                            disabled={isAnswerChecked}
+                            className="px-3 py-1 rounded-xl bg-purple-600 text-white font-semibold text-xs sm:text-sm shadow-xs hover:bg-purple-700 transition-all cursor-pointer active:scale-95"
+                          >
+                            {tile.word}
+                          </button>
+                        );
+                      })
                     )}
                   </div>
 
-                  {/* Available word tiles */}
+                  {/* Available word tiles (guaranteed scrambled) */}
                   <div className="flex flex-wrap gap-1.5">
-                    {currentExercise.options?.map((word, idx) => {
-                      const countInPicks = scramblePicks.filter((w) => w === word).length;
-                      const countInOptions = currentExercise.options?.filter((w) => w === word).length || 1;
-                      const isAllPicked = countInPicks >= countInOptions;
-
+                    {scrambleTiles.map((tile) => {
+                      const isPicked = pickedTileIds.includes(tile.id);
                       return (
                         <button
-                          key={idx}
+                          key={tile.id}
                           type="button"
-                          onClick={() => handlePickScrambleWord(word)}
-                          disabled={isAllPicked || isAnswerChecked}
+                          onClick={() => handlePickScrambleTile(tile)}
+                          disabled={isPicked || isAnswerChecked}
                           className={`px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer ${
-                            isAllPicked
+                            isPicked
                               ? 'bg-slate-100 text-slate-300 border-slate-200 cursor-not-allowed'
                               : 'bg-white border-slate-300 text-slate-800 hover:border-purple-400 hover:bg-purple-50 shadow-2xs active:scale-95'
                           }`}
                         >
-                          {word}
+                          {tile.word}
                         </button>
                       );
                     })}
@@ -285,10 +350,10 @@ export const LessonModal: React.FC<LessonModalProps> = ({
                 </div>
               )}
 
-              {/* Multiple Choice / Translation Options */}
-              {currentExercise.type !== 'scramble' && currentExercise.options && (
+              {/* Multiple Choice / Translation Options (randomized order) */}
+              {currentExercise.type !== 'scramble' && (shuffledOptions.length > 0 ? shuffledOptions : currentExercise.options) && (
                 <div className="space-y-2">
-                  {currentExercise.options.map((opt, idx) => {
+                  {(shuffledOptions.length > 0 ? shuffledOptions : (currentExercise.options || [])).map((opt, idx) => {
                     const isSelected = selectedOption === opt;
                     const isAudioPlayingThis = playingText === opt;
 
@@ -415,7 +480,7 @@ export const LessonModal: React.FC<LessonModalProps> = ({
                     onClick={handleCheckAnswer}
                     disabled={
                       currentExercise.type === 'scramble'
-                        ? scramblePicks.length === 0
+                        ? pickedTileIds.length === 0
                         : !selectedOption
                     }
                     className="px-6 py-2.5 bg-purple-600 hover:bg-purple-700 disabled:opacity-40 text-white font-bold text-xs sm:text-sm rounded-xl shadow-xs transition-all cursor-pointer"

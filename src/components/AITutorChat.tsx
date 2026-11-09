@@ -9,7 +9,7 @@ import {
   RefreshCw,
   UserCheck
 } from 'lucide-react';
-import { UserProfile, StudentMemoryFacts } from '../types';
+import { UserProfile, StudentMemoryFacts, ImmersionLevel } from '../types';
 import { speakFrench, createSpeechRecognizer, isSpeechRecognitionSupported } from '../utils/audio';
 import { 
   loadChatHistory, 
@@ -38,6 +38,17 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ profile }) => {
   const isSwedish = profile.supportLanguage === 'sv';
   const micSupported = isSpeechRecognitionSupported();
 
+  // French immersion level preference (default 'high' = más francés sencillo y menos español)
+  const [immersionLevel, setImmersionLevel] = useState<ImmersionLevel>(() => {
+    return profile.frenchImmersionLevel || 'high';
+  });
+
+  const handleSetImmersion = (level: ImmersionLevel) => {
+    setImmersionLevel(level);
+    profile.frenchImmersionLevel = level;
+    saveUserProfile({ ...profile, frenchImmersionLevel: level });
+  };
+
   // Persistent student facts (name, age, pets, favorite foods, hobbies)
   const [studentFacts, setStudentFacts] = useState<StudentMemoryFacts>(() => {
     return loadStudentFacts(profile.id, profile.name);
@@ -45,13 +56,14 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ profile }) => {
 
   const knownName = studentFacts.name || (profile.name && profile.name !== 'Élève' ? profile.name : undefined);
 
+  // Camille starts directly with friendly, accessible French
   const initialGreeting = isSwedish
     ? (knownName 
-        ? `Hej ${knownName}! Jag är Camille, din samtalspartner i franska. På franska säger man *bonjour* (uttalas 'bån-sjur'). Vad vill du att vi pratar om idag?` 
-        : "Hej! Jag heter Camille, din samtalspartner för att lära dig franska från grunden. På franska säger man *bonjour* (uttalas 'bån-sjur'). Vad heter du?")
+        ? `Bonjour ${knownName} ! Comment ça va aujourd'hui ? (Hur mår du idag?). Vad vill du att vi pratar om: la musique, les animaux eller l'école ?` 
+        : "Bonjour ! Je m'appelle Camille. (Jag heter Camille). Et toi, comment tu t'appelles ? (Vad heter du?)")
     : (knownName
-        ? `¡Hola, ${knownName}! Soy Camille, tu compañera de conversación en francés. En francés, hola se dice *bonjour* (se pronuncia 'bonyúr'). ¿De qué te gustaría hablar hoy?`
-        : "¡Hola! Soy Camille, tu compañera de conversación para aprender francés desde cero. En francés, hola se dice *bonjour* (se pronuncia 'bonyúr'). ¿Cómo te llamas?");
+        ? `Bonjour ${knownName} ! Comment ça va aujourd'hui ? (¿Cómo estás hoy?). ¿De qué te gustaría hablar: la musique, les animaux o l'école ?`
+        : "Bonjour ! Je m'appelle Camille. (Me llamo Camille). Et toi, comment tu t'appelles ? (¿Y tú, cómo te llamas?)");
 
   // chatHistory maintained in Gemini's exact schema and persisted in storage
   const [messages, setMessages] = useState<ChatMessageItem[]>(() => {
@@ -109,6 +121,40 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ profile }) => {
       }
     }
 
+    // 2. Dynamic language immersion detection based on user request
+    let activeImmersion = immersionLevel;
+    const lower = text.toLowerCase();
+    if (
+      lower.includes('más francés') || 
+      lower.includes('mas frances') || 
+      lower.includes('parle en français') || 
+      lower.includes('en français') || 
+      lower.includes('plus de français') ||
+      lower.includes('mer franska')
+    ) {
+      activeImmersion = 'high';
+      handleSetImmersion('high');
+    } else if (
+      lower.includes('solo francés') || 
+      lower.includes('todo en francés') || 
+      lower.includes('tout en français') || 
+      lower.includes('bara franska')
+    ) {
+      activeImmersion = 'french-only';
+      handleSetImmersion('french-only');
+    } else if (
+      lower.includes('en español') || 
+      lower.includes('no entiendo') || 
+      lower.includes('explícamelo en español') || 
+      lower.includes('på svenska') || 
+      lower.includes('förklara på svenska') ||
+      lower.includes('equilibrado') ||
+      lower.includes('mitad y mitad')
+    ) {
+      activeImmersion = 'balanced';
+      handleSetImmersion('balanced');
+    }
+
     const userMsg: ChatMessageItem = {
       id: Date.now().toString(),
       role: 'user',
@@ -142,7 +188,8 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ profile }) => {
           messages: chatHistory,
           studentName: activeFacts.name || (profile.name !== 'Élève' ? profile.name : undefined),
           studentFacts: activeFacts,
-          supportLanguage: profile.supportLanguage
+          supportLanguage: profile.supportLanguage,
+          immersionLevel: activeImmersion
         }),
       });
       clearTimeout(timeoutId);
@@ -213,15 +260,19 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ profile }) => {
 
   const quickPrompts = isSwedish
     ? [
-        knownName ? `Jag heter ${knownName}!` : "Hej! Jag heter Maria och jag är 13 år.",
-        "Hur säger man 'katt' på franska?",
-        "Jag gillar musik och fotboll.",
+        knownName ? `Je m'appelle ${knownName} !` : "Bonjour ! Je m'appelle Patxi.",
+        "🇫🇷 Prata mer franska!",
+        "Comment ça va aujourd'hui ?",
+        "J'aime beaucoup la musique et les animaux.",
+        "🇸🇪 Förklara på svenska",
         "Kommer du ihåg vad jag heter?",
       ]
     : [
-        knownName ? `¡Me llamo ${knownName}!` : "¡Hola! Me llamo Sofía y tengo 13 años.",
-        "¿Cómo se dice 'gato' en francés?",
-        "Me gusta mucho la música y la pizza.",
+        knownName ? `Je m'appelle ${knownName} !` : "Bonjour ! Je m'appelle Patxi.",
+        "🇫🇷 ¡Háblame más en francés!",
+        "Comment ça va aujourd'hui ?",
+        "J'aime beaucoup la musique et les animaux.",
+        "🇪🇸 Explícamelo en español",
         "¿Te acuerdas de cómo me llamo?",
       ];
 
@@ -241,7 +292,11 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ profile }) => {
                 </h3>
                 <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" title="Online" />
                 <span className="text-[10px] font-bold text-purple-700 bg-purple-50 border border-purple-200/60 px-2 py-0.5 rounded-full">
-                  {isSwedish ? 'Nivå A1 · Smörgåsmetod' : 'Nivel A1 · Método Sándwich'}
+                  {immersionLevel === 'french-only' 
+                    ? (isSwedish ? '100% Franska' : '100% Francés') 
+                    : (immersionLevel === 'high' 
+                        ? (isSwedish ? 'Mer franska' : 'Más Francés') 
+                        : (isSwedish ? 'Balanserad' : 'Equilibrado'))}
                 </span>
                 {studentFacts.name && (
                   <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 rounded-full flex items-center gap-1" title="Nombre recordado en memoria">
@@ -257,19 +312,59 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ profile }) => {
               </div>
               <span className="text-xs text-slate-400 leading-tight mt-0.5 block">
                 {isSwedish 
-                  ? 'Samtalspartner i franska (svenska som bas, korta meningar och minne för dina svar)' 
-                  : 'Compañera de francés (base en español, frases cortas y memoria activa de tus datos)'}
+                  ? 'Samtalspartner i franska (anpassar sig till dina önskemål och minne för dina svar)' 
+                  : 'Compañera en francés sencillo (adaptable a tus peticiones y con memoria activa)'}
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 self-end sm:self-auto">
+          <div className="flex items-center gap-2 self-end sm:self-auto flex-wrap">
+            {/* Immersion Selector Toggle */}
+            <div className="flex items-center bg-slate-100 p-0.5 rounded-xl border border-slate-200/80 text-[11px] font-semibold">
+              <button
+                type="button"
+                onClick={() => handleSetImmersion('high')}
+                className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
+                  immersionLevel === 'high'
+                    ? 'bg-purple-600 text-white font-bold shadow-2xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+                title="Francés sencillo como idioma principal con apoyo breve"
+              >
+                🇫🇷 {isSwedish ? 'Mer franska' : 'Más Francés'}
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSetImmersion('balanced')}
+                className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
+                  immersionLevel === 'balanced'
+                    ? 'bg-purple-600 text-white font-bold shadow-2xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+                title="Equilibrado entre francés y español"
+              >
+                ⚖️ {isSwedish ? 'Balanserad' : 'Equilibrado'}
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSetImmersion('french-only')}
+                className={`px-2 py-1 rounded-lg transition-all cursor-pointer ${
+                  immersionLevel === 'french-only'
+                    ? 'bg-purple-600 text-white font-bold shadow-2xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+                title="100% en francés fácil adaptado A1/A2"
+              >
+                🥖 {isSwedish ? 'Bara' : 'Solo FR'}
+              </button>
+            </div>
+
             <button
               onClick={() => {
                 const currentName = studentFacts.name || (profile.name !== 'Élève' ? profile.name : null);
                 const restartGreeting = isSwedish 
-                  ? `Hej igen${currentName ? ` ${currentName}` : ''}! Vad vill du att vi pratar om nu: musik, mat eller djur?` 
-                  : `¡Hola de nuevo${currentName ? ` ${currentName}` : ''}! ¿De qué te gustaría que hablemos ahora: música, comida o mascotas?`;
+                  ? `Bonjour${currentName ? ` ${currentName}` : ''} ! Comment ça va ? (Hur mår du?). De quoi tu veux qu'on parle : la musique, les animaux ou l'école ?` 
+                  : `Bonjour${currentName ? ` ${currentName}` : ''} ! Comment ça va ? (¿Cómo estás?). ¿De qué te gustaría hablar: la musique, les animaux o l'école ?`;
                 const resetList: ChatMessageItem[] = [
                   {
                     id: 'restart-' + Date.now(),
