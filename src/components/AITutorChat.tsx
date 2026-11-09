@@ -22,6 +22,7 @@ import {
 
 interface AITutorChatProps {
   profile: UserProfile;
+  onRecordStudy?: () => void;
 }
 
 export interface GeminiMessage {
@@ -34,7 +35,7 @@ interface ChatMessageItem extends GeminiMessage {
   timestamp: string;
 }
 
-export const AITutorChat: React.FC<AITutorChatProps> = ({ profile }) => {
+export const AITutorChat: React.FC<AITutorChatProps> = ({ profile, onRecordStudy }) => {
   const isSwedish = profile.supportLanguage === 'sv';
   const micSupported = isSpeechRecognitionSupported();
 
@@ -167,6 +168,7 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ profile }) => {
     setMessages(updatedMessages);
     setInputValue('');
     setIsLoading(true);
+    onRecordStudy?.();
 
     // Prepare strictly Gemini-formatted chatHistory
     const chatHistory: GeminiMessage[] = updatedMessages.map((m) => ({

@@ -23,7 +23,9 @@ import {
   saveFlashcards,
   getActiveProfileId,
   setActiveProfileId,
-  resetAllProgress
+  resetAllProgress,
+  recordStudyActivity,
+  syncProfileStreakOnLoad
 } from './utils/storage';
 import { CURRICULUM_UNITS } from './data/curriculum';
 
@@ -86,7 +88,7 @@ function ChispaFrançaisApp() {
             new Set([...(local.completedSessionIds || []), ...(remoteProfile.completedSessionIds || [])])
           );
 
-          merged = {
+          const candidate: UserProfile = {
             ...local,
             id: user!.uid,
             name: user!.displayName || remoteProfile.name || local.name,
@@ -94,12 +96,15 @@ function ChispaFrançaisApp() {
             photoURL: user!.photoURL || undefined,
             accountType: 'google',
             totalXp: Math.max(local.totalXp, remoteProfile.totalXp || 0),
-            streakDays: Math.max(local.streakDays, remoteProfile.streakDays || 1),
+            streakDays: Math.max(local.streakDays, remoteProfile.streakDays || 0),
+            lastStudyDate: remoteProfile.lastStudyDate || local.lastStudyDate || '',
             completedLessonIds: mergedLessons,
             completedSessionIds: mergedSessions,
             currentGrade: remoteProfile.currentGrade || local.currentGrade,
             chatMemory: remoteProfile.chatMemory || local.chatMemory,
           };
+
+          merged = syncProfileStreakOnLoad(candidate);
         }
 
         saveUserProfile(merged);
@@ -168,15 +173,15 @@ function ChispaFrançaisApp() {
 
     const isAlreadyDone = profile.completedLessonIds.includes(lessonId);
     const updatedDone = isAlreadyDone ? profile.completedLessonIds : [...profile.completedLessonIds, lessonId];
-    const today = new Date().toISOString().split('T')[0];
 
-    const next: UserProfile = {
+    const baseUpdate: UserProfile = {
       ...profile,
       totalXp: profile.totalXp + earnedXp,
       completedLessonIds: updatedDone,
-      lastStudyDate: today,
       minutesToday: profile.minutesToday + 10,
     };
+
+    const next = recordStudyActivity(baseUpdate);
 
     saveUserProfile(next);
     setProfile(next);
@@ -186,18 +191,34 @@ function ChispaFrançaisApp() {
   };
 
   const handleCompleteSession = (earnedXp: number) => {
-    const today = new Date().toISOString().split('T')[0];
     const sessionId = activeSessionUnit?.dailySessionTemplate.id || 'session-daily';
 
-    const next: UserProfile = {
+    const baseUpdate: UserProfile = {
       ...profile,
       totalXp: profile.totalXp + earnedXp,
       completedSessionIds: profile.completedSessionIds.includes(sessionId)
         ? profile.completedSessionIds
         : [...profile.completedSessionIds, sessionId],
-      lastStudyDate: today,
       minutesToday: profile.minutesToday + 30,
     };
+
+    const next = recordStudyActivity(baseUpdate);
+
+    saveUserProfile(next);
+    setProfile(next);
+    if (user) {
+      saveCloudData(next, cardsRef.current);
+    }
+  };
+
+  const handleRecordPracticeActivity = (earnedXp: number = 0) => {
+    const baseUpdate: UserProfile = {
+      ...profile,
+      totalXp: profile.totalXp + earnedXp,
+      minutesToday: profile.minutesToday + 2,
+    };
+
+    const next = recordStudyActivity(baseUpdate);
 
     saveUserProfile(next);
     setProfile(next);
@@ -207,10 +228,11 @@ function ChispaFrançaisApp() {
   };
 
   const handleSelectProfileFromLanding = (selectedProfile: UserProfile) => {
-    setProfile(selectedProfile);
-    saveUserProfile(selectedProfile);
-    if (selectedProfile.id) {
-      setActiveProfileId(selectedProfile.id);
+    const synced = syncProfileStreakOnLoad(selectedProfile);
+    setProfile(synced);
+    saveUserProfile(synced);
+    if (synced.id) {
+      setActiveProfileId(synced.id);
     }
     setHasSelectedSession(true);
   };
@@ -304,11 +326,15 @@ function ChispaFrançaisApp() {
                   onUpdateCards={handleUpdateCards}
                   profile={profile}
                   units={CURRICULUM_UNITS}
+                  onRecordStudy={handleRecordPracticeActivity}
                 />
               )}
 
               {activeTab === 'tutor' && (
-                <AITutorChat profile={profile} />
+                <AITutorChat 
+                  profile={profile} 
+                  onRecordStudy={handleRecordPracticeActivity}
+                />
               )}
 
               {activeTab === 'achievements' && (

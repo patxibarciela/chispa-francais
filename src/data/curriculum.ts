@@ -773,226 +773,198 @@ const CURRICULUM_AK6_UNITS: Unit[] = [
         "description": "Domina Je, Tu, Il, Elle y el verbo ser/estar.",
         "xpReward": 20,
         "culturalNote": {
-          "title": "Point Culturel",
-          "textEs": "Aspecto cultural y lingüístico relevante para Årskurs 6.",
-          "textSv": "Kulturell och språklig aspekt för årskurs 6."
+          "title": "El verbo être y la cortesía",
+          "textEs": "El verbo «être» (ser/estar) es el más importante del francés. Los franceses dicen a menudo «C'est super !» o «C'est magnifique !» para expresar entusiasmo en su día a día.",
+          "textSv": "Verbet «être» (att vara) är det viktigaste verbet i franskan. Franska ungdomar säger ofta «C'est super !» för att visa entusiasm."
         },
         "exercises": [
           {
             "id": "u1-l4-e1",
             "type": "choice",
-            "prompt": "Reto 1: Paso 4: Pronombres sujeto y el verbo Être — práctica guiada",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "prompt": "¿Qué pronombre personal significa «Yo» en francés?",
+            "promptFr": "Je",
+            "audioFr": "Je",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "Je",
+              "Tu",
+              "Il",
+              "Elle"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista explicativa del ejercicio.",
-            "hintSv": "Förklarande ledtråd för övningen.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "Je",
+            "hintEs": "Tiene solo dos letras y suena suave con la 'e' francesa.",
+            "hintSv": "Betyder 'jag' på svenska.",
+            "explanationEs": "¡Exacto! «Je» significa «Yo» (como en Je suis o Je m'appelle).",
+            "explanationSv": "Exakt! «Je» betyder jag."
           },
           {
             "id": "u1-l4-e2",
-            "type": "translate",
-            "prompt": "Reto 2: Paso 4: Pronombres sujeto y el verbo Être — práctica guiada",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "choice",
+            "prompt": "¿Cómo se dice «Yo soy» o «Yo estoy» con el verbo être?",
+            "promptFr": "Je suis",
+            "audioFr": "Je suis",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "Je suis",
+              "Tu es",
+              "Il est",
+              "Elle est"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista explicativa del ejercicio.",
-            "hintSv": "Förklarande ledtråd för övningen.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "Je suis",
+            "hintEs": "Empieza por 'Je' y la 's' final no se pronuncia.",
+            "hintSv": "Betyder 'jag är' på svenska.",
+            "explanationEs": "¡Muy bien! «Je suis» significa tanto «yo soy» como «yo estoy».",
+            "explanationSv": "Mycket bra! «Je suis» betyder jag är."
           },
           {
             "id": "u1-l4-e3",
-            "type": "fill-blank",
-            "prompt": "Reto 3: Paso 4: Pronombres sujeto y el verbo Être — práctica guiada",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "scramble",
+            "prompt": "Ordena la frase: «Yo soy estudiante.»",
+            "promptFr": "Je suis élève",
+            "audioFr": "Je suis élève",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "élève",
+              "suis",
+              "Je"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista explicativa del ejercicio.",
-            "hintSv": "Förklarande ledtråd för övningen.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": [
+              "Je",
+              "suis",
+              "élève"
+            ],
+            "hintEs": "Sujeto (Je) + verbo (suis) + profesión/rol (élève).",
+            "hintSv": "Börja med 'Je'.",
+            "explanationEs": "¡Bravo! «Je suis élève» significa «Soy alumno/estudiante».",
+            "explanationSv": "Bravo! «Je suis élève» betyder jag är elev."
           },
           {
             "id": "u1-l4-e4",
-            "type": "scramble",
-            "prompt": "Reto 4: Paso 4: Pronombres sujeto y el verbo Être — práctica guiada",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "choice",
+            "prompt": "¿Cómo le dices a un compañero: «¡Tú eres genial / simpático!»?",
+            "promptFr": "Tu es sympa !",
+            "audioFr": "Tu es sympa !",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "Tu es sympa !",
+              "Je suis sympa !",
+              "Il est sympa !",
+              "Elle est sympa !"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista explicativa del ejercicio.",
-            "hintSv": "Förklarande ledtråd för övningen.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "Tu es sympa !",
+            "hintEs": "El pronombre para tú es 'Tu' y su forma del verbo être es 'es'.",
+            "hintSv": "Betyder 'du är trevlig'.",
+            "explanationEs": "¡Correcto! «Tu es» se pronuncia 'tü e'. «Tu es sympa !» = ¡Eres simpático/a!",
+            "explanationSv": "Rätt! «Tu es sympa !» betyder du är schyst/trevlig."
           },
           {
             "id": "u1-l4-e5",
-            "type": "choice",
-            "prompt": "Reto 5: Paso 4: Pronombres sujeto y el verbo Être — práctica guiada",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "fill-blank",
+            "prompt": "Completa con el verbo être: « Marc _____ français. » (Marc es francés)",
+            "promptFr": "Marc est français.",
+            "audioFr": "Marc est français.",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "est",
+              "es",
+              "suis",
+              "sommes"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista explicativa del ejercicio.",
-            "hintSv": "Förklarande ledtråd för övningen.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "est",
+            "hintEs": "Para 'él' (Il) o un nombre propio, el verbo es 'est' (se pronuncia como una simple 'e').",
+            "hintSv": "Böjs som 'il est'.",
+            "explanationEs": "¡Excelente! «Marc est français» (se pronuncia 'est' como una simple 'e').",
+            "explanationSv": "Utmärkt! Tredje person singular böjs 'est'."
           },
           {
             "id": "u1-l4-e6",
-            "type": "translate",
-            "prompt": "Reto 6: Paso 4: Pronombres sujeto y el verbo Être — práctica guiada",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "choice",
+            "prompt": "¿Qué pronombre francés se usa para «Ella»?",
+            "promptFr": "Elle",
+            "audioFr": "Elle",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "Elle",
+              "Il",
+              "Tu",
+              "Je"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista explicativa del ejercicio.",
-            "hintSv": "Förklarande ledtråd för övningen.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "Elle",
+            "hintEs": "Se pronuncia 'el'.",
+            "hintSv": "Betyder 'hon' på svenska.",
+            "explanationEs": "¡Exacto! «Elle» es «Ella» (ej: Elle est gentille = Ella es amable).",
+            "explanationSv": "Exakt! «Elle» betyder hon."
           },
           {
             "id": "u1-l4-e7",
-            "type": "fill-blank",
-            "prompt": "Reto 7: Paso 4: Pronombres sujeto y el verbo Être — práctica guiada",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "scramble",
+            "prompt": "Ordena la frase: «Ella está en París.»",
+            "promptFr": "Elle est à Paris",
+            "audioFr": "Elle est à Paris",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "Paris",
+              "Elle",
+              "à",
+              "est"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista explicativa del ejercicio.",
-            "hintSv": "Förklarande ledtråd för övningen.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": [
+              "Elle",
+              "est",
+              "à",
+              "Paris"
+            ],
+            "hintEs": "Sujeto (Elle) + verbo (est) + preposición (à) + ciudad (Paris).",
+            "hintSv": "Börja med 'Elle'.",
+            "explanationEs": "¡Perfecto! «Elle est à Paris» (Ella está en París). El verbo être sirve para ser y para estar.",
+            "explanationSv": "Perfekt! «Elle est à Paris» betyder hon är i Paris."
           },
           {
             "id": "u1-l4-e8",
-            "type": "scramble",
-            "prompt": "Reto 8: Paso 4: Pronombres sujeto y el verbo Être — práctica guiada",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "choice",
+            "prompt": "¿Cómo se dice «Él es de Madrid»?",
+            "promptFr": "Il est de Madrid.",
+            "audioFr": "Il est de Madrid.",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "Il est de Madrid.",
+              "Elle est de Madrid.",
+              "Tu es de Madrid.",
+              "Je suis de Madrid."
             ],
-            "answer": "Option A",
-            "hintEs": "Pista explicativa del ejercicio.",
-            "hintSv": "Förklarande ledtråd för övningen.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "Il est de Madrid.",
+            "hintEs": "Para «Él» usamos «Il».",
+            "hintSv": "Börja med 'Il' (han).",
+            "explanationEs": "¡Genial! «Il» significa «él». «Il est de Madrid» = Él es de Madrid.",
+            "explanationSv": "Strålande! «Il est de Madrid» betyder han är från Madrid."
           },
           {
             "id": "u1-l4-e9",
-            "type": "choice",
-            "prompt": "Reto 9: Paso 4: Pronombres sujeto y el verbo Être — práctica guiada",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "fill-blank",
+            "prompt": "Completa: « Tu _____ content aujourd'hui ? » (¿Estás contento hoy?)",
+            "promptFr": "Tu es content aujourd'hui ?",
+            "audioFr": "Tu es content aujourd'hui ?",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "es",
+              "est",
+              "suis",
+              "êtes"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista explicativa del ejercicio.",
-            "hintSv": "Förklarande ledtråd för övningen.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "es",
+            "hintEs": "Con 'Tu' siempre va 'es' (se pronuncia 'e').",
+            "hintSv": "Med 'tu' används alltid 'es'.",
+            "explanationEs": "¡Muy bien! «Tu es» (tú eres / tú estás). La 's' final es muda.",
+            "explanationSv": "Mycket bra! 'Tu es' uttalas 'tü e'."
           },
           {
             "id": "u1-l4-e10",
             "type": "translate",
-            "prompt": "Reto 10: Paso 4: Pronombres sujeto y el verbo Être — práctica guiada",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "prompt": "Traduce al francés: «¡Es genial!» o «¡Es súper!»",
+            "promptFr": "C'est super !",
+            "audioFr": "C'est super !",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "C'est super !",
+              "Je suis super !",
+              "Il super !",
+              "Tu as super !"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista explicativa del ejercicio.",
-            "hintSv": "Förklarande ledtråd för övningen.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
-          },
-          {
-            "id": "u1-l4-e11",
-            "type": "fill-blank",
-            "prompt": "Reto 11: Paso 4: Pronombres sujeto y el verbo Être — práctica guiada",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
-            "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
-            ],
-            "answer": "Option A",
-            "hintEs": "Pista explicativa del ejercicio.",
-            "hintSv": "Förklarande ledtråd för övningen.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
-          },
-          {
-            "id": "u1-l4-e12",
-            "type": "scramble",
-            "prompt": "Reto 12: Paso 4: Pronombres sujeto y el verbo Être — práctica guiada",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
-            "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
-            ],
-            "answer": "Option A",
-            "hintEs": "Pista explicativa del ejercicio.",
-            "hintSv": "Förklarande ledtråd för övningen.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "C'est super !",
+            "hintEs": "Usa la fórmula «C'est...» (es / esto es).",
+            "hintSv": "Använd 'C'est super !'.",
+            "explanationEs": "¡Fantástico! «C'est super !» es una de las frases más usadas por los jóvenes franceses.",
+            "explanationSv": "Fantastiskt! «C'est super !» betyder det är toppen!"
           }
         ]
       },
@@ -1004,226 +976,211 @@ const CURRICULUM_AK6_UNITS: Unit[] = [
         "description": "Aplica todo en un diálogo escolar realista.",
         "xpReward": 25,
         "culturalNote": {
-          "title": "Point Culturel",
-          "textEs": "Profundización pedagógica en el uso real del francés cotidiano.",
-          "textSv": "Fördjupning i vardaglig franska för ungdomar."
+          "title": "La vida en el «Collège» francés",
+          "textEs": "En Francia, los alumnos de 11 a 15 años van al «collège» (equivalente a Årskurs 6-9). Al conocerse el primer día de clase, se saludan con «Salut !» o se presentan diciendo «Je te présente mon ami...».",
+          "textSv": "I Frankrike går elever mellan 11 och 15 år i «le collège» (motsvarande årskurs 6–9). Första skoldagen hälsar man med «Salut !» och presenterar sina vänner."
         },
         "exercises": [
           {
             "id": "u1-l5-e1",
             "type": "choice",
-            "prompt": "Reto 1: Paso 5: Diálogo escolar y presentación de amigos — aplicación activa",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "prompt": "¿Cómo le presentas un compañero a otro diciendo: «Te presento a Lucas»?",
+            "promptFr": "Je te présente Lucas.",
+            "audioFr": "Je te présente Lucas.",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "Je te présente Lucas.",
+              "Je m'appelle Lucas.",
+              "Comment tu t'appelles Lucas ?",
+              "Au revoir Lucas !"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista pedagógica del ejercicio.",
-            "hintSv": "Pedagogisk ledtråd.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "Je te présente Lucas.",
+            "hintEs": "Significa literalmente: «Yo te presento a...»",
+            "hintSv": "Betyder: Jag presenterar Lucas för dig.",
+            "explanationEs": "¡Exacto! «Je te présente [nombre]» es la forma habitual de presentar a alguien entre amigos.",
+            "explanationSv": "Exakt! «Je te présente...» betyder jag presenterar..."
           },
           {
             "id": "u1-l5-e2",
-            "type": "translate",
-            "prompt": "Reto 2: Paso 5: Diálogo escolar y presentación de amigos — aplicación activa",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "choice",
+            "prompt": "¿Qué dices cuando te presentan a alguien por primera vez? («¡Mucho gusto / Encantado!»)",
+            "promptFr": "Enchanté !",
+            "audioFr": "Enchanté !",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "Enchanté !",
+              "Pardon !",
+              "De rien !",
+              "S'il vous plaît !"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista pedagógica del ejercicio.",
-            "hintSv": "Pedagogisk ledtråd.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "Enchanté !",
+            "hintEs": "Empieza por 'En-' y se pronuncia 'ansshanté'.",
+            "hintSv": "Uttalas 'ansjanté', betyder trevligt att träffas.",
+            "explanationEs": "¡Perfecto! «Enchanté !» (o «Enchantée !» si lo dice una chica) significa «¡Encantado/a de conocerte!».",
+            "explanationSv": "Perfekt! «Enchanté !» betyder trevligt att råkas."
           },
           {
             "id": "u1-l5-e3",
-            "type": "fill-blank",
-            "prompt": "Reto 3: Paso 5: Diálogo escolar y presentación de amigos — aplicación activa",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "scramble",
+            "prompt": "Ordena la presentación: «Este es mi amigo Leo.»",
+            "promptFr": "Voici mon ami Léo",
+            "audioFr": "Voici mon ami Léo",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "ami",
+              "Voici",
+              "Léo",
+              "mon"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista pedagógica del ejercicio.",
-            "hintSv": "Pedagogisk ledtråd.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": [
+              "Voici",
+              "mon",
+              "ami",
+              "Léo"
+            ],
+            "hintEs": "Empieza con «Voici» (aquí está / este es) + mon ami (mi amigo).",
+            "hintSv": "Börja med 'Voici' (här är / det här är).",
+            "explanationEs": "¡Bravo! «Voici mon ami Léo» significa «Aquí está / este es mi amigo Leo».",
+            "explanationSv": "Bravo! «Voici mon ami Léo» betyder här är min kompis Leo."
           },
           {
             "id": "u1-l5-e4",
-            "type": "scramble",
-            "prompt": "Reto 4: Paso 5: Diálogo escolar y presentación de amigos — aplicación activa",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "choice",
+            "prompt": "¿Cómo presentas a una amiga femenina? («Esta es una amiga»)",
+            "promptFr": "C'est une amie.",
+            "audioFr": "C'est une amie.",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "C'est une amie.",
+              "C'est un ami.",
+              "Il est une amie.",
+              "Tu es mon amie."
             ],
-            "answer": "Option A",
-            "hintEs": "Pista pedagógica del ejercicio.",
-            "hintSv": "Pedagogisk ledtråd.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "C'est une amie.",
+            "hintEs": "Para femenino se usa «une amie» (con 'e' al final).",
+            "hintSv": "Femininum använder 'une amie'.",
+            "explanationEs": "¡Muy bien! «un ami» es un amigo (masculino) y «une amie» es una amiga (femenino).",
+            "explanationSv": "Mycket bra! 'Une amie' är en tjejkompis."
           },
           {
             "id": "u1-l5-e5",
-            "type": "choice",
-            "prompt": "Reto 5: Paso 5: Diálogo escolar y presentación de amigos — aplicación activa",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "fill-blank",
+            "prompt": "Completa el saludo informal: « Salut Thomas, ça va _____ ? » (¿Va todo bien?)",
+            "promptFr": "Salut Thomas, ça va bien ?",
+            "audioFr": "Salut Thomas, ça va bien ?",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "bien",
+              "merci",
+              "nom",
+              "toi"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista pedagógica del ejercicio.",
-            "hintSv": "Pedagogisk ledtråd.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "bien",
+            "hintEs": "«Ça va bien ?» es la pregunta clásica entre compañeros.",
+            "hintSv": "'Ça va bien ?' = mår du bra?",
+            "explanationEs": "¡Exacto! «Salut, ça va bien ?» (Hola, ¿todo bien?).",
+            "explanationSv": "Exakt! 'Ça va bien ?' är den vanliga frasen."
           },
           {
             "id": "u1-l5-e6",
-            "type": "translate",
-            "prompt": "Reto 6: Paso 5: Diálogo escolar y presentación de amigos — aplicación activa",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "choice",
+            "prompt": "¿Cómo responde Thomas diciendo: «¡Sí, va genial, gracias!»?",
+            "promptFr": "Oui, ça va super bien, merci !",
+            "audioFr": "Oui, ça va super bien, merci !",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "Oui, ça va super bien, merci !",
+              "Non, au revoir merci !",
+              "Pardon, je m'appelle Thomas.",
+              "De rien, bonsoir !"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista pedagógica del ejercicio.",
-            "hintSv": "Pedagogisk ledtråd.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "Oui, ça va super bien, merci !",
+            "hintEs": "Empieza por «Oui» (sí) y usa «super bien».",
+            "hintSv": "'Oui' betyder ja på franska.",
+            "explanationEs": "¡Genial! «Oui, ça va super bien, merci !» es una respuesta entusiasta y muy natural.",
+            "explanationSv": "Strålande! Betyder 'Ja, det går superbra, tack!'."
           },
           {
             "id": "u1-l5-e7",
-            "type": "fill-blank",
-            "prompt": "Reto 7: Paso 5: Diálogo escolar y presentación de amigos — aplicación activa",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "scramble",
+            "prompt": "Ordena la despedida al salir del colegio: «¡Hasta mañana en clase!»",
+            "promptFr": "À demain en classe !",
+            "audioFr": "À demain en classe !",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "classe",
+              "demain",
+              "À",
+              "en",
+              "!"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista pedagógica del ejercicio.",
-            "hintSv": "Pedagogisk ledtråd.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": [
+              "À",
+              "demain",
+              "en",
+              "classe",
+              "!"
+            ],
+            "hintEs": "Empieza por «À demain» (hasta mañana).",
+            "hintSv": "Börja med 'À demain'.",
+            "explanationEs": "¡Perfecto! «À demain en classe !» (¡Hasta mañana en clase!).",
+            "explanationSv": "Perfekt! 'À demain' betyder vi ses imorgon."
           },
           {
             "id": "u1-l5-e8",
-            "type": "scramble",
-            "prompt": "Reto 8: Paso 5: Diálogo escolar y presentación de amigos — aplicación activa",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "choice",
+            "prompt": "¿Qué significa la palabra francesa «le collège»?",
+            "promptFr": "Le collège",
+            "audioFr": "Le collège",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "La escuela secundaria (11 a 15 años)",
+              "La universidad",
+              "La guardería",
+              "El campamento de verano"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista pedagógica del ejercicio.",
-            "hintSv": "Pedagogisk ledtråd.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "La escuela secundaria (11 a 15 años)",
+            "hintEs": "En Francia, el collège equivale a los cursos de årskurs 6 a 9 en Suecia o 1º a 4º de ESO en España.",
+            "hintSv": "I Frankrike motsvarar 'le collège' högstadiet (årskurs 6–9).",
+            "explanationEs": "¡Dato cultural clave! En Francia, «le collège» es la escuela secundaria inferior (de 11 a 15 años).",
+            "explanationSv": "Viktig kulturfakta! 'Le collège' är den franska motsvarigheten till högstadiet."
           },
           {
             "id": "u1-l5-e9",
-            "type": "choice",
-            "prompt": "Reto 9: Paso 5: Diálogo escolar y presentación de amigos — aplicación activa",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "translate",
+            "prompt": "Traduce al francés: «Él es nuevo en la escuela.»",
+            "promptFr": "Il est nouveau au collège.",
+            "audioFr": "Il est nouveau au collège.",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "Il est nouveau au collège.",
+              "Elle est nouvelle au collège.",
+              "Tu es nuevo au collège.",
+              "Je suis nouveau au collège."
             ],
-            "answer": "Option A",
-            "hintEs": "Pista pedagógica del ejercicio.",
-            "hintSv": "Pedagogisk ledtråd.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "Il est nouveau au collège.",
+            "hintEs": "Él = Il, es = est, nuevo = nouveau.",
+            "hintSv": "Han = Il, är = est, ny = nouveau.",
+            "explanationEs": "¡Excelente! «Il est nouveau au collège» (Él es nuevo en el colegio).",
+            "explanationSv": "Utmärkt! Han är ny i skolan."
           },
           {
             "id": "u1-l5-e10",
-            "type": "translate",
-            "prompt": "Reto 10: Paso 5: Diálogo escolar y presentación de amigos — aplicación activa",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
-            "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
-            ],
-            "answer": "Option A",
-            "hintEs": "Pista pedagógica del ejercicio.",
-            "hintSv": "Pedagogisk ledtråd.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
-          },
-          {
-            "id": "u1-l5-e11",
-            "type": "fill-blank",
-            "prompt": "Reto 11: Paso 5: Diálogo escolar y presentación de amigos — aplicación activa",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
-            "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
-            ],
-            "answer": "Option A",
-            "hintEs": "Pista pedagógica del ejercicio.",
-            "hintSv": "Pedagogisk ledtråd.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
-          },
-          {
-            "id": "u1-l5-e12",
             "type": "scramble",
-            "prompt": "Reto 12: Paso 5: Diálogo escolar y presentación de amigos — aplicación activa",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "prompt": "Ordena el diálogo de despedida: «Adiós y que tengas un buen día.»",
+            "promptFr": "Au revoir et bonne journée !",
+            "audioFr": "Au revoir et bonne journée !",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "revoir",
+              "Au",
+              "bonne",
+              "et",
+              "journée",
+              "!"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista pedagógica del ejercicio.",
-            "hintSv": "Pedagogisk ledtråd.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": [
+              "Au",
+              "revoir",
+              "et",
+              "bonne",
+              "journée",
+              "!"
+            ],
+            "hintEs": "Au revoir (adiós) + et (y) + bonne journée (buen día).",
+            "hintSv": "Börja med 'Au revoir'.",
+            "explanationEs": "¡Bravo! «Au revoir et bonne journée !» es la fórmula perfecta para despedirte cordialmente.",
+            "explanationSv": "Bravo! 'Au revoir et bonne journée !' betyder hejdå och ha en bra dag!"
           }
         ]
       }
@@ -2105,226 +2062,183 @@ const CURRICULUM_AK6_UNITS: Unit[] = [
         "description": "Dictado de teléfonos de dos en dos y sumas/restas básicas.",
         "xpReward": 20,
         "culturalNote": {
-          "title": "Point Culturel",
-          "textEs": "Aspecto cultural y lingüístico relevante para Årskurs 6.",
-          "textSv": "Kulturell och språklig aspekt för årskurs 6."
+          "title": "Point Culturel : Les numéros de téléphone",
+          "textEs": "En Francia, los números de teléfono tienen 10 dígitos y se dicen de dos en dos: por ejemplo, 06 12 34 56 78 se dice «zéro six, douze, trente-quatre...».",
+          "textSv": "I Frankrike har telefonnummer 10 siffror och sägs parvis: t.ex. 06 12 34 56 78 uttalas två och två."
         },
         "exercises": [
           {
             "id": "u2-l4-e1",
             "type": "choice",
-            "prompt": "Reto 1: Paso 4: Teléfonos, operaciones y fechas — práctica guiada",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "prompt": "¿Cómo se pregunta el número de teléfono a un compañero?",
+            "audioFr": "Quel est ton numéro de téléphone ?",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "Comment tu t'appelles ?",
+              "Quel est ton numéro de téléphone ?",
+              "Quel âge as-tu ?",
+              "Où habites-tu ?"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista explicativa del ejercicio.",
-            "hintSv": "Förklarande ledtråd för övningen.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "Quel est ton numéro de téléphone ?",
+            "hintEs": "Busca la frase que contiene \"numéro de téléphone\".",
+            "hintSv": "Leta efter frasen som innehåller \"numéro de téléphone\".",
+            "explanationEs": "¡Exacto! «Quel est ton numéro de téléphone ?» significa ¿Cuál es tu número de teléfono?.",
+            "explanationSv": "Helt rätt! «Quel est ton numéro de téléphone ?» betyder Vad är ditt telefonnummer?."
           },
           {
             "id": "u2-l4-e2",
-            "type": "translate",
-            "prompt": "Reto 2: Paso 4: Teléfonos, operaciones y fechas — práctica guiada",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "choice",
+            "prompt": "En Francia los móviles suelen empezar por 06 o 07. ¿Cómo se dice « 06 »?",
+            "audioFr": "Zéro six",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "Six zéro",
+              "Dix six",
+              "Zéro six",
+              "Zéro sept"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista explicativa del ejercicio.",
-            "hintSv": "Förklarande ledtråd för övningen.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "Zéro six",
+            "hintEs": "0 es zéro y 6 es six.",
+            "hintSv": "0 är zéro och 6 är six.",
+            "explanationEs": "¡Muy bien! «Zéro six» es el inicio más típico de un número móvil francés.",
+            "explanationSv": "Mycket bra! «Zéro six» är den vanligaste starten för franska mobilnummer."
           },
           {
             "id": "u2-l4-e3",
-            "type": "fill-blank",
-            "prompt": "Reto 3: Paso 4: Teléfonos, operaciones y fechas — práctica guiada",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "scramble",
+            "prompt": "Ordena la frase: \"Mon numéro est le zéro six\" (Mi número es el 06)",
+            "audioFr": "Mon numéro est le zéro six",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "zéro",
+              "numéro",
+              "le",
+              "Mon",
+              "six",
+              "est"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista explicativa del ejercicio.",
-            "hintSv": "Förklarande ledtråd för övningen.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "Mon numéro est le zéro six",
+            "hintEs": "Empieza por la palabra posesiva «Mon».",
+            "hintSv": "Börja med ägandeordet «Mon».",
+            "explanationEs": "«Mon numéro est le...» es la fórmula habitual para dar tu teléfono en francés.",
+            "explanationSv": "«Mon numéro est le...» är standardfrasen för att ge sitt telefonnummer."
           },
           {
             "id": "u2-l4-e4",
-            "type": "scramble",
-            "prompt": "Reto 4: Paso 4: Teléfonos, operaciones y fechas — práctica guiada",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "choice",
+            "prompt": "¿Cuánto es: « Dix plus cinq égale... »? (10 + 5)",
+            "audioFr": "Dix plus cinq égale quinze",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "Quatorze",
+              "Treize",
+              "Quinze",
+              "Seize"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista explicativa del ejercicio.",
-            "hintSv": "Förklarande ledtråd för övningen.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "Quinze",
+            "hintEs": "10 + 5 = 15. En francés 15 se escribe con q-.",
+            "hintSv": "10 + 5 = 15. På franska stavas 15 med q-.",
+            "explanationEs": "¡Correcto! 10 (dix) + 5 (cinq) = 15 (quinze).",
+            "explanationSv": "Rätt! 10 (dix) + 5 (cinq) = 15 (quinze)."
           },
           {
             "id": "u2-l4-e5",
-            "type": "choice",
-            "prompt": "Reto 5: Paso 4: Teléfonos, operaciones y fechas — práctica guiada",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "fill-blank",
+            "prompt": "Completa el cálculo: « Sept plus sept égale _____ » (7 + 7 = 14)",
+            "promptFr": "Sept plus sept égale _____ .",
+            "audioFr": "Sept plus sept égale quatorze",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "quatorze",
+              "quinze",
+              "treize",
+              "seize"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista explicativa del ejercicio.",
-            "hintSv": "Förklarande ledtråd för övningen.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "quatorze",
+            "hintEs": "7 + 7 = 14. Recuerda: 14 = quatorze.",
+            "hintSv": "7 + 7 = 14. Kom ihåg: 14 = quatorze.",
+            "explanationEs": "¡Eso es! Sept (7) + sept (7) = quatorze (14).",
+            "explanationSv": "Det stämmer! Sept (7) + sept (7) = quatorze (14)."
           },
           {
             "id": "u2-l4-e6",
             "type": "translate",
-            "prompt": "Reto 6: Paso 4: Teléfonos, operaciones y fechas — práctica guiada",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "prompt": "¿Cómo se dice «¿Cuántos años tienes?» en francés?",
+            "audioFr": "Quel âge as-tu ?",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "Comment vas-tu ?",
+              "Quel âge as-tu ?",
+              "Où habites-tu ?",
+              "Tu es élève ?"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista explicativa del ejercicio.",
-            "hintSv": "Förklarande ledtråd för övningen.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "Quel âge as-tu ?",
+            "hintEs": "\"Âge\" significa edad.",
+            "hintSv": "\"Âge\" betyder ålder.",
+            "explanationEs": "«Quel âge as-tu ?» (o informalmente «Tu as quel âge ?») pregunta la edad.",
+            "explanationSv": "«Quel âge as-tu ?» frågar hur gammal någon är."
           },
           {
             "id": "u2-l4-e7",
-            "type": "fill-blank",
-            "prompt": "Reto 7: Paso 4: Teléfonos, operaciones y fechas — práctica guiada",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "scramble",
+            "prompt": "Ordena la respuesta: \"J'ai treize ans\" (Tengo 13 años)",
+            "audioFr": "J'ai treize ans",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "ans",
+              "J'ai",
+              "treize"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista explicativa del ejercicio.",
-            "hintSv": "Förklarande ledtråd för övningen.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "J'ai treize ans",
+            "hintEs": "En francés siempre se añade la palabra «ans» al final.",
+            "hintSv": "På franska lägger man alltid till ordet «ans» på slutet.",
+            "explanationEs": "«J'ai treize ans» = Tengo 13 años. Se usa el verbo avoir (tener).",
+            "explanationSv": "«J'ai treize ans» = Jag är 13 år (bokstavligen: jag har 13 år)."
           },
           {
             "id": "u2-l4-e8",
-            "type": "scramble",
-            "prompt": "Reto 8: Paso 4: Teléfonos, operaciones y fechas — práctica guiada",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "choice",
+            "prompt": "¿Qué número es « seize »?",
+            "audioFr": "Seize",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "6",
+              "16",
+              "15",
+              "17"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista explicativa del ejercicio.",
-            "hintSv": "Förklarande ledtråd för övningen.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "16",
+            "hintEs": "Viene justo después de quinze (15).",
+            "hintSv": "Kommer direkt efter quinze (15).",
+            "explanationEs": "«Seize» es 16. La familia en -ze: onze (11), douze (12), treize (13), quatorze (14), quinze (15), seize (16).",
+            "explanationSv": "«Seize» är 16. Sifferfamiljen på -ze: 11 till 16."
           },
           {
             "id": "u2-l4-e9",
-            "type": "choice",
-            "prompt": "Reto 9: Paso 4: Teléfonos, operaciones y fechas — práctica guiada",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "fill-blank",
+            "prompt": "Completa con la forma correcta del verbo para la edad: « J'_____ douze ans »",
+            "promptFr": "J'_____ douze ans.",
+            "audioFr": "J'ai douze ans",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "ai",
+              "es",
+              "suis",
+              "as"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista explicativa del ejercicio.",
-            "hintSv": "Förklarande ledtråd för övningen.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "ai",
+            "hintEs": "Con 'Je' (J') el verbo avoir se conjuga 'ai'.",
+            "hintSv": "Med 'Je' böjs verbet avoir till 'ai'.",
+            "explanationEs": "¡Excelente! «J'ai douze ans» = Tengo 12 años. Nunca se dice «Je suis douze ans».",
+            "explanationSv": "Utmärkt! «J'ai douze ans» = Jag är 12 år."
           },
           {
             "id": "u2-l4-e10",
-            "type": "translate",
-            "prompt": "Reto 10: Paso 4: Teléfonos, operaciones y fechas — práctica guiada",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "choice",
+            "prompt": "¿Cómo se escribe 17 (10 + 7) en francés?",
+            "audioFr": "Dix-sept",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "Dix-six",
+              "Dix-sept",
+              "Dix-huit",
+              "Dix-neuf"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista explicativa del ejercicio.",
-            "hintSv": "Förklarande ledtråd för övningen.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
-          },
-          {
-            "id": "u2-l4-e11",
-            "type": "fill-blank",
-            "prompt": "Reto 11: Paso 4: Teléfonos, operaciones y fechas — práctica guiada",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
-            "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
-            ],
-            "answer": "Option A",
-            "hintEs": "Pista explicativa del ejercicio.",
-            "hintSv": "Förklarande ledtråd för övningen.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
-          },
-          {
-            "id": "u2-l4-e12",
-            "type": "scramble",
-            "prompt": "Reto 12: Paso 4: Teléfonos, operaciones y fechas — práctica guiada",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
-            "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
-            ],
-            "answer": "Option A",
-            "hintEs": "Pista explicativa del ejercicio.",
-            "hintSv": "Förklarande ledtråd för övningen.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "Dix-sept",
+            "hintEs": "Une dix (10) y sept (7) con un guión.",
+            "hintSv": "Sätt ihop dix (10) och sept (7) med ett bindestreck.",
+            "explanationEs": "¡Muy bien! A partir del 17 se forman con guión: dix-sept (17), dix-huit (18), dix-neuf (19).",
+            "explanationSv": "Mycket bra! Från 17 bildas talen med bindestreck."
           }
         ]
       },
@@ -2336,226 +2250,182 @@ const CURRICULUM_AK6_UNITS: Unit[] = [
         "description": "Aprende a contar hasta el 30 y resolver retos numéricos.",
         "xpReward": 25,
         "culturalNote": {
-          "title": "Point Culturel",
-          "textEs": "Profundización pedagógica en el uso real del francés cotidiano.",
-          "textSv": "Fördjupning i vardaglig franska för ungdomar."
+          "title": "Point Culturel : Compter en français",
+          "textEs": "El número 20 (vingt) tiene una ortografía especial con 'g' y 't' mudas. Pero el 21 lleva una conjunción especial: «vingt et un» (veinte y uno).",
+          "textSv": "Talet 20 (vingt) har stumma bokstäver (g och t). Talet 21 binds ihop med 'et': «vingt et un»."
         },
         "exercises": [
           {
             "id": "u2-l5-e1",
             "type": "choice",
-            "prompt": "Reto 1: Paso 5: Decenas y números hasta el 30 — aplicación activa",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "prompt": "¿Cómo se dice « 20 » en francés?",
+            "audioFr": "Vingt",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "Dix",
+              "Vingt",
+              "Trente",
+              "Douze"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista pedagógica del ejercicio.",
-            "hintSv": "Pedagogisk ledtråd.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "Vingt",
+            "hintEs": "Empieza por V y tiene una 'g' y 't' silenciosas.",
+            "hintSv": "Börjar på V med stumt 'g' och 't'.",
+            "explanationEs": "«Vingt» = 20. Se pronuncia como /vɛ̃/.",
+            "explanationSv": "«Vingt» = 20. Uttalas som /vɛ̃/."
           },
           {
             "id": "u2-l5-e2",
-            "type": "translate",
-            "prompt": "Reto 2: Paso 5: Decenas y números hasta el 30 — aplicación activa",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "choice",
+            "prompt": "¿Cómo se escribe « 21 » en francés?",
+            "audioFr": "Vingt et un",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "Vingt-un",
+              "Vingt et un",
+              "Vingt-deux",
+              "Trente et un"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista pedagógica del ejercicio.",
-            "hintSv": "Pedagogisk ledtråd.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "Vingt et un",
+            "hintEs": "El 21 une las palabras con «et» (y).",
+            "hintSv": "Talet 21 binder ihop orden med «et» (och).",
+            "explanationEs": "¡Exacto! El 21 lleva 'et': «vingt et un». Para 22-29 se usa guion directo: «vingt-deux».",
+            "explanationSv": "Helt rätt! 21 använder 'et': «vingt et un»."
           },
           {
             "id": "u2-l5-e3",
-            "type": "fill-blank",
-            "prompt": "Reto 3: Paso 5: Decenas y números hasta el 30 — aplicación activa",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "scramble",
+            "prompt": "Ordena la frase: \"Il a vingt ans\" (Él tiene 20 años)",
+            "audioFr": "Il a vingt ans",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "ans",
+              "Il",
+              "vingt",
+              "a"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista pedagógica del ejercicio.",
-            "hintSv": "Pedagogisk ledtråd.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "Il a vingt ans",
+            "hintEs": "Sujeto + verbo + número + ans.",
+            "hintSv": "Subjekt + verb + siffra + ans.",
+            "explanationEs": "«Il a vingt ans» = Él tiene 20 años.",
+            "explanationSv": "«Il a vingt ans» = Han är 20 år gammal."
           },
           {
             "id": "u2-l5-e4",
-            "type": "scramble",
-            "prompt": "Reto 4: Paso 5: Decenas y números hasta el 30 — aplicación activa",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "choice",
+            "prompt": "¿Cómo se escribe el número « 25 » en francés?",
+            "audioFr": "Vingt-cinq",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "Vingt et cinq",
+              "Vingt-cinq",
+              "Trente-cinq",
+              "Quinze-cinq"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista pedagógica del ejercicio.",
-            "hintSv": "Pedagogisk ledtråd.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "Vingt-cinq",
+            "hintEs": "A partir del 22 se unen con guion sin 'et'.",
+            "hintSv": "Från 22 binds de ihop med bindestreck utan 'et'.",
+            "explanationEs": "¡Correcto! «Vingt-cinq» = 25.",
+            "explanationSv": "Rätt! «Vingt-cinq» = 25."
           },
           {
             "id": "u2-l5-e5",
-            "type": "choice",
-            "prompt": "Reto 5: Paso 5: Decenas y números hasta el 30 — aplicación activa",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "fill-blank",
+            "prompt": "Completa el cálculo: « Vingt plus dix égale _____ » (20 + 10 = 30)",
+            "promptFr": "Vingt plus dix égale _____ .",
+            "audioFr": "Vingt plus dix égale trente",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "trente",
+              "quarante",
+              "vingt",
+              "seize"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista pedagógica del ejercicio.",
-            "hintSv": "Pedagogisk ledtråd.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "trente",
+            "hintEs": "30 en francés se dice 'trente'.",
+            "hintSv": "30 på franska heter 'trente'.",
+            "explanationEs": "¡Bravo! Vingt (20) + dix (10) = trente (30).",
+            "explanationSv": "Bravo! Vingt (20) + dix (10) = trente (30)."
           },
           {
             "id": "u2-l5-e6",
-            "type": "translate",
-            "prompt": "Reto 6: Paso 5: Decenas y números hasta el 30 — aplicación activa",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "choice",
+            "prompt": "¿Qué número es « vingt-huit »?",
+            "audioFr": "Vingt-huit",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "18",
+              "27",
+              "28",
+              "29"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista pedagógica del ejercicio.",
-            "hintSv": "Pedagogisk ledtråd.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "28",
+            "hintEs": "Vingt (20) + huit (8).",
+            "hintSv": "Vingt (20) + huit (8).",
+            "explanationEs": "«Vingt-huit» = 28.",
+            "explanationSv": "«Vingt-huit» = 28."
           },
           {
             "id": "u2-l5-e7",
-            "type": "fill-blank",
-            "prompt": "Reto 7: Paso 5: Decenas y números hasta el 30 — aplicación activa",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "scramble",
+            "prompt": "Ordena la frase: \"Elle a vingt-deux ans\" (Ella tiene 22 años)",
+            "audioFr": "Elle a vingt-deux ans",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "vingt-deux",
+              "Elle",
+              "ans",
+              "a"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista pedagógica del ejercicio.",
-            "hintSv": "Pedagogisk ledtråd.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "Elle a vingt-deux ans",
+            "hintEs": "Empieza por el pronombre «Elle».",
+            "hintSv": "Börja med pronomenet «Elle».",
+            "explanationEs": "«Elle a vingt-deux ans» = Ella tiene veintidós años.",
+            "explanationSv": "«Elle a vingt-deux ans» = Hon är tjugotvå år."
           },
           {
             "id": "u2-l5-e8",
-            "type": "scramble",
-            "prompt": "Reto 8: Paso 5: Decenas y números hasta el 30 — aplicación activa",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "fill-blank",
+            "prompt": "Completa la serie: « vingt-sept, vingt-huit, _____ » (27, 28, ...)",
+            "promptFr": "Vingt-sept, vingt-huit, _____ .",
+            "audioFr": "Vingt-sept, vingt-huit, vingt-neuf",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "vingt-neuf",
+              "trente",
+              "vingt-six",
+              "trente et un"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista pedagógica del ejercicio.",
-            "hintSv": "Pedagogisk ledtråd.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "vingt-neuf",
+            "hintEs": "El número 29 es 20 + 9 (neuf).",
+            "hintSv": "Talet 29 är 20 + 9 (neuf).",
+            "explanationEs": "¡Perfecto! Vingt-sept (27), vingt-huit (28), vingt-neuf (29), trente (30).",
+            "explanationSv": "Perfekt! Vingt-sept (27), vingt-huit (28), vingt-neuf (29), trente (30)."
           },
           {
             "id": "u2-l5-e9",
-            "type": "choice",
-            "prompt": "Reto 9: Paso 5: Decenas y números hasta el 30 — aplicación activa",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "translate",
+            "prompt": "¿Cómo se dice «Tengo veintidós años» en francés?",
+            "audioFr": "J'ai vingt-deux ans",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "Je suis vingt-deux ans",
+              "J'ai deux ans",
+              "J'ai vingt-deux ans",
+              "Tu as vingt ans"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista pedagógica del ejercicio.",
-            "hintSv": "Pedagogisk ledtråd.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "J'ai vingt-deux ans",
+            "hintEs": "Recuerda que en francés se usa el verbo avoir: «J'ai...».",
+            "hintSv": "Kom ihåg att man använder verbet avoir på franska: «J'ai...».",
+            "explanationEs": "¡Excelente! «J'ai vingt-deux ans». Nunca se usa être (suis) para la edad.",
+            "explanationSv": "Utmärkt! «J'ai vingt-deux ans». Man använder aldrig être för ålder."
           },
           {
             "id": "u2-l5-e10",
-            "type": "translate",
-            "prompt": "Reto 10: Paso 5: Decenas y números hasta el 30 — aplicación activa",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
+            "type": "choice",
+            "prompt": "¿Cuánto es: « Quinze plus quinze égale... »?",
+            "audioFr": "Quinze plus quinze égale trente",
             "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
+              "Vingt-cinq",
+              "Trente",
+              "Vingt",
+              "Quarante"
             ],
-            "answer": "Option A",
-            "hintEs": "Pista pedagógica del ejercicio.",
-            "hintSv": "Pedagogisk ledtråd.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
-          },
-          {
-            "id": "u2-l5-e11",
-            "type": "fill-blank",
-            "prompt": "Reto 11: Paso 5: Decenas y números hasta el 30 — aplicación activa",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
-            "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
-            ],
-            "answer": "Option A",
-            "hintEs": "Pista pedagógica del ejercicio.",
-            "hintSv": "Pedagogisk ledtråd.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
-          },
-          {
-            "id": "u2-l5-e12",
-            "type": "scramble",
-            "prompt": "Reto 12: Paso 5: Decenas y números hasta el 30 — aplicación activa",
-            "promptFr": "Option A",
-            "audioFr": "Option A",
-            "options": [
-              "Option A",
-              "Option B",
-              "Option C",
-              "Option D"
-            ],
-            "answer": "Option A",
-            "hintEs": "Pista pedagógica del ejercicio.",
-            "hintSv": "Pedagogisk ledtråd.",
-            "explanationEs": "Explicación pedagógica detallada.",
-            "explanationSv": "Pedagogisk detaljerad förklaring."
+            "answer": "Trente",
+            "hintEs": "15 + 15 = 30.",
+            "hintSv": "15 + 15 = 30.",
+            "explanationEs": "¡Bravo! 15 (quinze) + 15 (quinze) = 30 (trente).",
+            "explanationSv": "Bravo! 15 (quinze) + 15 (quinze) = 30 (trente)."
           }
         ]
       }

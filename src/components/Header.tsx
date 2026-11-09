@@ -116,7 +116,9 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Streak */}
             <div 
               className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-amber-50 text-amber-700 font-bold text-xs border border-amber-200/70 select-none cursor-default"
-              title={isEs ? `${profile.streakDays} días seguidos de racha` : `${profile.streakDays} dagars svit`}
+              title={isEs 
+                ? (profile.streakDays === 1 ? '1 día de racha' : `${profile.streakDays} días seguidos de racha`) 
+                : (profile.streakDays === 1 ? '1 dags svit' : `${profile.streakDays} dagars svit`)}
             >
               <Flame className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
               <span className="tabular-nums">{profile.streakDays}d</span>

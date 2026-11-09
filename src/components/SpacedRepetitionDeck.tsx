@@ -26,6 +26,7 @@ interface SpacedRepetitionDeckProps {
   onUpdateCards: (cards: Flashcard[]) => void;
   profile: UserProfile;
   units?: Unit[];
+  onRecordStudy?: () => void;
 }
 
 export const SpacedRepetitionDeck: React.FC<SpacedRepetitionDeckProps> = ({
@@ -33,6 +34,7 @@ export const SpacedRepetitionDeck: React.FC<SpacedRepetitionDeckProps> = ({
   onUpdateCards,
   profile,
   units,
+  onRecordStudy,
 }) => {
   const isSwedish = profile.supportLanguage === 'sv';
 
@@ -167,6 +169,7 @@ export const SpacedRepetitionDeck: React.FC<SpacedRepetitionDeckProps> = ({
 
     onUpdateCards(newCards);
     saveFlashcards(newCards);
+    onRecordStudy?.();
 
     if (outcome === 'easy' || outcome === 'good') {
       if (profile.soundEnabled) soundEffects.playCorrect();

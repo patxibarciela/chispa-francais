@@ -22,8 +22,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const isEs = profile.supportLanguage === 'es';
 
-  // Calculate weekly goal (e.g. 1 out of 5 days based on streak or study dates)
-  const daysThisWeek = Math.min(5, Math.max(1, profile.streakDays % 7 || 1));
+  // Calculate weekly goal (0 to 5 days based on active streak)
+  const daysThisWeek = Math.min(5, profile.streakDays || 0);
   const weeklyPercent = Math.round((daysThisWeek / 5) * 100);
 
   const navItems = [

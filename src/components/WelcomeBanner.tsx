@@ -24,8 +24,8 @@ export const WelcomeBanner: React.FC<WelcomeBannerProps> = ({ profile }) => {
                 <Flame className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
                 <span>
                   {isEs 
-                    ? `Racha de ${profile.streakDays} días` 
-                    : `${profile.streakDays} dagars svit`}
+                    ? (profile.streakDays === 1 ? 'Racha de 1 día' : `Racha de ${profile.streakDays} días`)
+                    : (profile.streakDays === 1 ? '1 dags svit' : `${profile.streakDays} dagars svit`)}
                 </span>
               </span>
 

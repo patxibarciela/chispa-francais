@@ -64,7 +64,7 @@ export const LoginLandingView: React.FC<LoginLandingViewProps> = ({
       bio: studentBio.trim(),
       accountType: 'local',
       streakDays: 0,
-      lastStudyDate: new Date().toISOString().split('T')[0],
+      lastStudyDate: '',
       totalXp: 0,
       completedLessonIds: [],
       completedSessionIds: [],

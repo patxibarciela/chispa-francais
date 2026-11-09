@@ -18,10 +18,118 @@ if (typeof window !== 'undefined') {
   }
 }
 
+/**
+ * Returns today's calendar date in local timezone as YYYY-MM-DD
+ */
+export function getTodayDateString(): string {
+  const d = new Date();
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+/**
+ * Calculates calendar day difference between two YYYY-MM-DD dates without DST offset errors
+ */
+export function getDaysDifference(fromDateStr: string, toDateStr: string): number {
+  if (!fromDateStr || !toDateStr) return 999;
+  const [y1, m1, d1] = fromDateStr.split('-').map(Number);
+  const [y2, m2, d2] = toDateStr.split('-').map(Number);
+  if (!y1 || !m1 || !d1 || !y2 || !m2 || !d2) return 999;
+
+  const utc1 = Date.UTC(y1, m1 - 1, d1);
+  const utc2 = Date.UTC(y2, m2 - 1, d2);
+  const MS_PER_DAY = 1000 * 60 * 60 * 24;
+  return Math.round((utc2 - utc1) / MS_PER_DAY);
+}
+
+/**
+ * Evaluates active streak state on app load or profile load.
+ * - If studied yesterday (diff === 1): streak is ACTIVE today (fixes 0 to >=1).
+ * - If studied today (diff === 0): streak is ACTIVE.
+ * - If missed 2 or more days (diff > 1): streak was broken -> 0.
+ */
+export function syncProfileStreakOnLoad(profile: UserProfile): UserProfile {
+  if (!profile) return profile;
+
+  const today = getTodayDateString();
+  const lastDate = profile.lastStudyDate;
+  let streak = typeof profile.streakDays === 'number' ? profile.streakDays : 0;
+
+  if (!lastDate) {
+    if ((profile.completedLessonIds && profile.completedLessonIds.length > 0) || profile.totalXp > 0) {
+      streak = Math.max(1, streak);
+      return { ...profile, streakDays: streak, lastStudyDate: today };
+    }
+    return { ...profile, streakDays: 0 };
+  }
+
+  const diff = getDaysDifference(lastDate, today);
+
+  if (diff === 0) {
+    // Studied today: active streak
+    if (streak === 0 && ((profile.completedLessonIds && profile.completedLessonIds.length > 0) || profile.totalXp > 0)) {
+      streak = 1;
+    }
+  } else if (diff === 1) {
+    // Studied yesterday: streak is ACTIVE today!
+    // If it was 0 due to the legacy save bug, correct it to at least 1!
+    streak = Math.max(1, streak);
+  } else if (diff > 1) {
+    // Missed a day or more: streak broken
+    streak = 0;
+  } else if (diff < 0) {
+    // System clock future anomaly: keep streak
+    streak = Math.max(1, streak);
+  }
+
+  return {
+    ...profile,
+    streakDays: streak,
+  };
+}
+
+/**
+ * Records a study activity and increments streak correctly.
+ * - If already studied today (diff === 0): keeps current streak (ensures >= 1)
+ * - If studied yesterday (diff === 1): increments streak (+1)
+ *   (if streak was 0 due to legacy bug, yesterday + today = 2 days!)
+ * - If first time or missed days (diff > 1): starts new streak of 1 today
+ */
+export function recordStudyActivity(profile: UserProfile): UserProfile {
+  const today = getTodayDateString();
+  const lastDate = profile.lastStudyDate;
+  const currentStreak = typeof profile.streakDays === 'number' ? profile.streakDays : 0;
+  let newStreak = currentStreak;
+
+  if (!lastDate) {
+    newStreak = 1;
+  } else {
+    const diff = getDaysDifference(lastDate, today);
+    if (diff === 0) {
+      // Already studied today
+      newStreak = Math.max(1, currentStreak);
+    } else if (diff === 1) {
+      // Studied yesterday -> increment streak!
+      newStreak = currentStreak >= 1 ? currentStreak + 1 : 2;
+    } else {
+      // Missed days -> new streak starts today
+      newStreak = 1;
+    }
+  }
+
+  return {
+    ...profile,
+    streakDays: newStreak,
+    lastStudyDate: today,
+  };
+}
+
 export const DEFAULT_PROFILE: UserProfile = {
   name: 'Élève',
   streakDays: 0,
-  lastStudyDate: new Date().toISOString().split('T')[0],
+  lastStudyDate: '',
   totalXp: 0,
   completedLessonIds: [],
   completedSessionIds: [],
@@ -39,7 +147,8 @@ export function loadSavedProfiles(): UserProfile[] {
     const raw = localStorage.getItem(STORAGE_KEY_PROFILES_LIST);
     if (!raw) return [];
     const list = JSON.parse(raw);
-    return Array.isArray(list) ? list : [];
+    if (!Array.isArray(list)) return [];
+    return list.map((p) => syncProfileStreakOnLoad(p));
   } catch {
     return [];
   }
@@ -103,22 +212,19 @@ export function loadUserProfile(): UserProfile {
     const raw = localStorage.getItem(STORAGE_KEY_PROFILE);
     if (!raw) return DEFAULT_PROFILE;
     const parsed = JSON.parse(raw);
+    const fullProfile = { ...DEFAULT_PROFILE, ...parsed };
+    const synced = syncProfileStreakOnLoad(fullProfile);
 
-    // Update streak logic
-    const today = new Date().toISOString().split('T')[0];
-    const lastDate = parsed.lastStudyDate || today;
-    const diffDays = Math.floor(
-      (new Date(today).getTime() - new Date(lastDate).getTime()) / (1000 * 60 * 60 * 24)
-    );
-
-    if (diffDays === 1) {
-      // Studied yesterday, keep streak
-    } else if (diffDays > 1) {
-      // Streak broken, reset to 1
-      parsed.streakDays = 1;
+    // If streak was corrected from 0 or out of sync, persist back to localStorage
+    if (synced.streakDays !== parsed.streakDays || synced.lastStudyDate !== parsed.lastStudyDate) {
+      try {
+        localStorage.setItem(STORAGE_KEY_PROFILE, JSON.stringify(synced));
+      } catch {
+        // ignore
+      }
     }
 
-    return { ...DEFAULT_PROFILE, ...parsed };
+    return synced;
   } catch {
     return DEFAULT_PROFILE;
   }
