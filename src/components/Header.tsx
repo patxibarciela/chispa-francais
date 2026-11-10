@@ -26,6 +26,7 @@ interface HeaderProps {
   onUpdateProfile: (updated: Partial<UserProfile>) => void;
   onLogout: () => void;
   onResetProgress?: () => void;
+  onManualSync?: () => Promise<void>;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -36,8 +37,9 @@ export const Header: React.FC<HeaderProps> = ({
   onUpdateProfile,
   onLogout,
   onResetProgress,
+  onManualSync,
 }) => {
-  const { user, signOut } = useAuth();
+  const { user, signOut, syncStatus } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -195,9 +197,23 @@ export const Header: React.FC<HeaderProps> = ({
                     <ChevronDown className="w-3 h-3 text-slate-400" />
                   </div>
                   <div className="flex items-center gap-1 mt-0.5 leading-none">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
-                    <span className="text-[10px] font-semibold text-emerald-700">
-                      {isCloud ? (isEs ? 'En la nube' : 'I molnet') : (isEs ? 'En navegador' : 'I webbläsare')}
+                    <span 
+                      className={`w-1.5 h-1.5 rounded-full inline-block ${
+                        isCloud
+                          ? (syncStatus === 'saving'
+                              ? 'bg-amber-400 animate-pulse'
+                              : (syncStatus === 'offline' ? 'bg-amber-500' : 'bg-emerald-500'))
+                          : 'bg-slate-400'
+                      }`} 
+                    />
+                    <span className="text-[10px] font-semibold text-slate-600">
+                      {isCloud 
+                        ? (syncStatus === 'saving' 
+                            ? (isEs ? 'Guardando...' : 'Sparar...') 
+                            : (syncStatus === 'offline' 
+                                ? (isEs ? 'Sin conexión' : 'Offline') 
+                                : (isEs ? 'En la nube' : 'I molnet'))) 
+                        : (isEs ? 'En navegador' : 'I webbläsare')}
                     </span>
                   </div>
                 </div>
@@ -212,6 +228,7 @@ export const Header: React.FC<HeaderProps> = ({
               onUpdateProfile={onUpdateProfile}
               onLogout={onLogout}
               onResetProgress={onResetProgress}
+              onManualSync={onManualSync}
             />
           </div>
         </div>

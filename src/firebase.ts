@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
-import { getFirestore, doc, getDocFromServer } from 'firebase/firestore';
+import { initializeFirestore, getFirestore, doc, getDocFromServer } from 'firebase/firestore';
 
 import appletConfig from '../firebase-applet-config.json';
 
@@ -18,8 +18,10 @@ const firebaseConfig = {
 // Initialize Firebase App
 export const app = initializeApp(firebaseConfig);
 
-// Initialize Firestore with the specific provisioned database ID
-export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+// Initialize Firestore with auto-detect long-polling to prevent mobile connection drops
+export const db = initializeFirestore(app, {
+  experimentalAutoDetectLongPolling: true,
+}, firebaseConfig.firestoreDatabaseId);
 
 // Initialize Auth
 export const auth = getAuth(app);

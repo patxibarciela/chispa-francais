@@ -10,7 +10,8 @@ import {
   Cloud, 
   HardDrive, 
   ShieldCheck,
-  RotateCcw
+  RotateCcw,
+  RefreshCw
 } from 'lucide-react';
 import { UserProfile } from '../types';
 import { useAuth } from '../context/AuthContext';
@@ -22,6 +23,7 @@ interface AccountModalProps {
   onUpdateProfile: (updated: Partial<UserProfile>) => void;
   onLogout: () => void;
   onResetProgress?: () => void;
+  onManualSync?: () => Promise<void>;
 }
 
 export const AccountModal: React.FC<AccountModalProps> = ({
@@ -31,10 +33,13 @@ export const AccountModal: React.FC<AccountModalProps> = ({
   onUpdateProfile,
   onLogout,
   onResetProgress,
+  onManualSync,
 }) => {
-  const { user, signOut } = useAuth();
+  const { user, signOut, syncStatus, lastSyncedAt } = useAuth();
   const [isEditingName, setIsEditingName] = useState(false);
   const [editedName, setEditedName] = useState(profile.name);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [syncFeedback, setSyncFeedback] = useState<string | null>(null);
 
   // Close on Escape key press
   useEffect(() => {
@@ -67,6 +72,21 @@ export const AccountModal: React.FC<AccountModalProps> = ({
       onUpdateProfile({ name: trimmed });
     }
     setIsEditingName(false);
+  };
+
+  const handleManualSyncClick = async () => {
+    if (!onManualSync || isSyncing) return;
+    try {
+      setIsSyncing(true);
+      setSyncFeedback(null);
+      await onManualSync();
+      setSyncFeedback(isEs ? '✓ Sincronizado con la nube' : '✓ Synkad med molnet');
+      setTimeout(() => setSyncFeedback(null), 3500);
+    } catch {
+      setSyncFeedback(isEs ? 'Error al sincronizar' : 'Kunde inte synka');
+    } finally {
+      setIsSyncing(false);
+    }
   };
 
   const handleSignOut = async () => {
@@ -192,6 +212,22 @@ export const AccountModal: React.FC<AccountModalProps> = ({
 
         {/* Action Buttons */}
         <div className="space-y-2.5">
+          {isGoogle && onManualSync && (
+            <button
+              type="button"
+              onClick={handleManualSyncClick}
+              disabled={isSyncing}
+              className="w-full py-3 px-4 rounded-2xl bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold text-sm flex items-center justify-center gap-2.5 transition-all cursor-pointer shadow-xs disabled:opacity-60"
+            >
+              <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+              <span>
+                {isSyncing
+                  ? (isEs ? 'Sincronizando con la nube...' : 'Synkar med molnet...')
+                  : (syncFeedback || (isEs ? 'Sincronizar datos ahora con la nube' : 'Synka data nu med molnet'))}
+              </span>
+            </button>
+          )}
+
           <button
             type="button"
             onClick={handleSignOut}

@@ -79,21 +79,40 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const loadCloudData = useCallback(async (uid: string): Promise<CloudDataResult> => {
     const userDocPath = `users/${uid}`;
+    let docExists = false;
+    let profileData: Partial<UserProfile> | null = null;
+    let cardsData: Flashcard[] | null = null;
+    let profileError = false;
+
+    // 1. Fetch user profile from Firestore (try fresh server copy first)
     try {
       const userRef = doc(db, 'users', uid);
-      const userSnap = await getDoc(userRef);
+      let userSnap;
+      try {
+        userSnap = await getDocFromServer(userRef);
+      } catch {
+        userSnap = await getDoc(userRef);
+      }
 
-      const docExists = userSnap.exists();
-      let profileData: Partial<UserProfile> | null = null;
+      docExists = userSnap.exists();
       if (docExists) {
         const raw = userSnap.data();
+        const rawXp = typeof raw.xp === 'number' ? raw.xp : (typeof raw.totalXp === 'number' ? raw.totalXp : undefined);
+        const rawStreak = typeof raw.streak === 'number' ? raw.streak : (typeof raw.streakDays === 'number' ? raw.streakDays : undefined);
+        const rawLessons = Array.isArray(raw.completedLessons)
+          ? raw.completedLessons
+          : (Array.isArray(raw.completedLessonIds) ? raw.completedLessonIds : []);
+        const rawSessions = Array.isArray(raw.completedSessions)
+          ? raw.completedSessions
+          : (Array.isArray(raw.completedSessionIds) ? raw.completedSessionIds : []);
+
         profileData = {
-          name: raw.displayName || 'Élève',
-          totalXp: typeof raw.xp === 'number' ? raw.xp : undefined,
-          streakDays: typeof raw.streak === 'number' ? raw.streak : undefined,
-          lastStudyDate: raw.lastActivityDate,
-          completedLessonIds: Array.isArray(raw.completedLessons) ? raw.completedLessons : [],
-          completedSessionIds: Array.isArray(raw.completedSessions) ? raw.completedSessions : [],
+          name: raw.displayName || raw.name || 'Élève',
+          totalXp: rawXp,
+          streakDays: rawStreak,
+          lastStudyDate: raw.lastActivityDate || raw.lastStudyDate || '',
+          completedLessonIds: rawLessons,
+          completedSessionIds: rawSessions,
           currentGrade: raw.currentGrade || 'ak6',
           chatMemory: raw.chatMemory || undefined,
           supportLanguage: raw.supportLanguage === 'sv' ? 'sv' : 'es',
@@ -102,10 +121,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           voiceSpeed: typeof raw.voiceSpeed === 'number' ? raw.voiceSpeed : 0.9,
         };
       }
+    } catch (error) {
+      console.warn('Could not fetch user profile from Firestore:', error);
+      handleFirestoreError(error, OperationType.GET, userDocPath);
+      profileError = true;
+    }
 
-      // Fetch Leitner cards subcollection
+    // 2. Fetch Leitner cards in an isolated try-catch so it NEVER blocks profile XP/lesson sync
+    try {
       const cardsSnap = await getDocs(collection(db, 'users', uid, 'flashcards'));
-      let cardsData: Flashcard[] | null = null;
       if (!cardsSnap.empty) {
         const vocabMap = new Map(INITIAL_VOCABULARY.map((v) => [v.id, v]));
         cardsData = cardsSnap.docs.map((d) => {
@@ -138,15 +162,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           cardsData = [...cardsData, ...missingCards];
         }
       }
+    } catch (cardsErr) {
+      console.warn('Could not load flashcards subcollection (non-fatal, ignored):', cardsErr);
+    }
 
+    if (!profileError) {
       setLastSyncedAt(new Date());
       setSyncStatus('synced');
-      return { docExists, profile: profileData, cards: cardsData, hasError: false };
-    } catch (error) {
-      handleFirestoreError(error, OperationType.GET, userDocPath);
+    } else {
       setSyncStatus('offline');
-      return { docExists: false, profile: null, cards: null, hasError: true };
     }
+
+    return {
+      docExists,
+      profile: profileData,
+      cards: cardsData,
+      hasError: profileError,
+    };
   }, []);
 
   const saveCloudData = useCallback(async (profile: UserProfile, cards?: Flashcard[]) => {
@@ -164,10 +196,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         photoURL: auth.currentUser?.photoURL || '',
         currentGrade: profile.currentGrade || 'ak6',
         streak: profile.streakDays || 0,
+        streakDays: profile.streakDays || 0,
         lastActivityDate: profile.lastStudyDate || '',
+        lastStudyDate: profile.lastStudyDate || '',
         xp: profile.totalXp || 0,
+        totalXp: profile.totalXp || 0,
         completedLessons: profile.completedLessonIds || [],
+        completedLessonIds: profile.completedLessonIds || [],
         completedSessions: profile.completedSessionIds || [],
+        completedSessionIds: profile.completedSessionIds || [],
         chatMemory: profile.chatMemory || null,
         supportLanguage: profile.supportLanguage || 'es',
         frenchImmersionLevel: profile.frenchImmersionLevel || 'balanced',
@@ -178,27 +215,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       await setDoc(userRef, payload, { merge: true });
 
-      // Save flashcards subcollection if modified
+      // Save flashcards subcollection if explicitly passed
       if (cards && cards.length > 0) {
-        const batch = writeBatch(db);
-        cards.slice(0, 50).forEach((card) => {
-          const cardRef = doc(db, 'users', uid, 'flashcards', card.id);
-          batch.set(cardRef, {
-            id: card.id,
-            userId: uid,
-            french: card.french,
-            spanish: card.spanish,
-            swedish: card.swedish,
-            box: card.box,
-            nextReviewDate: card.nextReviewDate,
-            timesReviewed: card.timesReviewed,
-            correctStreak: card.correctStreak,
-            grade: card.grade || null,
-            unitId: card.unitId || null,
-            lastReviewed: new Date().toISOString(),
-          }, { merge: true });
-        });
-        await batch.commit();
+        try {
+          const batch = writeBatch(db);
+          cards.slice(0, 50).forEach((card) => {
+            const cardRef = doc(db, 'users', uid, 'flashcards', card.id);
+            batch.set(cardRef, {
+              id: card.id,
+              userId: uid,
+              french: card.french,
+              spanish: card.spanish,
+              swedish: card.swedish,
+              box: card.box,
+              nextReviewDate: card.nextReviewDate,
+              timesReviewed: card.timesReviewed,
+              correctStreak: card.correctStreak,
+              grade: card.grade || null,
+              unitId: card.unitId || null,
+              lastReviewed: new Date().toISOString(),
+            }, { merge: true });
+          });
+          await batch.commit();
+        } catch (cardSaveErr) {
+          console.warn('Could not save flashcards subcollection (non-fatal):', cardSaveErr);
+        }
       }
 
       setLastSyncedAt(new Date());

@@ -159,10 +159,18 @@ function ChispaFrançaisApp() {
         const remote = docSnap.data();
         const current = profileRef.current;
 
-        const remoteLessons: string[] = Array.isArray(remote.completedLessons) ? remote.completedLessons : [];
-        const remoteSessions: string[] = Array.isArray(remote.completedSessions) ? remote.completedSessions : [];
-        const remoteXp = typeof remote.xp === 'number' ? remote.xp : 0;
-        const remoteStreak = typeof remote.streak === 'number' ? remote.streak : 0;
+        const remoteLessons: string[] = Array.isArray(remote.completedLessons)
+          ? remote.completedLessons
+          : (Array.isArray(remote.completedLessonIds) ? remote.completedLessonIds : []);
+        const remoteSessions: string[] = Array.isArray(remote.completedSessions)
+          ? remote.completedSessions
+          : (Array.isArray(remote.completedSessionIds) ? remote.completedSessionIds : []);
+        const remoteXp = typeof remote.xp === 'number'
+          ? remote.xp
+          : (typeof remote.totalXp === 'number' ? remote.totalXp : 0);
+        const remoteStreak = typeof remote.streak === 'number'
+          ? remote.streak
+          : (typeof remote.streakDays === 'number' ? remote.streakDays : 0);
 
         const mergedLessons = Array.from(new Set([...(current.completedLessonIds || []), ...remoteLessons]));
         const mergedSessions = Array.from(new Set([...(current.completedSessionIds || []), ...remoteSessions]));
@@ -191,8 +199,8 @@ function ChispaFrançaisApp() {
         // Check if anything actually updated to prevent redundant state re-renders
         const xpChanged = synced.totalXp !== current.totalXp;
         const streakChanged = synced.streakDays !== current.streakDays;
-        const lessonsChanged = synced.completedLessonIds.length !== current.completedLessonIds.length;
-        const sessionsChanged = synced.completedSessionIds.length !== current.completedSessionIds.length;
+        const lessonsChanged = JSON.stringify(synced.completedLessonIds) !== JSON.stringify(current.completedLessonIds);
+        const sessionsChanged = JSON.stringify(synced.completedSessionIds) !== JSON.stringify(current.completedSessionIds);
         const langChanged = synced.supportLanguage !== current.supportLanguage;
 
         if (xpChanged || streakChanged || lessonsChanged || sessionsChanged || langChanged) {
