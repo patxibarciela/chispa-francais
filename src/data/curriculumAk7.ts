@@ -81,7 +81,13 @@ const CURRICULUM_AK7_INITIAL_UNITS: Unit[] = [
             prompt: 'Traduce al francés: "Ellos estudian en el instituto."',
             promptFr: 'Ils étudient au collège.',
             audioFr: 'Ils étudient au collège.',
-            answer: ['Ils étudient au collège', 'Ils étudient au collège.'],
+            options: [
+              'Ils étudient au collège.',
+              'Elles étudient à la maison.',
+              'Ils habitent au collège.',
+              'Nous étudions ensemble.'
+            ],
+            answer: 'Ils étudient au collège.',
             hintEs: 'Usa "Ils", el verbo "étudier" con terminación "-ent" y "au collège".',
             hintSv: 'Använd "Ils", verbet "étudier" med "-ent" och "au collège".',
             explanationEs: '¡Exacto! "Ils étudient au collège."',
@@ -184,7 +190,13 @@ const CURRICULUM_AK7_INITIAL_UNITS: Unit[] = [
             prompt: 'Traduce al francés: "Vivo en Estocolmo."',
             promptFr: "J'habite à Stockholm.",
             audioFr: "J'habite à Stockholm.",
-            answer: ["J'habite à Stockholm", "J'habite à Stockholm."],
+            options: [
+              "J'habite à Stockholm.",
+              "J'habite en Suède.",
+              "Tu habites à Stockholm.",
+              "Nous habitons à Paris."
+            ],
+            answer: "J'habite à Stockholm.",
             hintEs: 'Recuerda el apóstrofe con "J\'" ante "habite" y la preposición "à" para ciudades.',
             hintSv: 'Kom ihåg apostrofen "J\'" före "habite" och "à" för städer.',
             explanationEs: '¡Genial! "J\'habite à Stockholm."',
@@ -1473,7 +1485,7 @@ const CURRICULUM_AK7_INITIAL_UNITS: Unit[] = [
             promptFr: 'C\'est à cinq minutes à pied.',
             audioFr: 'C\'est à cinq minutes à pied.',
             options: ['C\'est à cinq minutes à pied.', 'C\'est en voiture.', 'C\'est très loin.', 'C\'est fermé.'],
-            answer: 'C\'est àcinq minutes à pied.',
+            answer: 'C\'est à cinq minutes à pied.',
             hintEs: 'À pied = a pie / caminando.',
             hintSv: 'Till fots = à pied.',
             explanationEs: '¡Bravo! « À pied » expresa movimiento a pie.',

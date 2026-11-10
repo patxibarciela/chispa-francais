@@ -69,6 +69,13 @@ function ChispaFrançaisApp() {
         const remoteProfile = cloudData.profile;
 
         let merged: UserProfile;
+        let finalCards = cardsRef.current;
+        if (cloudData.cards && cloudData.cards.length > 0) {
+          finalCards = cloudData.cards;
+          setCards(cloudData.cards);
+          saveFlashcards(cloudData.cards);
+        }
+
         if (!remoteProfile) {
           // New user, write initial profile to cloud
           merged = {
@@ -79,6 +86,7 @@ function ChispaFrançaisApp() {
             photoURL: user!.photoURL || undefined,
             accountType: 'google',
           };
+          saveCloudData(merged, finalCards);
         } else {
           // Union of completed lessons and sessions
           const mergedLessons = Array.from(
@@ -90,6 +98,7 @@ function ChispaFrançaisApp() {
 
           const candidate: UserProfile = {
             ...local,
+            ...remoteProfile,
             id: user!.uid,
             name: user!.displayName || remoteProfile.name || local.name,
             email: user!.email || undefined,
@@ -100,26 +109,21 @@ function ChispaFrançaisApp() {
             lastStudyDate: remoteProfile.lastStudyDate || local.lastStudyDate || '',
             completedLessonIds: mergedLessons,
             completedSessionIds: mergedSessions,
-            currentGrade: remoteProfile.currentGrade || local.currentGrade,
+            currentGrade: remoteProfile.currentGrade || local.currentGrade || 'ak6',
             chatMemory: remoteProfile.chatMemory || local.chatMemory,
+            supportLanguage: remoteProfile.supportLanguage || local.supportLanguage || 'es',
+            frenchImmersionLevel: remoteProfile.frenchImmersionLevel || local.frenchImmersionLevel || 'balanced',
+            soundEnabled: remoteProfile.soundEnabled ?? local.soundEnabled,
+            voiceSpeed: remoteProfile.voiceSpeed ?? local.voiceSpeed,
           };
 
           merged = syncProfileStreakOnLoad(candidate);
+          // Sync merged state back to cloud so both Chromebook and mobile have the exact same up-to-date data
+          saveCloudData(merged, finalCards);
         }
 
         saveUserProfile(merged);
         setProfile(merged);
-
-        let finalCards = cardsRef.current;
-        if (cloudData.cards && cloudData.cards.length > 0) {
-          finalCards = cloudData.cards;
-          setCards(cloudData.cards);
-          saveFlashcards(cloudData.cards);
-        }
-
-        if (!remoteProfile) {
-          saveCloudData(merged, finalCards);
-        }
       } catch (err) {
         console.warn('Could not sync cloud data initially:', err);
       }

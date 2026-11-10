@@ -1,0 +1,56 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile containing progress, streaks, and preferences",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 256 },
+        "displayName": { "type": "string", "maxLength": 128 },
+        "photoURL": { "type": "string", "maxLength": 512 },
+        "currentGrade": { "type": "string", "enum": ["ak6", "ak7", "ak8", "ak9"] },
+        "streak": { "type": "number" },
+        "lastActivityDate": { "type": "string", "maxLength": 64 },
+        "xp": { "type": "number" },
+        "completedLessons": { "type": "array" },
+        "completedSessions": { "type": "array" },
+        "chatMemory": { "type": "object" },
+        "supportLanguage": { "type": "string", "enum": ["es", "sv"] },
+        "frenchImmersionLevel": { "type": "string" },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["uid"]
+    },
+    "FlashcardItem": {
+      "title": "FlashcardItem",
+      "description": "User spaced repetition Leitner flashcard",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "french": { "type": "string", "maxLength": 256 },
+        "spanish": { "type": "string", "maxLength": 256 },
+        "swedish": { "type": "string", "maxLength": 256 },
+        "box": { "type": "number" },
+        "nextReviewDate": { "type": "string", "maxLength": 64 },
+        "timesReviewed": { "type": "number" },
+        "correctStreak": { "type": "number" },
+        "grade": { "type": "string", "maxLength": 64 },
+        "unitId": { "type": "string", "maxLength": 64 },
+        "lastReviewed": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "userId", "french"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile documents keyed by Firebase Auth UID"
+    },
+    "/users/{userId}/flashcards/{cardId}": {
+      "schema": "FlashcardItem",
+      "description": "User flashcards subcollection"
+    }
+  }
+}

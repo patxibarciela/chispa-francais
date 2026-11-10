@@ -130,7 +130,6 @@ export const CurriculumRoadmap: React.FC<CurriculumRoadmapProps> = ({
                     ? 'Låst: Slutför alla 8 enheter i årskurs 6 för att låsa upp årskurs 7'
                     : 'Bloqueado: Completa las 8 unidades de Årskurs 6 para desbloquear Årskurs 7'
                 );
-                setSelectedGrade('ak7');
               }}
               className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-colors whitespace-nowrap flex items-center gap-2 ${
                 selectedGrade === 'ak7'

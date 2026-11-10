@@ -88,6 +88,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           completedSessionIds: Array.isArray(raw.completedSessions) ? raw.completedSessions : [],
           currentGrade: raw.currentGrade || 'ak6',
           chatMemory: raw.chatMemory || undefined,
+          supportLanguage: raw.supportLanguage === 'sv' ? 'sv' : 'es',
+          frenchImmersionLevel: raw.frenchImmersionLevel || 'balanced',
+          soundEnabled: typeof raw.soundEnabled === 'boolean' ? raw.soundEnabled : true,
+          voiceSpeed: typeof raw.voiceSpeed === 'number' ? raw.voiceSpeed : 0.9,
         };
       }
 
@@ -164,6 +168,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           completedLessons: profile.completedLessonIds,
           completedSessions: profile.completedSessionIds,
           chatMemory: profile.chatMemory || null,
+          supportLanguage: profile.supportLanguage || 'es',
+          frenchImmersionLevel: profile.frenchImmersionLevel || 'balanced',
+          soundEnabled: profile.soundEnabled ?? true,
+          voiceSpeed: profile.voiceSpeed ?? 0.9,
           updatedAt: new Date().toISOString(),
         };
 
