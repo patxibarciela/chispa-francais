@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db, handleFirestoreError, OperationType } from './firebase';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Header } from './components/Header';
 import { LoginLandingView } from './components/LoginLandingView';
@@ -55,20 +57,26 @@ function ChispaFrançaisApp() {
     }
   }, [user]);
 
-  // Sync with Firestore whenever user signs in or changes
+  // Real-time synchronization with Firestore across all devices (Chromebook, mobile, desktop)
   useEffect(() => {
     if (!user) return;
 
     let isCancelled = false;
-    async function syncFromCloud() {
+
+    async function initialSync() {
       try {
         const cloudData = await loadCloudData(user!.uid);
         if (isCancelled || !cloudData) return;
 
+        // If there was an error reading from cloud, do not attempt to overwrite anything
+        if (cloudData.hasError) {
+          console.warn('Network issue reading cloud data; skipping cloud initialization until online');
+          return;
+        }
+
         const local = profileRef.current;
         const remoteProfile = cloudData.profile;
 
-        let merged: UserProfile;
         let finalCards = cardsRef.current;
         if (cloudData.cards && cloudData.cards.length > 0) {
           finalCards = cloudData.cards;
@@ -76,8 +84,10 @@ function ChispaFrançaisApp() {
           saveFlashcards(cloudData.cards);
         }
 
-        if (!remoteProfile) {
-          // New user, write initial profile to cloud
+        let merged: UserProfile;
+
+        if (!cloudData.docExists || !remoteProfile) {
+          // Brand-new account in Firestore: create initial document with current local progress
           merged = {
             ...local,
             id: user!.uid,
@@ -88,7 +98,7 @@ function ChispaFrançaisApp() {
           };
           saveCloudData(merged, finalCards);
         } else {
-          // Union of completed lessons and sessions
+          // Document exists: union completed lessons & sessions, take max XP & streak
           const mergedLessons = Array.from(
             new Set([...(local.completedLessonIds || []), ...(remoteProfile.completedLessonIds || [])])
           );
@@ -118,21 +128,98 @@ function ChispaFrançaisApp() {
           };
 
           merged = syncProfileStreakOnLoad(candidate);
-          // Sync merged state back to cloud so both Chromebook and mobile have the exact same up-to-date data
-          saveCloudData(merged, finalCards);
+
+          // If local device had lessons or sessions completed offline, sync back to Firestore
+          const hasLocalDelta =
+            merged.totalXp > (remoteProfile.totalXp || 0) ||
+            mergedLessons.length > (remoteProfile.completedLessonIds?.length || 0) ||
+            mergedSessions.length > (remoteProfile.completedSessionIds?.length || 0);
+
+          if (hasLocalDelta) {
+            saveCloudData(merged);
+          }
         }
 
         saveUserProfile(merged);
         setProfile(merged);
       } catch (err) {
-        console.warn('Could not sync cloud data initially:', err);
+        console.warn('Initial cloud sync exception:', err);
       }
     }
 
-    syncFromCloud();
+    // 1. Run initial sync on sign-in
+    initialSync();
+
+    // 2. Real-time onSnapshot listener: instantly receives updates when user completes lessons on other devices
+    const userDocRef = doc(db, 'users', user.uid);
+    const unsubscribeSnapshot = onSnapshot(
+      userDocRef,
+      (docSnap) => {
+        if (!docSnap.exists()) return;
+        const remote = docSnap.data();
+        const current = profileRef.current;
+
+        const remoteLessons: string[] = Array.isArray(remote.completedLessons) ? remote.completedLessons : [];
+        const remoteSessions: string[] = Array.isArray(remote.completedSessions) ? remote.completedSessions : [];
+        const remoteXp = typeof remote.xp === 'number' ? remote.xp : 0;
+        const remoteStreak = typeof remote.streak === 'number' ? remote.streak : 0;
+
+        const mergedLessons = Array.from(new Set([...(current.completedLessonIds || []), ...remoteLessons]));
+        const mergedSessions = Array.from(new Set([...(current.completedSessionIds || []), ...remoteSessions]));
+
+        const candidate: UserProfile = {
+          ...current,
+          id: user.uid,
+          name: remote.displayName || user.displayName || current.name,
+          email: remote.email || user.email || current.email,
+          photoURL: remote.photoURL || user.photoURL || current.photoURL,
+          accountType: 'google',
+          totalXp: Math.max(current.totalXp, remoteXp),
+          streakDays: Math.max(current.streakDays, remoteStreak),
+          lastStudyDate: remote.lastActivityDate || current.lastStudyDate || '',
+          completedLessonIds: mergedLessons,
+          completedSessionIds: mergedSessions,
+          currentGrade: remote.currentGrade || current.currentGrade || 'ak6',
+          supportLanguage: remote.supportLanguage === 'sv' ? 'sv' : (remote.supportLanguage === 'es' ? 'es' : current.supportLanguage),
+          frenchImmersionLevel: remote.frenchImmersionLevel || current.frenchImmersionLevel || 'balanced',
+          soundEnabled: typeof remote.soundEnabled === 'boolean' ? remote.soundEnabled : current.soundEnabled,
+          voiceSpeed: typeof remote.voiceSpeed === 'number' ? remote.voiceSpeed : current.voiceSpeed,
+        };
+
+        const synced = syncProfileStreakOnLoad(candidate);
+
+        // Check if anything actually updated to prevent redundant state re-renders
+        const xpChanged = synced.totalXp !== current.totalXp;
+        const streakChanged = synced.streakDays !== current.streakDays;
+        const lessonsChanged = synced.completedLessonIds.length !== current.completedLessonIds.length;
+        const sessionsChanged = synced.completedSessionIds.length !== current.completedSessionIds.length;
+        const langChanged = synced.supportLanguage !== current.supportLanguage;
+
+        if (xpChanged || streakChanged || lessonsChanged || sessionsChanged || langChanged) {
+          saveUserProfile(synced);
+          setProfile(synced);
+        }
+      },
+      (error) => {
+        handleFirestoreError(error, OperationType.GET, `users/${user.uid}`);
+      }
+    );
+
+    // 3. Listen for tab visibility / focus (mobile unlock or switching back from another app)
+    const handleVisibilityOrFocus = () => {
+      if (document.visibilityState === 'visible') {
+        initialSync();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityOrFocus);
+    window.addEventListener('focus', handleVisibilityOrFocus);
 
     return () => {
       isCancelled = true;
+      unsubscribeSnapshot();
+      document.removeEventListener('visibilitychange', handleVisibilityOrFocus);
+      window.removeEventListener('focus', handleVisibilityOrFocus);
     };
   }, [user, loadCloudData, saveCloudData]);
 
@@ -151,7 +238,7 @@ function ChispaFrançaisApp() {
     saveUserProfile(next);
     setProfile(next);
     if (user) {
-      saveCloudData(next, cardsRef.current);
+      saveCloudData(next);
     }
   };
 
@@ -190,7 +277,7 @@ function ChispaFrançaisApp() {
     saveUserProfile(next);
     setProfile(next);
     if (user) {
-      saveCloudData(next, cardsRef.current);
+      saveCloudData(next);
     }
   };
 
@@ -211,7 +298,7 @@ function ChispaFrançaisApp() {
     saveUserProfile(next);
     setProfile(next);
     if (user) {
-      saveCloudData(next, cardsRef.current);
+      saveCloudData(next);
     }
   };
 
@@ -227,7 +314,7 @@ function ChispaFrançaisApp() {
     saveUserProfile(next);
     setProfile(next);
     if (user) {
-      saveCloudData(next, cardsRef.current);
+      saveCloudData(next);
     }
   };
 

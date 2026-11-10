@@ -19,6 +19,13 @@ import { INITIAL_VOCABULARY } from '../data/vocabulary';
 
 export type SyncStatus = 'guest' | 'synced' | 'saving' | 'offline' | 'error';
 
+export interface CloudDataResult {
+  docExists: boolean;
+  profile: Partial<UserProfile> | null;
+  cards: Flashcard[] | null;
+  hasError?: boolean;
+}
+
 interface AuthContextType {
   user: User | null;
   loading: boolean;
@@ -27,7 +34,7 @@ interface AuthContextType {
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
   saveCloudData: (profile: UserProfile, cards?: Flashcard[]) => Promise<void>;
-  loadCloudData: (uid: string) => Promise<{ profile: Partial<UserProfile> | null; cards: Flashcard[] | null }>;
+  loadCloudData: (uid: string) => Promise<CloudDataResult>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -70,14 +77,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const loadCloudData = useCallback(async (uid: string): Promise<{ profile: Partial<UserProfile> | null; cards: Flashcard[] | null }> => {
+  const loadCloudData = useCallback(async (uid: string): Promise<CloudDataResult> => {
     const userDocPath = `users/${uid}`;
     try {
       const userRef = doc(db, 'users', uid);
       const userSnap = await getDoc(userRef);
 
+      const docExists = userSnap.exists();
       let profileData: Partial<UserProfile> | null = null;
-      if (userSnap.exists()) {
+      if (docExists) {
         const raw = userSnap.data();
         profileData = {
           name: raw.displayName || 'Élève',
@@ -96,7 +104,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       // Fetch Leitner cards subcollection
-      const cardsColPath = `users/${uid}/flashcards`;
       const cardsSnap = await getDocs(collection(db, 'users', uid, 'flashcards'));
       let cardsData: Flashcard[] | null = null;
       if (!cardsSnap.empty) {
@@ -134,11 +141,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       setLastSyncedAt(new Date());
       setSyncStatus('synced');
-      return { profile: profileData, cards: cardsData };
+      return { docExists, profile: profileData, cards: cardsData, hasError: false };
     } catch (error) {
       handleFirestoreError(error, OperationType.GET, userDocPath);
       setSyncStatus('offline');
-      return { profile: null, cards: null };
+      return { docExists: false, profile: null, cards: null, hasError: true };
     }
   }, []);
 
@@ -147,67 +154,59 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const uid = auth.currentUser.uid;
     const userDocPath = `users/${uid}`;
 
-    if (saveTimeoutRef.current) {
-      clearTimeout(saveTimeoutRef.current);
-    }
+    setSyncStatus('saving');
+    try {
+      const userRef = doc(db, 'users', uid);
+      const payload = {
+        uid,
+        email: auth.currentUser?.email || '',
+        displayName: auth.currentUser?.displayName || profile.name || 'Élève',
+        photoURL: auth.currentUser?.photoURL || '',
+        currentGrade: profile.currentGrade || 'ak6',
+        streak: profile.streakDays || 0,
+        lastActivityDate: profile.lastStudyDate || '',
+        xp: profile.totalXp || 0,
+        completedLessons: profile.completedLessonIds || [],
+        completedSessions: profile.completedSessionIds || [],
+        chatMemory: profile.chatMemory || null,
+        supportLanguage: profile.supportLanguage || 'es',
+        frenchImmersionLevel: profile.frenchImmersionLevel || 'balanced',
+        soundEnabled: profile.soundEnabled ?? true,
+        voiceSpeed: profile.voiceSpeed ?? 0.9,
+        updatedAt: new Date().toISOString(),
+      };
 
-    // Debounce save to batch rapid actions and avoid setState during render
-    saveTimeoutRef.current = setTimeout(async () => {
-      setSyncStatus('saving');
-      try {
-        const userRef = doc(db, 'users', uid);
-        const payload = {
-          uid,
-          email: auth.currentUser?.email || '',
-          displayName: auth.currentUser?.displayName || profile.name || 'Élève',
-          photoURL: auth.currentUser?.photoURL || '',
-          currentGrade: profile.currentGrade,
-          streak: profile.streakDays,
-          lastActivityDate: profile.lastStudyDate,
-          xp: profile.totalXp,
-          completedLessons: profile.completedLessonIds,
-          completedSessions: profile.completedSessionIds,
-          chatMemory: profile.chatMemory || null,
-          supportLanguage: profile.supportLanguage || 'es',
-          frenchImmersionLevel: profile.frenchImmersionLevel || 'balanced',
-          soundEnabled: profile.soundEnabled ?? true,
-          voiceSpeed: profile.voiceSpeed ?? 0.9,
-          updatedAt: new Date().toISOString(),
-        };
+      await setDoc(userRef, payload, { merge: true });
 
-        await setDoc(userRef, payload, { merge: true });
-
-        // Save flashcards subcollection if modified
-        if (cards && cards.length > 0) {
-          const batch = writeBatch(db);
-          // Only save top cards or modified cards to stay well within limits
-          cards.slice(0, 50).forEach((card) => {
-            const cardRef = doc(db, 'users', uid, 'flashcards', card.id);
-            batch.set(cardRef, {
-              id: card.id,
-              userId: uid,
-              french: card.french,
-              spanish: card.spanish,
-              swedish: card.swedish,
-              box: card.box,
-              nextReviewDate: card.nextReviewDate,
-              timesReviewed: card.timesReviewed,
-              correctStreak: card.correctStreak,
-              grade: card.grade || null,
-              unitId: card.unitId || null,
-              lastReviewed: new Date().toISOString(),
-            }, { merge: true });
-          });
-          await batch.commit();
-        }
-
-        setLastSyncedAt(new Date());
-        setSyncStatus('synced');
-      } catch (error) {
-        setSyncStatus('offline');
-        handleFirestoreError(error, OperationType.WRITE, userDocPath);
+      // Save flashcards subcollection if modified
+      if (cards && cards.length > 0) {
+        const batch = writeBatch(db);
+        cards.slice(0, 50).forEach((card) => {
+          const cardRef = doc(db, 'users', uid, 'flashcards', card.id);
+          batch.set(cardRef, {
+            id: card.id,
+            userId: uid,
+            french: card.french,
+            spanish: card.spanish,
+            swedish: card.swedish,
+            box: card.box,
+            nextReviewDate: card.nextReviewDate,
+            timesReviewed: card.timesReviewed,
+            correctStreak: card.correctStreak,
+            grade: card.grade || null,
+            unitId: card.unitId || null,
+            lastReviewed: new Date().toISOString(),
+          }, { merge: true });
+        });
+        await batch.commit();
       }
-    }, 600);
+
+      setLastSyncedAt(new Date());
+      setSyncStatus('synced');
+    } catch (error) {
+      setSyncStatus('offline');
+      handleFirestoreError(error, OperationType.WRITE, userDocPath);
+    }
   }, []);
 
   return (

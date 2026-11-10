@@ -282,8 +282,8 @@ export const LessonModal: React.FC<LessonModalProps> = ({
 
               {/* Only shown when it contains a fill-in blank or French sentence to translate */}
               {shouldShowPromptFr(currentExercise) && (
-                <div className="mt-2.5 p-2.5 rounded-xl bg-purple-50/60 border border-purple-100 flex items-center justify-between gap-2">
-                  <span className="font-bold text-slate-900 text-base">
+                <div className="mt-2.5 p-2.5 rounded-xl bg-purple-50/60 border border-purple-100 flex items-center justify-between gap-2 notranslate" translate="no">
+                  <span className="font-bold text-slate-900 text-base notranslate" translate="no">
                     {currentExercise.promptFr}
                   </span>
                   <button
@@ -303,12 +303,12 @@ export const LessonModal: React.FC<LessonModalProps> = ({
             </div>
 
             {/* Exercise Interaction Body */}
-            <div className="flex-1 min-h-0 py-1 overflow-y-auto">
+            <div className="flex-1 min-h-0 py-1 overflow-y-auto notranslate" translate="no">
               {/* Scramble Exercise Type */}
               {currentExercise.type === 'scramble' && (
-                <div className="space-y-3">
+                <div className="space-y-3 notranslate" translate="no">
                   {/* Construction Drop Zone */}
-                  <div className="min-h-[52px] p-2.5 rounded-2xl border-2 border-dashed border-purple-200 bg-purple-50/20 flex flex-wrap gap-1.5 items-center">
+                  <div className="min-h-[52px] p-2.5 rounded-2xl border-2 border-dashed border-purple-200 bg-purple-50/20 flex flex-wrap gap-1.5 items-center notranslate" translate="no">
                     {pickedTileIds.length === 0 ? (
                       <span className="text-xs text-slate-400 italic px-2">
                         {isSwedish ? 'Tryck på orden nedan i rätt ordning' : 'Pulsa sobre las palabras para ordenar la frase'}
@@ -323,7 +323,8 @@ export const LessonModal: React.FC<LessonModalProps> = ({
                             type="button"
                             onClick={() => handleRemoveScrambleTile(idx)}
                             disabled={isAnswerChecked}
-                            className="px-3 py-1 rounded-xl bg-purple-600 text-white font-semibold text-xs sm:text-sm shadow-xs hover:bg-purple-700 transition-all cursor-pointer active:scale-95"
+                            className="px-3 py-1 rounded-xl bg-purple-600 text-white font-semibold text-xs sm:text-sm shadow-xs hover:bg-purple-700 transition-all cursor-pointer active:scale-95 notranslate"
+                            translate="no"
                           >
                             {tile.word}
                           </button>
@@ -333,7 +334,7 @@ export const LessonModal: React.FC<LessonModalProps> = ({
                   </div>
 
                   {/* Available word tiles (guaranteed scrambled) */}
-                  <div className="flex flex-wrap gap-1.5">
+                  <div className="flex flex-wrap gap-1.5 notranslate" translate="no">
                     {scrambleTiles.map((tile) => {
                       const isPicked = pickedTileIds.includes(tile.id);
                       return (
@@ -342,11 +343,12 @@ export const LessonModal: React.FC<LessonModalProps> = ({
                           type="button"
                           onClick={() => handlePickScrambleTile(tile)}
                           disabled={isPicked || isAnswerChecked}
-                          className={`px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer ${
+                          className={`px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold border transition-all cursor-pointer notranslate ${
                             isPicked
                               ? 'bg-slate-100 text-slate-300 border-slate-200 cursor-not-allowed'
                               : 'bg-white border-slate-300 text-slate-800 hover:border-purple-400 hover:bg-purple-50 shadow-2xs active:scale-95'
                           }`}
+                          translate="no"
                         >
                           {tile.word}
                         </button>
@@ -358,7 +360,7 @@ export const LessonModal: React.FC<LessonModalProps> = ({
 
               {/* Multiple Choice / Translation Options (randomized order) */}
               {currentExercise.type !== 'scramble' && (shuffledOptions.length > 0 || (currentExercise.options && currentExercise.options.length > 0)) && (
-                <div className="space-y-2">
+                <div className="space-y-2 notranslate" translate="no">
                   {(shuffledOptions.length > 0 ? shuffledOptions : (currentExercise.options || [])).map((opt, idx) => {
                     const isSelected = selectedOption === opt;
                     const isAudioPlayingThis = playingText === opt;
@@ -372,19 +374,20 @@ export const LessonModal: React.FC<LessonModalProps> = ({
                           }
                           triggerAudio(opt);
                         }}
-                        className={`w-full py-2.5 px-3.5 rounded-2xl border font-semibold text-xs sm:text-sm transition-all flex items-center justify-between cursor-pointer select-none ${
+                        className={`w-full py-2.5 px-3.5 rounded-2xl border font-semibold text-xs sm:text-sm transition-all flex items-center justify-between cursor-pointer select-none notranslate ${
                           isSelected
                             ? 'border-purple-600 bg-purple-50/80 text-purple-950 shadow-xs ring-1 ring-purple-500/20'
                             : 'border-slate-200 bg-white text-slate-800 hover:bg-purple-50/30 hover:border-purple-200'
                         }`}
+                        translate="no"
                       >
-                        <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="flex items-center gap-2.5 min-w-0 notranslate" translate="no">
                           <div className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${
                             isSelected ? 'border-purple-600 bg-purple-600' : 'border-slate-300'
                           }`}>
                             {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                           </div>
-                          <span className="truncate">{opt}</span>
+                          <span className="truncate notranslate" translate="no">{opt}</span>
                         </div>
 
                         {/* Speaker Button: ALWAYS ACTIVE, NEVER DISABLED */}
