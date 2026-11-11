@@ -53,6 +53,31 @@ export function sanitizeForFirestore<T>(data: T): T {
   return data;
 }
 
+/**
+ * Executes a promise with an automatic timeout guard so network stalls
+ * never cause the UI to hang indefinitely.
+ */
+export function withTimeout<T>(
+  promise: Promise<T>,
+  ms: number = 6000,
+  fallbackMsg: string = 'Tiempo de espera agotado al conectar con el servidor'
+): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      reject(new Error(fallbackMsg));
+    }, ms);
+    promise
+      .then((res) => {
+        clearTimeout(timer);
+        resolve(res);
+      })
+      .catch((err) => {
+        clearTimeout(timer);
+        reject(err);
+      });
+  });
+}
+
 interface AuthContextType {
   user: User | null;
   loading: boolean;
@@ -123,7 +148,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       enableNetwork(db).catch(() => {});
       const userRef = doc(db, 'users', uid);
-      const userSnap = await getDoc(userRef);
+      const userSnap = await withTimeout(
+        getDoc(userRef),
+        6000,
+        'Tiempo de espera agotado al consultar Firestore'
+      );
 
       docExists = userSnap.exists();
       const raw = userSnap.data();
@@ -174,9 +203,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     }
 
-    // 2. Fetch Leitner cards in an isolated try-catch so it NEVER blocks profile XP/lesson sync
+    // 2. Fetch Leitner cards in an isolated try-catch with 3.5s timeout so it NEVER blocks profile XP/lesson sync
     try {
-      const cardsSnap = await getDocs(collection(db, 'users', uid, 'flashcards'));
+      const cardsSnap = await withTimeout(
+        getDocs(collection(db, 'users', uid, 'flashcards')),
+        3500,
+        'Tiempo de espera agotado al cargar tarjetas'
+      );
       if (!cardsSnap.empty) {
         const vocabMap = new Map(INITIAL_VOCABULARY.map((v) => [v.id, v]));
         cardsData = cardsSnap.docs.map((d) => {
@@ -268,34 +301,41 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       const sanitizedPayload = sanitizeForFirestore(rawPayload);
 
-      await setDoc(userRef, sanitizedPayload, { merge: true });
+      // Fast foreground write: user document with timeout
+      await withTimeout(
+        setDoc(userRef, sanitizedPayload, { merge: true }),
+        6000,
+        'Tiempo de espera agotado al guardar en Firestore'
+      );
 
-      // Save flashcards subcollection if explicitly passed
+      // Save flashcards subcollection asynchronously in background so it NEVER blocks UI or sync completion
       if (cards && cards.length > 0) {
-        try {
-          const batch = writeBatch(db);
-          cards.slice(0, 50).forEach((card) => {
-            const cardRef = doc(db, 'users', uid, 'flashcards', card.id);
-            const cardData = sanitizeForFirestore({
-              id: card.id,
-              userId: uid,
-              french: card.french,
-              spanish: card.spanish,
-              swedish: card.swedish,
-              box: card.box,
-              nextReviewDate: card.nextReviewDate,
-              timesReviewed: card.timesReviewed,
-              correctStreak: card.correctStreak,
-              grade: card.grade || null,
-              unitId: card.unitId || null,
-              lastReviewed: new Date().toISOString(),
+        (async () => {
+          try {
+            const batch = writeBatch(db);
+            cards.slice(0, 50).forEach((card) => {
+              const cardRef = doc(db, 'users', uid, 'flashcards', card.id);
+              const cardData = sanitizeForFirestore({
+                id: card.id,
+                userId: uid,
+                french: card.french,
+                spanish: card.spanish,
+                swedish: card.swedish,
+                box: card.box,
+                nextReviewDate: card.nextReviewDate,
+                timesReviewed: card.timesReviewed,
+                correctStreak: card.correctStreak,
+                grade: card.grade || null,
+                unitId: card.unitId || null,
+                lastReviewed: new Date().toISOString(),
+              });
+              batch.set(cardRef, cardData, { merge: true });
             });
-            batch.set(cardRef, cardData, { merge: true });
-          });
-          await batch.commit();
-        } catch (cardSaveErr) {
-          console.warn('Could not save flashcards subcollection (non-fatal):', cardSaveErr);
-        }
+            await batch.commit();
+          } catch (cardSaveErr) {
+            console.warn('Could not save flashcards subcollection in background (non-fatal):', cardSaveErr);
+          }
+        })();
       }
 
       setLastSyncedAt(new Date());
@@ -344,34 +384,40 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       };
 
       const sanitizedPayload = sanitizeForFirestore(rawPayload);
-      await setDoc(userRef, sanitizedPayload, { merge: true });
+      await withTimeout(
+        setDoc(userRef, sanitizedPayload, { merge: true }),
+        6000,
+        'Tiempo de espera agotado al subir a la nube'
+      );
 
-      // Save flashcards subcollection
+      // Save flashcards subcollection asynchronously in background
       if (cards && cards.length > 0) {
-        try {
-          const batch = writeBatch(db);
-          cards.slice(0, 50).forEach((card) => {
-            const cardRef = doc(db, 'users', uid, 'flashcards', card.id);
-            const cardData = sanitizeForFirestore({
-              id: card.id,
-              userId: uid,
-              french: card.french,
-              spanish: card.spanish,
-              swedish: card.swedish,
-              box: card.box,
-              nextReviewDate: card.nextReviewDate,
-              timesReviewed: card.timesReviewed,
-              correctStreak: card.correctStreak,
-              grade: card.grade || null,
-              unitId: card.unitId || null,
-              lastReviewed: new Date().toISOString(),
+        (async () => {
+          try {
+            const batch = writeBatch(db);
+            cards.slice(0, 50).forEach((card) => {
+              const cardRef = doc(db, 'users', uid, 'flashcards', card.id);
+              const cardData = sanitizeForFirestore({
+                id: card.id,
+                userId: uid,
+                french: card.french,
+                spanish: card.spanish,
+                swedish: card.swedish,
+                box: card.box,
+                nextReviewDate: card.nextReviewDate,
+                timesReviewed: card.timesReviewed,
+                correctStreak: card.correctStreak,
+                grade: card.grade || null,
+                unitId: card.unitId || null,
+                lastReviewed: new Date().toISOString(),
+              });
+              batch.set(cardRef, cardData, { merge: true });
             });
-            batch.set(cardRef, cardData, { merge: true });
-          });
-          await batch.commit();
-        } catch (e) {
-          console.warn('Subcollection batch warning:', e);
-        }
+            await batch.commit();
+          } catch (e) {
+            console.warn('Subcollection batch warning in background:', e);
+          }
+        })();
       }
 
       setLastSyncedAt(new Date());
@@ -395,7 +441,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       enableNetwork(db).catch(() => {});
       const userRef = doc(db, 'users', uid);
-      const userSnap = await getDoc(userRef);
+      const userSnap = await withTimeout(
+        getDoc(userRef),
+        6000,
+        'Tiempo de espera agotado al descargar de la nube'
+      );
 
       if (!userSnap.exists()) {
         setSyncStatus('synced');

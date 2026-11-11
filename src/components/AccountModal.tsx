@@ -18,7 +18,7 @@ import {
   HelpCircle
 } from 'lucide-react';
 import { UserProfile } from '../types';
-import { useAuth } from '../context/AuthContext';
+import { useAuth, withTimeout } from '../context/AuthContext';
 
 interface AccountModalProps {
   isOpen: boolean;
@@ -139,7 +139,11 @@ export const AccountModal: React.FC<AccountModalProps> = ({
     setActiveAction('sync');
     setFeedbackMsg(null);
     try {
-      const res = await onManualSync();
+      const res = await withTimeout(
+        onManualSync(),
+        7000,
+        isEs ? 'El servidor tardó demasiado en responder' : 'Servern svarade inte i tid'
+      );
       const finalXp = res?.xp ?? profile.totalXp;
       setCloudProfile({
         exists: true,
@@ -173,7 +177,11 @@ export const AccountModal: React.FC<AccountModalProps> = ({
     setActiveAction('push');
     setFeedbackMsg(null);
     try {
-      const res = await onForcePush();
+      const res = await withTimeout(
+        onForcePush(),
+        7000,
+        isEs ? 'El servidor tardó demasiado en responder' : 'Servern svarade inte i tid'
+      );
       if (res?.success) {
         setCloudProfile({
           exists: true,
@@ -208,7 +216,11 @@ export const AccountModal: React.FC<AccountModalProps> = ({
     setActiveAction('pull');
     setFeedbackMsg(null);
     try {
-      const res = await onForcePull();
+      const res = await withTimeout(
+        onForcePull(),
+        7000,
+        isEs ? 'El servidor tardó demasiado en responder' : 'Servern svarade inte i tid'
+      );
       if (res?.success) {
         const pulledXp = res?.profile?.totalXp ?? (cloudProfile?.xp ?? 0);
         setFeedbackMsg({
