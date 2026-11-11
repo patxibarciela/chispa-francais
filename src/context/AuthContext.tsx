@@ -25,6 +25,32 @@ export interface CloudDataResult {
   profile: Partial<UserProfile> | null;
   cards: Flashcard[] | null;
   hasError?: boolean;
+  errorMessage?: string;
+  rawDoc?: Record<string, any> | null;
+}
+
+/**
+ * Deeply sanitizes any object for Firestore:
+ * Strips all undefined fields recursively so Firestore setDoc never throws
+ * "Unsupported field value: undefined"
+ */
+export function sanitizeForFirestore<T>(data: T): T {
+  if (data === null || data === undefined) {
+    return null as any;
+  }
+  if (Array.isArray(data)) {
+    return data.map(sanitizeForFirestore) as any;
+  }
+  if (typeof data === 'object') {
+    const cleaned: Record<string, any> = {};
+    for (const [key, value] of Object.entries(data)) {
+      if (value !== undefined) {
+        cleaned[key] = sanitizeForFirestore(value);
+      }
+    }
+    return cleaned as any;
+  }
+  return data;
 }
 
 interface AuthContextType {
@@ -32,10 +58,13 @@ interface AuthContextType {
   loading: boolean;
   syncStatus: SyncStatus;
   lastSyncedAt: Date | null;
+  lastCloudError: string | null;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
   saveCloudData: (profile: UserProfile, cards?: Flashcard[]) => Promise<void>;
   loadCloudData: (uid: string) => Promise<CloudDataResult>;
+  forcePushToCloud: (profile: UserProfile, cards?: Flashcard[]) => Promise<{ success: boolean; xpSaved: number; error?: string }>;
+  forcePullFromCloud: () => Promise<{ success: boolean; profile?: Partial<UserProfile>; error?: string }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -45,7 +74,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState<boolean>(true);
   const [syncStatus, setSyncStatus] = useState<SyncStatus>('guest');
   const [lastSyncedAt, setLastSyncedAt] = useState<Date | null>(null);
-  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [lastCloudError, setLastCloudError] = useState<string | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -60,10 +89,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signInWithGoogle = async () => {
     try {
       setSyncStatus('saving');
+      setLastCloudError(null);
       await signInWithPopup(auth, googleProvider);
       setSyncStatus('synced');
     } catch (error: any) {
       console.error('Google Sign-in failed:', error);
+      setLastCloudError(error?.message || 'Error al iniciar sesión con Google');
       setSyncStatus(user ? 'error' : 'guest');
       throw error;
     }
@@ -73,6 +104,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       await fbSignOut(auth);
       setSyncStatus('guest');
+      setLastCloudError(null);
     } catch (error) {
       console.error('Sign-out failed:', error);
     }
@@ -84,6 +116,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     let profileData: Partial<UserProfile> | null = null;
     let cardsData: Flashcard[] | null = null;
     let profileError = false;
+    let errorMessage: string | undefined = undefined;
+    let rawDoc: Record<string, any> | null = null;
 
     // 1. Fetch user profile from Firestore (try fresh server copy first)
     try {
@@ -91,15 +125,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       let userSnap;
       try {
         userSnap = await getDocFromServer(userRef);
-      } catch {
+      } catch (serverErr) {
+        // Fallback to default getDoc (which checks local cache or network)
         userSnap = await getDoc(userRef);
       }
 
       docExists = userSnap.exists();
       const raw = userSnap.data();
+      rawDoc = raw || null;
+
       if (docExists && raw) {
-        const rawXp = typeof raw.xp === 'number' ? raw.xp : (typeof raw.totalXp === 'number' ? raw.totalXp : undefined);
-        const rawStreak = typeof raw.streak === 'number' ? raw.streak : (typeof raw.streakDays === 'number' ? raw.streakDays : undefined);
+        const rawXp = typeof raw.xp === 'number' ? raw.xp : (typeof raw.totalXp === 'number' ? raw.totalXp : 0);
+        const rawStreak = typeof raw.streak === 'number' ? raw.streak : (typeof raw.streakDays === 'number' ? raw.streakDays : 0);
         const rawLessons = Array.isArray(raw.completedLessons)
           ? raw.completedLessons
           : (Array.isArray(raw.completedLessonIds) ? raw.completedLessonIds : []);
@@ -122,8 +159,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           voiceSpeed: typeof raw.voiceSpeed === 'number' ? raw.voiceSpeed : 0.9,
         };
       }
-    } catch (error) {
+    } catch (error: any) {
       console.warn('Could not fetch user profile from Firestore:', error);
+      errorMessage = error?.message || String(error);
+      setLastCloudError(errorMessage || null);
       handleFirestoreError(error, OperationType.GET, userDocPath);
       profileError = true;
     }
@@ -170,6 +209,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (!profileError) {
       setLastSyncedAt(new Date());
       setSyncStatus('synced');
+      setLastCloudError(null);
     } else {
       setSyncStatus('offline');
     }
@@ -179,6 +219,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       profile: profileData,
       cards: cardsData,
       hasError: profileError,
+      errorMessage,
+      rawDoc,
     };
   }, []);
 
@@ -190,11 +232,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setSyncStatus('saving');
     try {
       const userRef = doc(db, 'users', uid);
-      const payload = {
+
+      // Clean raw payload and explicitly strip any undefined values using sanitizeForFirestore
+      const rawPayload = {
         uid,
-        email: auth.currentUser?.email || '',
+        email: auth.currentUser?.email || profile.email || '',
         displayName: auth.currentUser?.displayName || profile.name || 'Élève',
-        photoURL: auth.currentUser?.photoURL || '',
+        photoURL: auth.currentUser?.photoURL || profile.photoURL || '',
         currentGrade: profile.currentGrade || 'ak6',
         streak: profile.streakDays || 0,
         streakDays: profile.streakDays || 0,
@@ -214,7 +258,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         updatedAt: new Date().toISOString(),
       };
 
-      await setDoc(userRef, payload, { merge: true });
+      const sanitizedPayload = sanitizeForFirestore(rawPayload);
+
+      await setDoc(userRef, sanitizedPayload, { merge: true });
 
       // Save flashcards subcollection if explicitly passed
       if (cards && cards.length > 0) {
@@ -222,7 +268,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           const batch = writeBatch(db);
           cards.slice(0, 50).forEach((card) => {
             const cardRef = doc(db, 'users', uid, 'flashcards', card.id);
-            batch.set(cardRef, {
+            const cardData = sanitizeForFirestore({
               id: card.id,
               userId: uid,
               french: card.french,
@@ -235,7 +281,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               grade: card.grade || null,
               unitId: card.unitId || null,
               lastReviewed: new Date().toISOString(),
-            }, { merge: true });
+            });
+            batch.set(cardRef, cardData, { merge: true });
           });
           await batch.commit();
         } catch (cardSaveErr) {
@@ -245,9 +292,145 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       setLastSyncedAt(new Date());
       setSyncStatus('synced');
-    } catch (error) {
+      setLastCloudError(null);
+    } catch (error: any) {
+      const msg = error?.message || String(error);
+      console.warn('Firestore write failed:', msg);
+      setLastCloudError(msg);
       setSyncStatus('offline');
       handleFirestoreError(error, OperationType.WRITE, userDocPath);
+    }
+  }, []);
+
+  const forcePushToCloud = useCallback(async (profile: UserProfile, cards?: Flashcard[]) => {
+    if (!auth.currentUser) {
+      return { success: false, xpSaved: 0, error: 'No hay usuario autenticado con Google' };
+    }
+    const uid = auth.currentUser.uid;
+    setSyncStatus('saving');
+    try {
+      const userRef = doc(db, 'users', uid);
+      const rawPayload = {
+        uid,
+        email: auth.currentUser?.email || profile.email || '',
+        displayName: auth.currentUser?.displayName || profile.name || 'Élève',
+        photoURL: auth.currentUser?.photoURL || profile.photoURL || '',
+        currentGrade: profile.currentGrade || 'ak6',
+        streak: profile.streakDays || 0,
+        streakDays: profile.streakDays || 0,
+        lastActivityDate: profile.lastStudyDate || '',
+        lastStudyDate: profile.lastStudyDate || '',
+        xp: profile.totalXp || 0,
+        totalXp: profile.totalXp || 0,
+        completedLessons: profile.completedLessonIds || [],
+        completedLessonIds: profile.completedLessonIds || [],
+        completedSessions: profile.completedSessionIds || [],
+        completedSessionIds: profile.completedSessionIds || [],
+        chatMemory: profile.chatMemory || null,
+        supportLanguage: profile.supportLanguage || 'es',
+        frenchImmersionLevel: profile.frenchImmersionLevel || 'balanced',
+        soundEnabled: profile.soundEnabled ?? true,
+        voiceSpeed: profile.voiceSpeed ?? 0.9,
+        updatedAt: new Date().toISOString(),
+      };
+
+      const sanitizedPayload = sanitizeForFirestore(rawPayload);
+      await setDoc(userRef, sanitizedPayload, { merge: true });
+
+      // Save flashcards subcollection
+      if (cards && cards.length > 0) {
+        try {
+          const batch = writeBatch(db);
+          cards.slice(0, 50).forEach((card) => {
+            const cardRef = doc(db, 'users', uid, 'flashcards', card.id);
+            const cardData = sanitizeForFirestore({
+              id: card.id,
+              userId: uid,
+              french: card.french,
+              spanish: card.spanish,
+              swedish: card.swedish,
+              box: card.box,
+              nextReviewDate: card.nextReviewDate,
+              timesReviewed: card.timesReviewed,
+              correctStreak: card.correctStreak,
+              grade: card.grade || null,
+              unitId: card.unitId || null,
+              lastReviewed: new Date().toISOString(),
+            });
+            batch.set(cardRef, cardData, { merge: true });
+          });
+          await batch.commit();
+        } catch (e) {
+          console.warn('Subcollection batch warning:', e);
+        }
+      }
+
+      setLastSyncedAt(new Date());
+      setSyncStatus('synced');
+      setLastCloudError(null);
+      return { success: true, xpSaved: profile.totalXp || 0 };
+    } catch (error: any) {
+      const msg = error?.message || String(error);
+      setLastCloudError(msg);
+      setSyncStatus('error');
+      return { success: false, xpSaved: 0, error: msg };
+    }
+  }, []);
+
+  const forcePullFromCloud = useCallback(async () => {
+    if (!auth.currentUser) {
+      return { success: false, error: 'No hay usuario autenticado con Google' };
+    }
+    const uid = auth.currentUser.uid;
+    setSyncStatus('saving');
+    try {
+      const userRef = doc(db, 'users', uid);
+      let userSnap;
+      try {
+        userSnap = await getDocFromServer(userRef);
+      } catch {
+        userSnap = await getDoc(userRef);
+      }
+
+      if (!userSnap.exists()) {
+        setSyncStatus('synced');
+        return { success: true, profile: undefined };
+      }
+
+      const raw = userSnap.data();
+      const rawXp = typeof raw.xp === 'number' ? raw.xp : (typeof raw.totalXp === 'number' ? raw.totalXp : 0);
+      const rawStreak = typeof raw.streak === 'number' ? raw.streak : (typeof raw.streakDays === 'number' ? raw.streakDays : 0);
+      const rawLessons = Array.isArray(raw.completedLessons)
+        ? raw.completedLessons
+        : (Array.isArray(raw.completedLessonIds) ? raw.completedLessonIds : []);
+      const rawSessions = Array.isArray(raw.completedSessions)
+        ? raw.completedSessions
+        : (Array.isArray(raw.completedSessionIds) ? raw.completedSessionIds : []);
+
+      const profileData: Partial<UserProfile> = {
+        name: raw.displayName || raw.name || 'Élève',
+        totalXp: rawXp,
+        streakDays: rawStreak,
+        lastStudyDate: raw.lastActivityDate || raw.lastStudyDate || '',
+        completedLessonIds: rawLessons,
+        completedSessionIds: rawSessions,
+        currentGrade: raw.currentGrade || 'ak6',
+        chatMemory: raw.chatMemory || undefined,
+        supportLanguage: raw.supportLanguage === 'sv' ? 'sv' : 'es',
+        frenchImmersionLevel: raw.frenchImmersionLevel || 'balanced',
+        soundEnabled: typeof raw.soundEnabled === 'boolean' ? raw.soundEnabled : true,
+        voiceSpeed: typeof raw.voiceSpeed === 'number' ? raw.voiceSpeed : 0.9,
+      };
+
+      setLastSyncedAt(new Date());
+      setSyncStatus('synced');
+      setLastCloudError(null);
+      return { success: true, profile: profileData };
+    } catch (error: any) {
+      const msg = error?.message || String(error);
+      setLastCloudError(msg);
+      setSyncStatus('error');
+      return { success: false, error: msg };
     }
   }, []);
 
@@ -258,10 +441,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         loading,
         syncStatus,
         lastSyncedAt,
+        lastCloudError,
         signInWithGoogle,
         signOut,
         saveCloudData,
         loadCloudData,
+        forcePushToCloud,
+        forcePullFromCloud,
       }}
     >
       {children}
@@ -276,3 +462,4 @@ export const useAuth = () => {
   }
   return context;
 };
+

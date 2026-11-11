@@ -33,7 +33,7 @@ import {
 import { CURRICULUM_UNITS } from './data/curriculum';
 
 function ChispaFrançaisApp() {
-  const { user, loading, saveCloudData, loadCloudData } = useAuth();
+  const { user, loading, saveCloudData, loadCloudData, forcePushToCloud, forcePullFromCloud } = useAuth();
   const [hasSelectedSession, setHasSelectedSession] = useState<boolean>(() => {
     return !!getActiveProfileId();
   });
@@ -130,14 +130,14 @@ function ChispaFrançaisApp() {
 
           merged = syncProfileStreakOnLoad(candidate);
 
-          // If local device had lessons or sessions completed offline, sync back to Firestore
+          // If local device had lessons, higher XP or sessions, ensure Firestore is updated with the union!
           const hasLocalDelta =
             merged.totalXp > (remoteProfile.totalXp || 0) ||
             mergedLessons.length > (remoteProfile.completedLessonIds?.length || 0) ||
             mergedSessions.length > (remoteProfile.completedSessionIds?.length || 0);
 
           if (hasLocalDelta) {
-            saveCloudData(merged);
+            saveCloudData(merged, finalCards);
           }
         }
 
@@ -338,55 +338,92 @@ function ChispaFrançaisApp() {
   };
 
   const handleManualSync = async () => {
-    if (!user) return;
+    if (!user) {
+      throw new Error('No hay usuario autenticado');
+    }
     try {
       const cloudData = await loadCloudData(user.uid);
-      if (!cloudData || cloudData.hasError) return;
-
-      if (cloudData.profile) {
-        const local = profileRef.current;
-        const remoteProfile = cloudData.profile;
-
-        const mergedLessons = Array.from(
-          new Set([...(local.completedLessonIds || []), ...(remoteProfile.completedLessonIds || [])])
-        );
-        const mergedSessions = Array.from(
-          new Set([...(local.completedSessionIds || []), ...(remoteProfile.completedSessionIds || [])])
-        );
-
-        const candidate: UserProfile = {
-          ...local,
-          ...remoteProfile,
-          id: user.uid,
-          name: user.displayName || remoteProfile.name || local.name,
-          email: user.email || undefined,
-          photoURL: user.photoURL || undefined,
-          accountType: 'google',
-          totalXp: Math.max(local.totalXp, remoteProfile.totalXp || 0),
-          streakDays: Math.max(local.streakDays, remoteProfile.streakDays || 0),
-          lastStudyDate: remoteProfile.lastStudyDate || local.lastStudyDate || '',
-          completedLessonIds: mergedLessons,
-          completedSessionIds: mergedSessions,
-          currentGrade: remoteProfile.currentGrade || local.currentGrade || 'ak6',
-          chatMemory: remoteProfile.chatMemory || local.chatMemory,
-          supportLanguage: remoteProfile.supportLanguage || local.supportLanguage || 'es',
-          frenchImmersionLevel: remoteProfile.frenchImmersionLevel || local.frenchImmersionLevel || 'balanced',
-          soundEnabled: remoteProfile.soundEnabled ?? local.soundEnabled,
-          voiceSpeed: remoteProfile.voiceSpeed ?? local.voiceSpeed,
-        };
-
-        const merged = syncProfileStreakOnLoad(candidate);
-        saveUserProfile(merged);
-        setProfile(merged);
-
-        if (cloudData.cards && cloudData.cards.length > 0) {
-          setCards(cloudData.cards);
-          saveFlashcards(cloudData.cards);
-        }
+      if (cloudData.hasError) {
+        throw new Error(cloudData.errorMessage || 'No se pudo conectar con Firestore');
       }
-    } catch (e) {
+
+      const local = profileRef.current;
+      const remoteProfile = cloudData.profile;
+
+      let finalCards = cardsRef.current;
+      if (cloudData.cards && cloudData.cards.length > 0) {
+        finalCards = cloudData.cards;
+        setCards(cloudData.cards);
+        saveFlashcards(cloudData.cards);
+      }
+
+      const mergedLessons = Array.from(
+        new Set([...(local.completedLessonIds || []), ...(remoteProfile?.completedLessonIds || [])])
+      );
+      const mergedSessions = Array.from(
+        new Set([...(local.completedSessionIds || []), ...(remoteProfile?.completedSessionIds || [])])
+      );
+
+      const candidate: UserProfile = {
+        ...local,
+        ...(remoteProfile || {}),
+        id: user.uid,
+        name: user.displayName || remoteProfile?.name || local.name,
+        email: user.email || undefined,
+        photoURL: user.photoURL || undefined,
+        accountType: 'google',
+        totalXp: Math.max(local.totalXp, remoteProfile?.totalXp || 0),
+        streakDays: Math.max(local.streakDays, remoteProfile?.streakDays || 0),
+        lastStudyDate: remoteProfile?.lastStudyDate || local.lastStudyDate || '',
+        completedLessonIds: mergedLessons,
+        completedSessionIds: mergedSessions,
+        currentGrade: remoteProfile?.currentGrade || local.currentGrade || 'ak6',
+        chatMemory: remoteProfile?.chatMemory || local.chatMemory,
+        supportLanguage: remoteProfile?.supportLanguage || local.supportLanguage || 'es',
+        frenchImmersionLevel: remoteProfile?.frenchImmersionLevel || local.frenchImmersionLevel || 'balanced',
+        soundEnabled: remoteProfile?.soundEnabled ?? local.soundEnabled,
+        voiceSpeed: remoteProfile?.voiceSpeed ?? local.voiceSpeed,
+      };
+
+      const merged = syncProfileStreakOnLoad(candidate);
+      saveUserProfile(merged);
+      setProfile(merged);
+
+      // ALWAYS write the merged union back to Firestore so cloud and client match perfectly!
+      await saveCloudData(merged, finalCards);
+
+      return {
+        success: true,
+        xp: merged.totalXp,
+        streak: merged.streakDays,
+        lessons: merged.completedLessonIds.length,
+      };
+    } catch (e: any) {
       console.warn('Manual cloud sync failed:', e);
+      throw e;
     }
+  };
+
+  const handleForcePushToCloud = async () => {
+    if (!user) return { success: false, xpSaved: 0, error: 'No hay usuario autenticado' };
+    const current = profileRef.current;
+    const res = await forcePushToCloud(current, cardsRef.current);
+    return res;
+  };
+
+  const handleForcePullFromCloud = async () => {
+    if (!user) return { success: false, error: 'No hay usuario autenticado' };
+    const res = await forcePullFromCloud();
+    if (res.success && res.profile) {
+      const merged: UserProfile = syncProfileStreakOnLoad({
+        ...profileRef.current,
+        ...res.profile,
+        totalXp: res.profile.totalXp ?? profileRef.current.totalXp,
+      });
+      saveUserProfile(merged);
+      setProfile(merged);
+    }
+    return res;
   };
 
   const handleLogout = () => {
@@ -434,6 +471,8 @@ function ChispaFrançaisApp() {
         onLogout={handleLogout}
         onResetProgress={handleResetProgress}
         onManualSync={handleManualSync}
+        onForcePush={handleForcePushToCloud}
+        onForcePull={handleForcePullFromCloud}
       />
 
       {/* App Body with Left Sidebar (like Chispa Español) */}

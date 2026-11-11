@@ -26,7 +26,9 @@ interface HeaderProps {
   onUpdateProfile: (updated: Partial<UserProfile>) => void;
   onLogout: () => void;
   onResetProgress?: () => void;
-  onManualSync?: () => Promise<void>;
+  onManualSync?: () => Promise<any>;
+  onForcePush?: () => Promise<any>;
+  onForcePull?: () => Promise<any>;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -38,6 +40,8 @@ export const Header: React.FC<HeaderProps> = ({
   onLogout,
   onResetProgress,
   onManualSync,
+  onForcePush,
+  onForcePull,
 }) => {
   const { user, signOut, syncStatus } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -229,6 +233,8 @@ export const Header: React.FC<HeaderProps> = ({
               onLogout={onLogout}
               onResetProgress={onResetProgress}
               onManualSync={onManualSync}
+              onForcePush={onForcePush}
+              onForcePull={onForcePull}
             />
           </div>
         </div>
