@@ -156,13 +156,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     } catch (error: any) {
       const errText = error instanceof Error ? error.message : String(error);
-      errorMessage = errText;
-      // If it is just an offline warning on first connection, do not treat as fatal error
-      if (!errText.includes('offline')) {
+      if (errText.includes('offline') || errText.includes('client is offline')) {
+        // In Firebase Firestore SDK, when a document does not exist yet on the server
+        // and is not in local cache, getDoc rejects with "Failed to get document because the client is offline."
+        // This indicates that the document does not exist yet in Firestore (docExists = false), NOT a network failure.
+        docExists = false;
+        profileData = null;
+        profileError = false;
+        errorMessage = undefined;
+        setLastCloudError(null);
+      } else {
+        console.warn('Could not fetch user profile from Firestore:', error);
+        errorMessage = errText;
         setLastCloudError(errText);
         handleFirestoreError(error, OperationType.GET, userDocPath);
+        profileError = true;
       }
-      profileError = true;
     }
 
     // 2. Fetch Leitner cards in an isolated try-catch so it NEVER blocks profile XP/lesson sync
@@ -424,6 +433,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return { success: true, profile: profileData };
     } catch (error: any) {
       const msg = error?.message || String(error);
+      if (msg.includes('offline') || msg.includes('client is offline')) {
+        // Document does not exist yet on server
+        setLastSyncedAt(new Date());
+        setSyncStatus('synced');
+        setLastCloudError(null);
+        return { success: true, profile: undefined };
+      }
       setLastCloudError(msg);
       setSyncStatus('error');
       return { success: false, error: msg };
