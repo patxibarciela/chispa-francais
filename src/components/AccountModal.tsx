@@ -444,11 +444,21 @@ export const AccountModal: React.FC<AccountModalProps> = ({
 
             {/* Any Firestore error notice */}
             {lastCloudError && (
-              <div className="p-2 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-[11px] flex items-start gap-1.5">
-                <AlertCircle className="w-4 h-4 shrink-0 text-rose-600 mt-0.5" />
-                <div>
-                  <span className="font-bold block">{isEs ? 'Aviso de conexión con la nube:' : 'Anslutningsvarning:'}</span>
-                  <span className="text-[10px] opacity-90 break-all">{lastCloudError}</span>
+              <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-[11px] flex items-start gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0 text-amber-600 mt-0.5" />
+                <div className="flex-1">
+                  <span className="font-bold block">
+                    {lastCloudError.includes('offline')
+                      ? (isEs ? 'Conectando con la base de datos:' : 'Ansluter till molnet:')
+                      : (isEs ? 'Aviso de conexión con la nube:' : 'Anslutningsvarning:')}
+                  </span>
+                  <span className="text-[10px] opacity-90 block mt-0.5">
+                    {lastCloudError.includes('offline')
+                      ? (isEs 
+                          ? 'El navegador está estableciendo conexión con Firestore. Pulsa "⬆️ Subir a la nube" o "Sincronizar ahora" para guardar tus 15 XP.' 
+                          : 'Webbläsaren ansluter till Firestore. Klicka på "Ladda upp" för att spara.')
+                      : lastCloudError}
+                  </span>
                 </div>
               </div>
             )}

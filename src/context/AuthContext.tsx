@@ -8,11 +8,11 @@ import {
 import { 
   doc, 
   getDoc, 
-  getDocFromServer,
   setDoc, 
   collection, 
   getDocs, 
-  writeBatch 
+  writeBatch,
+  enableNetwork 
 } from 'firebase/firestore';
 import { auth, db, googleProvider, handleFirestoreError, OperationType } from '../firebase';
 import { UserProfile, Flashcard } from '../types';
@@ -119,16 +119,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     let errorMessage: string | undefined = undefined;
     let rawDoc: Record<string, any> | null = null;
 
-    // 1. Fetch user profile from Firestore (try fresh server copy first)
+    // 1. Fetch user profile from Firestore
     try {
+      enableNetwork(db).catch(() => {});
       const userRef = doc(db, 'users', uid);
-      let userSnap;
-      try {
-        userSnap = await getDocFromServer(userRef);
-      } catch (serverErr) {
-        // Fallback to default getDoc (which checks local cache or network)
-        userSnap = await getDoc(userRef);
-      }
+      const userSnap = await getDoc(userRef);
 
       docExists = userSnap.exists();
       const raw = userSnap.data();
@@ -160,10 +155,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         };
       }
     } catch (error: any) {
-      console.warn('Could not fetch user profile from Firestore:', error);
-      errorMessage = error?.message || String(error);
-      setLastCloudError(errorMessage || null);
-      handleFirestoreError(error, OperationType.GET, userDocPath);
+      const errText = error instanceof Error ? error.message : String(error);
+      errorMessage = errText;
+      // If it is just an offline warning on first connection, do not treat as fatal error
+      if (!errText.includes('offline')) {
+        setLastCloudError(errText);
+        handleFirestoreError(error, OperationType.GET, userDocPath);
+      }
       profileError = true;
     }
 
@@ -231,6 +229,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     setSyncStatus('saving');
     try {
+      enableNetwork(db).catch(() => {});
       const userRef = doc(db, 'users', uid);
 
       // Clean raw payload and explicitly strip any undefined values using sanitizeForFirestore
@@ -309,6 +308,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const uid = auth.currentUser.uid;
     setSyncStatus('saving');
     try {
+      enableNetwork(db).catch(() => {});
       const userRef = doc(db, 'users', uid);
       const rawPayload = {
         uid,
@@ -384,13 +384,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const uid = auth.currentUser.uid;
     setSyncStatus('saving');
     try {
+      enableNetwork(db).catch(() => {});
       const userRef = doc(db, 'users', uid);
-      let userSnap;
-      try {
-        userSnap = await getDocFromServer(userRef);
-      } catch {
-        userSnap = await getDoc(userRef);
-      }
+      const userSnap = await getDoc(userRef);
 
       if (!userSnap.exists()) {
         setSyncStatus('synced');
