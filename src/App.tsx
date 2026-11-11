@@ -27,7 +27,8 @@ import {
   setActiveProfileId,
   resetAllProgress,
   recordStudyActivity,
-  syncProfileStreakOnLoad
+  syncProfileStreakOnLoad,
+  DEFAULT_PROFILE
 } from './utils/storage';
 import { CURRICULUM_UNITS } from './data/curriculum';
 
@@ -336,9 +337,63 @@ function ChispaFrançaisApp() {
     setHasSelectedSession(true);
   };
 
+  const handleManualSync = async () => {
+    if (!user) return;
+    try {
+      const cloudData = await loadCloudData(user.uid);
+      if (!cloudData || cloudData.hasError) return;
+
+      if (cloudData.profile) {
+        const local = profileRef.current;
+        const remoteProfile = cloudData.profile;
+
+        const mergedLessons = Array.from(
+          new Set([...(local.completedLessonIds || []), ...(remoteProfile.completedLessonIds || [])])
+        );
+        const mergedSessions = Array.from(
+          new Set([...(local.completedSessionIds || []), ...(remoteProfile.completedSessionIds || [])])
+        );
+
+        const candidate: UserProfile = {
+          ...local,
+          ...remoteProfile,
+          id: user.uid,
+          name: user.displayName || remoteProfile.name || local.name,
+          email: user.email || undefined,
+          photoURL: user.photoURL || undefined,
+          accountType: 'google',
+          totalXp: Math.max(local.totalXp, remoteProfile.totalXp || 0),
+          streakDays: Math.max(local.streakDays, remoteProfile.streakDays || 0),
+          lastStudyDate: remoteProfile.lastStudyDate || local.lastStudyDate || '',
+          completedLessonIds: mergedLessons,
+          completedSessionIds: mergedSessions,
+          currentGrade: remoteProfile.currentGrade || local.currentGrade || 'ak6',
+          chatMemory: remoteProfile.chatMemory || local.chatMemory,
+          supportLanguage: remoteProfile.supportLanguage || local.supportLanguage || 'es',
+          frenchImmersionLevel: remoteProfile.frenchImmersionLevel || local.frenchImmersionLevel || 'balanced',
+          soundEnabled: remoteProfile.soundEnabled ?? local.soundEnabled,
+          voiceSpeed: remoteProfile.voiceSpeed ?? local.voiceSpeed,
+        };
+
+        const merged = syncProfileStreakOnLoad(candidate);
+        saveUserProfile(merged);
+        setProfile(merged);
+
+        if (cloudData.cards && cloudData.cards.length > 0) {
+          setCards(cloudData.cards);
+          saveFlashcards(cloudData.cards);
+        }
+      }
+    } catch (e) {
+      console.warn('Manual cloud sync failed:', e);
+    }
+  };
+
   const handleLogout = () => {
     setActiveProfileId(null);
     setHasSelectedSession(false);
+    setProfile(DEFAULT_PROFILE);
+    setCards(loadFlashcards());
   };
 
   const handleResetProgress = () => {
@@ -378,6 +433,7 @@ function ChispaFrançaisApp() {
         onUpdateProfile={handleUpdateProfile}
         onLogout={handleLogout}
         onResetProgress={handleResetProgress}
+        onManualSync={handleManualSync}
       />
 
       {/* App Body with Left Sidebar (like Chispa Español) */}

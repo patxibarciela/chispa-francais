@@ -8,6 +8,7 @@ import {
 import { 
   doc, 
   getDoc, 
+  getDocFromServer,
   setDoc, 
   collection, 
   getDocs, 
@@ -95,8 +96,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       docExists = userSnap.exists();
-      if (docExists) {
-        const raw = userSnap.data();
+      const raw = userSnap.data();
+      if (docExists && raw) {
         const rawXp = typeof raw.xp === 'number' ? raw.xp : (typeof raw.totalXp === 'number' ? raw.totalXp : undefined);
         const rawStreak = typeof raw.streak === 'number' ? raw.streak : (typeof raw.streakDays === 'number' ? raw.streakDays : undefined);
         const rawLessons = Array.isArray(raw.completedLessons)
