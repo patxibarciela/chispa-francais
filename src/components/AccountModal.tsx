@@ -15,7 +15,13 @@ import {
   UploadCloud,
   DownloadCloud,
   AlertCircle,
-  HelpCircle
+  HelpCircle,
+  Copy,
+  KeyRound,
+  ArrowRight,
+  Share2,
+  Link,
+  Smartphone
 } from 'lucide-react';
 import { UserProfile } from '../types';
 import { useAuth, withTimeout } from '../context/AuthContext';
@@ -58,6 +64,11 @@ export const AccountModal: React.FC<AccountModalProps> = ({
   const [isSyncing, setIsSyncing] = useState(false);
   const [activeAction, setActiveAction] = useState<'sync' | 'push' | 'pull' | null>(null);
   const [feedbackMsg, setFeedbackMsg] = useState<{ text: string; type: 'success' | 'error' | 'info' } | null>(null);
+
+  // Direct Progress Transfer state (zero-cloud offline-safe sync)
+  const [showTransferSection, setShowTransferSection] = useState(false);
+  const [transferInput, setTransferInput] = useState('');
+  const [copiedType, setCopiedType] = useState<'code' | 'link' | null>(null);
 
   const isEs = profile.supportLanguage === 'es';
   const isGoogle = !!user;
@@ -145,7 +156,7 @@ export const AccountModal: React.FC<AccountModalProps> = ({
     try {
       const res = await withTimeout(
         onManualSync(),
-        16000,
+        20000,
         isEs ? 'El servidor tardó demasiado en responder' : 'Servern svarade inte i tid'
       );
       const finalXp = res?.xp ?? profile.totalXp;
@@ -183,7 +194,7 @@ export const AccountModal: React.FC<AccountModalProps> = ({
     try {
       const res = await withTimeout(
         onForcePush(),
-        16000,
+        20000,
         isEs ? 'El servidor tardó demasiado en responder' : 'Servern svarade inte i tid'
       );
       if (res?.success) {
@@ -222,7 +233,7 @@ export const AccountModal: React.FC<AccountModalProps> = ({
     try {
       const res = await withTimeout(
         onForcePull(),
-        16000,
+        20000,
         isEs ? 'El servidor tardó demasiado en responder' : 'Servern svarade inte i tid'
       );
       if (res?.success) {
@@ -244,6 +255,107 @@ export const AccountModal: React.FC<AccountModalProps> = ({
     } finally {
       setIsSyncing(false);
       setActiveAction(null);
+    }
+  };
+
+  // 4. Direct Progress Transfer (Zero-cloud 100% reliable device-to-device sync)
+  const generateTransferCode = () => {
+    const payload = {
+      v: 2,
+      xp: profile.totalXp,
+      streak: profile.streakDays,
+      lessons: profile.completedLessonIds,
+      sessions: profile.completedSessionIds,
+      name: profile.name,
+      grade: profile.currentGrade,
+      supportLanguage: profile.supportLanguage,
+      soundEnabled: profile.soundEnabled,
+      voiceSpeed: profile.voiceSpeed,
+      lastStudyDate: profile.lastStudyDate,
+      ts: Date.now(),
+    };
+    const json = JSON.stringify(payload);
+    return `CHISPA-${btoa(unescape(encodeURIComponent(json)))}`;
+  };
+
+  const handleCopyCode = async () => {
+    const code = generateTransferCode();
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopiedType('code');
+      setTimeout(() => setCopiedType(null), 3000);
+      setFeedbackMsg({
+        text: isEs 
+          ? `✓ ¡Código de progreso copiado (${profile.totalXp} XP)! Pégalo en tu otro dispositivo.` 
+          : `✓ Framstegskod kopierad (${profile.totalXp} XP)! Klistra in på din andra enhet.`,
+        type: 'success',
+      });
+    } catch {
+      window.prompt(
+        isEs ? 'Copia este código de progreso y pégalo en tu otro dispositivo:' : 'Kopiera denna kod:',
+        code
+      );
+    }
+  };
+
+  const handleCopyDirectLink = async () => {
+    const code = generateTransferCode();
+    const origin = typeof window !== 'undefined' ? window.location.origin : '';
+    const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+    const shareUrl = `${origin}${pathname}?import=${encodeURIComponent(code)}`;
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopiedType('link');
+      setTimeout(() => setCopiedType(null), 3000);
+      setFeedbackMsg({
+        text: isEs 
+          ? `✓ ¡Enlace directo copiado! Ábrelo en tu móvil para sincronizar los ${profile.totalXp} XP al instante.` 
+          : `✓ Direktlänk kopierad! Öppna på mobilen för att synka direkt.`,
+        type: 'success',
+      });
+    } catch {
+      window.prompt(
+        isEs ? 'Copia este enlace y ábrelo en tu móvil:' : 'Kopiera denna länk:',
+        shareUrl
+      );
+    }
+  };
+
+  const handleApplyTransferCode = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    const cleanCode = transferInput.trim().replace(/^CHISPA-/, '');
+    if (!cleanCode) return;
+    try {
+      const decodedJson = decodeURIComponent(escape(atob(cleanCode)));
+      const parsed = JSON.parse(decodedJson);
+      if (typeof parsed.xp !== 'number') {
+        throw new Error('Código no válido');
+      }
+      const newXp = Math.max(profile.totalXp, parsed.xp);
+      onUpdateProfile({
+        totalXp: newXp,
+        streakDays: Math.max(profile.streakDays, parsed.streak || 0),
+        completedLessonIds: Array.from(new Set([...profile.completedLessonIds, ...(parsed.lessons || [])])),
+        completedSessionIds: Array.from(new Set([...profile.completedSessionIds, ...(parsed.sessions || [])])),
+        name: parsed.name || profile.name,
+        currentGrade: parsed.grade || profile.currentGrade,
+        lastStudyDate: parsed.lastStudyDate || profile.lastStudyDate,
+      });
+      setTransferInput('');
+      setShowTransferSection(false);
+      setFeedbackMsg({
+        text: isEs 
+          ? `✓ ¡Progreso importado con éxito! Este dispositivo tiene ahora ${newXp} XP.` 
+          : `✓ Klart! Enheten har nu ${newXp} XP.`,
+        type: 'success',
+      });
+    } catch {
+      setFeedbackMsg({
+        text: isEs 
+          ? 'El código introducido no es válido o está incompleto.' 
+          : 'Koden är inte giltig.',
+        type: 'error',
+      });
     }
   };
 
@@ -539,6 +651,114 @@ export const AccountModal: React.FC<AccountModalProps> = ({
               </div>
             </>
           )}
+
+          {/* Direct Device-to-Device Progress Transfer (100% foolproof, works offline / without cloud) */}
+          <div className="pt-2">
+            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/90 shadow-2xs space-y-2.5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0">
+                    <Smartphone className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-slate-800">
+                      {isEs ? 'Transferencia directa PC ⇄ Móvil' : 'Direkt överföring Dator ⇄ Mobil'}
+                    </h4>
+                    <p className="text-[10px] text-slate-700">
+                      {isEs ? '100% inmediata sin depender de la nube' : '100% direkt utan moln'}
+                    </p>
+                  </div>
+                </div>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                  {profile.totalXp} XP
+                </span>
+              </div>
+
+              {/* Action buttons to copy code or direct link */}
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={handleCopyCode}
+                  className="py-2 px-2.5 rounded-xl border border-indigo-200 bg-white hover:bg-indigo-50 text-indigo-700 font-bold text-[11px] flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-2xs"
+                  title="Copia el código de tus 15 XP para pegarlo en tu móvil"
+                >
+                  {copiedType === 'code' ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                      <span className="text-emerald-700">{isEs ? '¡Copiado!' : 'Kopierad!'}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5 shrink-0" />
+                      <span>{isEs ? 'Copiar código' : 'Kopiera kod'}</span>
+                    </>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleCopyDirectLink}
+                  className="py-2 px-2.5 rounded-xl border border-indigo-200 bg-white hover:bg-indigo-50 text-indigo-700 font-bold text-[11px] flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-2xs"
+                  title="Copia un enlace para abrir directamente en el navegador del móvil"
+                >
+                  {copiedType === 'link' ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                      <span className="text-emerald-700">{isEs ? '¡Enlace copiado!' : 'Länk kopierad!'}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Link className="w-3.5 h-3.5 shrink-0" />
+                      <span>{isEs ? 'Enlace directo' : 'Direktlänk'}</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {/* Collapsible section to paste and apply code from another device */}
+              <div className="pt-1">
+                {!showTransferSection ? (
+                  <button
+                    type="button"
+                    onClick={() => setShowTransferSection(true)}
+                    className="w-full text-center text-[11px] font-bold text-slate-700 hover:text-indigo-600 transition-colors py-1 cursor-pointer flex items-center justify-center gap-1"
+                  >
+                    <span>{isEs ? '📥 Pegar código de otro dispositivo' : '📥 Klistra in kod från annan enhet'}</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </button>
+                ) : (
+                  <form onSubmit={handleApplyTransferCode} className="space-y-2 pt-1 border-t border-slate-200">
+                    <label className="block text-[10px] font-semibold text-slate-700">
+                      {isEs ? 'Pega el código copiado de tu otro dispositivo:' : 'Klistra in koden från din andra enhet:'}
+                    </label>
+                    <div className="flex gap-1.5">
+                      <input
+                        type="text"
+                        value={transferInput}
+                        onChange={(e) => setTransferInput(e.target.value)}
+                        placeholder="CHISPA-..."
+                        className="flex-1 px-2.5 py-1.5 rounded-xl border border-slate-300 text-xs text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono"
+                      />
+                      <button
+                        type="submit"
+                        disabled={!transferInput.trim()}
+                        className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-bold text-xs cursor-pointer shadow-2xs shrink-0"
+                      >
+                        {isEs ? 'Aplicar' : 'Tillämpa'}
+                      </button>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowTransferSection(false)}
+                      className="text-[10px] text-slate-600 hover:underline cursor-pointer block text-center w-full"
+                    >
+                      {isEs ? 'Cancelar' : 'Avbryt'}
+                    </button>
+                  </form>
+                )}
+              </div>
+            </div>
+          </div>
 
           <div className="pt-2">
             <button

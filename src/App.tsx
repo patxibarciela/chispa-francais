@@ -58,6 +58,41 @@ function ChispaFrançaisApp() {
     }
   }, [user]);
 
+  // Handle direct transfer link import on initial mount (e.g. ?import=CHISPA-...)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const rawCode = urlParams.get('import') || urlParams.get('transfer') || urlParams.get('code');
+      if (rawCode) {
+        const cleanCode = rawCode.trim().replace(/^CHISPA-/, '');
+        const decoded = decodeURIComponent(escape(atob(cleanCode)));
+        const parsed = JSON.parse(decoded);
+        if (typeof parsed.xp === 'number') {
+          const current = loadUserProfile();
+          const merged: UserProfile = {
+            ...current,
+            totalXp: Math.max(current.totalXp, parsed.xp),
+            streakDays: Math.max(current.streakDays, parsed.streak || 0),
+            completedLessonIds: Array.from(new Set([...current.completedLessonIds, ...(parsed.lessons || [])])),
+            completedSessionIds: Array.from(new Set([...current.completedSessionIds, ...(parsed.sessions || [])])),
+            name: parsed.name || current.name,
+            currentGrade: parsed.grade || current.currentGrade,
+            lastStudyDate: parsed.lastStudyDate || current.lastStudyDate,
+          };
+          saveUserProfile(merged);
+          setProfile(merged);
+          setHasSelectedSession(true);
+          // Clean URL so refresh does not re-trigger
+          const newUrl = window.location.pathname;
+          window.history.replaceState({}, document.title, newUrl);
+        }
+      }
+    } catch (e) {
+      console.warn('URL transfer import skipped:', e);
+    }
+  }, []);
+
   // Real-time synchronization with Firestore across all devices (Chromebook, mobile, desktop)
   useEffect(() => {
     if (!user) return;
@@ -390,7 +425,7 @@ function ChispaFrançaisApp() {
       setProfile(merged);
 
       // ALWAYS write the merged union back to Firestore so cloud and client match perfectly!
-      await saveCloudData(merged, finalCards);
+      await saveCloudData(merged, finalCards, { throwOnError: true });
 
       return {
         success: true,

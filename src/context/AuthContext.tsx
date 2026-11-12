@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { 
   User, 
   signInWithPopup, 
@@ -7,14 +7,13 @@ import {
 } from 'firebase/auth';
 import { 
   doc, 
-  getDoc, 
+  getDocFromServer,
   setDoc, 
   collection, 
   getDocs, 
-  writeBatch,
-  enableNetwork 
+  writeBatch
 } from 'firebase/firestore';
-import { auth, db, googleProvider, handleFirestoreError, OperationType } from '../firebase';
+import { auth, db, firebaseConfig, googleProvider, handleFirestoreError, OperationType } from '../firebase';
 import { UserProfile, Flashcard } from '../types';
 import { INITIAL_VOCABULARY } from '../data/vocabulary';
 
@@ -78,6 +77,150 @@ export function withTimeout<T>(
   });
 }
 
+/**
+ * Firestore REST API v1 value encoders/decoders.
+ * Used as an ultra-fast stateless HTTPS fallback if the Firestore SDK stream stalls
+ * behind restrictive mobile carriers, proxies, or Safari ITP.
+ */
+function toFirestoreRestValue(val: any): Record<string, any> {
+  if (val === null || val === undefined) return { nullValue: null };
+  if (typeof val === 'boolean') return { booleanValue: val };
+  if (typeof val === 'number') {
+    return Number.isInteger(val) ? { integerValue: String(val) } : { doubleValue: val };
+  }
+  if (typeof val === 'string') return { stringValue: val };
+  if (Array.isArray(val)) {
+    return { arrayValue: { values: val.map(toFirestoreRestValue) } };
+  }
+  if (typeof val === 'object') {
+    const fields: Record<string, any> = {};
+    for (const [k, v] of Object.entries(val)) {
+      if (v !== undefined) {
+        fields[k] = toFirestoreRestValue(v);
+      }
+    }
+    return { mapValue: { fields } };
+  }
+  return { stringValue: String(val) };
+}
+
+function fromFirestoreRestValue(val: any): any {
+  if (!val || typeof val !== 'object') return undefined;
+  if ('nullValue' in val) return null;
+  if ('booleanValue' in val) return val.booleanValue;
+  if ('integerValue' in val) return Number(val.integerValue);
+  if ('doubleValue' in val) return Number(val.doubleValue);
+  if ('stringValue' in val) return val.stringValue;
+  if ('timestampValue' in val) return val.timestampValue;
+  if ('arrayValue' in val) {
+    const vals = val.arrayValue?.values;
+    return Array.isArray(vals) ? vals.map(fromFirestoreRestValue) : [];
+  }
+  if ('mapValue' in val) {
+    const fields = val.mapValue?.fields || {};
+    const out: Record<string, any> = {};
+    for (const [k, v] of Object.entries(fields)) {
+      out[k] = fromFirestoreRestValue(v);
+    }
+    return out;
+  }
+  return undefined;
+}
+
+function parseRawDocToProfile(raw: Record<string, any>): Partial<UserProfile> {
+  const rawXp = typeof raw.xp === 'number' ? raw.xp : (typeof raw.totalXp === 'number' ? raw.totalXp : 0);
+  const rawStreak = typeof raw.streak === 'number' ? raw.streak : (typeof raw.streakDays === 'number' ? raw.streakDays : 0);
+  const rawLessons = Array.isArray(raw.completedLessons)
+    ? raw.completedLessons
+    : (Array.isArray(raw.completedLessonIds) ? raw.completedLessonIds : []);
+  const rawSessions = Array.isArray(raw.completedSessions)
+    ? raw.completedSessions
+    : (Array.isArray(raw.completedSessionIds) ? raw.completedSessionIds : []);
+
+  return {
+    name: raw.displayName || raw.name || 'Élève',
+    totalXp: rawXp,
+    streakDays: rawStreak,
+    lastStudyDate: raw.lastActivityDate || raw.lastStudyDate || '',
+    completedLessonIds: rawLessons,
+    completedSessionIds: rawSessions,
+    currentGrade: raw.currentGrade || 'ak6',
+    chatMemory: raw.chatMemory || undefined,
+    supportLanguage: raw.supportLanguage === 'sv' ? 'sv' : 'es',
+    frenchImmersionLevel: raw.frenchImmersionLevel || 'balanced',
+    soundEnabled: typeof raw.soundEnabled === 'boolean' ? raw.soundEnabled : true,
+    voiceSpeed: typeof raw.voiceSpeed === 'number' ? raw.voiceSpeed : 0.9,
+  };
+}
+
+async function restGetUserDoc(uid: string): Promise<{ exists: boolean; data: Record<string, any> | null }> {
+  const currentUser = auth.currentUser;
+  if (!currentUser) throw new Error('Usuario no autenticado');
+  const idToken = await currentUser.getIdToken();
+  const dbId = firebaseConfig.firestoreDatabaseId || '(default)';
+  const url = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/${encodeURIComponent(dbId)}/documents/users/${encodeURIComponent(uid)}`;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 8000);
+  try {
+    const res = await fetch(url, {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${idToken}` },
+      signal: controller.signal,
+    });
+    if (res.status === 404) {
+      return { exists: false, data: null };
+    }
+    if (!res.ok) {
+      const errBody = await res.json().catch(() => ({}));
+      throw new Error(errBody?.error?.message || `HTTP ${res.status}`);
+    }
+    const json = await res.json();
+    const fields = json?.fields || {};
+    const out: Record<string, any> = {};
+    for (const [k, v] of Object.entries(fields)) {
+      out[k] = fromFirestoreRestValue(v);
+    }
+    return { exists: true, data: out };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function restPatchUserDoc(uid: string, payload: Record<string, any>): Promise<void> {
+  const currentUser = auth.currentUser;
+  if (!currentUser) throw new Error('Usuario no autenticado');
+  const idToken = await currentUser.getIdToken();
+  const dbId = firebaseConfig.firestoreDatabaseId || '(default)';
+  const keys = Object.keys(payload);
+  const maskParams = keys.map((k) => `updateMask.fieldPaths=${encodeURIComponent(k)}`).join('&');
+  const url = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/${encodeURIComponent(dbId)}/documents/users/${encodeURIComponent(uid)}?${maskParams}`;
+  const fields: Record<string, any> = {};
+  for (const [k, v] of Object.entries(payload)) {
+    if (v !== undefined) {
+      fields[k] = toFirestoreRestValue(v);
+    }
+  }
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 8000);
+  try {
+    const res = await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${idToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ fields }),
+      signal: controller.signal,
+    });
+    if (!res.ok) {
+      const errBody = await res.json().catch(() => ({}));
+      throw new Error(errBody?.error?.message || `HTTP ${res.status}`);
+    }
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 interface AuthContextType {
   user: User | null;
   loading: boolean;
@@ -86,7 +229,7 @@ interface AuthContextType {
   lastCloudError: string | null;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
-  saveCloudData: (profile: UserProfile, cards?: Flashcard[]) => Promise<void>;
+  saveCloudData: (profile: UserProfile, cards?: Flashcard[], options?: { throwOnError?: boolean }) => Promise<void>;
   loadCloudData: (uid: string) => Promise<CloudDataResult>;
   forcePushToCloud: (profile: UserProfile, cards?: Flashcard[]) => Promise<{ success: boolean; xpSaved: number; error?: string }>;
   forcePullFromCloud: () => Promise<{ success: boolean; profile?: Partial<UserProfile>; error?: string }>;
@@ -144,12 +287,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     let errorMessage: string | undefined = undefined;
     let rawDoc: Record<string, any> | null = null;
 
-    // 1. Fetch user profile from Firestore
+    // 1. Fetch user profile from Firestore server (with stateless REST fallback)
     try {
       const userRef = doc(db, 'users', uid);
       const userSnap = await withTimeout(
-        getDoc(userRef),
-        15000,
+        getDocFromServer(userRef),
+        5000,
         'Tiempo de espera agotado al consultar Firestore'
       );
 
@@ -158,46 +301,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       rawDoc = raw || null;
 
       if (docExists && raw) {
-        const rawXp = typeof raw.xp === 'number' ? raw.xp : (typeof raw.totalXp === 'number' ? raw.totalXp : 0);
-        const rawStreak = typeof raw.streak === 'number' ? raw.streak : (typeof raw.streakDays === 'number' ? raw.streakDays : 0);
-        const rawLessons = Array.isArray(raw.completedLessons)
-          ? raw.completedLessons
-          : (Array.isArray(raw.completedLessonIds) ? raw.completedLessonIds : []);
-        const rawSessions = Array.isArray(raw.completedSessions)
-          ? raw.completedSessions
-          : (Array.isArray(raw.completedSessionIds) ? raw.completedSessionIds : []);
-
-        profileData = {
-          name: raw.displayName || raw.name || 'Élève',
-          totalXp: rawXp,
-          streakDays: rawStreak,
-          lastStudyDate: raw.lastActivityDate || raw.lastStudyDate || '',
-          completedLessonIds: rawLessons,
-          completedSessionIds: rawSessions,
-          currentGrade: raw.currentGrade || 'ak6',
-          chatMemory: raw.chatMemory || undefined,
-          supportLanguage: raw.supportLanguage === 'sv' ? 'sv' : 'es',
-          frenchImmersionLevel: raw.frenchImmersionLevel || 'balanced',
-          soundEnabled: typeof raw.soundEnabled === 'boolean' ? raw.soundEnabled : true,
-          voiceSpeed: typeof raw.voiceSpeed === 'number' ? raw.voiceSpeed : 0.9,
-        };
+        profileData = parseRawDocToProfile(raw);
       }
-    } catch (error: any) {
-      const errText = error instanceof Error ? error.message : String(error);
-      if (errText.includes('offline') || errText.includes('client is offline')) {
-        // In Firebase Firestore SDK, when a document does not exist yet on the server
-        // and is not in local cache, getDoc rejects with "Failed to get document because the client is offline."
-        // This indicates that the document does not exist yet in Firestore (docExists = false), NOT a network failure.
-        docExists = false;
-        profileData = null;
+    } catch (sdkError: any) {
+      const sdkMsg = sdkError instanceof Error ? sdkError.message : String(sdkError);
+      console.warn('Firestore SDK getDocFromServer failed, trying direct REST fallback:', sdkMsg);
+      try {
+        const restResult = await restGetUserDoc(uid);
+        docExists = restResult.exists;
+        rawDoc = restResult.data;
+        if (restResult.exists && restResult.data) {
+          profileData = parseRawDocToProfile(restResult.data);
+        }
         profileError = false;
         errorMessage = undefined;
-        setLastCloudError(null);
-      } else {
-        console.warn('Could not fetch user profile from Firestore:', error);
+      } catch (restErr: any) {
+        const errText = restErr instanceof Error ? restErr.message : String(restErr);
+        console.warn('Could not fetch user profile from Firestore (SDK & REST):', errText);
         errorMessage = errText;
         setLastCloudError(errText);
-        handleFirestoreError(error, OperationType.GET, userDocPath);
+        handleFirestoreError(sdkError, OperationType.GET, userDocPath);
         profileError = true;
       }
     }
@@ -263,7 +386,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
   }, []);
 
-  const saveCloudData = useCallback(async (profile: UserProfile, cards?: Flashcard[]) => {
+  const saveCloudData = useCallback(async (profile: UserProfile, cards?: Flashcard[], options?: { throwOnError?: boolean }) => {
     if (!auth.currentUser) return;
     const uid = auth.currentUser.uid;
     const userDocPath = `users/${uid}`;
@@ -299,12 +422,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       const sanitizedPayload = sanitizeForFirestore(rawPayload);
 
-      // Fast foreground write: user document with timeout
-      await withTimeout(
-        setDoc(userRef, sanitizedPayload, { merge: true }),
-        15000,
-        'Tiempo de espera agotado al guardar en Firestore'
-      );
+      // Fast foreground write: user document with SDK, falling back to stateless REST if SDK stalls
+      try {
+        await withTimeout(
+          setDoc(userRef, sanitizedPayload, { merge: true }),
+          5000,
+          'Tiempo de espera agotado al guardar en Firestore'
+        );
+      } catch (sdkWriteErr: any) {
+        console.warn('Firestore SDK setDoc stalled/failed, retrying via direct REST API:', sdkWriteErr?.message);
+        await restPatchUserDoc(uid, sanitizedPayload);
+      }
 
       // Save flashcards subcollection asynchronously in background so it NEVER blocks UI or sync completion
       if (cards && cards.length > 0) {
@@ -345,6 +473,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setLastCloudError(msg);
       setSyncStatus('offline');
       handleFirestoreError(error, OperationType.WRITE, userDocPath);
+      if (options?.throwOnError) {
+        throw error;
+      }
     }
   }, []);
 
@@ -381,11 +512,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       };
 
       const sanitizedPayload = sanitizeForFirestore(rawPayload);
-      await withTimeout(
-        setDoc(userRef, sanitizedPayload, { merge: true }),
-        15000,
-        'Tiempo de espera agotado al subir a la nube'
-      );
+      try {
+        await withTimeout(
+          setDoc(userRef, sanitizedPayload, { merge: true }),
+          5000,
+          'Tiempo de espera agotado al subir a la nube'
+        );
+      } catch (sdkPushErr: any) {
+        console.warn('Firestore SDK forcePush failed/stalled, retrying via REST API:', sdkPushErr?.message);
+        await restPatchUserDoc(uid, sanitizedPayload);
+      }
 
       // Save flashcards subcollection asynchronously in background
       if (cards && cards.length > 0) {
@@ -436,42 +572,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const uid = auth.currentUser.uid;
     setSyncStatus('saving');
     try {
-      const userRef = doc(db, 'users', uid);
-      const userSnap = await withTimeout(
-        getDoc(userRef),
-        15000,
-        'Tiempo de espera agotado al descargar de la nube'
-      );
+      let docExists = false;
+      let raw: Record<string, any> | null = null;
 
-      if (!userSnap.exists()) {
+      try {
+        const userRef = doc(db, 'users', uid);
+        const userSnap = await withTimeout(
+          getDocFromServer(userRef),
+          5000,
+          'Tiempo de espera agotado al descargar de la nube'
+        );
+        docExists = userSnap.exists();
+        raw = userSnap.data() || null;
+      } catch (sdkPullErr: any) {
+        console.warn('Firestore SDK forcePull failed/stalled, retrying via REST API:', sdkPullErr?.message);
+        const restResult = await restGetUserDoc(uid);
+        docExists = restResult.exists;
+        raw = restResult.data;
+      }
+
+      if (!docExists || !raw) {
+        setLastSyncedAt(new Date());
         setSyncStatus('synced');
+        setLastCloudError(null);
         return { success: true, profile: undefined };
       }
 
-      const raw = userSnap.data();
-      const rawXp = typeof raw.xp === 'number' ? raw.xp : (typeof raw.totalXp === 'number' ? raw.totalXp : 0);
-      const rawStreak = typeof raw.streak === 'number' ? raw.streak : (typeof raw.streakDays === 'number' ? raw.streakDays : 0);
-      const rawLessons = Array.isArray(raw.completedLessons)
-        ? raw.completedLessons
-        : (Array.isArray(raw.completedLessonIds) ? raw.completedLessonIds : []);
-      const rawSessions = Array.isArray(raw.completedSessions)
-        ? raw.completedSessions
-        : (Array.isArray(raw.completedSessionIds) ? raw.completedSessionIds : []);
-
-      const profileData: Partial<UserProfile> = {
-        name: raw.displayName || raw.name || 'Élève',
-        totalXp: rawXp,
-        streakDays: rawStreak,
-        lastStudyDate: raw.lastActivityDate || raw.lastStudyDate || '',
-        completedLessonIds: rawLessons,
-        completedSessionIds: rawSessions,
-        currentGrade: raw.currentGrade || 'ak6',
-        chatMemory: raw.chatMemory || undefined,
-        supportLanguage: raw.supportLanguage === 'sv' ? 'sv' : 'es',
-        frenchImmersionLevel: raw.frenchImmersionLevel || 'balanced',
-        soundEnabled: typeof raw.soundEnabled === 'boolean' ? raw.soundEnabled : true,
-        voiceSpeed: typeof raw.voiceSpeed === 'number' ? raw.voiceSpeed : 0.9,
-      };
+      const profileData = parseRawDocToProfile(raw);
 
       setLastSyncedAt(new Date());
       setSyncStatus('synced');
@@ -479,13 +606,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return { success: true, profile: profileData };
     } catch (error: any) {
       const msg = error?.message || String(error);
-      if (msg.includes('offline') || msg.includes('client is offline')) {
-        // Document does not exist yet on server
-        setLastSyncedAt(new Date());
-        setSyncStatus('synced');
-        setLastCloudError(null);
-        return { success: true, profile: undefined };
-      }
       setLastCloudError(msg);
       setSyncStatus('error');
       return { success: false, error: msg };

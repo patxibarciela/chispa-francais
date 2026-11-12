@@ -5,7 +5,7 @@ import { initializeFirestore, getFirestore, doc, getDocFromServer } from 'fireba
 import appletConfig from '../firebase-applet-config.json';
 
 // Configuración de Firebase utilizando variables de entorno de Vite con fallbacks basados en firebase-applet-config.json
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY || appletConfig.apiKey,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || appletConfig.authDomain,
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || appletConfig.projectId,
@@ -18,14 +18,29 @@ const firebaseConfig = {
 // Initialize Firebase App
 export const app = initializeApp(firebaseConfig);
 
-// Initialize Firestore with named database ID and long-polling support to prevent mobile/proxy stream stalls
+// Initialize Firestore with named database ID and forced HTTP long-polling
+// This completely bypasses WebChannel streaming to eliminate proxy and carrier stalls
 export const db = initializeFirestore(
   app,
   {
-    experimentalAutoDetectLongPolling: true,
+    experimentalForceLongPolling: true,
   },
   firebaseConfig.firestoreDatabaseId
 );
+
+// Validate connection to Firestore on boot
+async function testConnection() {
+  try {
+    await getDocFromServer(doc(db, 'test', 'connection'));
+  } catch (error) {
+    if (error instanceof Error && error.message.includes('the client is offline')) {
+      console.warn('Firestore connection check: client is offline or blocked; REST fallback available.');
+    }
+  }
+}
+if (typeof window !== 'undefined') {
+  void testConnection();
+}
 
 // Initialize Auth
 export const auth = getAuth(app);
