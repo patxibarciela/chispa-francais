@@ -6,6 +6,7 @@ import { Header } from './components/Header';
 import { LoginLandingView } from './components/LoginLandingView';
 import { WelcomeBanner } from './components/WelcomeBanner';
 import { Sidebar } from './components/Sidebar';
+import { MobileBottomNav } from './components/MobileBottomNav';
 import { CurriculumRoadmap } from './components/CurriculumRoadmap';
 import { DailySessionView } from './components/DailySessionView';
 import { LessonModal } from './components/LessonModal';
@@ -524,7 +525,7 @@ function ChispaFrançaisApp() {
         )}
 
         {/* Main Content Area */}
-        <main className="flex-1 pb-16 min-w-0">
+        <main className="flex-1 pb-24 md:pb-16 min-w-0">
           {activeSessionUnit ? (
             // Active 30-minute structured session directly within the curriculum flow
             <DailySessionView
@@ -586,7 +587,7 @@ function ChispaFrançaisApp() {
       )}
 
       {/* Clean quiet footer */}
-      <footer className="border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-500">
+      <footer className="border-t border-slate-200 bg-white pt-6 pb-24 md:py-6 text-center text-xs text-slate-500">
         <div className="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <span>Chispa Français · Moderna språk Franska Åk 6</span>
           <div className="flex items-center gap-4 text-slate-400">
@@ -598,6 +599,16 @@ function ChispaFrançaisApp() {
           </div>
         </div>
       </footer>
+
+      {/* Fixed Mobile Bottom Navigation Bar */}
+      <MobileBottomNav
+        activeTab={activeTab}
+        setActiveTab={(tab) => {
+          setActiveSessionUnit(null);
+          setActiveTab(tab);
+        }}
+        supportLanguage={profile.supportLanguage}
+      />
     </div>
   );
 }
