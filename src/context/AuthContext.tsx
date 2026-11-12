@@ -59,7 +59,7 @@ export function sanitizeForFirestore<T>(data: T): T {
  */
 export function withTimeout<T>(
   promise: Promise<T>,
-  ms: number = 6000,
+  ms: number = 15000,
   fallbackMsg: string = 'Tiempo de espera agotado al conectar con el servidor'
 ): Promise<T> {
   return new Promise((resolve, reject) => {
@@ -146,11 +146,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // 1. Fetch user profile from Firestore
     try {
-      enableNetwork(db).catch(() => {});
       const userRef = doc(db, 'users', uid);
       const userSnap = await withTimeout(
         getDoc(userRef),
-        6000,
+        15000,
         'Tiempo de espera agotado al consultar Firestore'
       );
 
@@ -271,7 +270,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     setSyncStatus('saving');
     try {
-      enableNetwork(db).catch(() => {});
       const userRef = doc(db, 'users', uid);
 
       // Clean raw payload and explicitly strip any undefined values using sanitizeForFirestore
@@ -304,7 +302,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Fast foreground write: user document with timeout
       await withTimeout(
         setDoc(userRef, sanitizedPayload, { merge: true }),
-        6000,
+        15000,
         'Tiempo de espera agotado al guardar en Firestore'
       );
 
@@ -357,7 +355,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const uid = auth.currentUser.uid;
     setSyncStatus('saving');
     try {
-      enableNetwork(db).catch(() => {});
       const userRef = doc(db, 'users', uid);
       const rawPayload = {
         uid,
@@ -386,7 +383,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const sanitizedPayload = sanitizeForFirestore(rawPayload);
       await withTimeout(
         setDoc(userRef, sanitizedPayload, { merge: true }),
-        6000,
+        15000,
         'Tiempo de espera agotado al subir a la nube'
       );
 
@@ -439,11 +436,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const uid = auth.currentUser.uid;
     setSyncStatus('saving');
     try {
-      enableNetwork(db).catch(() => {});
       const userRef = doc(db, 'users', uid);
       const userSnap = await withTimeout(
         getDoc(userRef),
-        6000,
+        15000,
         'Tiempo de espera agotado al descargar de la nube'
       );
 

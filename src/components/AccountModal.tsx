@@ -141,7 +141,7 @@ export const AccountModal: React.FC<AccountModalProps> = ({
     try {
       const res = await withTimeout(
         onManualSync(),
-        7000,
+        16000,
         isEs ? 'El servidor tardó demasiado en responder' : 'Servern svarade inte i tid'
       );
       const finalXp = res?.xp ?? profile.totalXp;
@@ -179,7 +179,7 @@ export const AccountModal: React.FC<AccountModalProps> = ({
     try {
       const res = await withTimeout(
         onForcePush(),
-        7000,
+        16000,
         isEs ? 'El servidor tardó demasiado en responder' : 'Servern svarade inte i tid'
       );
       if (res?.success) {
@@ -218,7 +218,7 @@ export const AccountModal: React.FC<AccountModalProps> = ({
     try {
       const res = await withTimeout(
         onForcePull(),
-        7000,
+        16000,
         isEs ? 'El servidor tardó demasiado en responder' : 'Servern svarade inte i tid'
       );
       if (res?.success) {
