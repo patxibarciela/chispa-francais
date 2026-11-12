@@ -1,27 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { 
-  X, 
-  LogOut, 
-  User, 
-  CheckCircle2, 
-  Edit2, 
-  Check, 
-  Cloud, 
-  HardDrive, 
+import {
+  X,
+  LogOut,
+  User,
+  CheckCircle2,
+  Edit2,
+  Check,
+  Cloud,
+  HardDrive,
   ShieldCheck,
   RotateCcw,
   RefreshCw,
-  UploadCloud,
-  DownloadCloud,
   AlertCircle,
-  HelpCircle,
-  Copy,
-  KeyRound,
-  ArrowRight,
-  Share2,
-  Link,
-  Smartphone
 } from 'lucide-react';
 import { UserProfile } from '../types';
 import { useAuth, withTimeout } from '../context/AuthContext';
@@ -46,14 +37,12 @@ export const AccountModal: React.FC<AccountModalProps> = ({
   onLogout,
   onResetProgress,
   onManualSync,
-  onForcePush,
-  onForcePull,
 }) => {
   const { user, signOut, loadCloudData, lastCloudError } = useAuth();
   const [isEditingName, setIsEditingName] = useState(false);
   const [editedName, setEditedName] = useState(profile.name);
-  
-  // Cloud Inspection state
+
+  // Cloud status state
   const [cloudProfile, setCloudProfile] = useState<{
     exists: boolean;
     xp: number;
@@ -62,18 +51,12 @@ export const AccountModal: React.FC<AccountModalProps> = ({
   } | null>(null);
   const [isQueryingCloud, setIsQueryingCloud] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
-  const [activeAction, setActiveAction] = useState<'sync' | 'push' | 'pull' | null>(null);
-  const [feedbackMsg, setFeedbackMsg] = useState<{ text: string; type: 'success' | 'error' | 'info' } | null>(null);
-
-  // Direct Progress Transfer state (zero-cloud offline-safe sync)
-  const [showTransferSection, setShowTransferSection] = useState(false);
-  const [transferInput, setTransferInput] = useState('');
-  const [copiedType, setCopiedType] = useState<'code' | 'link' | null>(null);
+  const [feedbackMsg, setFeedbackMsg] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
 
   const isEs = profile.supportLanguage === 'es';
   const isGoogle = !!user;
 
-  // Query Firestore whenever the modal opens for live inspection
+  // Query Firestore whenever the modal opens for live status
   useEffect(() => {
     if (!isOpen || !user) return;
 
@@ -114,7 +97,7 @@ export const AccountModal: React.FC<AccountModalProps> = ({
     return () => {
       cancelled = true;
     };
-  }, [isOpen, user, loadCloudData]);
+  }, [isOpen, user, loadCloudData, profile.totalXp]);
 
   // Close on Escape key press
   useEffect(() => {
@@ -126,7 +109,7 @@ export const AccountModal: React.FC<AccountModalProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-  // Keep editedName in sync with profile.name when opening
+  // Reset modal editing state on open
   useEffect(() => {
     if (isOpen) {
       setEditedName(profile.name);
@@ -147,11 +130,10 @@ export const AccountModal: React.FC<AccountModalProps> = ({
     setIsEditingName(false);
   };
 
-  // 1. Bi-directional Intelligent Sync (Union & Save to both)
+  // Single intelligent bidirectional sync (merges highest progress & saves to both)
   const handleFullSync = async () => {
     if (!onManualSync || isSyncing) return;
     setIsSyncing(true);
-    setActiveAction('sync');
     setFeedbackMsg(null);
     try {
       const res = await withTimeout(
@@ -167,195 +149,20 @@ export const AccountModal: React.FC<AccountModalProps> = ({
         lessons: res?.lessons ?? profile.completedLessonIds.length,
       });
       setFeedbackMsg({
-        text: isEs 
-          ? `✓ Sincronizado con éxito: ${finalXp} XP guardados en la nube y en este dispositivo.` 
-          : `✓ Synkat: ${finalXp} XP sparade i molnet och på denna enhet.`,
+        text: isEs
+          ? `Sincronizado (${finalXp} XP guardados en la nube y en este dispositivo).`
+          : `Synkad (${finalXp} XP sparade i molnet och på enheten).`,
         type: 'success',
       });
     } catch (err: any) {
       setFeedbackMsg({
-        text: isEs 
-          ? `Error al sincronizar: ${err?.message || 'Fallo de conexión'}` 
+        text: isEs
+          ? `Error al sincronizar: ${err?.message || 'Fallo de conexión'}`
           : `Kunde inte synka: ${err?.message || 'Anslutningsfel'}`,
         type: 'error',
       });
     } finally {
       setIsSyncing(false);
-      setActiveAction(null);
-    }
-  };
-
-  // 2. Force Push Local Device to Cloud
-  const handlePushToCloud = async () => {
-    if (!onForcePush || isSyncing) return;
-    setIsSyncing(true);
-    setActiveAction('push');
-    setFeedbackMsg(null);
-    try {
-      const res = await withTimeout(
-        onForcePush(),
-        20000,
-        isEs ? 'El servidor tardó demasiado en responder' : 'Servern svarade inte i tid'
-      );
-      if (res?.success) {
-        setCloudProfile({
-          exists: true,
-          xp: profile.totalXp,
-          streak: profile.streakDays,
-          lessons: profile.completedLessonIds.length,
-        });
-        setFeedbackMsg({
-          text: isEs 
-            ? `✓ ¡Progreso subido a la nube! (${profile.totalXp} XP guardados en Firestore)` 
-            : `✓ Uppladdat till molnet! (${profile.totalXp} XP i Firestore)`,
-          type: 'success',
-        });
-      } else {
-        throw new Error(res?.error || 'No se pudo guardar');
-      }
-    } catch (err: any) {
-      setFeedbackMsg({
-        text: isEs ? `Error al subir a la nube: ${err?.message}` : `Kunde inte ladda upp: ${err?.message}`,
-        type: 'error',
-      });
-    } finally {
-      setIsSyncing(false);
-      setActiveAction(null);
-    }
-  };
-
-  // 3. Force Pull from Cloud to This Device
-  const handlePullFromCloud = async () => {
-    if (!onForcePull || isSyncing) return;
-    setIsSyncing(true);
-    setActiveAction('pull');
-    setFeedbackMsg(null);
-    try {
-      const res = await withTimeout(
-        onForcePull(),
-        20000,
-        isEs ? 'El servidor tardó demasiado en responder' : 'Servern svarade inte i tid'
-      );
-      if (res?.success) {
-        const pulledXp = res?.profile?.totalXp ?? (cloudProfile?.xp ?? 0);
-        setFeedbackMsg({
-          text: isEs 
-            ? `✓ ¡Datos descargados de la nube! Este dispositivo tiene ahora ${pulledXp} XP.` 
-            : `✓ Nedladdat från molnet! Denna enhet har nu ${pulledXp} XP.`,
-          type: 'success',
-        });
-      } else {
-        throw new Error(res?.error || 'No se pudo descargar');
-      }
-    } catch (err: any) {
-      setFeedbackMsg({
-        text: isEs ? `Error al descargar de la nube: ${err?.message}` : `Kunde inte ladda ner: ${err?.message}`,
-        type: 'error',
-      });
-    } finally {
-      setIsSyncing(false);
-      setActiveAction(null);
-    }
-  };
-
-  // 4. Direct Progress Transfer (Zero-cloud 100% reliable device-to-device sync)
-  const generateTransferCode = () => {
-    const payload = {
-      v: 2,
-      xp: profile.totalXp,
-      streak: profile.streakDays,
-      lessons: profile.completedLessonIds,
-      sessions: profile.completedSessionIds,
-      name: profile.name,
-      grade: profile.currentGrade,
-      supportLanguage: profile.supportLanguage,
-      soundEnabled: profile.soundEnabled,
-      voiceSpeed: profile.voiceSpeed,
-      lastStudyDate: profile.lastStudyDate,
-      ts: Date.now(),
-    };
-    const json = JSON.stringify(payload);
-    return `CHISPA-${btoa(unescape(encodeURIComponent(json)))}`;
-  };
-
-  const handleCopyCode = async () => {
-    const code = generateTransferCode();
-    try {
-      await navigator.clipboard.writeText(code);
-      setCopiedType('code');
-      setTimeout(() => setCopiedType(null), 3000);
-      setFeedbackMsg({
-        text: isEs 
-          ? `✓ ¡Código de progreso copiado (${profile.totalXp} XP)! Pégalo en tu otro dispositivo.` 
-          : `✓ Framstegskod kopierad (${profile.totalXp} XP)! Klistra in på din andra enhet.`,
-        type: 'success',
-      });
-    } catch {
-      window.prompt(
-        isEs ? 'Copia este código de progreso y pégalo en tu otro dispositivo:' : 'Kopiera denna kod:',
-        code
-      );
-    }
-  };
-
-  const handleCopyDirectLink = async () => {
-    const code = generateTransferCode();
-    const origin = typeof window !== 'undefined' ? window.location.origin : '';
-    const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
-    const shareUrl = `${origin}${pathname}?import=${encodeURIComponent(code)}`;
-    try {
-      await navigator.clipboard.writeText(shareUrl);
-      setCopiedType('link');
-      setTimeout(() => setCopiedType(null), 3000);
-      setFeedbackMsg({
-        text: isEs 
-          ? `✓ ¡Enlace directo copiado! Ábrelo en tu móvil para sincronizar los ${profile.totalXp} XP al instante.` 
-          : `✓ Direktlänk kopierad! Öppna på mobilen för att synka direkt.`,
-        type: 'success',
-      });
-    } catch {
-      window.prompt(
-        isEs ? 'Copia este enlace y ábrelo en tu móvil:' : 'Kopiera denna länk:',
-        shareUrl
-      );
-    }
-  };
-
-  const handleApplyTransferCode = (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-    const cleanCode = transferInput.trim().replace(/^CHISPA-/, '');
-    if (!cleanCode) return;
-    try {
-      const decodedJson = decodeURIComponent(escape(atob(cleanCode)));
-      const parsed = JSON.parse(decodedJson);
-      if (typeof parsed.xp !== 'number') {
-        throw new Error('Código no válido');
-      }
-      const newXp = Math.max(profile.totalXp, parsed.xp);
-      onUpdateProfile({
-        totalXp: newXp,
-        streakDays: Math.max(profile.streakDays, parsed.streak || 0),
-        completedLessonIds: Array.from(new Set([...profile.completedLessonIds, ...(parsed.lessons || [])])),
-        completedSessionIds: Array.from(new Set([...profile.completedSessionIds, ...(parsed.sessions || [])])),
-        name: parsed.name || profile.name,
-        currentGrade: parsed.grade || profile.currentGrade,
-        lastStudyDate: parsed.lastStudyDate || profile.lastStudyDate,
-      });
-      setTransferInput('');
-      setShowTransferSection(false);
-      setFeedbackMsg({
-        text: isEs 
-          ? `✓ ¡Progreso importado con éxito! Este dispositivo tiene ahora ${newXp} XP.` 
-          : `✓ Klart! Enheten har nu ${newXp} XP.`,
-        type: 'success',
-      });
-    } catch {
-      setFeedbackMsg({
-        text: isEs 
-          ? 'El código introducido no es válido o está incompleto.' 
-          : 'Koden är inte giltig.',
-        type: 'error',
-      });
     }
   };
 
@@ -367,17 +174,17 @@ export const AccountModal: React.FC<AccountModalProps> = ({
     onLogout();
   };
 
+  const isInSync = cloudProfile !== null && cloudProfile.xp === profile.totalXp;
+
   return createPortal(
-    <div 
+    <div
       className="fixed inset-0 z-[9999] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-200"
       style={{ top: 0, left: 0, right: 0, bottom: 0 }}
     >
-      {/* Background click dismiss */}
       <div className="fixed inset-0" onClick={onClose} aria-hidden="true" />
 
-      {/* Modal Card matching Chispa Español */}
-      <div 
-        className="relative bg-white rounded-3xl max-w-lg w-full p-5 sm:p-7 shadow-2xl border border-slate-200 z-10 my-auto animate-in zoom-in-95 duration-150"
+      <div
+        className="relative bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-slate-200 z-10 my-auto animate-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -388,10 +195,10 @@ export const AccountModal: React.FC<AccountModalProps> = ({
             </div>
             <div>
               <h2 className="text-lg font-black text-slate-900 tracking-tight leading-tight">
-                {isEs ? 'Tu Cuenta y Sincronización' : 'Ditt Konto och Synkning'}
+                {isEs ? 'Tu Cuenta' : 'Ditt Konto'}
               </h2>
               <p className="text-xs text-slate-400 mt-0.5 leading-tight">
-                {isEs ? 'Perfil activo, sincronización móvil y ordenador' : 'Aktiv profil, synkning mobil och dator'}
+                {isEs ? 'Perfil y progreso guardado' : 'Profil och sparade framsteg'}
               </p>
             </div>
           </div>
@@ -409,7 +216,6 @@ export const AccountModal: React.FC<AccountModalProps> = ({
         {/* User Card */}
         <div className="my-4 p-4 rounded-2xl bg-purple-50/40 border border-purple-100/80 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3.5 min-w-0">
-            {/* Avatar */}
             {user?.photoURL ? (
               <img
                 src={user.photoURL}
@@ -484,109 +290,47 @@ export const AccountModal: React.FC<AccountModalProps> = ({
           )}
         </div>
 
-        {/* Live Cloud vs Device Inspection Panel */}
+        {/* Compact Progress & Cloud Sync Summary */}
         {isGoogle && (
           <div className="mb-4 p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-2.5">
-            <div className="flex items-center justify-between text-slate-500 font-bold uppercase tracking-wider text-[10px]">
-              <span>{isEs ? 'Estado en tiempo real' : 'Realtidsstatus'}</span>
-              <span className="text-purple-600 lowercase font-medium">Firestore Database</span>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2 text-center">
-              {/* This Device */}
-              <div className="bg-white p-2.5 rounded-xl border border-slate-200/80 shadow-2xs">
-                <span className="text-[10px] font-bold text-slate-400 block uppercase">
-                  {isEs ? 'En este dispositivo' : 'På denna enhet'}
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                  {isEs ? 'Tu progreso' : 'Dina framsteg'}
                 </span>
-                <span className="text-base font-black text-indigo-700 mt-0.5 block">
+                <span className="text-base font-black text-indigo-700">
                   {profile.totalXp} XP
                 </span>
-                <span className="text-[10px] text-slate-500 font-semibold block mt-0.5">
-                  {isEs 
-                    ? `${profile.completedLessonIds.length} lecciones • ${profile.streakDays}d racha` 
-                    : `${profile.completedLessonIds.length} lektioner`}
+                <span className="text-xs text-slate-500 font-semibold ml-2">
+                  • {profile.completedLessonIds.length} {isEs ? 'lecciones' : 'lektioner'} • {profile.streakDays}d {isEs ? 'racha' : 'svit'}
                 </span>
               </div>
 
-              {/* Cloud Firestore */}
-              <div className="bg-white p-2.5 rounded-xl border border-slate-200/80 shadow-2xs">
-                <span className="text-[10px] font-bold text-slate-400 block uppercase">
-                  {isEs ? 'En la nube (Firestore)' : 'I molnet'}
+              {isQueryingCloud ? (
+                <span className="text-[11px] text-slate-400 italic animate-pulse">
+                  {isEs ? 'Comprobando...' : 'Kontrollerar...'}
                 </span>
-                {isQueryingCloud ? (
-                  <span className="text-xs text-slate-400 italic mt-2 block animate-pulse">
-                    {isEs ? 'Consultando...' : 'Laddar...'}
-                  </span>
-                ) : (
-                  <>
-                    <span className="text-base font-black text-emerald-600 mt-0.5 block">
-                      {cloudProfile?.xp ?? 0} XP
-                    </span>
-                    <span className="text-[10px] text-slate-500 font-semibold block mt-0.5">
-                      {cloudProfile?.exists
-                        ? (isEs 
-                            ? `${cloudProfile.lessons} lecciones • ${cloudProfile.streak}d racha` 
-                            : `${cloudProfile.lessons} lektioner`)
-                        : (isEs ? 'Sin datos guardados' : 'Ingen data')}
-                    </span>
-                  </>
-                )}
-              </div>
+              ) : isInSync ? (
+                <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-100/80 px-2.5 py-1 rounded-full">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>{isEs ? 'En la nube' : 'Synkad'}</span>
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-800 bg-amber-100/80 px-2.5 py-1 rounded-full">
+                  <span>{isEs ? `Nube: ${cloudProfile?.xp ?? 0} XP` : `Moln: ${cloudProfile?.xp ?? 0} XP`}</span>
+                </span>
+              )}
             </div>
 
-            {/* Diagnostic helper alert */}
-            {cloudProfile && !isQueryingCloud && (
-              <div className="text-[11px] leading-relaxed pt-1">
-                {profile.totalXp > (cloudProfile.xp || 0) && (
-                  <p className="text-amber-800 bg-amber-50/80 p-2 rounded-xl border border-amber-200/80 flex items-start gap-1.5 font-medium">
-                    <span className="shrink-0 text-base leading-none">💡</span>
-                    <span>
-                      {isEs 
-                        ? `Este dispositivo tiene más puntos (${profile.totalXp} XP) que la nube (${cloudProfile.xp} XP). Pulsa "Subir a la nube" o "Sincronizar ahora" para guardarlos en tu cuenta.`
-                        : `Denna enhet har mer poäng (${profile.totalXp} XP) än molnet (${cloudProfile.xp} XP). Klicka på "Ladda upp till molnet" för att spara.`}
-                    </span>
-                  </p>
-                )}
-                {cloudProfile.xp > profile.totalXp && (
-                  <p className="text-indigo-800 bg-indigo-50/80 p-2 rounded-xl border border-indigo-200/80 flex items-start gap-1.5 font-medium">
-                    <span className="shrink-0 text-base leading-none">📲</span>
-                    <span>
-                      {isEs 
-                        ? `Tu cuenta en la nube tiene ${cloudProfile.xp} XP acumulados. Pulsa "Descargar de la nube" para reflejarlos en este móvil.`
-                        : `Ditt molnkonto har ${cloudProfile.xp} XP. Klicka på "Ladda ner från molnet" för att visa dem här.`}
-                    </span>
-                  </p>
-                )}
-                {cloudProfile.xp === profile.totalXp && cloudProfile.xp > 0 && (
-                  <p className="text-emerald-800 bg-emerald-50/80 p-2 rounded-xl border border-emerald-200/80 flex items-center gap-1.5 font-medium">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                    <span>
-                      {isEs 
-                        ? `✓ Perfectamente sincronizado: ${profile.totalXp} XP coinciden exactamente en la nube y en este dispositivo.` 
-                        : `✓ Fullt synkad: ${profile.totalXp} XP matchar i molnet och på enheten.`}
-                    </span>
-                  </p>
-                )}
-              </div>
-            )}
-
-            {/* Any Firestore error notice (suppressed when already in sync) */}
-            {lastCloudError && (!cloudProfile || cloudProfile.xp !== profile.totalXp) && (
+            {/* Cloud error notice if there is a real active connection issue */}
+            {lastCloudError && !isInSync && (
               <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-[11px] flex items-start gap-2">
                 <AlertCircle className="w-4 h-4 shrink-0 text-amber-600 mt-0.5" />
                 <div className="flex-1">
                   <span className="font-bold block">
-                    {lastCloudError.includes('offline')
-                      ? (isEs ? 'Conectando con la base de datos:' : 'Ansluter till molnet:')
-                      : (isEs ? 'Aviso de conexión con la nube:' : 'Anslutningsvarning:')}
+                    {isEs ? 'Aviso de conexión con la nube:' : 'Anslutningsvarning:'}
                   </span>
-                  <span className="text-[10px] opacity-90 block mt-0.5">
-                    {lastCloudError.includes('offline')
-                      ? (isEs 
-                          ? 'El navegador está estableciendo conexión con Firestore. Pulsa "⬆️ Subir a la nube" o "Sincronizar ahora" para guardar tus 15 XP.' 
-                          : 'Webbläsaren ansluter till Firestore. Klicka på "Ladda upp" för att spara.')
-                      : lastCloudError}
-                  </span>
+                  <span className="text-[10px] opacity-90 block mt-0.5">{lastCloudError}</span>
                 </div>
               </div>
             )}
@@ -595,187 +339,55 @@ export const AccountModal: React.FC<AccountModalProps> = ({
 
         {/* Feedback message banner */}
         {feedbackMsg && (
-          <div className={`mb-4 p-3 rounded-2xl text-xs font-bold transition-all ${
-            feedbackMsg.type === 'success'
-              ? 'bg-emerald-100 text-emerald-900 border border-emerald-200 shadow-2xs'
-              : 'bg-rose-100 text-rose-900 border border-rose-200'
-          }`}>
+          <div
+            className={`mb-4 p-3 rounded-2xl text-xs font-bold transition-all ${
+              feedbackMsg.type === 'success'
+                ? 'bg-emerald-100 text-emerald-900 border border-emerald-200 shadow-2xs'
+                : 'bg-rose-100 text-rose-900 border border-rose-200'
+            }`}
+          >
             {feedbackMsg.text}
           </div>
         )}
 
         {/* Action Buttons */}
-        <div className="space-y-2">
+        <div className="space-y-2.5">
           {isGoogle && (
-            <>
-              {/* 1. Main Bi-directional Intelligent Sync */}
-              <button
-                type="button"
-                onClick={handleFullSync}
-                disabled={isSyncing}
-                className="w-full py-3 px-4 rounded-2xl bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold text-sm flex items-center justify-center gap-2.5 transition-all cursor-pointer shadow-xs disabled:opacity-60"
-              >
-                <RefreshCw className={`w-4 h-4 ${isSyncing && activeAction === 'sync' ? 'animate-spin' : ''}`} />
-                <span>
-                  {isSyncing && activeAction === 'sync'
-                    ? (isEs ? 'Sincronizando con Firestore...' : 'Synkar med Firestore...')
-                    : (isEs ? 'Sincronizar ahora (Nube ⇄ Dispositivo)' : 'Synka nu (Moln ⇄ Enhet)')}
-                </span>
-              </button>
-
-              {/* 2. Side-by-side Push & Pull buttons */}
-              <div className="grid grid-cols-2 gap-2 pt-1">
-                {/* Force Upload Button */}
-                <button
-                  type="button"
-                  onClick={handlePushToCloud}
-                  disabled={isSyncing}
-                  className="py-2.5 px-3 rounded-xl border border-indigo-200 bg-indigo-50 hover:bg-indigo-100 text-indigo-900 font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer disabled:opacity-60"
-                  title="Sube los puntos y lecciones de este dispositivo directamente a la nube"
-                >
-                  <UploadCloud className={`w-3.5 h-3.5 text-indigo-700 ${isSyncing && activeAction === 'push' ? 'animate-bounce' : ''}`} />
-                  <span>{isEs ? '⬆️ Subir a la nube' : '⬆️ Ladda upp'}</span>
-                </button>
-
-                {/* Force Download Button */}
-                <button
-                  type="button"
-                  onClick={handlePullFromCloud}
-                  disabled={isSyncing}
-                  className="py-2.5 px-3 rounded-xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer disabled:opacity-60"
-                  title="Descarga los datos de la cuenta en la nube a este dispositivo"
-                >
-                  <DownloadCloud className={`w-3.5 h-3.5 text-emerald-700 ${isSyncing && activeAction === 'pull' ? 'animate-bounce' : ''}`} />
-                  <span>{isEs ? '⬇️ Descargar de la nube' : '⬇️ Ladda ner'}</span>
-                </button>
-              </div>
-            </>
-          )}
-
-          {/* Direct Device-to-Device Progress Transfer (100% foolproof, works offline / without cloud) */}
-          <div className="pt-2">
-            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/90 shadow-2xs space-y-2.5">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0">
-                    <Smartphone className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-slate-800">
-                      {isEs ? 'Transferencia directa PC ⇄ Móvil' : 'Direkt överföring Dator ⇄ Mobil'}
-                    </h4>
-                    <p className="text-[10px] text-slate-700">
-                      {isEs ? '100% inmediata sin depender de la nube' : '100% direkt utan moln'}
-                    </p>
-                  </div>
-                </div>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
-                  {profile.totalXp} XP
-                </span>
-              </div>
-
-              {/* Action buttons to copy code or direct link */}
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={handleCopyCode}
-                  className="py-2 px-2.5 rounded-xl border border-indigo-200 bg-white hover:bg-indigo-50 text-indigo-700 font-bold text-[11px] flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-2xs"
-                  title="Copia el código de tus 15 XP para pegarlo en tu móvil"
-                >
-                  {copiedType === 'code' ? (
-                    <>
-                      <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                      <span className="text-emerald-700">{isEs ? '¡Copiado!' : 'Kopierad!'}</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-3.5 h-3.5 shrink-0" />
-                      <span>{isEs ? 'Copiar código' : 'Kopiera kod'}</span>
-                    </>
-                  )}
-                </button>
-
-                <button
-                  type="button"
-                  onClick={handleCopyDirectLink}
-                  className="py-2 px-2.5 rounded-xl border border-indigo-200 bg-white hover:bg-indigo-50 text-indigo-700 font-bold text-[11px] flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-2xs"
-                  title="Copia un enlace para abrir directamente en el navegador del móvil"
-                >
-                  {copiedType === 'link' ? (
-                    <>
-                      <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                      <span className="text-emerald-700">{isEs ? '¡Enlace copiado!' : 'Länk kopierad!'}</span>
-                    </>
-                  ) : (
-                    <>
-                      <Link className="w-3.5 h-3.5 shrink-0" />
-                      <span>{isEs ? 'Enlace directo' : 'Direktlänk'}</span>
-                    </>
-                  )}
-                </button>
-              </div>
-
-              {/* Collapsible section to paste and apply code from another device */}
-              <div className="pt-1">
-                {!showTransferSection ? (
-                  <button
-                    type="button"
-                    onClick={() => setShowTransferSection(true)}
-                    className="w-full text-center text-[11px] font-bold text-slate-700 hover:text-indigo-600 transition-colors py-1 cursor-pointer flex items-center justify-center gap-1"
-                  >
-                    <span>{isEs ? '📥 Pegar código de otro dispositivo' : '📥 Klistra in kod från annan enhet'}</span>
-                    <ArrowRight className="w-3 h-3" />
-                  </button>
-                ) : (
-                  <form onSubmit={handleApplyTransferCode} className="space-y-2 pt-1 border-t border-slate-200">
-                    <label className="block text-[10px] font-semibold text-slate-700">
-                      {isEs ? 'Pega el código copiado de tu otro dispositivo:' : 'Klistra in koden från din andra enhet:'}
-                    </label>
-                    <div className="flex gap-1.5">
-                      <input
-                        type="text"
-                        value={transferInput}
-                        onChange={(e) => setTransferInput(e.target.value)}
-                        placeholder="CHISPA-..."
-                        className="flex-1 px-2.5 py-1.5 rounded-xl border border-slate-300 text-xs text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono"
-                      />
-                      <button
-                        type="submit"
-                        disabled={!transferInput.trim()}
-                        className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-bold text-xs cursor-pointer shadow-2xs shrink-0"
-                      >
-                        {isEs ? 'Aplicar' : 'Tillämpa'}
-                      </button>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setShowTransferSection(false)}
-                      className="text-[10px] text-slate-600 hover:underline cursor-pointer block text-center w-full"
-                    >
-                      {isEs ? 'Cancelar' : 'Avbryt'}
-                    </button>
-                  </form>
-                )}
-              </div>
-            </div>
-          </div>
-
-          <div className="pt-2">
             <button
               type="button"
-              onClick={handleSignOut}
-              className="w-full py-3 px-4 rounded-2xl border border-purple-200 bg-purple-50/70 hover:bg-purple-100/80 text-purple-800 font-bold text-sm flex items-center justify-center gap-2.5 transition-all cursor-pointer shadow-2xs active:scale-[0.99]"
+              onClick={handleFullSync}
+              disabled={isSyncing}
+              className="w-full py-3 px-4 rounded-2xl bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs disabled:opacity-60"
             >
-              <LogOut className="w-4 h-4 text-purple-700" />
-              <span>{isEs ? 'Cerrar sesión y volver a la pantalla de acceso' : 'Logga ut och återgå till startskärmen'}</span>
+              <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+              <span>
+                {isSyncing
+                  ? (isEs ? 'Sincronizando...' : 'Synkar...')
+                  : (isEs ? 'Sincronizar ahora' : 'Synka nu')}
+              </span>
             </button>
-          </div>
+          )}
+
+          <button
+            type="button"
+            onClick={handleSignOut}
+            className="w-full py-3 px-4 rounded-2xl border border-purple-200 bg-purple-50/70 hover:bg-purple-100/80 text-purple-800 font-bold text-sm flex items-center justify-center gap-2.5 transition-all cursor-pointer shadow-2xs active:scale-[0.99]"
+          >
+            <LogOut className="w-4 h-4 text-purple-700" />
+            <span>{isEs ? 'Cerrar sesión y volver a la pantalla de acceso' : 'Logga ut och återgå till startskärmen'}</span>
+          </button>
 
           {onResetProgress && (
             <button
               type="button"
               onClick={() => {
-                if (window.confirm(isEs ? '¿Quieres reiniciar todo el progreso a cero y comenzar desde el Paso 1 de la Unidad 1?' : 'Vill du återställa alla framsteg till noll och börja från Steg 1?')) {
+                if (
+                  window.confirm(
+                    isEs
+                      ? '¿Quieres reiniciar todo el progreso a cero y comenzar desde el Paso 1 de la Unidad 1?'
+                      : 'Vill du återställa alla framsteg till noll och börja från Steg 1?'
+                  )
+                ) {
                   onResetProgress();
                   onClose();
                 }
@@ -793,8 +405,8 @@ export const AccountModal: React.FC<AccountModalProps> = ({
           <p className="text-[11px] text-emerald-800/80 font-medium flex items-center justify-center gap-1.5">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
             <span>
-              {isGoogle 
-                ? (isEs ? 'Sincronización multi-dispositivo activa con Google Cloud Firestore' : 'Realtidssynkning med Google Cloud Firestore')
+              {isGoogle
+                ? (isEs ? 'Sincronización automática activa en la nube' : 'Automatisk molnsynkning aktiv')
                 : (isEs ? 'Progreso guardado de forma segura en este navegador' : 'Framsteg sparade lokalt i webbläsaren')}
             </span>
           </p>
@@ -804,4 +416,3 @@ export const AccountModal: React.FC<AccountModalProps> = ({
     document.body
   );
 };
-
