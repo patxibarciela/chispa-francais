@@ -73,12 +73,16 @@ export const AccountModal: React.FC<AccountModalProps> = ({
         const res = await loadCloudData(user!.uid);
         if (cancelled) return;
         if (res.profile) {
+          const remoteXp = res.profile.totalXp ?? 0;
           setCloudProfile({
             exists: res.docExists,
-            xp: res.profile.totalXp ?? 0,
+            xp: remoteXp,
             streak: res.profile.streakDays ?? 0,
             lessons: res.profile.completedLessonIds?.length ?? 0,
           });
+          if (remoteXp === profile.totalXp) {
+            setFeedbackMsg(null);
+          }
         } else {
           setCloudProfile({
             exists: res.docExists,
@@ -454,8 +458,8 @@ export const AccountModal: React.FC<AccountModalProps> = ({
               </div>
             )}
 
-            {/* Any Firestore error notice */}
-            {lastCloudError && (
+            {/* Any Firestore error notice (suppressed when already in sync) */}
+            {lastCloudError && (!cloudProfile || cloudProfile.xp !== profile.totalXp) && (
               <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-[11px] flex items-start gap-2">
                 <AlertCircle className="w-4 h-4 shrink-0 text-amber-600 mt-0.5" />
                 <div className="flex-1">
