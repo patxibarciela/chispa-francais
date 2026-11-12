@@ -5,14 +5,18 @@ import { initializeFirestore, getFirestore, doc, getDocFromServer } from 'fireba
 import appletConfig from '../firebase-applet-config.json';
 
 // Configuración de Firebase utilizando variables de entorno de Vite con fallbacks basados en firebase-applet-config.json
+const rawEnvDbId = (import.meta.env.VITE_FIREBASE_FIRESTORE_DATABASE_ID || '').trim();
+const resolvedDbId = (rawEnvDbId || appletConfig.firestoreDatabaseId || 'ai-studio-chispafranais-0ebf0205-6e76-40ea-a4ec-e02e91017c97')
+  .replace('ai-studio-chisparanais-', 'ai-studio-chispafranais-');
+
 export const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || appletConfig.apiKey,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || appletConfig.authDomain,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || appletConfig.projectId,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || appletConfig.storageBucket,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || appletConfig.messagingSenderId,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || appletConfig.appId,
-  firestoreDatabaseId: import.meta.env.VITE_FIREBASE_FIRESTORE_DATABASE_ID || appletConfig.firestoreDatabaseId || 'ai-studio-chispafranais-0ebf0205-6e76-40ea-a4ec-e02e91017c97'
+  apiKey: (import.meta.env.VITE_FIREBASE_API_KEY || appletConfig.apiKey || '').trim(),
+  authDomain: (import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || appletConfig.authDomain || '').trim(),
+  projectId: (import.meta.env.VITE_FIREBASE_PROJECT_ID || appletConfig.projectId || '').trim(),
+  storageBucket: (import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || appletConfig.storageBucket || '').trim(),
+  messagingSenderId: (import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || appletConfig.messagingSenderId || '').trim(),
+  appId: (import.meta.env.VITE_FIREBASE_APP_ID || appletConfig.appId || '').trim(),
+  firestoreDatabaseId: resolvedDbId,
 };
 
 // Initialize Firebase App
