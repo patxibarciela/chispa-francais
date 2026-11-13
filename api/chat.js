@@ -15,19 +15,19 @@ const MODEL_PRIORITY_CHAT = [
   {
     id: 'gemini-4-hydrogen',
     thinkingLevel: ThinkingLevel.LOW,
-    timeoutMs: 6500,
+    timeoutMs: 6000,
     role: 'primary-quality-fast',
   },
   {
     id: 'gemini-3.8-flash',
     thinkingLevel: ThinkingLevel.LOW,
-    timeoutMs: 6000,
+    timeoutMs: 4500,
     role: 'secondary-recommended',
   },
   {
     id: 'gemini-3.1-flash-lite',
     thinkingLevel: ThinkingLevel.MINIMAL,
-    timeoutMs: 5000,
+    timeoutMs: 3500,
     role: 'tertiary-ultra-fast',
   },
 ];
@@ -219,22 +219,24 @@ async function processChatRequest(rawMessages, rawApiKey, studentName, studentFa
   const contents = normalizeContents(rawMessages, studentName, studentFacts);
   const systemInstruction = buildSystemInstruction(studentName, studentFacts, supportLanguage, immersionLevel);
 
+  const ai = new GoogleGenAI({
+    apiKey,
+    httpOptions: {
+      headers: {
+        'User-Agent': 'aistudio-build',
+      },
+    },
+  });
+
   let lastError = null;
 
   for (const modelSpec of MODEL_PRIORITY_CHAT) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), modelSpec.timeoutMs);
     try {
-      const ai = new GoogleGenAI({
-        apiKey,
-        httpOptions: {
-          headers: {
-            'User-Agent': 'aistudio-build',
-          },
-          timeout: modelSpec.timeoutMs,
-        },
-      });
-
       const config = {
         systemInstruction,
+        abortSignal: controller.signal,
         thinkingConfig: {
           thinkingLevel: modelSpec.thinkingLevel,
         },
@@ -260,7 +262,9 @@ async function processChatRequest(rawMessages, rawApiKey, studentName, studentFa
 
       lastError = `El modelo ${modelSpec.id} devolvió una respuesta vacía.`;
     } catch (err) {
-      const errMessage = err?.message || String(err);
+      const errMessage = controller.signal.aborted
+        ? `Tiempo de espera agotado (${modelSpec.timeoutMs} ms) con ${modelSpec.id}`
+        : err?.message || String(err);
       console.warn(`[Tutor Chat] Fallo con ${modelSpec.id}:`, errMessage);
       lastError = errMessage;
 
@@ -278,6 +282,8 @@ async function processChatRequest(rawMessages, rawApiKey, studentName, studentFa
       if (errMessage.includes('429') || errMessage.includes('RESOURCE_EXHAUSTED')) {
         await new Promise((r) => setTimeout(r, 150));
       }
+    } finally {
+      clearTimeout(timer);
     }
   }
 

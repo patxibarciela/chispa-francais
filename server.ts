@@ -31,7 +31,6 @@ function getGeminiClient(): GoogleGenAI | null {
         headers: {
           'User-Agent': 'aistudio-build',
         },
-        timeout: 8000,
       },
     });
   } catch (err) {
@@ -49,24 +48,27 @@ async function generateWithPriorityModels(
   const priorityList =
     taskMode === 'evaluate'
       ? [
-          { id: 'gemini-4-hydrogen', thinkingLevel: ThinkingLevel.MEDIUM },
-          { id: 'gemini-3.8-flash', thinkingLevel: ThinkingLevel.LOW },
-          { id: 'gemini-3.1-flash-lite', thinkingLevel: ThinkingLevel.MINIMAL },
+          { id: 'gemini-4-hydrogen', thinkingLevel: ThinkingLevel.MEDIUM, timeoutMs: 9000 },
+          { id: 'gemini-3.8-flash', thinkingLevel: ThinkingLevel.LOW, timeoutMs: 8000 },
+          { id: 'gemini-3.1-flash-lite', thinkingLevel: ThinkingLevel.MINIMAL, timeoutMs: 6000 },
         ]
       : [
-          { id: 'gemini-4-hydrogen', thinkingLevel: ThinkingLevel.LOW },
-          { id: 'gemini-3.8-flash', thinkingLevel: ThinkingLevel.LOW },
-          { id: 'gemini-3.1-flash-lite', thinkingLevel: ThinkingLevel.MINIMAL },
+          { id: 'gemini-4-hydrogen', thinkingLevel: ThinkingLevel.LOW, timeoutMs: 8000 },
+          { id: 'gemini-3.8-flash', thinkingLevel: ThinkingLevel.LOW, timeoutMs: 7000 },
+          { id: 'gemini-3.1-flash-lite', thinkingLevel: ThinkingLevel.MINIMAL, timeoutMs: 6000 },
         ];
 
   let lastErr: unknown = null;
   for (const modelSpec of priorityList) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), modelSpec.timeoutMs);
     try {
       const response = await ai.models.generateContent({
         model: modelSpec.id,
         contents,
         config: {
           ...configBase,
+          abortSignal: controller.signal,
           thinkingConfig: {
             thinkingLevel: modelSpec.thinkingLevel,
           },
@@ -81,6 +83,8 @@ async function generateWithPriorityModels(
         throw err;
       }
       console.warn(`[Server Gemini] Fallo con ${modelSpec.id}:`, err?.message || err);
+    } finally {
+      clearTimeout(timer);
     }
   }
   throw lastErr || new Error('No active Gemini model returned a response');
