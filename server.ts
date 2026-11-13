@@ -48,46 +48,121 @@ async function generateWithPriorityModels(
   const priorityList =
     taskMode === 'evaluate'
       ? [
-          { id: 'gemini-4-hydrogen', thinkingLevel: ThinkingLevel.MEDIUM, timeoutMs: 9000 },
-          { id: 'gemini-3.8-flash', thinkingLevel: ThinkingLevel.LOW, timeoutMs: 8000 },
-          { id: 'gemini-3.1-flash-lite', thinkingLevel: ThinkingLevel.MINIMAL, timeoutMs: 6000 },
+          { id: 'gemini-4-hydrogen', thinkingLevel: ThinkingLevel.MEDIUM, hedgeDelayMs: 5500 },
+          { id: 'gemini-3.8-flash', thinkingLevel: ThinkingLevel.LOW, hedgeDelayMs: 3000 },
+          { id: 'gemini-3.1-flash-lite', thinkingLevel: ThinkingLevel.MINIMAL, hedgeDelayMs: 0 },
         ]
       : [
-          { id: 'gemini-4-hydrogen', thinkingLevel: ThinkingLevel.LOW, timeoutMs: 8000 },
-          { id: 'gemini-3.8-flash', thinkingLevel: ThinkingLevel.LOW, timeoutMs: 7000 },
-          { id: 'gemini-3.1-flash-lite', thinkingLevel: ThinkingLevel.MINIMAL, timeoutMs: 6000 },
+          { id: 'gemini-4-hydrogen', thinkingLevel: ThinkingLevel.LOW, hedgeDelayMs: 4200 },
+          { id: 'gemini-3.8-flash', thinkingLevel: ThinkingLevel.LOW, hedgeDelayMs: 2500 },
+          { id: 'gemini-3.1-flash-lite', thinkingLevel: ThinkingLevel.MINIMAL, hedgeDelayMs: 0 },
         ];
 
-  let lastErr: unknown = null;
-  for (const modelSpec of priorityList) {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), modelSpec.timeoutMs);
-    try {
-      const response = await ai.models.generateContent({
-        model: modelSpec.id,
-        contents,
-        config: {
-          ...configBase,
-          abortSignal: controller.signal,
-          thinkingConfig: {
-            thinkingLevel: modelSpec.thinkingLevel,
-          },
-        },
-      });
-      const text = response.text?.trim();
-      if (text) return text;
-    } catch (err: any) {
-      lastErr = err;
-      const msg = String(err?.message || err || '').toLowerCase();
-      if (msg.includes('api_key_invalid') || msg.includes('permission_denied')) {
-        throw err;
+  const totalBudgetMs = 20000;
+
+  return new Promise((resolve, reject) => {
+    let settled = false;
+    let lastErr: unknown = null;
+    let inFlight = 0;
+    let nextIndex = 0;
+    const controllers = new Set<AbortController>();
+    const timers = new Set<ReturnType<typeof setTimeout>>();
+
+    const cleanupAll = () => {
+      for (const t of timers) clearTimeout(t);
+      timers.clear();
+      for (const c of controllers) {
+        try {
+          c.abort();
+        } catch {
+          // ignore abort errors
+        }
       }
-      console.warn(`[Server Gemini] Fallo con ${modelSpec.id}:`, err?.message || err);
-    } finally {
-      clearTimeout(timer);
-    }
-  }
-  throw lastErr || new Error('No active Gemini model returned a response');
+      controllers.clear();
+    };
+
+    const masterTimer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      cleanupAll();
+      reject(lastErr || new Error(`Gemini request timed out after ${totalBudgetMs} ms`));
+    }, totalBudgetMs);
+    timers.add(masterTimer);
+
+    const launchModel = (index: number) => {
+      if (settled || index >= priorityList.length || index < nextIndex) return;
+      nextIndex = index + 1;
+
+      const modelSpec = priorityList[index];
+      const controller = new AbortController();
+      controllers.add(controller);
+      inFlight += 1;
+
+      let hedgeTimer: ReturnType<typeof setTimeout> | null = null;
+      if (index + 1 < priorityList.length && modelSpec.hedgeDelayMs > 0) {
+        hedgeTimer = setTimeout(() => {
+          if (hedgeTimer) timers.delete(hedgeTimer);
+          launchModel(index + 1);
+        }, modelSpec.hedgeDelayMs);
+        timers.add(hedgeTimer);
+      }
+
+      ai.models
+        .generateContent({
+          model: modelSpec.id,
+          contents,
+          config: {
+            ...configBase,
+            abortSignal: controller.signal,
+            thinkingConfig: {
+              thinkingLevel: modelSpec.thinkingLevel,
+            },
+          },
+        })
+        .then((response) => {
+          if (settled) return;
+          const text = response.text?.trim();
+          if (text) {
+            settled = true;
+            cleanupAll();
+            resolve(text);
+            return;
+          }
+          lastErr = new Error(`Empty response from ${modelSpec.id}`);
+        })
+        .catch((err: any) => {
+          if (settled || controller.signal.aborted) return;
+          lastErr = err;
+          const msg = String(err?.message || err || '').toLowerCase();
+          if (msg.includes('api_key_invalid') || msg.includes('permission_denied')) {
+            settled = true;
+            cleanupAll();
+            reject(err);
+            return;
+          }
+          console.warn(`[Server Gemini] Fallo con ${modelSpec.id}:`, err?.message || err);
+        })
+        .finally(() => {
+          controllers.delete(controller);
+          if (hedgeTimer) {
+            clearTimeout(hedgeTimer);
+            timers.delete(hedgeTimer);
+          }
+          inFlight -= 1;
+          if (settled) return;
+
+          if (nextIndex < priorityList.length) {
+            launchModel(nextIndex);
+          } else if (inFlight === 0) {
+            settled = true;
+            cleanupAll();
+            reject(lastErr || new Error('No active Gemini model returned a response'));
+          }
+        });
+    };
+
+    launchModel(0);
+  });
 }
 
 // Health check endpoint

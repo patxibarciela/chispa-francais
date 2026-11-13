@@ -102,7 +102,7 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ profile, onRecordStudy
     }
   }, [messages, isLoading, errorMessage]);
 
-  const handleSendMessage = async (textToSend?: string) => {
+  const handleSendMessage = async (textToSend?: string, isRetry = false) => {
     const text = (textToSend || inputValue).trim();
     if (!text || isLoading) return;
 
@@ -156,17 +156,28 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ profile, onRecordStudy
       handleSetImmersion('balanced');
     }
 
-    const userMsg: ChatMessageItem = {
-      id: Date.now().toString(),
-      role: 'user',
-      parts: [{ text }],
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    };
+    const lastExisting = messages[messages.length - 1];
+    const shouldReuseLastUser =
+      isRetry &&
+      lastExisting?.role === 'user' &&
+      lastExisting.parts?.[0]?.text?.trim() === text;
 
-    // Build complete updated Gemini chatHistory
-    const updatedMessages = [...messages, userMsg];
-    setMessages(updatedMessages);
-    setInputValue('');
+    const updatedMessages = shouldReuseLastUser
+      ? messages
+      : [
+          ...messages,
+          {
+            id: Date.now().toString(),
+            role: 'user' as const,
+            parts: [{ text }],
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          },
+        ];
+
+    if (!shouldReuseLastUser) {
+      setMessages(updatedMessages);
+      setInputValue('');
+    }
     setIsLoading(true);
     onRecordStudy?.();
 
@@ -177,7 +188,7 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ profile, onRecordStudy
     }));
 
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 25000);
+    const timeoutId = setTimeout(() => controller.abort(), 26000);
 
     try {
       const response = await fetch('/api/chat', {
@@ -241,7 +252,7 @@ export const AITutorChat: React.FC<AITutorChatProps> = ({ profile, onRecordStudy
     const lastUserIndex = [...messages].reverse().findIndex((m) => m.role === 'user');
     if (lastUserIndex !== -1) {
       const lastUser = [...messages].reverse()[lastUserIndex];
-      handleSendMessage(lastUser.parts[0]?.text || '');
+      handleSendMessage(lastUser.parts[0]?.text || '', true);
     }
   };
 

@@ -6,28 +6,28 @@ import { GoogleGenAI, ThinkingLevel } from '@google/genai';
  */
 
 /**
- * Prioritized active models for conversational tutoring:
- * 1. gemini-4-hydrogen (ThinkingLevel.LOW): Best pedagogical & bilingual naturalness with low latency.
- * 2. gemini-3.8-flash (ThinkingLevel.LOW): Fast, high-quality fallback explicitly recommended for chat.
- * 3. gemini-3.1-flash-lite (ThinkingLevel.MINIMAL): Ultra-fast resilience fallback under heavy load / 429 limits.
+ * Prioritized active models for conversational tutoring (hedged fallback):
+ * 1. gemini-4-hydrogen (ThinkingLevel.LOW): Best pedagogical & bilingual naturalness.
+ * 2. gemini-3.8-flash (ThinkingLevel.LOW): Fast, high-quality fallback launched if primary stalls > 4.2s or errors.
+ * 3. gemini-3.1-flash-lite (ThinkingLevel.MINIMAL): Ultra-fast resilience fallback launched if neither resolves by 6.7s.
  */
 const MODEL_PRIORITY_CHAT = [
   {
     id: 'gemini-4-hydrogen',
     thinkingLevel: ThinkingLevel.LOW,
-    timeoutMs: 6000,
+    hedgeDelayMs: 4200,
     role: 'primary-quality-fast',
   },
   {
     id: 'gemini-3.8-flash',
     thinkingLevel: ThinkingLevel.LOW,
-    timeoutMs: 4500,
+    hedgeDelayMs: 2500,
     role: 'secondary-recommended',
   },
   {
     id: 'gemini-3.1-flash-lite',
     thinkingLevel: ThinkingLevel.MINIMAL,
-    timeoutMs: 3500,
+    hedgeDelayMs: 0,
     role: 'tertiary-ultra-fast',
   },
 ];
@@ -128,7 +128,7 @@ function extractTurnText(m) {
  */
 function normalizeContents(rawMessages, studentName, studentFacts) {
   const contents = [];
-  const recentTurns = rawMessages.slice(-12);
+  const recentTurns = rawMessages.slice(-10);
 
   for (const turn of recentTurns) {
     const text = extractTurnText(turn);
@@ -192,6 +192,145 @@ function isFatalKeyError(err) {
   return false;
 }
 
+const unavailableModels = new Set();
+
+function isModelUnavailableError(err) {
+  const status = err?.status || err?.statusCode;
+  const msg = String(err?.message || err || '').toLowerCase();
+  return status === 404 || msg.includes('not_found') || msg.includes('no longer available');
+}
+
+/**
+ * Runs prioritized models using hedged requests:
+ * - Starts primary (gemini-4-hydrogen) immediately.
+ * - Only launches next fallback if the current one fails fast OR exceeds its hedge delay.
+ * - Keeps slower models running within the overall deadline so the best or fastest valid reply wins.
+ */
+async function generateWithHedgedFallback({ ai, contents, systemInstruction }) {
+  const activeModels = MODEL_PRIORITY_CHAT.filter((m) => !unavailableModels.has(m.id));
+  const modelsToTry = activeModels.length > 0 ? activeModels : MODEL_PRIORITY_CHAT;
+  const isVercel = Boolean(process.env.VERCEL);
+  const totalBudgetMs = isVercel ? 13500 : 22000;
+
+  return new Promise((resolve, reject) => {
+    let settled = false;
+    let lastError = null;
+    let inFlight = 0;
+    let nextIndex = 0;
+    const controllers = new Set();
+    const timers = new Set();
+
+    const cleanupAll = () => {
+      for (const t of timers) clearTimeout(t);
+      timers.clear();
+      for (const c of controllers) {
+        try {
+          c.abort();
+        } catch {
+          // ignore abort errors
+        }
+      }
+      controllers.clear();
+    };
+
+    const masterTimer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      cleanupAll();
+      const timeoutErr = new Error(
+        lastError || `Tiempo de espera agotado (${totalBudgetMs} ms) al esperar respuesta de Gemini.`
+      );
+      timeoutErr.isBudgetTimeout = true;
+      reject(timeoutErr);
+    }, totalBudgetMs);
+    timers.add(masterTimer);
+
+    const launchModel = (index) => {
+      if (settled || index >= modelsToTry.length || index < nextIndex) return;
+      nextIndex = index + 1;
+
+      const modelSpec = modelsToTry[index];
+      const controller = new AbortController();
+      controllers.add(controller);
+      inFlight += 1;
+
+      let hedgeTimer = null;
+      if (index + 1 < modelsToTry.length && modelSpec.hedgeDelayMs > 0) {
+        hedgeTimer = setTimeout(() => {
+          if (hedgeTimer) timers.delete(hedgeTimer);
+          launchModel(index + 1);
+        }, modelSpec.hedgeDelayMs);
+        timers.add(hedgeTimer);
+      }
+
+      const startedAt = Date.now();
+      ai.models
+        .generateContent({
+          model: modelSpec.id,
+          contents,
+          config: {
+            systemInstruction,
+            abortSignal: controller.signal,
+            thinkingConfig: {
+              thinkingLevel: modelSpec.thinkingLevel,
+            },
+          },
+        })
+        .then((response) => {
+          if (settled) return;
+          const replyText = response.text?.trim() || '';
+          if (replyText) {
+            settled = true;
+            cleanupAll();
+            resolve({
+              reply: replyText,
+              usedModel: modelSpec.id,
+              latencyMs: Date.now() - startedAt,
+            });
+            return;
+          }
+          lastError = `El modelo ${modelSpec.id} devolvió una respuesta vacía.`;
+          console.warn(`[Tutor Chat] ${lastError}`);
+        })
+        .catch((err) => {
+          if (settled || controller.signal.aborted) return;
+          const errMessage = err?.message || String(err);
+          console.warn(`[Tutor Chat] Fallo con ${modelSpec.id} (${Date.now() - startedAt}ms):`, errMessage);
+          lastError = errMessage;
+
+          if (isModelUnavailableError(err)) {
+            unavailableModels.add(modelSpec.id);
+          }
+
+          if (isFatalKeyError(err)) {
+            settled = true;
+            cleanupAll();
+            reject(err);
+          }
+        })
+        .finally(() => {
+          controllers.delete(controller);
+          if (hedgeTimer) {
+            clearTimeout(hedgeTimer);
+            timers.delete(hedgeTimer);
+          }
+          inFlight -= 1;
+          if (settled) return;
+
+          if (nextIndex < modelsToTry.length) {
+            launchModel(nextIndex);
+          } else if (inFlight === 0) {
+            settled = true;
+            cleanupAll();
+            reject(new Error(lastError || 'Los modelos de Gemini no pudieron responder.'));
+          }
+        });
+    };
+
+    launchModel(0);
+  });
+}
+
 /**
  * Core chat executor supporting both Vercel Web Standard and Node/Express
  */
@@ -228,73 +367,39 @@ async function processChatRequest(rawMessages, rawApiKey, studentName, studentFa
     },
   });
 
-  let lastError = null;
-
-  for (const modelSpec of MODEL_PRIORITY_CHAT) {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), modelSpec.timeoutMs);
-    try {
-      const config = {
-        systemInstruction,
-        abortSignal: controller.signal,
-        thinkingConfig: {
-          thinkingLevel: modelSpec.thinkingLevel,
+  try {
+    const result = await generateWithHedgedFallback({ ai, contents, systemInstruction });
+    return {
+      status: 200,
+      data: {
+        success: true,
+        reply: result.reply,
+        usedModel: result.usedModel,
+        latencyMs: result.latencyMs,
+      },
+    };
+  } catch (err) {
+    const errMessage = err?.message || String(err);
+    if (isFatalKeyError(err)) {
+      return {
+        status: 403,
+        data: {
+          success: false,
+          error: 'La clave GEMINI_API_KEY no es válida o no tiene permisos.',
+          details: errMessage,
         },
       };
-
-      const response = await ai.models.generateContent({
-        model: modelSpec.id,
-        contents,
-        config,
-      });
-
-      const replyText = response.text?.trim() || '';
-      if (replyText) {
-        return {
-          status: 200,
-          data: {
-            success: true,
-            reply: replyText,
-            usedModel: modelSpec.id,
-          },
-        };
-      }
-
-      lastError = `El modelo ${modelSpec.id} devolvió una respuesta vacía.`;
-    } catch (err) {
-      const errMessage = controller.signal.aborted
-        ? `Tiempo de espera agotado (${modelSpec.timeoutMs} ms) con ${modelSpec.id}`
-        : err?.message || String(err);
-      console.warn(`[Tutor Chat] Fallo con ${modelSpec.id}:`, errMessage);
-      lastError = errMessage;
-
-      if (isFatalKeyError(err)) {
-        return {
-          status: 403,
-          data: {
-            success: false,
-            error: 'La clave GEMINI_API_KEY no es válida o no tiene permisos.',
-            details: errMessage,
-          },
-        };
-      }
-
-      if (errMessage.includes('429') || errMessage.includes('RESOURCE_EXHAUSTED')) {
-        await new Promise((r) => setTimeout(r, 150));
-      }
-    } finally {
-      clearTimeout(timer);
     }
-  }
 
-  return {
-    status: 503,
-    data: {
-      success: false,
-      error: 'No se pudo obtener respuesta del tutor IA.',
-      details: lastError || 'Los modelos de Gemini no respondieron a tiempo.',
-    },
-  };
+    return {
+      status: 503,
+      data: {
+        success: false,
+        error: 'No se pudo obtener respuesta del tutor IA.',
+        details: errMessage,
+      },
+    };
+  }
 }
 
 /**
