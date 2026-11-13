@@ -1,15 +1,35 @@
-import { GoogleGenAI } from '@google/genai';
+import { GoogleGenAI, ThinkingLevel } from '@google/genai';
 
 /**
  * Serverless function for Chispa Français AI French Companion ("Camille")
  * Compatible with Vercel Serverless Functions, Node.js, and Express dev server.
  */
 
-// Prioritized fallback models: fast, modern, and officially supported
-const MODEL_FALLBACK_LIST = [
-  'gemini-3.1-flash-lite',
-  'gemini-3.8-flash',
-  'gemini-2.5-flash'
+/**
+ * Prioritized active models for conversational tutoring:
+ * 1. gemini-4-hydrogen (ThinkingLevel.LOW): Best pedagogical & bilingual naturalness with low latency.
+ * 2. gemini-3.8-flash (ThinkingLevel.LOW): Fast, high-quality fallback explicitly recommended for chat.
+ * 3. gemini-3.1-flash-lite (ThinkingLevel.MINIMAL): Ultra-fast resilience fallback under heavy load / 429 limits.
+ */
+const MODEL_PRIORITY_CHAT = [
+  {
+    id: 'gemini-4-hydrogen',
+    thinkingLevel: ThinkingLevel.LOW,
+    timeoutMs: 6500,
+    role: 'primary-quality-fast',
+  },
+  {
+    id: 'gemini-3.8-flash',
+    thinkingLevel: ThinkingLevel.LOW,
+    timeoutMs: 6000,
+    role: 'secondary-recommended',
+  },
+  {
+    id: 'gemini-3.1-flash-lite',
+    thinkingLevel: ThinkingLevel.MINIMAL,
+    timeoutMs: 5000,
+    role: 'tertiary-ultra-fast',
+  },
 ];
 
 /**
@@ -52,37 +72,36 @@ ${realName ? `1. La estudiante se llama REALMENTE ${realName}.
   let immersionDirectives = '';
   if (immersionLevel === 'french-only') {
     immersionDirectives = `EQUILIBRIO DE IDIOMA: INMERSIÓN COMPLETA EN FRANCÉS SENCILLO (100% FRANCÉS A1/A2).
-- Habla TODO en francés sencillo, claro y adaptado a principiantes de secundaria.
+- Habla TODO en francés sencillo, claro, natural y adaptado a principiantes de secundaria.
 - Solo recurre al ${supLang} si la estudiante te pide expresamente traducir una palabra o dice que no entiende absolutamente nada.`;
   } else if (immersionLevel === 'balanced') {
     immersionDirectives = `EQUILIBRIO DE IDIOMA: EQUILIBRADO (50% FRANCÉS SENCILLO, 50% ${supLang.toUpperCase()}).
-- Inicia con una frase corta en francés, seguida de su traducción o aclaración en ${supLang}.`;
+- Inicia con una frase corta y natural en francés, seguida de su traducción o aclaración breve en ${supLang}.`;
   } else {
-    // Default 'high' (Más francés sencillo y menos español/sueco, petición expresa de la alumna)
     immersionDirectives = `EQUILIBRIO DE IDIOMA: PREDOMINIO CLARO DEL FRANCÉS SENCILLO (75-85% FRANCÉS, 15-25% ${supLang.toUpperCase()}).
 - PRIORIDAD AL FRANCÉS FÁCIL: La estudiante pide expresamente UTILIZAR MUCHO MÁS FRANCÉS SENCILLO Y MENOS ${supLang.toUpperCase()}.
-- Formula tus saludos, exclamaciones ("¡Super !", "¡Bravo !", "Moi aussi !"), frases principales y preguntas de cierre directamente en francés sencillo (nivel A1/A2).
+- Formula tus saludos, exclamaciones (« Super ! », « Bravo ! », « Moi aussi ! »), frases principales y preguntas de cierre directamente en francés sencillo (nivel A1/A2).
 - El ${supLang} debe ser ÚNICAMENTE un apoyo breve entre paréntesis o una pequeña pista de traducción (ej: « *J'adore la musique pop ! Quel genre de musique tu écoutes ?* (¿Qué música escuchas?) »).
 - NUNCA escribas respuestas donde casi todo esté en ${supLang} y solo haya una palabrita en francés. ¡El francés sencillo debe ser el protagonista!`;
   }
 
-  return `Eres Camille, una compañera de conversación amigable y entusiasta que ayuda a una estudiante a practicar y hablar francés en un entorno real.
+  return `Eres Camille, una compañera de conversación amigable, natural y entusiasta que ayuda a una estudiante de 13 años a practicar francés en un entorno real y divertido.
 
 ${immersionDirectives}
 
-ADAPTABILIDAD DINÁMICA INMEDIATA (REGLA FUNDAMENTAL DE FLEXIBILIDAD):
-- Si la estudiante te pide más francés en cualquier mensaje (ej: "háblame en francés", "más francés por favor", "plus de français", "parle français"):
-  -> Aumenta DE INMEDIATO el francés al 95-100%, con vocabulario sencillo y felicítala por el reto ("*¡D'accord ! On continue en français alors !*").
-- Si la estudiante te dice que no entiende, pide español o traducción (ej: "no entiendo", "en español por favor", "¿qué significa?", "prata svenska"):
+ADAPTABILIDAD DINÁMICA INMEDIATA:
+- Si la estudiante pide más francés en cualquier mensaje ("háblame en francés", "más francés por favor", "plus de français", "parle français"):
+  -> Aumenta DE INMEDIATO el francés al 95-100%, con vocabulario sencillo y felicítala por el reto ("*D'accord ! On continue en français alors !*").
+- Si la estudiante dice que no entiende o pide traducción ("no entiendo", "en español por favor", "¿qué significa?", "prata svenska"):
   -> Explícale DE INMEDIATO con dulzura en ${supLang}, traduce la frase anterior y facilítale opciones claras.
-- Si te pide un punto medio, equilibrado o cualquier otro ajuste, acéptalo al instante y ajústate en ese mismo mensaje.
+- Si pide un punto medio o cualquier otro ajuste, acéptalo al instante y ajústate en ese mismo mensaje.
 
-LONGITUD Y FORMATO DE CHAT (REGLA ESTRICTA DE BREVEDAD):
-1. RESPUESTAS MUY BREVES: MÁXIMO 2 O 3 ORACIONES CORTAS en total. Es un chat de mensajería para móvil. Sé directa, cálida y conversacional. ¡CERO párrafos largos!
-2. Hilo temático: Conecta siempre de inmediato con lo que la estudiante acaba de escribir.
-3. Cierre guiado: Termina siempre con una sola pregunta corta en francés fácil (con opciones cortas si es posible).
-4. Corrección formativa: Si la estudiante intenta escribir en francés y comete algún fallo, valida su esfuerzo con amabilidad y muestra la forma adecuada dentro de tu frase, sin desanimarla.
-5. Pronunciación: Cuando introduzcas un término clave nuevo, puedes añadir una aproximación fonética muy breve entre paréntesis.
+ESTILO, FLUIDEZ Y BREVEDAD:
+1. RESPUESTAS MUY BREVES Y NATURALES: MÁXIMO 2 O 3 ORACIONES CORTAS en total (aprox. 25-55 palabras). Es un chat de mensajería para móvil: sé directa, cercana y conversacional. ¡CERO párrafos largos!
+2. Hilo temático vivo: Conecta de inmediato con lo que la estudiante acaba de decir, como una amiga real, evitando sonar robótica o repetitiva.
+3. Cierre guiado: Termina siempre con una sola pregunta corta y natural en francés fácil que invite a seguir charlando.
+4. Corrección amable: Si comete un fallo en francés, valora su intento con cariño y muestra la forma natural dentro de tu frase sin cortar el ritmo.
+5. Pronunciación: Cuando introduzcas una expresión nueva útil, puedes añadir opcionalmente una pista fonética muy breve entre paréntesis.
 
 ${memoryBlock}`;
 }
@@ -105,45 +124,28 @@ function extractTurnText(m) {
 }
 
 /**
- * Core chat executor supporting both Vercel Web Standard and Node/Express
+ * Normalizes turns for Gemini: ensures alternating user/model roles and starts with user.
  */
-async function processChatRequest(rawMessages, rawApiKey, studentName, studentFacts, supportLanguage, immersionLevel = 'high') {
-  const apiKey = (rawApiKey || '').replace(/['"\s]+/g, '').trim();
-
-  if (!apiKey) {
-    return {
-      status: 500,
-      data: {
-        success: false,
-        error: 'GEMINI_API_KEY no configurada en las variables de entorno de Vercel.',
-        details: 'Añade la variable GEMINI_API_KEY en Vercel > Settings > Environment Variables y haz un redeploy.'
-      }
-    };
-  }
-
-  if (!rawMessages || !Array.isArray(rawMessages) || rawMessages.length === 0) {
-    return {
-      status: 400,
-      data: { success: false, error: 'No se enviaron mensajes en la petición.' }
-    };
-  }
-
-  // 1. Normalize turns safely extracting non-empty text
+function normalizeContents(rawMessages, studentName, studentFacts) {
   const contents = [];
-  const recentTurns = rawMessages.slice(-8);
+  const recentTurns = rawMessages.slice(-12);
 
   for (const turn of recentTurns) {
     const text = extractTurnText(turn);
-    if (!text) continue; // Skip empty turns to prevent Gemini 400 Bad Request
+    if (!text) continue;
 
     const role = turn.role === 'assistant' || turn.role === 'model' || turn.role === 'ai' ? 'model' : 'user';
-    contents.push({
-      role,
-      parts: [{ text }]
-    });
+    const prev = contents[contents.length - 1];
+    if (prev && prev.role === role) {
+      prev.parts[0].text += `\n${text}`;
+    } else {
+      contents.push({
+        role,
+        parts: [{ text }],
+      });
+    }
   }
 
-  // Gemini requires the conversation to start with a user message
   while (contents.length > 0 && contents[0].role !== 'user') {
     contents.shift();
   }
@@ -151,11 +153,10 @@ async function processChatRequest(rawMessages, rawApiKey, studentName, studentFa
   if (contents.length === 0) {
     contents.push({
       role: 'user',
-      parts: [{ text: 'Bonjour !' }]
+      parts: [{ text: 'Bonjour !' }],
     });
   }
 
-  // Prepend explicit memory facts to the conversation turns so the model always adheres to them
   const realName = studentFacts?.name || (studentName && studentName !== 'Élève' ? studentName : null);
   const memoryNotes = [];
   if (realName) memoryNotes.push(`El estudiante se llama ${realName}.`);
@@ -175,106 +176,107 @@ async function processChatRequest(rawMessages, rawApiKey, studentName, studentFa
     contents[0].parts[0].text = memoryHeader + contents[0].parts[0].text;
   }
 
-  // 2. Sequential attempt across models with fast per-model timeout
-  let lastError = null;
-  const systemInstruction = buildSystemInstruction(studentName, studentFacts, supportLanguage, immersionLevel);
+  return contents;
+}
 
-  // Initialize official SDK
-  let ai = null;
-  try {
-    ai = new GoogleGenAI({
-      apiKey,
-      httpOptions: {
-        headers: {
-          'User-Agent': 'aistudio-build',
-        },
-        timeout: 6500, // 6.5s per model ensures full execution stays within Vercel's limits
+/**
+ * Classifies Gemini API errors to decide whether to abort immediately or fail over to next model.
+ */
+function isFatalKeyError(err) {
+  const msg = String(err?.message || err || '').toLowerCase();
+  const status = err?.status || err?.statusCode;
+  if (status === 401 || status === 403) return true;
+  if (msg.includes('api_key_invalid') || msg.includes('api key not valid') || msg.includes('permission_denied')) {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Core chat executor supporting both Vercel Web Standard and Node/Express
+ */
+async function processChatRequest(rawMessages, rawApiKey, studentName, studentFacts, supportLanguage, immersionLevel = 'high') {
+  const apiKey = (rawApiKey || '').replace(/['"\s]+/g, '').trim();
+
+  if (!apiKey) {
+    return {
+      status: 500,
+      data: {
+        success: false,
+        error: 'GEMINI_API_KEY no configurada en el servidor.',
+        details: 'Configura GEMINI_API_KEY en Settings > Secrets (o en Vercel Environment Variables).',
       },
-    });
-  } catch (err) {
-    console.warn('[Tutor Chat] Error inicializando SDK:', err?.message || err);
+    };
   }
 
-  const modelErrors = {};
+  if (!rawMessages || !Array.isArray(rawMessages) || rawMessages.length === 0) {
+    return {
+      status: 400,
+      data: { success: false, error: 'No se enviaron mensajes en la petición.' },
+    };
+  }
 
-  for (const model of MODEL_FALLBACK_LIST) {
+  const contents = normalizeContents(rawMessages, studentName, studentFacts);
+  const systemInstruction = buildSystemInstruction(studentName, studentFacts, supportLanguage, immersionLevel);
+
+  let lastError = null;
+
+  for (const modelSpec of MODEL_PRIORITY_CHAT) {
     try {
-      console.log(`[Tutor Chat] Intentando modelo: ${model}`);
-      let replyText = '';
+      const ai = new GoogleGenAI({
+        apiKey,
+        httpOptions: {
+          headers: {
+            'User-Agent': 'aistudio-build',
+          },
+          timeout: modelSpec.timeoutMs,
+        },
+      });
 
-      // 1. Try official SDK first
-      if (ai) {
-        try {
-          const response = await ai.models.generateContent({
-            model,
-            contents,
-            config: {
-              systemInstruction,
-              maxOutputTokens: 150, // Strict chat brevity: 2 to 3 short sentences
-            },
-          });
-          replyText = response.text?.trim() || '';
-        } catch (sdkErr) {
-          console.warn(`[Tutor Chat] SDK fallo con ${model}:`, sdkErr?.message || sdkErr);
-          lastError = sdkErr?.message || String(sdkErr);
-        }
-      }
+      const config = {
+        systemInstruction,
+        thinkingConfig: {
+          thinkingLevel: modelSpec.thinkingLevel,
+        },
+      };
 
-      // 2. Direct REST fetch fallback if SDK didn't return text
-      if (!replyText) {
-        const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), 6500);
+      const response = await ai.models.generateContent({
+        model: modelSpec.id,
+        contents,
+        config,
+      });
 
-        try {
-          const restRes = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
-            {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              signal: controller.signal,
-              body: JSON.stringify({
-                system_instruction: { parts: [{ text: systemInstruction }] },
-                contents,
-                generationConfig: {
-                  temperature: 0.7,
-                  maxOutputTokens: 150,
-                }
-              })
-            }
-          );
-
-          const data = await restRes.json().catch(() => ({}));
-          if (restRes.ok && data.candidates?.[0]?.content?.parts?.[0]?.text) {
-            replyText = data.candidates[0].content.parts[0].text.trim();
-          } else {
-            const errDetail = data?.error?.message || (data?.error ? JSON.stringify(data.error) : `Status ${restRes.status}`);
-            throw new Error(errDetail);
-          }
-        } finally {
-          clearTimeout(timer);
-        }
-      }
-
+      const replyText = response.text?.trim() || '';
       if (replyText) {
-        console.log(`[Tutor Chat] Éxito con ${model} (${replyText.length} caracteres)`);
         return {
           status: 200,
           data: {
             success: true,
             reply: replyText,
-            usedModel: model
-          }
+            usedModel: modelSpec.id,
+          },
         };
       }
+
+      lastError = `El modelo ${modelSpec.id} devolvió una respuesta vacía.`;
     } catch (err) {
       const errMessage = err?.message || String(err);
-      console.warn(`[Tutor Chat] Fallo con ${model}:`, errMessage);
-      modelErrors[model] = errMessage;
+      console.warn(`[Tutor Chat] Fallo con ${modelSpec.id}:`, errMessage);
       lastError = errMessage;
 
-      // If rate limited (429), pause briefly before trying next model
-      if (errMessage.includes('429')) {
-        await new Promise((r) => setTimeout(r, 300));
+      if (isFatalKeyError(err)) {
+        return {
+          status: 403,
+          data: {
+            success: false,
+            error: 'La clave GEMINI_API_KEY no es válida o no tiene permisos.',
+            details: errMessage,
+          },
+        };
+      }
+
+      if (errMessage.includes('429') || errMessage.includes('RESOURCE_EXHAUSTED')) {
+        await new Promise((r) => setTimeout(r, 150));
       }
     }
   }
@@ -284,8 +286,8 @@ async function processChatRequest(rawMessages, rawApiKey, studentName, studentFa
     data: {
       success: false,
       error: 'No se pudo obtener respuesta del tutor IA.',
-      details: lastError || 'Los modelos de Gemini no respondieron a tiempo.'
-    }
+      details: lastError || 'Los modelos de Gemini no respondieron a tiempo.',
+    },
   };
 }
 
@@ -293,7 +295,6 @@ async function processChatRequest(rawMessages, rawApiKey, studentName, studentFa
  * Standard Vercel Serverless Function (Node.js runtime)
  */
 export default async function handler(req, res) {
-  // CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -331,12 +332,12 @@ export async function POST(request) {
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
-      }
+      },
     });
   } catch (error) {
     return new Response(JSON.stringify({ error: error?.message || 'Error interno' }), {
       status: 500,
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json' },
     });
   }
 }

@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { GoogleGenAI } from '@google/genai';
+import { GoogleGenAI, ThinkingLevel } from '@google/genai';
 import chatHandler from './api/chat.js';
 
 dotenv.config();
@@ -22,7 +22,7 @@ app.all('/api/chat', async (req, res) => {
 
 // Dynamic Google GenAI client resolver
 function getGeminiClient(): GoogleGenAI | null {
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = (process.env.GEMINI_API_KEY || '').replace(/['"\s]+/g, '').trim();
   if (!apiKey) return null;
   try {
     return new GoogleGenAI({
@@ -31,12 +31,59 @@ function getGeminiClient(): GoogleGenAI | null {
         headers: {
           'User-Agent': 'aistudio-build',
         },
+        timeout: 8000,
       },
     });
   } catch (err) {
     console.error('Failed to initialize GoogleGenAI client:', err);
     return null;
   }
+}
+
+async function generateWithPriorityModels(
+  ai: GoogleGenAI,
+  contents: string,
+  taskMode: 'chat' | 'evaluate',
+  configBase: Record<string, any> = {}
+): Promise<string> {
+  const priorityList =
+    taskMode === 'evaluate'
+      ? [
+          { id: 'gemini-4-hydrogen', thinkingLevel: ThinkingLevel.MEDIUM },
+          { id: 'gemini-3.8-flash', thinkingLevel: ThinkingLevel.LOW },
+          { id: 'gemini-3.1-flash-lite', thinkingLevel: ThinkingLevel.MINIMAL },
+        ]
+      : [
+          { id: 'gemini-4-hydrogen', thinkingLevel: ThinkingLevel.LOW },
+          { id: 'gemini-3.8-flash', thinkingLevel: ThinkingLevel.LOW },
+          { id: 'gemini-3.1-flash-lite', thinkingLevel: ThinkingLevel.MINIMAL },
+        ];
+
+  let lastErr: unknown = null;
+  for (const modelSpec of priorityList) {
+    try {
+      const response = await ai.models.generateContent({
+        model: modelSpec.id,
+        contents,
+        config: {
+          ...configBase,
+          thinkingConfig: {
+            thinkingLevel: modelSpec.thinkingLevel,
+          },
+        },
+      });
+      const text = response.text?.trim();
+      if (text) return text;
+    } catch (err: any) {
+      lastErr = err;
+      const msg = String(err?.message || err || '').toLowerCase();
+      if (msg.includes('api_key_invalid') || msg.includes('permission_denied')) {
+        throw err;
+      }
+      console.warn(`[Server Gemini] Fallo con ${modelSpec.id}:`, err?.message || err);
+    }
+  }
+  throw lastErr || new Error('No active Gemini model returned a response');
 }
 
 // Health check endpoint
@@ -121,18 +168,16 @@ Directrices pedagógicas:
     try {
       // Build conversation history for generateContent
       const lastMessage = messages[messages.length - 1]?.content || 'Bonjour !';
-      const historySummary = messages.slice(-6).map((m: any) => `${m.role === 'user' ? 'Étudiante' : 'Léo'}: ${m.content}`).join('\n');
+      const historySummary = messages.slice(-8).map((m: any) => `${m.role === 'user' ? 'Étudiante' : 'Léo'}: ${m.content}`).join('\n');
 
-      const response = await ai.models.generateContent({
-        model: 'gemini-3.8-flash',
-        contents: `Historial de la conversación:\n${historySummary}\n\nÚltimo mensaje de la estudiante: "${lastMessage}"\n\nResponde como Léo siguiendo las instrucciones del sistema:`,
-        config: {
-          systemInstruction,
-        },
-      });
+      const reply = await generateWithPriorityModels(
+        ai,
+        `Historial de la conversación:\n${historySummary}\n\nÚltimo mensaje de la estudiante: "${lastMessage}"\n\nResponde como Léo siguiendo las instrucciones del sistema:`,
+        'chat',
+        { systemInstruction }
+      );
 
-      const reply = response.text || 'Très bien ! Continuons à pratiquer le français !';
-      return res.json({ reply });
+      return res.json({ reply: reply || 'Très bien ! Continuons à pratiquer le français !' });
     } catch (err: any) {
       console.error('Gemini chat error:', err);
       // Fall through to smart rule-based fallback
@@ -204,15 +249,9 @@ Devuelve un JSON con el siguiente formato exacto:
   "hint": "Pista opcional en ${promptLanguage}"
 }`;
 
-        const response = await ai.models.generateContent({
-          model: 'gemini-3.8-flash',
-          contents: prompt,
-          config: {
-            responseMimeType: 'application/json',
-          },
+        const jsonStr = await generateWithPriorityModels(ai, prompt, 'evaluate', {
+          responseMimeType: 'application/json',
         });
-
-        const jsonStr = (response.text ?? '{}').trim();
         const data = JSON.parse(jsonStr);
         return res.json(data);
       } else if (phase === 4) {
@@ -235,15 +274,9 @@ Formato JSON exacto:
   "scoreXP": 45
 }`;
 
-        const response = await ai.models.generateContent({
-          model: 'gemini-3.8-flash',
-          contents: prompt,
-          config: {
-            responseMimeType: 'application/json',
-          },
+        const jsonStr = await generateWithPriorityModels(ai, prompt, 'evaluate', {
+          responseMimeType: 'application/json',
         });
-
-        const jsonStr = (response.text ?? '{}').trim();
         const data = JSON.parse(jsonStr);
         return res.json(data);
       }
